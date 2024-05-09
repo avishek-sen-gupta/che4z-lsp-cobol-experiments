@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="LangServerBootstrap" type="Application" factoryName="Application" nameIsGenerated="true">
+    <option name="MAIN_CLASS_NAME" value="org.eclipse.lsp.cobol.LangServerBootstrap" />
+    <module name="engine" />
+    <option name="PROGRAM_PARAMETERS" value="-s $USER_HOME$/Downloads/mbrdi-poc/V751C931 analysis -cf $USER_HOME$/Downloads/mbrdi-poc" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="org.eclipse.lsp.cobol.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

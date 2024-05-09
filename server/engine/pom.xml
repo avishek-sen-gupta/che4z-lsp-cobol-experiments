@@ -202,6 +202,11 @@
             <artifactId>picocli-codegen</artifactId>
             <version>${picocli.version}</version>
         </dependency>
+        <dependency>
+            <groupId>hu.webarticum</groupId>
+            <artifactId>tree-printer</artifactId>
+            <version>2.2.0</version>
+        </dependency>
     </dependencies>
 
 

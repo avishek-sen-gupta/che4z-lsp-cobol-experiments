@@ -18,10 +18,7 @@ import com.google.common.collect.Multimap;
 import com.google.gson.*;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import java.io.File;
-import java.nio.file.Files;
-import java.util.*;
-import java.util.concurrent.Callable;
+import hu.webarticum.treeprinter.printer.listing.ListingTreePrinter;
 import lombok.extern.slf4j.Slf4j;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.eclipse.lsp.cobol.cli.di.CliModule;
@@ -37,6 +34,7 @@ import org.eclipse.lsp.cobol.common.error.SyntaxError;
 import org.eclipse.lsp.cobol.common.mapping.ExtendedDocument;
 import org.eclipse.lsp.cobol.common.mapping.ExtendedText;
 import org.eclipse.lsp.cobol.common.message.MessageService;
+import org.eclipse.lsp.cobol.common.model.tree.Node;
 import org.eclipse.lsp.cobol.core.engine.analysis.AnalysisContext;
 import org.eclipse.lsp.cobol.core.engine.dialects.DialectService;
 import org.eclipse.lsp.cobol.core.engine.pipeline.Pipeline;
@@ -52,6 +50,11 @@ import org.eclipse.lsp.cobol.service.settings.CachingConfigurationService;
 import org.eclipse.lsp.cobol.service.settings.layout.CodeLayoutStore;
 import org.eclipse.lsp4j.Location;
 import picocli.CommandLine;
+import hu.webarticum.treeprinter.SimpleTreeNode;
+import java.io.File;
+import java.nio.file.Files;
+import java.util.*;
+import java.util.concurrent.Callable;
 
 /**
  * The Cli class represents a Command Line Interface (CLI) for interacting with the application.
@@ -153,10 +156,23 @@ public class Cli implements Callable<Integer> {
         break;
     }
     System.out.println(gson.toJson(result));
-    return 0;
+      ProcessingResult data = (ProcessingResult) pipelineResult.getLastStageResult().getData();
+      Node rootNode = data.getRootNode();
+      SimpleTreeNode graphRoot = new AugmentedTreeNode(rootNode);
+      buildGraph(rootNode, graphRoot);
+      new ListingTreePrinter().print(graphRoot);
+      return 0;
   }
 
-  private JsonObject toJson(SyntaxError syntaxError, Gson gson) {
+    private static void buildGraph(Node astParentNode, SimpleTreeNode graphParentNode) {
+        for (Node astChildNode: astParentNode.getChildren()) {
+            SimpleTreeNode graphChildNode = new AugmentedTreeNode(astChildNode);
+            graphParentNode.addChild(graphChildNode);
+            buildGraph(astChildNode, graphChildNode);
+        }
+    }
+
+    private JsonObject toJson(SyntaxError syntaxError, Gson gson) {
     JsonObject diagnostic = new JsonObject();
     Optional.ofNullable(syntaxError.getErrorCode())
         .ifPresent(code -> diagnostic.add("code", new JsonPrimitive(code.getLabel())));
