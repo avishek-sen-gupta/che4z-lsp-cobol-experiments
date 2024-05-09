@@ -41,7 +41,7 @@ class IdmsDialectTest {
 //      CommonTokenStream tokens = new CommonTokenStream(idmsLexer);
 //      IdmsParser idmsParser = new IdmsParser(tokens);
 //      IdmsParser.StartRuleContext startRuleContext = idmsParser.startRule();
-//      final IdmsParserListener listener = new IdmsCustomListener();
+      final IdmsParserListener listener = new CustomIdmsParseTreeListener();
 //      ParseTreeWalker walker = new ParseTreeWalker();
 //      walker.walk(listener, startRuleContext);
 

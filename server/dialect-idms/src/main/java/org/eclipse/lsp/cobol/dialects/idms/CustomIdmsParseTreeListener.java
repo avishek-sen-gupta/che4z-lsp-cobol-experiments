@@ -16,15 +16,25 @@
 package org.eclipse.lsp.cobol.dialects.idms;
 
 /** This test checks that Outline tree fot the program is constructed correctly */
-public class IdmsCustomListener extends IdmsParserBaseListener {
+public class CustomIdmsParseTreeListener extends IdmsParserBaseListener {
     @Override
     public void enterTransferStatement(IdmsParser.TransferStatementContext ctx) {
-//        super.enterTransferStatement(ctx);
+        super.enterTransferStatement(ctx);
 //        System.out.println("Entered a transfer statement");
 //        System.out.println(ctx.RETURN().getSymbol().getText());
 //        System.out.println(ctx.USING().getSymbol().getText());
 //        System.out.println(ctx.CONTROL().getSymbol().getText());
 //        System.out.println(ctx.children);
+    }
+
+    @Override
+    public void enterIdmsSections(IdmsParser.IdmsSectionsContext ctx) {
+        super.enterIdmsSections(ctx);
+    }
+
+    @Override
+    public void enterIdmsControlSection(IdmsParser.IdmsControlSectionContext ctx) {
+        super.enterIdmsControlSection(ctx);
     }
 
     @Override

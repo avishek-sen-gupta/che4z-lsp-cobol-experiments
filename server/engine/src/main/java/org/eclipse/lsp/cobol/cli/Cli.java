@@ -201,6 +201,7 @@ public class Cli implements Callable<Integer> {
     CodeLayoutStore layoutStore = diCtx.getInstance(CodeLayoutStore.class);
 
     Pipeline pipeline = new Pipeline();
+    pipeline.add(new DialectCompilerDirectiveStage(dialectService));
     pipeline.add(new CompilerDirectivesStage(messageService));
     pipeline.add(new DialectProcessingStage(dialectService));
     pipeline.add(new PreprocessorStage(grammarPreprocessor));

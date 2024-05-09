@@ -315,6 +315,7 @@ public class DialectService {
                         .findFirst()
                         .map(
                             dialect -> {
+//                              Not registering because unit test case
 //                              registerDialectCodeActions(dialect);
                               changed.set(true);
                               return dialect;

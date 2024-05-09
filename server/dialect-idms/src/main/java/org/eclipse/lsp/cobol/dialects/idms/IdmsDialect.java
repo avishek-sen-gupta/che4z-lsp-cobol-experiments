@@ -17,6 +17,7 @@ package org.eclipse.lsp.cobol.dialects.idms;
 import com.google.common.collect.ImmutableList;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.lsp.cobol.common.ResultWithErrors;
 import org.eclipse.lsp.cobol.common.copybook.CopybookModel;
@@ -191,8 +192,12 @@ public final class IdmsDialect implements CobolDialect {
     List<SyntaxError> errors = new ArrayList<>();
     IdmsParser.StartRuleContext startRuleContext = parseIdms(context.getExtendedDocument().toString(),
             context.getExtendedDocument().getUri(), errors);
+    IdmsParserListener idmsParserListener = new CustomIdmsParseTreeListener();
     List<Node> nodes = new ArrayList<>();
-    nodes.addAll(visitor.visitStartRule(startRuleContext));
+    ParseTreeWalker x = new ParseTreeWalker();
+    x.walk(idmsParserListener, startRuleContext);
+
+      nodes.addAll(visitor.visitStartRule(startRuleContext));
     nodes.addAll(context.getDialectNodes());
 
     new ArrayList<>(nodes).stream().filter(CopyNode.class::isInstance).forEach(n ->
