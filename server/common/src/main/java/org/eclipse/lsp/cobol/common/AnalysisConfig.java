@@ -49,7 +49,7 @@ public class AnalysisConfig {
   public static AnalysisConfig defaultConfig(CopybookProcessingMode mode) {
     return new AnalysisConfig(
             mode,
-        ImmutableList.of("dialect-idms"),
+        ImmutableList.of("IDMS"),
         true,
         ImmutableList.of(new DialectRegistryItem("IDMS", URI.create("file:///Users/asgupta/code/mbrdi-proleap/che4z/che-che4z-lsp-for-cobol-2.1.2/server/dialect-idms/target/dialect-idms.jar"), "Some Description", "Some ID")),
         ImmutableMap.of("target-sql-backend", new Gson().toJsonTree(SQLBackend.DB2_SERVER)));
