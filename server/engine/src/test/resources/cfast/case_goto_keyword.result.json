@@ -1,0 +1,52 @@
+[
+  {
+    "name": "GTKW",
+    "type": "program",
+    "location": {
+      "uri": "fake/path",
+      "start": {
+        "line": 15,
+        "character": 8
+      },
+      "end": {
+        "line": 19,
+        "character": 29
+      }
+    },
+    "children": [
+      {
+        "targetName": [
+          "OPTIONS"
+        ],
+        "type": "goto",
+        "location": {
+          "uri": "fake/path",
+          "start": {
+            "line": 17,
+            "character": 12
+          },
+          "end": {
+            "line": 17,
+            "character": 25
+          }
+        }
+      },
+      {
+        "snippet": "OPTIONS.\r\n           DISPLAY \u0027OPTION\u0027.",
+        "name": "OPTIONS",
+        "type": "paragraph",
+        "location": {
+          "uri": "fake/path",
+          "start": {
+            "line": 18,
+            "character": 8
+          },
+          "end": {
+            "line": 19,
+            "character": 29
+          }
+        }
+      }
+    ]
+  }
+]

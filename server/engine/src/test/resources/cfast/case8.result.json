@@ -1,0 +1,80 @@
+[
+  {
+    "name": "STPRG",
+    "type": "program",
+    "location": {
+      "uri": "fake/path",
+      "start": {
+        "line": 15,
+        "character": 8
+      },
+      "end": {
+        "line": 19,
+        "character": 18
+      }
+    },
+    "children": [
+      {
+        "targetName": "PARAG1",
+        "type": "perform",
+        "location": {
+          "uri": "fake/path",
+          "start": {
+            "line": 16,
+            "character": 20
+          },
+          "end": {
+            "line": 16,
+            "character": 26
+          }
+        }
+      },
+      {
+        "type": "stop",
+        "location": {
+          "uri": "fake/path",
+          "start": {
+            "line": 17,
+            "character": 12
+          },
+          "end": {
+            "line": 17,
+            "character": 24
+          }
+        }
+      },
+      {
+        "snippet": "PARAG1.\r\n            EXIT.",
+        "name": "PARAG1",
+        "type": "paragraph",
+        "location": {
+          "uri": "fake/path",
+          "start": {
+            "line": 18,
+            "character": 8
+          },
+          "end": {
+            "line": 19,
+            "character": 18
+          }
+        },
+        "children": [
+          {
+            "type": "exit",
+            "location": {
+              "uri": "fake/path",
+              "start": {
+                "line": 19,
+                "character": 13
+              },
+              "end": {
+                "line": 19,
+                "character": 17
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

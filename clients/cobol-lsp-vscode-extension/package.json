@@ -1,0 +1,511 @@
+{
+  "name": "cobol-language-support",
+  "displayName": "COBOL Language Support",
+  "description": "Autocomplete, highlighting and diagnostics for COBOL code and copybooks.",
+  "author": "Broadcom",
+  "license": "EPL-2.0",
+  "version": "2.1.2",
+  "preview": false,
+  "publisher": "BroadcomMFD",
+  "engines": {
+    "vscode": "^1.71.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eclipse/che-che4z-lsp-for-cobol.git"
+  },
+  "bugs": {
+    "url": "https://github.com/eclipse/che-che4z-lsp-for-cobol/issues"
+  },
+  "keywords": [
+    "mainframe",
+    "lsp",
+    "cobol",
+    "z/os",
+    "zowe",
+    "zos",
+    "ibm",
+    "datacom",
+    "cics",
+    "db2"
+  ],
+  "categories": [
+    "Programming Languages"
+  ],
+  "activationEvents": [
+    "onLanguage:cobol"
+  ],
+  "icon": "resources/logo.png",
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "cobol-lsp.cpy-manager.fetch-copybook",
+        "title": "Fetch copybook"
+      },
+      {
+        "command": "cobol-lsp.cpy-manager.goto-settings",
+        "title": "Open Copybook location settings"
+      },
+      {
+        "command": "cobol-lsp.serverRuntime.goto-settings",
+        "title": "Open serverRuntime settings"
+      },
+      {
+        "command": "cobol-lsp.dialects.goto-settings",
+        "title": "Open Dialects settings"
+      },
+      {
+        "command": "cobol-lsp.commentLine.toggle",
+        "title": "Toggle COBOL Line Comment"
+      },
+      {
+        "command": "cobol-lsp.commentLine.comment",
+        "title": "Add Cobol Line Comment"
+      },
+      {
+        "command": "cobol-lsp.commentLine.uncomment",
+        "title": "Remove COBOL Line Comment"
+      },
+      {
+        "command": "cobol-lsp.clear.downloaded.copybooks",
+        "title": "Clear downloaded copybooks"
+      },
+      {
+        "command": "cobol-lsp.snippets.insertSnippets",
+        "title": "Insert COBOL Snippet",
+        "category": "Snippets"
+      }
+    ],
+    "languages": [
+      {
+        "id": "cobol",
+        "extensions": [
+          ".cbl",
+          ".cob",
+          ".cobol",
+          ".cpy",
+          ".copy"
+        ],
+        "aliases": [
+          "COBOL"
+        ],
+        "configuration": "./syntaxes/lang-config.json",
+        "firstLine": "^[0-9 ]{6}([*].*|[ Dd] *([Ii][Dd]([Ee][Nn][Tt][Ii][Ff][Ii][Cc][Aa][Tt][Ii][Oo][Nn])? +[Dd][Ii][Vv][Ii][Ss][Ii][Oo][Nn][. ]|[0-9][0-9] +[@#$A-Z][-A-Z0-9]*[. ]|[*](CBL|PROCESS) ).*)$|^([0-9].{5})?[ ]*(CBL|PROCESS) "
+      }
+    ],
+    "grammars": [
+      {
+        "language": "cobol",
+        "scopeName": "source.cobol",
+        "path": "./syntaxes/COBOL.tmLanguage.json",
+        "embeddedLanguages": {
+          "meta.embedded.block.html": "html"
+        }
+      },
+      {
+        "scopeName": "meta.embedded.block.cics",
+        "path": "./syntaxes/CICS.tmLanguage.json",
+        "injectTo": [
+          "source.cobol"
+        ]
+      },
+      {
+        "scopeName": "meta.embedded.block.sql",
+        "path": "./syntaxes/SQL.tmLanguage.json",
+        "embeddedLanguages": {
+          "meta.embedded.block.sql": "sql"
+        },
+        "injectTo": [
+          "source.cobol"
+        ]
+      }
+    ],
+    "configuration": {
+      "title": "COBOL Language Support",
+      "properties": {
+        "cobol-lsp.smart-tab": {
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            },
+            {
+              "type": "object",
+              "properties": {
+                "default": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "anchors": {
+                  "type": "object",
+                  "patternProperties": {
+                    "^.*$": {
+                      "type": "array",
+                      "items": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "description": "Enable/disable smart tab",
+          "default": true
+        },
+        "cobol-lsp.cpy-manager.profiles": {
+          "type": "string",
+          "description": "Current default profile for copybook downloader\nZowe Explorer version 1.15.0 or higher is required to download copybooks from the mainframe"
+        },
+        "cobol-lsp.cpy-manager.paths-local": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Default list of local paths to search for copybooks",
+          "uniqueItems": true
+        },
+        "cobol-lsp.cpy-manager.paths-dsn": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Default list of datasets to search for copybooks\nZowe Explorer version 1.15.0 or higher is required to download copybooks from the mainframe",
+          "uniqueItems": true
+        },
+        "cobol-lsp.cpy-manager.paths-uss": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Default list of USS paths to search for copybooks\nZowe Explorer version 1.15.0 or higher is required to download copybooks from the mainframe",
+          "uniqueItems": true
+        },
+        "cobol-lsp.cpy-manager.copybook-extensions": {
+          "type": "array",
+          "$comment": "Items is converted to an array instead of simple string, to disable the vscode rendering the form for extensions setting, instead shows an hyper link to settings.xml for editing. This is done as empty string is not supported by vscode yet",
+          "items": {
+            "type": [
+              "string"
+            ]
+          },
+          "default": [
+            ".CPY",
+            ".COPY",
+            ".cpy",
+            ".copy",
+            ""
+          ],
+          "description": "List of copybook extensions. Empty string specifies no file extension.",
+          "uniqueItems": true
+        },
+        "cobol-lsp.cpy-manager.copybook-file-encoding": {
+          "type": "string",
+          "markdownDescription": "The file encoding for copybooks stored in mainframe or USS data sets. You can also edit this parameter in .vscode\\settings.json. Other supported encodings can be found at [supported encodings](https://github.com/ashtuchkin/iconv-lite/wiki/Supported-Encodings) ",
+          "enum": [
+            "utf8",
+            "ucs2",
+            "utf16le",
+            "ascii",
+            "base64",
+            "UTF7",
+            "UTF7-IMAP",
+            "UTF-16BE",
+            "UTF-16",
+            "UCS-4",
+            "UTF-32",
+            "UTF-32LE",
+            "UTF-32BE",
+            "ISO-8859-1",
+            "ISO-8859-2",
+            "ISO-8859-3",
+            "ISO-8859-4",
+            "ISO-8859-5",
+            "ISO-8859-6",
+            "ISO-8859-7",
+            "ISO-8859-8",
+            "ISO-8859-9",
+            "ISO-8859-10",
+            "ISO-8859-11",
+            "ISO-8859-12",
+            "ISO-8859-13",
+            "ISO-8859-14",
+            "ISO-8859-15",
+            "ISO-8859-16",
+            "cp437",
+            "cp720",
+            "cp737",
+            "cp775",
+            "cp808",
+            "cp850",
+            "cp852",
+            "cp855",
+            "cp856",
+            "cp857",
+            "cp858",
+            "cp860",
+            "cp861",
+            "cp862",
+            "cp863",
+            "cp864",
+            "cp865",
+            "cp866",
+            "cp869",
+            "cp922",
+            "cp1046",
+            "cp1124",
+            "cp1125",
+            "cp1129",
+            "cp1133",
+            "cp1161",
+            "cp1162",
+            "cp1163",
+            "cp1047",
+            "cp1140",
+            "cp1147",
+            "cp1148",
+            "cp037",
+            "cp500",
+            "iso646cn",
+            "iso646jp"
+          ],
+          "enumDescriptions": [
+            "utf8",
+            "ucs2",
+            "utf16le",
+            "ascii",
+            "base64",
+            "UTF7",
+            "UTF7-IMAP",
+            "UTF-16BE",
+            "UTF-16",
+            "UCS-4",
+            "UTF-32",
+            "UTF-32LE",
+            "UTF-32BE",
+            "ISO-8859-1",
+            "ISO-8859-2",
+            "ISO-8859-3",
+            "ISO-8859-4",
+            "ISO-8859-5",
+            "ISO-8859-6",
+            "ISO-8859-7",
+            "ISO-8859-8",
+            "ISO-8859-9",
+            "ISO-8859-10",
+            "ISO-8859-11",
+            "ISO-8859-12",
+            "ISO-8859-13",
+            "ISO-8859-14",
+            "ISO-8859-15",
+            "ISO-8859-16",
+            "IBM-437",
+            "IBM-720",
+            "IBM-737",
+            "IBM-775",
+            "IBM-808",
+            "IBM-850",
+            "IBM-852",
+            "IBM-855",
+            "IBM-856",
+            "IBM-857",
+            "IBM-858",
+            "IBM-860",
+            "IBM-861",
+            "IBM-862",
+            "IBM-863",
+            "IBM-864",
+            "IBM-865",
+            "IBM-866",
+            "IBM-869",
+            "IBM-922",
+            "IBM-1046",
+            "IBM-1124",
+            "IBM-1125",
+            "IBM-1129",
+            "IBM-1133",
+            "IBM-1161",
+            "IBM-1162",
+            "IBM-1163",
+            "IBM-1047",
+            "IBM-1140",
+            "IBM-1147",
+            "IBM-1148",
+            "IBM-037",
+            "IBM-500",
+            "iso646cn",
+            "iso646jp"
+          ]
+        },
+        "cobol-lsp.subroutine-manager.paths-local": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of relative local paths to search for subroutines",
+          "uniqueItems": true
+        },
+        "cobol-lsp.logging.level.root": {
+          "type": "string",
+          "default": "ERROR",
+          "enum": [
+            "ERROR",
+            "WARN",
+            "INFO",
+            "DEBUG",
+            "TRACE",
+            "ALL"
+          ],
+          "enumDescriptions": [
+            "ERROR level logs error events which might be fatal to the application",
+            "WARN level logs potentially harmful situations",
+            "INFO level logs informational messages which describe overall progress of the application",
+            "DEBUG level logs informational events of low importance",
+            "TRACE level logs informational events of very low importance",
+            "ALL level is used to turn on all logging"
+          ],
+          "description": "The logging level for COBOL LS backend"
+        },
+        "cobol-lsp.target-sql-backend": {
+          "type": "string",
+          "default": "DB2_SERVER",
+          "enum": [
+            "DB2_SERVER",
+            "DATACOM_SERVER",
+            "NONE"
+          ],
+          "enumDescriptions": [
+            "DB2_SERVER  - IBM DB2 SQL Server",
+            "DATACOM_SERVER - CA DATACOM Server",
+            "NONE"
+          ],
+          "description": "The target SQL backend server which is used on the mainframe"
+        },
+        "cobol-lsp.dialects": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of enabled dialects",
+          "uniqueItems": true
+        },
+        "cobol-lsp.cics.translator": {
+          "type": "boolean",
+          "default": "true",
+          "description": "Enable CICS translator"
+        },
+        "cobol-lsp.serverRuntime": {
+          "type": "string",
+          "enum": [
+            "JAVA",
+            "NATIVE"
+          ],
+          "default": "JAVA",
+          "enumDescriptions": [
+            "JAVA  - Run from a Java Archive (jar). Requires java runtime to be installed",
+            "NATIVE - Use platform binary"
+          ],
+          "description": "COBOL LS server runtime."
+        }
+      }
+    },
+    "configurationDefaults": {
+      "[cobol]": {
+        "editor.guides.indentation": false,
+        "editor.rulers": [
+          7,
+          11,
+          72,
+          80
+        ],
+        "editor.wordSeparators": "!\"#$%&'()*+,./:;<=>?@[\\]^`{|}~"
+      }
+    },
+    "keybindings": [
+      {
+        "key": "tab",
+        "command": "cobol-lsp.smart-tab",
+        "when": "editorLangId == cobol && config.cobol-lsp.smart-tab && editorTextFocus && !inSnippetMode && !suggestWidgetVisible"
+      },
+      {
+        "key": "shift+tab",
+        "command": "cobol-lsp.smart-outdent",
+        "when": "editorLangId == cobol && config.cobol-lsp.smart-tab && editorTextFocus && !inSnippetMode && !suggestWidgetVisible"
+      },
+      {
+        "key": "ctrl+/",
+        "mac": "cmd+/",
+        "command": "cobol-lsp.commentLine.toggle",
+        "when": "editorLangId =~ /^cobol$/i && editorTextFocus && !editorReadonly"
+      }
+    ],
+    "jsonValidation": [
+      {
+        "fileMatch": "/.cobolplugin/pgm_conf.json",
+        "url": "./schema/pgm_conf.schema.json"
+      },
+      {
+        "fileMatch": "/.cobolplugin/proc_grps.json",
+        "url": "./schema/proc_grps.schema.json"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run -S build -- --minify",
+    "postinstall": "node -e \"if (process.env.NODE_ENV === 'production'){process.exit(1)} \" && patch-package || echo skip patching",
+    "build": "esbuild src/extension.ts --bundle --sourcemap --platform=node --target=node16.17.1 --outdir=dist --external:vscode --format=cjs",
+    "build:watch": "npm run build -- --watch",
+    "test:integration": "npm run compile && node ./out/test/runTest.js",
+    "compile": "tsc -p ./",
+    "lint": "prettier -c .",
+    "pretest": "npm run compile && npm run lint",
+    "pretty": "prettier -w .",
+    "watch": "tsc -watch -p ./",
+    "test": "jest -w 1 --unhandled-rejections=strict",
+    "coverage": "jest --coverage --runInBand",
+    "package": "vsce package --no-dependencies"
+  },
+  "dependencies": {
+    "@code4z/cobol-dialect-api": "file:../cobol-dialect-api",
+    "glob": "10.3.10",
+    "iconv-lite": "^0.6.3",
+    "micromatch": "4.0.5",
+    "@vscode/extension-telemetry": "^0.8.2",
+    "vscode-languageclient": "8.0.2"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^9.0.13",
+    "@types/jest": "^29.0.3",
+    "@types/minimatch": "5.1.2",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "^14.18.29",
+    "@types/vscode": "^1.71.0",
+    "@vscode/test-electron": "2.3.8",
+    "@vscode/vsce": "2.19.0",
+    "decache": "^4.6.1",
+    "esbuild": "^0.16.6",
+    "eslint-plugin-sonarjs": "^0.15.0",
+    "fs-extra": "10.1.0",
+    "jest": "^29.0.3",
+    "jest-jasmine2": "^29.0.3",
+    "jest-sonar-reporter": "^2.0.0",
+    "mocha": "^10.0.0",
+    "nyc": "^15.1.0",
+    "patch-package": "^6.4.7",
+    "prettier": "2.8.7",
+    "ts-jest": "^29.0.1",
+    "tslint": "^5.18.0",
+    "typescript": "^4.9.4"
+  },
+  "overrides": {
+    "isexe": "^3.1.1"
+  }
+}

@@ -1,0 +1,139 @@
+[
+  {
+    "name": "CONDS2",
+    "type": "program",
+    "location": {
+      "uri": "fake/path",
+      "start": {
+        "line": 21,
+        "character": 8
+      },
+      "end": {
+        "line": 30,
+        "character": 21
+      }
+    },
+    "children": [
+      {
+        "snippet": "A000-PARA.\r\n           IF NOT WS-NUM1 \u003e WS-NUM2\r\n              DISPLAY \u0027HELLO\u0027\r\n              IF WS-NUM1 \u003e WS-NUM2\r\n                  GO TO A000-PARA\r\n              END-IF\r\n           END-IF\r\n           PERFORM A000-PARA.\r\n           STOP RUN.",
+        "name": "A000-PARA",
+        "type": "paragraph",
+        "location": {
+          "uri": "fake/path",
+          "start": {
+            "line": 22,
+            "character": 8
+          },
+          "end": {
+            "line": 30,
+            "character": 21
+          }
+        },
+        "children": [
+          {
+            "type": "if",
+            "location": {
+              "uri": "fake/path",
+              "start": {
+                "line": 23,
+                "character": 12
+              },
+              "end": {
+                "line": 28,
+                "character": 18
+              }
+            }
+          },
+          {
+            "type": "if",
+            "location": {
+              "uri": "fake/path",
+              "start": {
+                "line": 25,
+                "character": 15
+              },
+              "end": {
+                "line": 27,
+                "character": 21
+              }
+            }
+          },
+          {
+            "targetName": [
+              "A000-PARA"
+            ],
+            "type": "goto",
+            "location": {
+              "uri": "fake/path",
+              "start": {
+                "line": 26,
+                "character": 19
+              },
+              "end": {
+                "line": 26,
+                "character": 34
+              }
+            }
+          },
+          {
+            "type": "endif",
+            "location": {
+              "uri": "fake/path",
+              "start": {
+                "line": 25,
+                "character": 15
+              },
+              "end": {
+                "line": 27,
+                "character": 21
+              }
+            }
+          },
+          {
+            "type": "endif",
+            "location": {
+              "uri": "fake/path",
+              "start": {
+                "line": 23,
+                "character": 12
+              },
+              "end": {
+                "line": 28,
+                "character": 18
+              }
+            }
+          },
+          {
+            "targetName": "A000-PARA",
+            "type": "perform",
+            "location": {
+              "uri": "fake/path",
+              "start": {
+                "line": 29,
+                "character": 20
+              },
+              "end": {
+                "line": 29,
+                "character": 29
+              }
+            }
+          },
+          {
+            "type": "stop",
+            "location": {
+              "uri": "fake/path",
+              "start": {
+                "line": 30,
+                "character": 12
+              },
+              "end": {
+                "line": 30,
+                "character": 20
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

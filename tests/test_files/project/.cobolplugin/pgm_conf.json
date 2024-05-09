@@ -1,0 +1,24 @@
+{
+    "pgms": [
+        {
+            "program": "cobol-vanila/*",
+            "pgroup": "VANILA"
+        },
+        {
+            "program": "cobol-idms/*",
+            "pgroup": "IDMS"
+        },
+        {
+            "program": "cobol-daco/*",
+            "pgroup": "DaCo"
+        },
+        {
+            "program": "cobol-daco-noconf/*",
+            "pgroup": "IDMS"
+        },
+        {
+            "program": "cobol-dc/*",
+            "pgroup": "DaCo"
+        }
+    ]
+}

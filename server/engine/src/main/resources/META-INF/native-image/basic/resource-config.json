@@ -1,0 +1,33 @@
+{
+  "resources":{
+    "includes":[
+      {
+        "pattern":"\\QimplicitCopybooks/DFHEIBLC.cpy\\E"
+      },
+      {
+        "pattern":"\\QimplicitCopybooks/SPECIALREGISTERS.cpy\\E"
+      },
+      {
+        "pattern":"\\QimplicitCopybooks/SQLCA_DB2.cpy\\E"
+      },
+      {
+        "pattern":"\\QimplicitCopybooks/SQLCA_DATACOM.cpy\\E"
+      },
+      {
+        "pattern":"\\QimplicitCopybooks/SQLDA.cpy\\E"
+      },
+      {
+        "pattern":"\\Qlogback.xml\\E"
+      },
+      {
+        "pattern":"\\Q/SpecialTokenHandling.properties\\E"
+      },
+      {
+        "pattern":"\\Q/LanguageKeywords.txt\\E"
+      }
+    ]},
+  "bundles":[{
+    "name":"resourceBundles/messages",
+    "locales":["en"]
+  }]
+}
