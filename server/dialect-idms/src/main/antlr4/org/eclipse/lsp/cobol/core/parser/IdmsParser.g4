@@ -157,7 +157,7 @@ idmsStmtsOptTermOn
      connectStatement | dcStatement | dequeueStatement | disconnectStatement | endStatement | endpageStatement | enqueueStatement | eraseStatement | findStatement |
      finishStatement | freeStatement | getStatement | inquireMapMoveStatement | keepStatement | loadStatement | mapStatement | modifyStatement | obtainStatement |
      postStatement | putStatement | readyStatement |rollbackStatement | snapStatement | startpageStatement | storeStatement | waitStatement | writeIdmsStatement |
-     readStatement | acceptStatement | deleteStatement | returnStatement | sendStatement | setStatement
+     readStatement | acceptStatement | deleteStatement | returnStatement | sendStatement | setStatement | addRecordStatement | delRecordStatement
     ;
 
 idmsStmtsMandTermOn
@@ -170,6 +170,14 @@ idmsOnClause
 
 nextSentence
     : (NEXT SENTENCE) DOT_FS?
+    ;
+
+addRecordStatement
+    : ADD RECORD copySource DOT_FS
+    ;
+
+delRecordStatement
+    : DEL RECORD copySource DOT_FS
     ;
 
 // abend code statement

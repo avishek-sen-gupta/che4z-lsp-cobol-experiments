@@ -90,7 +90,15 @@ public class ParserStage implements Stage<ParserStageResult, DialectOutcome> {
     }
 }
 
+/**
+ * Parser Listener
+ */
 class CustomCobolParseTreeListener extends CobolParserBaseListener {
+    @Override
+    public void enterIfThen(CobolParser.IfThenContext ctx) {
+        super.enterIfThen(ctx);
+    }
+
     @Override
     public void enterCompilationUnit(CobolParser.CompilationUnitContext ctx) {
         super.enterCompilationUnit(ctx);
