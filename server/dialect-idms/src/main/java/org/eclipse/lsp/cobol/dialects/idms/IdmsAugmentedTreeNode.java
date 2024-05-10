@@ -45,7 +45,6 @@ public class IdmsAugmentedTreeNode extends SimpleTreeNode {
             int stopColumn = context.stop.getCharPositionInLine();
             String formattedExtent = MessageFormat.format("([{0}, {1}] - [{2}, {3}])", startLine, startColumn, stopLine, stopColumn);
             return astNode.getClass().getSimpleName() + " / " + astNode.getText() + " " + formattedExtent;
-//            return astNode.getClass().getSimpleName() + " / " + astNode.getText() + "([" + startLine + ", " + startColumn + "] - [" + stopLine + ", " + stopColumn + "])";
         }
         return astNode.getClass().getSimpleName() + " / " + astNode.getText();
     }
