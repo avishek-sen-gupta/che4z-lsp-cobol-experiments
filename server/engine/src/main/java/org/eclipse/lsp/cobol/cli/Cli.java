@@ -47,7 +47,6 @@ import org.eclipse.lsp.cobol.core.preprocessor.delegates.GrammarPreprocessor;
 import org.eclipse.lsp.cobol.core.semantics.CopybooksRepository;
 import org.eclipse.lsp.cobol.service.settings.CachingConfigurationService;
 import org.eclipse.lsp.cobol.service.settings.layout.CodeLayoutStore;
-import org.eclipse.lsp.cobol.visualisation.CobolTreeVisualiser;
 import org.eclipse.lsp4j.Location;
 import picocli.CommandLine;
 
@@ -161,7 +160,7 @@ public class Cli implements Callable<Integer> {
     System.out.println(gson.toJson(result));
       ProcessingResult data = (ProcessingResult) pipelineResult.getLastStageResult().getData();
       Node rootNode = data.getRootNode();
-      new CobolTreeVisualiser().visualiseCobolAST(rootNode);
+//      new CobolTreeVisualiser().visualiseCobolAST(rootNode);
       return 0;
   }
 

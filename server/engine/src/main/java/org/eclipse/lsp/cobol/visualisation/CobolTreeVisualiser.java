@@ -16,7 +16,9 @@ package org.eclipse.lsp.cobol.visualisation;
 
 import hu.webarticum.treeprinter.SimpleTreeNode;
 import hu.webarticum.treeprinter.printer.listing.ListingTreePrinter;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.cli.CobolAugmentedTreeNode;
+import org.eclipse.lsp.cobol.cli.CobolContextAugmentedTreeNode;
 import org.eclipse.lsp.cobol.common.model.tree.Node;
 
 /**
@@ -24,7 +26,7 @@ import org.eclipse.lsp.cobol.common.model.tree.Node;
  */
 public class CobolTreeVisualiser {
     /**
-     * Draws the tree
+     * Draws the tree using the wrapping Node structure
      * @param rootNode
      */
     public void visualiseCobolAST(Node rootNode) {
@@ -40,4 +42,24 @@ public class CobolTreeVisualiser {
             buildGraph(astChildNode, graphChildNode);
         }
     }
+
+    /**
+     * Draws the tree using the canonical Context structure
+     * @param tree
+     */
+    public void visualiseCobolAST(ParseTree tree) {
+        SimpleTreeNode graphRoot = new CobolContextAugmentedTreeNode(tree);
+        buildContextGraph(tree, graphRoot);
+        new ListingTreePrinter().print(graphRoot);
+    }
+
+    private void buildContextGraph(ParseTree astParentNode, SimpleTreeNode graphParentNode) {
+        for (int i = 0; i <= astParentNode.getChildCount() - 1; ++i) {
+            ParseTree astChildNode = astParentNode.getChild(i);
+            SimpleTreeNode graphChildNode = new CobolContextAugmentedTreeNode(astChildNode);
+            graphParentNode.addChild(graphChildNode);
+            buildContextGraph(astChildNode, graphChildNode);
+        }
+    }
+
 }

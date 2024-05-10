@@ -32,6 +32,7 @@ import org.eclipse.lsp.cobol.core.engine.pipeline.Stage;
 import org.eclipse.lsp.cobol.core.engine.pipeline.StageResult;
 import org.eclipse.lsp.cobol.core.strategy.CobolErrorStrategy;
 import org.eclipse.lsp.cobol.core.visitor.ParserListener;
+import org.eclipse.lsp.cobol.visualisation.CobolTreeVisualiser;
 import org.eclipse.lsp4j.Location;
 
 import java.util.List;
@@ -65,6 +66,8 @@ public class ParserStage implements Stage<ParserStageResult, DialectOutcome> {
             x.walk(new CustomCobolParseTreeListener(), tree);
 //      ParseTreeWalker walker = new ParseTreeWalker();
 //      walker.walk(listener, tree);
+            new CobolTreeVisualiser().visualiseCobolAST(tree);
+
             context.getAccumulatedErrors().addAll(listener.getErrors());
             context.getAccumulatedErrors().addAll(getParsingError(context, parser));
             return new StageResult<>(new ParserStageResult(parser.getTokens(), tree));
