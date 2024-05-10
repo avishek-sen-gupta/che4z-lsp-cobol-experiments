@@ -158,7 +158,7 @@ public class Cli implements Callable<Integer> {
     System.out.println(gson.toJson(result));
       ProcessingResult data = (ProcessingResult) pipelineResult.getLastStageResult().getData();
       Node rootNode = data.getRootNode();
-      SimpleTreeNode graphRoot = new AugmentedTreeNode(rootNode);
+      SimpleTreeNode graphRoot = new CobolAugmentedTreeNode(rootNode);
       buildGraph(rootNode, graphRoot);
       new ListingTreePrinter().print(graphRoot);
       return 0;
@@ -166,7 +166,7 @@ public class Cli implements Callable<Integer> {
 
     private static void buildGraph(Node astParentNode, SimpleTreeNode graphParentNode) {
         for (Node astChildNode: astParentNode.getChildren()) {
-            SimpleTreeNode graphChildNode = new AugmentedTreeNode(astChildNode);
+            SimpleTreeNode graphChildNode = new CobolAugmentedTreeNode(astChildNode);
             graphParentNode.addChild(graphChildNode);
             buildGraph(astChildNode, graphChildNode);
         }

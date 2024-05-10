@@ -23,10 +23,10 @@ import org.eclipse.lsp.cobol.common.model.tree.variables.ConditionDataNameNode;
 /**
  *  Visualisation Tree Node that encapsulates the actual AST node
  */
-public class AugmentedTreeNode extends SimpleTreeNode {
+public class CobolAugmentedTreeNode extends SimpleTreeNode {
     private Node astNode;
 
-    public AugmentedTreeNode(Node astNode) {
+    public CobolAugmentedTreeNode(Node astNode) {
         super(astNode.getClass().getSimpleName());
         this.astNode = astNode;
     }

@@ -15,8 +15,10 @@
 package org.eclipse.lsp.cobol.dialects.idms;
 
 import com.google.common.collect.ImmutableList;
+import hu.webarticum.treeprinter.printer.listing.ListingTreePrinter;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.lsp.cobol.common.ResultWithErrors;
@@ -36,6 +38,7 @@ import org.eclipse.lsp.cobol.common.utils.KeywordsUtils;
 import org.eclipse.lsp.cobol.common.utils.RangeUtils;
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
+import hu.webarticum.treeprinter.SimpleTreeNode;
 
 import java.util.*;
 
@@ -196,6 +199,27 @@ public final class IdmsDialect implements CobolDialect {
     List<Node> nodes = new ArrayList<>();
     ParseTreeWalker x = new ParseTreeWalker();
     x.walk(idmsParserListener, startRuleContext);
+      List<IdmsParser.IdmsRulesContext> idmsRulesContexts = startRuleContext.idmsRules();
+      for (IdmsParser.IdmsRulesContext ctx: idmsRulesContexts) {
+          IdmsParser.IdmsSectionsContext idmsSectionsContext = ctx.idmsSections();
+          IdmsParser.IdmsStatementsContext idmsStatementsContext = ctx.idmsStatements();
+          if (idmsSectionsContext != null) {
+              List<ParseTree> trees = idmsSectionsContext.children;
+              for (ParseTree tree: trees) {
+                  SimpleTreeNode graphRoot = new IdmsAugmentedTreeNode(tree);
+                  buildGraph(tree, graphRoot);
+                  new ListingTreePrinter().print(graphRoot);
+              }
+          }
+          if (idmsStatementsContext != null) {
+              List<ParseTree> trees = idmsStatementsContext.children;
+              for (ParseTree tree: trees) {
+                  SimpleTreeNode graphRoot = new IdmsAugmentedTreeNode(tree);
+                  buildGraph(tree, graphRoot);
+                  new ListingTreePrinter().print(graphRoot);
+              }
+          }
+      }
 
       nodes.addAll(visitor.visitStartRule(startRuleContext));
     nodes.addAll(context.getDialectNodes());
@@ -222,7 +246,17 @@ public final class IdmsDialect implements CobolDialect {
     return new ResultWithErrors<>(new DialectOutcome(nodes, context), errors);
   }
 
-  @Override
+    private static void buildGraph(ParseTree astParentNode, SimpleTreeNode graphParentNode) {
+        for (int i = 0; i <= astParentNode.getChildCount() - 1; ++i) {
+            ParseTree astChildNode = astParentNode.getChild(i);
+//        for (ParseTree astChildNode: astParentNode.) {
+            SimpleTreeNode graphChildNode = new IdmsAugmentedTreeNode(astChildNode);
+            graphParentNode.addChild(graphChildNode);
+            buildGraph(astChildNode, graphChildNode);
+        }
+    }
+
+    @Override
   public Map<String, String> getKeywords() {
     return KeywordsUtils.getKeywords(IdmsDialect.class.getClassLoader(), "KeywordsIdms.txt");
   }

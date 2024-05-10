@@ -118,5 +118,4 @@ class CustomCobolParseTreeListener extends CobolParserBaseListener {
     @Override public void enterParagraph(CobolParser.ParagraphContext ctx) {
         System.out.println(ctx.paragraphDefinitionName());
     }
-
 }
