@@ -791,7 +791,7 @@ statement
     initiateStatement | inspectStatement | mergeStatement | moveStatement | multiplyStatement | openStatement | performStatement | purgeStatement |
     readStatement | readyResetTraceStatement | receiveStatement | releaseStatement | returnStatement | rewriteStatement | searchStatement | sendStatement |
     serviceReloadStatement | serviceLabelStatement | setStatement | sortStatement | startStatement | stopStatement | stringStatement | subtractStatement |
-    terminateStatement | unstringStatement | writeStatement | xmlParseStatement | jsonStatement
+    terminateStatement | unstringStatement | writeStatement | xmlParseStatement | jsonStatement | mapStatement
    ;
 
 jsonStatement
@@ -2194,6 +2194,11 @@ hexadecimalUtfLiteral: U_CHAR HEX_NUMBERS;
 
 charString
    : FINALCHARSTRING
+   ;
+
+// map expression
+mapStatement
+   : PLUSCHAR IDENTIFIER
    ;
 
 // arithmetic expression ----------------------------------

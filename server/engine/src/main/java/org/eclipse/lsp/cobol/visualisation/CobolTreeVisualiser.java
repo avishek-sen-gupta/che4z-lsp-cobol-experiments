@@ -29,7 +29,7 @@ public class CobolTreeVisualiser {
      */
     public void visualiseCobolAST(Node rootNode) {
         SimpleTreeNode graphRoot = new CobolAugmentedTreeNode(rootNode);
-        new CobolTreeVisualiser().buildGraph(rootNode, graphRoot);
+        buildGraph(rootNode, graphRoot);
         new ListingTreePrinter().print(graphRoot);
     }
 

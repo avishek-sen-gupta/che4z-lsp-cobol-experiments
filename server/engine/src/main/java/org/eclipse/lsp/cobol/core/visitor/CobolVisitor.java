@@ -1166,7 +1166,12 @@ public class CobolVisitor extends CobolParserBaseVisitor<List<Node>> {
     return ImmutableList.of(node);
   }
 
-  @Override public List<Node> visitAlterStatement(CobolParser.AlterStatementContext ctx) {
+    @Override
+    public List<Node> visitMapStatement(MapStatementContext ctx) {
+        return addTreeNode(ctx, location -> new MapStatementNode(location, ctx.IDENTIFIER().getText()));
+    }
+
+    @Override public List<Node> visitAlterStatement(CobolParser.AlterStatementContext ctx) {
     if (ctx.alterProceedTo() != null && ctx.alterProceedTo().size() > 0) {
       CobolParser.AlterProceedToContext alter = ctx.alterProceedTo().get(0);
       if (alter.procedureName() != null && alter.procedureName().size() == 2) {

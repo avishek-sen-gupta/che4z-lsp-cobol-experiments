@@ -47,6 +47,8 @@ public class CobolAugmentedTreeNode extends SimpleTreeNode {
             return withType(((PerformNode) astNode).getTarget().getName(), astNode);
         if (astNode instanceof ConditionDataNameNode)
             return withType(((ConditionDataNameNode) astNode).getFullVariableDescription(), astNode);
+        if (astNode instanceof MapStatementNode)
+            return withType(((MapStatementNode) astNode).getLabel(), astNode);
         return astNode.getClass().getSimpleName();
     }
 
