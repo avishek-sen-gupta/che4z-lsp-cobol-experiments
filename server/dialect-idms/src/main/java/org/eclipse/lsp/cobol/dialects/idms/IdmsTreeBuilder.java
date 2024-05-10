@@ -26,6 +26,7 @@ import java.util.List;
 public class IdmsTreeBuilder {
     /**
      * Draws the tree
+     *
      * @param startRuleContext
      */
     public void drawTree(IdmsParser.StartRuleContext startRuleContext) {
@@ -34,28 +35,26 @@ public class IdmsTreeBuilder {
             IdmsParser.IdmsSectionsContext idmsSectionsContext = ctx.idmsSections();
             IdmsParser.IdmsStatementsContext idmsStatementsContext = ctx.idmsStatements();
             if (idmsSectionsContext != null) {
-                List<ParseTree> trees = idmsSectionsContext.children;
-                for (ParseTree tree : trees) {
-                    SimpleTreeNode graphRoot = new IdmsAugmentedTreeNode(tree);
-                    buildGraph(tree, graphRoot);
-                    new ListingTreePrinter().print(graphRoot);
-                }
+                drawParseTrees(idmsSectionsContext.children);
             }
             if (idmsStatementsContext != null) {
-                List<ParseTree> trees = idmsStatementsContext.children;
-                for (ParseTree tree : trees) {
-                    SimpleTreeNode graphRoot = new IdmsAugmentedTreeNode(tree);
-                    buildGraph(tree, graphRoot);
-                    new ListingTreePrinter().print(graphRoot);
-                }
+                drawParseTrees(idmsStatementsContext.children);
             }
         }
     }
 
-    private static void buildGraph(ParseTree astParentNode, SimpleTreeNode graphParentNode) {
+    private void drawParseTrees(List<ParseTree> parseRuleContext) {
+        List<ParseTree> trees = parseRuleContext;
+        for (ParseTree tree : trees) {
+            SimpleTreeNode graphRoot = new IdmsAugmentedTreeNode(tree);
+            buildGraph(tree, graphRoot);
+            new ListingTreePrinter().print(graphRoot);
+        }
+    }
+
+    private void buildGraph(ParseTree astParentNode, SimpleTreeNode graphParentNode) {
         for (int i = 0; i <= astParentNode.getChildCount() - 1; ++i) {
             ParseTree astChildNode = astParentNode.getChild(i);
-//        for (ParseTree astChildNode: astParentNode.) {
             SimpleTreeNode graphChildNode = new IdmsAugmentedTreeNode(astChildNode);
             graphParentNode.addChild(graphChildNode);
             buildGraph(astChildNode, graphChildNode);
