@@ -34,6 +34,7 @@ import org.eclipse.lsp.cobol.common.model.tree.CopyNode;
 import org.eclipse.lsp.cobol.common.model.tree.Node;
 import org.eclipse.lsp.cobol.common.utils.KeywordsUtils;
 import org.eclipse.lsp.cobol.common.utils.RangeUtils;
+import org.eclipse.lsp.cobol.dialects.idms.visualisation.IdmsTreeVisualiser;
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
 
@@ -196,7 +197,7 @@ public final class IdmsDialect implements CobolDialect {
     List<Node> nodes = new ArrayList<>();
     ParseTreeWalker x = new ParseTreeWalker();
     x.walk(idmsParserListener, startRuleContext);
-    new IdmsTreeBuilder().drawTree(startRuleContext);
+    new IdmsTreeVisualiser().visualiseIdmsAST(startRuleContext);
 
     nodes.addAll(visitor.visitStartRule(startRuleContext));
     nodes.addAll(context.getDialectNodes());

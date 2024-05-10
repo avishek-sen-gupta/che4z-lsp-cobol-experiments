@@ -18,7 +18,6 @@ import com.google.common.collect.Multimap;
 import com.google.gson.*;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import hu.webarticum.treeprinter.printer.listing.ListingTreePrinter;
 import lombok.extern.slf4j.Slf4j;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.eclipse.lsp.cobol.cli.di.CliModule;
@@ -48,12 +47,16 @@ import org.eclipse.lsp.cobol.core.preprocessor.delegates.GrammarPreprocessor;
 import org.eclipse.lsp.cobol.core.semantics.CopybooksRepository;
 import org.eclipse.lsp.cobol.service.settings.CachingConfigurationService;
 import org.eclipse.lsp.cobol.service.settings.layout.CodeLayoutStore;
+import org.eclipse.lsp.cobol.visualisation.CobolTreeVisualiser;
 import org.eclipse.lsp4j.Location;
 import picocli.CommandLine;
-import hu.webarticum.treeprinter.SimpleTreeNode;
+
 import java.io.File;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.Callable;
 
 /**
@@ -158,19 +161,10 @@ public class Cli implements Callable<Integer> {
     System.out.println(gson.toJson(result));
       ProcessingResult data = (ProcessingResult) pipelineResult.getLastStageResult().getData();
       Node rootNode = data.getRootNode();
-      SimpleTreeNode graphRoot = new CobolAugmentedTreeNode(rootNode);
-      buildGraph(rootNode, graphRoot);
-      new ListingTreePrinter().print(graphRoot);
+      new CobolTreeVisualiser().visualiseCobolAST(rootNode);
       return 0;
   }
 
-    private static void buildGraph(Node astParentNode, SimpleTreeNode graphParentNode) {
-        for (Node astChildNode: astParentNode.getChildren()) {
-            SimpleTreeNode graphChildNode = new CobolAugmentedTreeNode(astChildNode);
-            graphParentNode.addChild(graphChildNode);
-            buildGraph(astChildNode, graphChildNode);
-        }
-    }
 
     private JsonObject toJson(SyntaxError syntaxError, Gson gson) {
     JsonObject diagnostic = new JsonObject();

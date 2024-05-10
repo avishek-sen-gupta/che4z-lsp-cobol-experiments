@@ -12,24 +12,26 @@
  *    Broadcom, Inc. - initial API and implementation
  *
  */
-package org.eclipse.lsp.cobol.dialects.idms;
+package org.eclipse.lsp.cobol.dialects.idms.visualisation;
 
 import hu.webarticum.treeprinter.SimpleTreeNode;
 import hu.webarticum.treeprinter.printer.listing.ListingTreePrinter;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.eclipse.lsp.cobol.dialects.idms.IdmsAugmentedTreeNode;
+import org.eclipse.lsp.cobol.dialects.idms.IdmsParser;
 
 import java.util.List;
 
 /**
  * Draws IDMS AST
  */
-public class IdmsTreeBuilder {
+public class IdmsTreeVisualiser {
     /**
      * Draws the tree
      *
      * @param startRuleContext
      */
-    public void drawTree(IdmsParser.StartRuleContext startRuleContext) {
+    public void visualiseIdmsAST(IdmsParser.StartRuleContext startRuleContext) {
         List<IdmsParser.IdmsRulesContext> idmsRulesContexts = startRuleContext.idmsRules();
         for (IdmsParser.IdmsRulesContext ctx : idmsRulesContexts) {
             IdmsParser.IdmsSectionsContext idmsSectionsContext = ctx.idmsSections();
