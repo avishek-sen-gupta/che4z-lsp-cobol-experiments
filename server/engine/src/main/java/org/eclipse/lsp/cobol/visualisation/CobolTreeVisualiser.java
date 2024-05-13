@@ -14,6 +14,8 @@
  */
 package org.eclipse.lsp.cobol.visualisation;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import hu.webarticum.treeprinter.SimpleTreeNode;
 import hu.webarticum.treeprinter.printer.listing.ListingTreePrinter;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -48,18 +50,21 @@ public class CobolTreeVisualiser {
      * @param tree
      */
     public void visualiseCobolAST(ParseTree tree) {
-        SimpleTreeNode graphRoot = new CobolContextAugmentedTreeNode(tree);
+        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
+        CobolContextAugmentedTreeNode graphRoot = new CobolContextAugmentedTreeNode(tree);
         buildContextGraph(tree, graphRoot);
         new ListingTreePrinter().print(graphRoot);
+        String s = gson.toJson(graphRoot);
     }
 
-    private void buildContextGraph(ParseTree astParentNode, SimpleTreeNode graphParentNode) {
+    private void buildContextGraph(ParseTree astParentNode, CobolContextAugmentedTreeNode graphParentNode) {
         for (int i = 0; i <= astParentNode.getChildCount() - 1; ++i) {
             ParseTree astChildNode = astParentNode.getChild(i);
-            SimpleTreeNode graphChildNode = new CobolContextAugmentedTreeNode(astChildNode);
+            CobolContextAugmentedTreeNode graphChildNode = new CobolContextAugmentedTreeNode(astChildNode);
             graphParentNode.addChild(graphChildNode);
             buildContextGraph(astChildNode, graphChildNode);
         }
+        graphParentNode.freeze();
     }
 
 }

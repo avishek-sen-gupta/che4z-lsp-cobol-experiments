@@ -14,15 +14,18 @@
  */
 package org.eclipse.lsp.cobol.cli;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import hu.webarticum.treeprinter.SimpleTreeNode;
+import hu.webarticum.treeprinter.TreeNode;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
-import org.eclipse.lsp.cobol.common.model.tree.Node;
-import org.eclipse.lsp.cobol.core.CobolParser;
+
+import java.util.List;
 
 /**
  *  Visualisation Tree Node that encapsulates the actual AST node
@@ -30,28 +33,53 @@ import org.eclipse.lsp.cobol.core.CobolParser;
 public class CobolContextAugmentedTreeNode extends SimpleTreeNode {
     private final ParseTree astNode;
 
+    @Expose
+    @SerializedName("nodeType")
+    private final String nodeType;
+    @Expose
+    @SerializedName("text")
+    private final String originalText;
+
+    @Expose
+    @SerializedName("children")
+    private List<TreeNode> childrenRef;
+
     public CobolContextAugmentedTreeNode(ParseTree astNode) {
         super(astNode.getClass().getSimpleName());
         this.astNode = astNode;
+        this.nodeType = astNode.getClass().getSimpleName();
+        this.originalText = withType(astNode, false);
+//        this.originalText = "LOL";
     }
 
     @Override
     public String content() {
-        return withType(astNode);
+        return astNode.getClass().getSimpleName() + " / " + withType(astNode, true);
     }
 
-    private String withType(ParseTree astNode) {
-//        ParserRuleContext context = (ParserRuleContext) astNode;
-//        Token start = context.start;
-//        Token stop = context.stop;
-        Token startToken = (astNode instanceof TerminalNode) ? ((TerminalNode)(astNode)).getSymbol() : ((ParserRuleContext)(astNode)).start;
-        Token stopToken = (astNode instanceof TerminalNode) ? ((TerminalNode)(astNode)).getSymbol() : ((ParserRuleContext)(astNode)).stop;
+    private String withType(ParseTree astNode, boolean truncate) {
+        String originalText = originalText(astNode);
+//        String text = astNode.getText().length() > 50 ? astNode.getText().substring(0, 50) + " ... (truncated)" : astNode.getText();
+        return truncate ? truncated(originalText) : originalText;
+    }
+
+    private String truncated(String text) {
+        return text.length() > 50 ? text.substring(0, 50) + " ... (truncated)" : text;
+    }
+
+    private String originalText(ParseTree astNode) {
+        Token startToken = (astNode instanceof TerminalNode) ? ((TerminalNode) astNode).getSymbol() : ((ParserRuleContext) astNode).start;
+        Token stopToken = (astNode instanceof TerminalNode) ? ((TerminalNode) astNode).getSymbol() : ((ParserRuleContext) astNode).stop;
 
         CharStream cs = startToken.getInputStream();
         int stopIndex = stopToken != null ? stopToken.getStopIndex() : -1;
-        String originalText = stopIndex >= startToken.getStartIndex() ? cs.getText(new Interval(startToken.getStartIndex(), stopIndex)) : "<NULL>";
-//        String text = astNode.getText().length() > 50 ? astNode.getText().substring(0, 50) + " ... (truncated)" : astNode.getText();
-        String text = originalText.length() > 50 ? originalText.substring(0, 50) + " ... (truncated)" : originalText;
-        return astNode.getClass().getSimpleName() + " / " + text;
+        return stopIndex >= startToken.getStartIndex() ? cs.getText(new Interval(startToken.getStartIndex(), stopIndex)) : "<NULL>";
+    }
+
+    /**
+     * Creates a new reference to the children that will be used for serialisation to JSON
+     */
+    public void freeze() {
+        this.childrenRef = super.children();
     }
 }
