@@ -66,5 +66,4 @@ public class CobolTreeVisualiser {
         }
         graphParentNode.freeze();
     }
-
 }
