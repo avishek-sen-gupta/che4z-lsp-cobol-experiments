@@ -187,7 +187,7 @@ public class CobolLanguageEngine {
     BenchmarkSession session = benchmarkService.startSession();
     AnalysisContext ctx =
         new AnalysisContext(
-            new ExtendedDocument(resultWithErrors.getResult(), text), analysisConfig, session);
+            new ExtendedDocument(resultWithErrors.getResult(), text), analysisConfig, session, null, null);
     ctx.getAccumulatedErrors().addAll(resultWithErrors.getErrors());
 
     PipelineResult pipelineResult = pipeline.run(ctx);

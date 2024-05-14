@@ -84,9 +84,19 @@ public class Cli implements Callable<Integer> {
   private File[] cpyPaths;
 
   @CommandLine.Option(
-      names = {"-ce", "--copybook-extension"},
-      description = "List of copybook paths.")
-  private String[] cpyExt = {"", ".cpy"};
+          names = {"-ce", "--copybook-extension"},
+          description = "List of copybook paths.")
+    private String[] cpyExt = {"", ".cpy"};
+
+  @CommandLine.Option(
+      names = {"-oidms", "--idms-output"},
+      description = "Output path for IDMS trees.")
+  private String idmsParseTreeOutputPath;
+
+  @CommandLine.Option(
+      names = {"-ocobol", "--cobol-output"},
+      description = "Output path for Cobol parse tree.")
+  private String cobolParseTreeOutputPath;
 
   /**
    * Prints the file name to the console and returns result code.
@@ -120,7 +130,10 @@ public class Cli implements Callable<Integer> {
         new AnalysisContext(
             new ExtendedDocument(resultWithErrors.getResult(), text),
             createAnalysisConfiguration(),
-            benchmarkService.startSession());
+            benchmarkService.startSession(),
+                cobolParseTreeOutputPath, idmsParseTreeOutputPath);
+//                "/Users/asgupta/Downloads/mbrdi-poc/test-cobol.json",
+//                "/Users/asgupta/Downloads/mbrdi-poc/test-idms.json"
     ctx.getAccumulatedErrors().addAll(resultWithErrors.getErrors());
     PipelineResult pipelineResult = pipeline.run(ctx);
     Gson gson = new GsonBuilder().setPrettyPrinting().create();

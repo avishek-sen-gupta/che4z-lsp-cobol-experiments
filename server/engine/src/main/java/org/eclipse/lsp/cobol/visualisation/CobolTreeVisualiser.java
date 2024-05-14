@@ -30,6 +30,8 @@ import java.io.PrintWriter;
  * Draws Cobol AST
  */
 public class CobolTreeVisualiser {
+    private String cobolParseTreeOutputPath;
+
     /**
      * Draws the tree using the wrapping Node structure
      * @param rootNode
@@ -50,16 +52,19 @@ public class CobolTreeVisualiser {
 
     /**
      * Draws the tree using the canonical Context structure
+     *
      * @param tree
+     * @param cobolParseTreeOutputPath
      */
-    public void visualiseCobolAST(ParseTree tree) {
+    public void visualiseCobolAST(ParseTree tree, String cobolParseTreeOutputPath) {
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
         CobolContextAugmentedTreeNode graphRoot = new CobolContextAugmentedTreeNode(tree);
         buildContextGraph(tree, graphRoot);
         new ListingTreePrinter().print(graphRoot);
         try {
             String s = gson.toJson(graphRoot);
-            PrintWriter out = new PrintWriter("/Users/asgupta/Downloads/mbrdi-poc/V751C931-parse-tree.json");
+//            PrintWriter out = new PrintWriter("/Users/asgupta/Downloads/mbrdi-poc/V7523438-compiled-parse-tree.json");
+            PrintWriter out = new PrintWriter(cobolParseTreeOutputPath);
             out.println(s);
             out.close();
         } catch (FileNotFoundException e) {

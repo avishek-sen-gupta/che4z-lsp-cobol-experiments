@@ -25,7 +25,8 @@ import org.eclipse.lsp.cobol.common.mapping.ExtendedDocument;
 import org.eclipse.lsp.cobol.common.model.tree.Node;
 import org.eclipse.lsp.cobol.core.semantics.CopybooksRepository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Contains related to analysis state
@@ -38,6 +39,8 @@ public class AnalysisContext {
   private final AnalysisConfig config;
   private final List<SyntaxError> accumulatedErrors = new ArrayList<>();
   private final BenchmarkSession benchmarkSession;
+  private final String cobolParseTreeOutputPath;
+  private final String idmsParseTreeOutputPath;
 
   private @Setter List<Node> dialectNodes;
   private @Setter CopybooksRepository copybooksRepository;

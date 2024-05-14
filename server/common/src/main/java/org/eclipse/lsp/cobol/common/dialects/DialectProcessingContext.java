@@ -30,4 +30,5 @@ public class DialectProcessingContext {
   String programDocumentUri;
   ExtendedDocument extendedDocument;
   @Builder.Default List<Node> dialectNodes = new ArrayList<>();
+  String idmsParseTreeOutputPath;
 }

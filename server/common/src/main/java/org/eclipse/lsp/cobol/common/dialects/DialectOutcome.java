@@ -48,5 +48,4 @@ public class DialectOutcome {
     this.dialectNodes = ImmutableList.of();
     this.dialectMissed = hasMissedDialect;
   }
-
 }

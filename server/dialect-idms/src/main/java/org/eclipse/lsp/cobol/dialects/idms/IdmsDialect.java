@@ -197,7 +197,7 @@ public final class IdmsDialect implements CobolDialect {
     List<Node> nodes = new ArrayList<>();
     ParseTreeWalker x = new ParseTreeWalker();
     x.walk(idmsParserListener, startRuleContext);
-    new IdmsTreeVisualiser().visualiseIdmsAST(startRuleContext);
+    new IdmsTreeVisualiser().visualiseIdmsAST(startRuleContext, context.getIdmsParseTreeOutputPath());
 
     nodes.addAll(visitor.visitStartRule(startRuleContext));
     nodes.addAll(context.getDialectNodes());

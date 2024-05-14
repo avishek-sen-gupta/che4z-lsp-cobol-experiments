@@ -34,8 +34,9 @@ public class IdmsTreeVisualiser {
      * Draws the tree
      *
      * @param startRuleContext
+     * @param idmsParseTreeOutputPath
      */
-    public void visualiseIdmsAST(IdmsParser.StartRuleContext startRuleContext) {
+    public void visualiseIdmsAST(IdmsParser.StartRuleContext startRuleContext, String idmsParseTreeOutputPath) {
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
         List<IdmsParser.IdmsRulesContext> idmsRulesContexts = startRuleContext.idmsRules();
         List<CobolContextAugmentedTreeNode> allAstTrees = new ArrayList<>();
@@ -53,7 +54,8 @@ public class IdmsTreeVisualiser {
 
         try {
             String s = gson.toJson(allAstTrees);
-            PrintWriter out = new PrintWriter("/Users/asgupta/Downloads/mbrdi-poc/V751C931-idms-parse-trees.json");
+//            PrintWriter out = new PrintWriter("/Users/asgupta/Downloads/mbrdi-poc/V7523438-compiled-idms-parse-trees.json");
+            PrintWriter out = new PrintWriter(idmsParseTreeOutputPath);
             out.println(s);
             out.close();
         } catch (FileNotFoundException e) {

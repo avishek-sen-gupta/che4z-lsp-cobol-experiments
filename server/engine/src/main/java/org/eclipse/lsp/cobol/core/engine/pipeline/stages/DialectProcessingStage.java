@@ -53,6 +53,7 @@ public class DialectProcessingStage implements Stage<DialectOutcome, Void> {
             .config(ctx.getConfig())
             .programDocumentUri(ctx.getExtendedDocument().getUri())
             .extendedDocument(ctx.getExtendedDocument())
+            .idmsParseTreeOutputPath(ctx.getIdmsParseTreeOutputPath())
             .build();
     dialectProcessingContext.getExtendedDocument().commitTransformations();
 

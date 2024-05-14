@@ -64,9 +64,7 @@ public class ParserStage implements Stage<ParserStageResult, DialectOutcome> {
             CobolParser.StartRuleContext tree = parser.runParser();
             ParseTreeWalker x = new ParseTreeWalker();
             x.walk(new CustomCobolParseTreeListener(), tree);
-//      ParseTreeWalker walker = new ParseTreeWalker();
-//      walker.walk(listener, tree);
-            new CobolTreeVisualiser().visualiseCobolAST(tree);
+            new CobolTreeVisualiser().visualiseCobolAST(tree, context.getCobolParseTreeOutputPath());
 
             context.getAccumulatedErrors().addAll(listener.getErrors());
             context.getAccumulatedErrors().addAll(getParsingError(context, parser));
