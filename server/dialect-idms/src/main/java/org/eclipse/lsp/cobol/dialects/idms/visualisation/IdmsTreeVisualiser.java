@@ -14,12 +14,16 @@
  */
 package org.eclipse.lsp.cobol.dialects.idms.visualisation;
 
-import hu.webarticum.treeprinter.SimpleTreeNode;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import hu.webarticum.treeprinter.printer.listing.ListingTreePrinter;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.dialects.idms.IdmsAugmentedTreeNode;
 import org.eclipse.lsp.cobol.dialects.idms.IdmsParser;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,34 +36,50 @@ public class IdmsTreeVisualiser {
      * @param startRuleContext
      */
     public void visualiseIdmsAST(IdmsParser.StartRuleContext startRuleContext) {
+        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
         List<IdmsParser.IdmsRulesContext> idmsRulesContexts = startRuleContext.idmsRules();
+        List<IdmsAugmentedTreeNode> allAstTrees = new ArrayList<>();
+
         for (IdmsParser.IdmsRulesContext ctx : idmsRulesContexts) {
             IdmsParser.IdmsSectionsContext idmsSectionsContext = ctx.idmsSections();
             IdmsParser.IdmsStatementsContext idmsStatementsContext = ctx.idmsStatements();
             if (idmsSectionsContext != null) {
-                drawParseTrees(idmsSectionsContext.children);
+                allAstTrees.addAll(drawParseTrees(idmsSectionsContext.children));
             }
             if (idmsStatementsContext != null) {
-                drawParseTrees(idmsStatementsContext.children);
+                allAstTrees.addAll(drawParseTrees(idmsStatementsContext.children));
             }
         }
-    }
 
-    private void drawParseTrees(List<ParseTree> parseRuleContext) {
-        List<ParseTree> trees = parseRuleContext;
-        for (ParseTree tree : trees) {
-            SimpleTreeNode graphRoot = new IdmsAugmentedTreeNode(tree);
-            buildGraph(tree, graphRoot);
-            new ListingTreePrinter().print(graphRoot);
+        try {
+            String s = gson.toJson(allAstTrees);
+            PrintWriter out = new PrintWriter("/Users/asgupta/Downloads/mbrdi-poc/V751C931-idms-parse-trees.json");
+            out.println(s);
+            out.close();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    private void buildGraph(ParseTree astParentNode, SimpleTreeNode graphParentNode) {
+    private List<IdmsAugmentedTreeNode> drawParseTrees(List<ParseTree> parseRuleContext) {
+        List<ParseTree> trees = parseRuleContext;
+        List<IdmsAugmentedTreeNode> astTrees = new ArrayList<>();
+        for (ParseTree tree : trees) {
+            IdmsAugmentedTreeNode graphRoot = new IdmsAugmentedTreeNode(tree);
+            buildGraph(tree, graphRoot);
+            astTrees.add(graphRoot);
+            new ListingTreePrinter().print(graphRoot);
+        }
+        return astTrees;
+    }
+
+    private void buildGraph(ParseTree astParentNode, IdmsAugmentedTreeNode graphParentNode) {
         for (int i = 0; i <= astParentNode.getChildCount() - 1; ++i) {
             ParseTree astChildNode = astParentNode.getChild(i);
-            SimpleTreeNode graphChildNode = new IdmsAugmentedTreeNode(astChildNode);
+            IdmsAugmentedTreeNode graphChildNode = new IdmsAugmentedTreeNode(astChildNode);
             graphParentNode.addChild(graphChildNode);
             buildGraph(astChildNode, graphChildNode);
         }
+        graphParentNode.freeze();
     }
 }

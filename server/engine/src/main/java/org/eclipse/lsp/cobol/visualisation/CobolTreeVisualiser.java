@@ -23,6 +23,9 @@ import org.eclipse.lsp.cobol.cli.CobolAugmentedTreeNode;
 import org.eclipse.lsp.cobol.cli.CobolContextAugmentedTreeNode;
 import org.eclipse.lsp.cobol.common.model.tree.Node;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+
 /**
  * Draws Cobol AST
  */
@@ -54,7 +57,14 @@ public class CobolTreeVisualiser {
         CobolContextAugmentedTreeNode graphRoot = new CobolContextAugmentedTreeNode(tree);
         buildContextGraph(tree, graphRoot);
         new ListingTreePrinter().print(graphRoot);
-        String s = gson.toJson(graphRoot);
+        try {
+            String s = gson.toJson(graphRoot);
+            PrintWriter out = new PrintWriter("/Users/asgupta/Downloads/mbrdi-poc/V751C931-parse-tree.json");
+            out.println(s);
+            out.close();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void buildContextGraph(ParseTree astParentNode, CobolContextAugmentedTreeNode graphParentNode) {

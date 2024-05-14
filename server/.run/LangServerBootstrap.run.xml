@@ -1,9 +1,9 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="LangServerBootstrap" type="Application" factoryName="Application" nameIsGenerated="true">
-    <output_file path="$USER_HOME$/Downloads/mbrdi-poc/V7523438-compiled-parse-tree.txt" is_save="true" />
+  <configuration default="false" name="LangServerBootstrap" type="Application" factoryName="Application" nameIsGenerated="true" show_console_on_std_err="true" show_console_on_std_out="true">
+    <output_file path="$USER_HOME$/Downloads/mbrdi-poc/V7523438-compiled-parse-tree.txt" />
     <option name="MAIN_CLASS_NAME" value="org.eclipse.lsp.cobol.LangServerBootstrap" />
     <module name="engine" />
-    <option name="PROGRAM_PARAMETERS" value="-s $USER_HOME$/Downloads/mbrdi-poc/V7523438-compiled analysis -cf $USER_HOME$/Downloads/mbrdi-poc" />
+    <option name="PROGRAM_PARAMETERS" value="-s $USER_HOME$/Downloads/mbrdi-poc/V751C931 analysis -cf $USER_HOME$/Downloads/mbrdi-poc" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="org.eclipse.lsp.cobol.*" />
