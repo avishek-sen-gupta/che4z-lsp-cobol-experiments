@@ -12,7 +12,7 @@
  *    Broadcom, Inc. - initial API and implementation
  *
  */
-package org.eclipse.lsp.cobol.dialects.idms;
+package org.eclipse.lsp.cobol.common.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -35,12 +35,20 @@ public class TextSpan {
     @Expose
     @SerializedName("stopColumn")
     private int stopColumn;
+    @Expose
+    @SerializedName("startIndex")
+    private int startIndex;
+    @Expose
+    @SerializedName("stopIndex")
+    private int stopIndex;
 
-    public TextSpan(int startLine, int stopLine, int startColumn, int stopColumn) {
+    public TextSpan(int startLine, int stopLine, int startColumn, int stopColumn, int startIndex, int stopIndex) {
         this.startLine = startLine;
         this.stopLine = stopLine;
         this.startColumn = startColumn;
         this.stopColumn = stopColumn;
+        this.startIndex = startIndex;
+        this.stopIndex = stopIndex;
     }
 
     /**

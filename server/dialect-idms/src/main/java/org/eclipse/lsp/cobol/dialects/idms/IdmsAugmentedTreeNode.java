@@ -24,12 +24,13 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.eclipse.lsp.cobol.common.model.TextSpan;
 
 import java.text.MessageFormat;
 import java.util.List;
 
 /**
- *  Visualisation Tree Node that encapsulates the actual AST node
+ * Visualisation Tree Node that encapsulates the actual AST node
  */
 public class IdmsAugmentedTreeNode extends SimpleTreeNode {
     private final ParseTree astNode;
@@ -58,9 +59,12 @@ public class IdmsAugmentedTreeNode extends SimpleTreeNode {
     }
 
     private TextSpan createSpan(ParseTree astNode) {
-        if (!(astNode instanceof ParserRuleContext)) return new TextSpan(-1, -1, -1, -1);
+        if (!(astNode instanceof ParserRuleContext)) {
+            TerminalNode terminalNode = (TerminalNode) astNode;
+            return new TextSpan(terminalNode.getSymbol().getLine(), terminalNode.getSymbol().getLine(), terminalNode.getSymbol().getCharPositionInLine(), -1, terminalNode.getSymbol().getStartIndex(), terminalNode.getSymbol().getStopIndex());
+        }
         ParserRuleContext context = (ParserRuleContext) astNode;
-        return new TextSpan(context.start.getLine(), context.stop.getLine(), context.start.getCharPositionInLine(), context.stop.getCharPositionInLine());
+        return new TextSpan(context.start.getLine(), context.stop.getLine(), context.start.getCharPositionInLine(), context.stop.getCharPositionInLine(), context.start.getStartIndex(), context.stop.getStopIndex());
     }
 
     @Override

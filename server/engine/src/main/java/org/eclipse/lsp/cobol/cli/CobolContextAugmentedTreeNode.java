@@ -24,6 +24,7 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.eclipse.lsp.cobol.common.model.TextSpan;
 
 import java.util.List;
 
@@ -44,14 +45,26 @@ public class CobolContextAugmentedTreeNode extends SimpleTreeNode {
     @SerializedName("children")
     private List<TreeNode> childrenRef;
 
+    @Expose
+    @SerializedName("span")
+    private TextSpan span;
+
     public CobolContextAugmentedTreeNode(ParseTree astNode) {
         super(astNode.getClass().getSimpleName());
         this.astNode = astNode;
         this.nodeType = astNode.getClass().getSimpleName();
         this.originalText = withType(astNode, false);
-//        this.originalText = "LOL";
+        this.span = createSpan(astNode);
     }
 
+    private TextSpan createSpan(ParseTree astNode) {
+        if (!(astNode instanceof ParserRuleContext)) {
+            TerminalNode terminalNode = (TerminalNode) astNode;
+            return new TextSpan(terminalNode.getSymbol().getLine(), terminalNode.getSymbol().getLine(), terminalNode.getSymbol().getCharPositionInLine(), -1, terminalNode.getSymbol().getStartIndex(), terminalNode.getSymbol().getStopIndex());
+        }
+        ParserRuleContext context = (ParserRuleContext) astNode;
+        return new TextSpan(context.start.getLine(), context.stop.getLine(), context.start.getCharPositionInLine(), context.stop.getCharPositionInLine(), context.start.getStartIndex(), context.stop.getStopIndex());
+    }
     @Override
     public String content() {
         return astNode.getClass().getSimpleName() + " / " + withType(astNode, true);
