@@ -18,8 +18,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import hu.webarticum.treeprinter.printer.listing.ListingTreePrinter;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.eclipse.lsp.cobol.dialects.idms.IdmsAugmentedTreeNode;
 import org.eclipse.lsp.cobol.dialects.idms.IdmsParser;
+import org.poc.CobolContextAugmentedTreeNode;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -38,7 +38,7 @@ public class IdmsTreeVisualiser {
     public void visualiseIdmsAST(IdmsParser.StartRuleContext startRuleContext) {
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
         List<IdmsParser.IdmsRulesContext> idmsRulesContexts = startRuleContext.idmsRules();
-        List<IdmsAugmentedTreeNode> allAstTrees = new ArrayList<>();
+        List<CobolContextAugmentedTreeNode> allAstTrees = new ArrayList<>();
 
         for (IdmsParser.IdmsRulesContext ctx : idmsRulesContexts) {
             IdmsParser.IdmsSectionsContext idmsSectionsContext = ctx.idmsSections();
@@ -61,11 +61,11 @@ public class IdmsTreeVisualiser {
         }
     }
 
-    private List<IdmsAugmentedTreeNode> drawParseTrees(List<ParseTree> parseRuleContext) {
+    private List<CobolContextAugmentedTreeNode> drawParseTrees(List<ParseTree> parseRuleContext) {
         List<ParseTree> trees = parseRuleContext;
-        List<IdmsAugmentedTreeNode> astTrees = new ArrayList<>();
+        List<CobolContextAugmentedTreeNode> astTrees = new ArrayList<>();
         for (ParseTree tree : trees) {
-            IdmsAugmentedTreeNode graphRoot = new IdmsAugmentedTreeNode(tree);
+            CobolContextAugmentedTreeNode graphRoot = new CobolContextAugmentedTreeNode(tree);
             buildGraph(tree, graphRoot);
             astTrees.add(graphRoot);
             new ListingTreePrinter().print(graphRoot);
@@ -73,10 +73,10 @@ public class IdmsTreeVisualiser {
         return astTrees;
     }
 
-    private void buildGraph(ParseTree astParentNode, IdmsAugmentedTreeNode graphParentNode) {
+    private void buildGraph(ParseTree astParentNode, CobolContextAugmentedTreeNode graphParentNode) {
         for (int i = 0; i <= astParentNode.getChildCount() - 1; ++i) {
             ParseTree astChildNode = astParentNode.getChild(i);
-            IdmsAugmentedTreeNode graphChildNode = new IdmsAugmentedTreeNode(astChildNode);
+            CobolContextAugmentedTreeNode graphChildNode = new CobolContextAugmentedTreeNode(astChildNode);
             graphParentNode.addChild(graphChildNode);
             buildGraph(astChildNode, graphChildNode);
         }

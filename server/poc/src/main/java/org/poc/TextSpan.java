@@ -12,7 +12,7 @@
  *    Broadcom, Inc. - initial API and implementation
  *
  */
-package org.eclipse.lsp.cobol.common.model;
+package org.poc;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

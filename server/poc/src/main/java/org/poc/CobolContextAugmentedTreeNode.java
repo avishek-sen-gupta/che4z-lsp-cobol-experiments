@@ -12,7 +12,7 @@
  *    Broadcom, Inc. - initial API and implementation
  *
  */
-package org.eclipse.lsp.cobol.cli;
+package org.poc;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -24,8 +24,8 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
-import org.eclipse.lsp.cobol.common.model.TextSpan;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 /**
@@ -67,12 +67,12 @@ public class CobolContextAugmentedTreeNode extends SimpleTreeNode {
     }
     @Override
     public String content() {
-        return astNode.getClass().getSimpleName() + " / " + withType(astNode, true);
+        String formattedExtent = MessageFormat.format("({0}])", span.content());
+        return astNode.getClass().getSimpleName() + " / " + withType(astNode, true) + " " + formattedExtent;
     }
 
     private String withType(ParseTree astNode, boolean truncate) {
         String originalText = originalText(astNode);
-//        String text = astNode.getText().length() > 50 ? astNode.getText().substring(0, 50) + " ... (truncated)" : astNode.getText();
         return truncate ? truncated(originalText) : originalText;
     }
 

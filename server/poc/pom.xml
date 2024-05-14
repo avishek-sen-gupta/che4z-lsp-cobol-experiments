@@ -19,7 +19,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <version>1.0-SNAPSHOT</version>
-    <artifactId>dialect-idms</artifactId>
+    <artifactId>poc</artifactId>
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -48,11 +48,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.eclipse.lsp.cobol</groupId>
-            <artifactId>poc</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
         <dependency>
             <groupId>org.eclipse.lsp.cobol</groupId>
             <artifactId>common</artifactId>
@@ -92,12 +87,6 @@
             </exclusions>
         </dependency>
 
-        <dependency>
-            <groupId>org.eclipse.lsp.cobol</groupId>
-            <artifactId>engine</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>org.eclipse.lsp.cobol</groupId>
             <artifactId>test</artifactId>
@@ -144,7 +133,7 @@
 
 
     <build>
-        <finalName>dialect-idms</finalName>
+        <finalName>poc</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -194,31 +183,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>${maven.resources.plugin.version}</version>
-            </plugin>
-            <plugin>
-                <groupId>org.antlr</groupId>
-                <artifactId>antlr4-maven-plugin</artifactId>
-                <version>${maven.antlr4.plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>run antlr</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>antlr4</goal>
-                        </goals>
-                        <configuration>
-                            <arguments>
-                                <argument>-package</argument>
-                                <argument>org.eclipse.lsp.cobol.dialects.idms</argument>
-                                <argument>-o</argument>
-                                <argument>${basedir}/target/generated-sources/antlr4/org/eclipse/lsp/cobol/dialects/idms</argument>
-                            </arguments>
-                            <sourceDirectory>src/main/antlr4/org/eclipse/lsp/cobol/core/parser</sourceDirectory>
-                            <listener>true</listener>
-                            <visitor>true</visitor>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -295,32 +259,6 @@
 
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <groupId>org.eclipse.m2e</groupId>
-                    <artifactId>lifecycle-mapping</artifactId>
-                    <version>1.0.0</version>
-                    <configuration>
-                        <lifecycleMappingMetadata>
-                            <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>org.antlr</groupId>
-                                        <artifactId>antlr4-maven-plugin</artifactId>
-                                        <versionRange>[4.0,)</versionRange>
-                                        <goals>
-                                            <goal>antlr4</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <execute>
-                                            <runOnIncremental>true</runOnIncremental>
-                                        </execute>
-                                    </action>
-                                </pluginExecution>
-                            </pluginExecutions>
-                        </lifecycleMappingMetadata>
-                    </configuration>
-                </plugin>
             </plugins>
         </pluginManagement>
 

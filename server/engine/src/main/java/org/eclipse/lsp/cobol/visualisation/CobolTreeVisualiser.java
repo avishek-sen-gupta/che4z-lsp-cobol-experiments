@@ -20,8 +20,8 @@ import hu.webarticum.treeprinter.SimpleTreeNode;
 import hu.webarticum.treeprinter.printer.listing.ListingTreePrinter;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.cli.CobolAugmentedTreeNode;
-import org.eclipse.lsp.cobol.cli.CobolContextAugmentedTreeNode;
 import org.eclipse.lsp.cobol.common.model.tree.Node;
+import org.poc.CobolContextAugmentedTreeNode;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;

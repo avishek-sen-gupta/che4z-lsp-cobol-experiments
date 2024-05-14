@@ -24,7 +24,7 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
-import org.eclipse.lsp.cobol.common.model.TextSpan;
+import org.poc.TextSpan;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -75,11 +75,7 @@ public class IdmsAugmentedTreeNode extends SimpleTreeNode {
 
     private String withType(ParseTree astNode, boolean truncate) {
         String originalText = originalText(astNode);
-        if (astNode instanceof ParserRuleContext) {
-            ParserRuleContext context = (ParserRuleContext) astNode;
-            return truncate ? truncated(originalText) : originalText;
-        }
-        return astNode.getText();
+        return truncate ? truncated(originalText) : originalText;
     }
 
     private String truncated(String text) {
