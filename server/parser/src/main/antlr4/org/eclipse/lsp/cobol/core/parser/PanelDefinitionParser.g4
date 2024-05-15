@@ -209,14 +209,6 @@ generalIdentifier
 
 // names ----------------------------------
 
-figurativeConstant
-   : ALL literal | HIGH_VALUE | HIGH_VALUES | LOW_VALUE | LOW_VALUES | NULL | NULLS | QUOTE | QUOTES | SPACE | SPACES | ZEROS | ZEROES
-   ;
-
-booleanLiteral
-   : TRUE | FALSE
-   ;
-
 numericLiteral
    : NUMERICLITERAL | ZERO | integerLiteral
    ;
@@ -225,10 +217,8 @@ integerLiteral
    : INTEGERLITERAL | LEVEL_NUMBER | LEVEL_NUMBER_66 | LEVEL_NUMBER_77 | LEVEL_NUMBER_88
    ;
 
-//cics_conditions: EOC | EODS | INVMPSZ | INVPARTN | INVREQ | MAPFAIL | PARTNFAIL | RDATT | UNEXPIN;
-
 literal
-   : NONNUMERICLITERAL | figurativeConstant | numericLiteral | booleanLiteral | utfLiteral | hexadecimalUtfLiteral
+   : NONNUMERICLITERAL | numericLiteral | utfLiteral | hexadecimalUtfLiteral
    ;
 
 utfLiteral: U_CHAR NONNUMERICLITERAL;
