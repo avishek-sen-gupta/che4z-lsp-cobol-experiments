@@ -123,6 +123,17 @@ public class Cli implements Callable<Integer> {
       LOG.error("src must be provided");
       return 1;
     }
+
+    if (cobolParseTreeOutputPath == null) {
+        LOG.error("cobolParseTreeOutputPath must be provided");
+        return 1;
+    }
+
+    if (idmsParseTreeOutputPath == null) {
+        LOG.error("idmsParseTreeOutputPath must be provided");
+        return 1;
+    }
+
     String documentUri = src.toURI().toString();
     String text = new String(Files.readAllBytes(src.toPath()));
     ResultWithErrors<ExtendedText> resultWithErrors = preprocessor.cleanUpCode(documentUri, text);
