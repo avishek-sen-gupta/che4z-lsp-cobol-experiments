@@ -12,16 +12,11 @@ options {tokenVocab = PanelDefinitionLexer; superClass = MessageServiceParser;}
 startRule : compilationUnit EOF;
 
 compilationUnit
-   : programUnit+
+   : programUnit
    ;
 
 programUnit
-   : identificationDivision
-   ;
-
-endProgramStatement
-   : END PROGRAM programName DOT_FS
-   ;
+   : statement*;
 
 commaSeparator: COMMACHAR | COMMASEPARATOR;
 
@@ -32,10 +27,10 @@ identificationDivision
    ;
 
 statement : verb MAP IDENTIFIER versionClause? dateTimeClause? messagePrefix?
-            autoPanelClause systemClause? residencyClause usingClause?
-            editClause cursorClause? resetClause? lockKeyboardClause? alarmClause
-            prtClause carriageReturnClause pageableClause
-            decimalPointClause? helpClause? onEditErrorClause? originClause? DO
+            autoPanelClause systemClause? residencyClause? usingClause?
+            editClause? cursorClause? resetClause? lockKeyboardClause? alarmClause?
+            prtClause? carriageReturnClause? pageableClause?
+            decimalPointClause? helpClause? onEditErrorClause? originClause?
             ;
 
 dateTimeClause :DATETIME (IS | EQUALCHAR)? DATE_TIME_STAMP;
@@ -43,7 +38,7 @@ messagePrefix: MSG PREFIX (IS | EQUALCHAR)? (DC | IDENTIFIER);
 autoPanelClause : AUTOPANEL;
 systemClause : (SYS | SYSTEM) (IS | EQUALCHAR) IDENTIFIER;
 residencyClause : (RES | RESIDENT) | (NONRES | NONRESIDENT);
-usingClause : USING recordKeyword LPARENCHAR records RPARENCHAR;
+usingClause : USING recordKeyword? LPARENCHAR records RPARENCHAR;
 editClause : (EDIT | NOEDIT);
 cursorClause : CURSOR AT IDENTIFIER;
 resetClause : (RESET | NORESET) (MODIFIED | MOD);
@@ -52,28 +47,28 @@ alarmClause : (ALARM | NOALARM);
 prtClause : (STARTPRT | NOPRT);
 carriageReturnClause : (NLCR | FORTY_CR | SIXTYFOUR_CR | EIGHTY_CR);
 pageableClause : (pageable | nonPageable);
-decimalPointClause : decimalPoint (IS | EQUALCHAR)? (COMMA_WORD | PERIOD_WORD);
+decimalPointClause : decimalPoint (IS | EQUALCHAR)? (COMMA | PERIOD_WORD);
 helpClause : HELP;
 onEditErrorClause : ON EDIT ERROR incorrectFieldsAttributesClause? correctFieldsAttributesClause? soundClause?;
-incorrectFieldsAttributesClause : INCORRECT FIELDS (ATTR | ATTRIBUTES) EQUALCHAR attributesList;
-correctFieldsAttributesClause : CORRECT FIELDS (ATTR | ATTRIBUTES) EQUALCHAR attributesList;
+incorrectFieldsAttributesClause : INCORRECT FIELDS (ATTR | ATTRIBUTES) EQUALCHAR? attributesList;
+correctFieldsAttributesClause : CORRECT FIELDS (ATTR | ATTRIBUTES) EQUALCHAR? attributesList;
 soundClause : SOUND ALARM | NOALARM;
-originaClause : ORIGIN FOR (ALL | deviceCodesList) (IS | EQUALCHAR) LPARENCHAR row column RIGHTPARENCHAR;
+originClause : ORIGIN FOR (ALL | records) (IS | EQUALCHAR) LPARENCHAR row column RPARENCHAR;
 
-deviceCodesList : LPARENCHAR deviceCodes RPARENCHAR;
-deviceCodes : commaDelimitedDeviceCode* deviceCode;
-commaDelimitedDeviceCode : deviceCode COMMA;
-deviceCode : IDENTIFIER;
+//deviceCodesList : LPARENCHAR deviceCodes RPARENCHAR;
+//deviceCodes : commaDelimitedDeviceCode* deviceCode;
+//commaDelimitedDeviceCode : deviceCode commaSeparator;
+//deviceCode : IDENTIFIER;
 
 row : INTEGERLITERAL;
 column : INTEGERLITERAL;
 
-attributesList : (attributeAlphanumericOption | attributeProtectedOption | skipOption | attributeDetectableOption |
+attributesList : LPARENCHAR (attributeAlphanumericOption | attributeProtectedOption | skipOption | attributeDetectableOption |
                     atributeDisplayOption | attributeMdtOption | attributeBlinkOption | attributeVideoOption |
                     attributeUnderscoreOption | attributeAllLineOption | attributeLeftLineOption | attributeRightLinePption |
-                    attributeBottomLineOption | attributeTopLineOption | attributeColorOption);
+                    attributeBottomLineOption | attributeTopLineOption | attributeColorOption) RPARENCHAR;
 
-attributeAlphanumericOption : (ALPHANUMBERIC | ALPHA) | (NUMERIC | NUM);
+attributeAlphanumericOption : (ALPHANUMERIC | ALPHA) | (NUMERIC | NUM);
 attributeProtectedOption : (PROT | PROTECTED) |(UNPROT | UNPROTECTED);
 skipOption : SKIP_WORD;
 attributeDetectableOption : (DETECT | DETECTABLE) | (NONDETECT | NONDETECTABLE);
@@ -87,73 +82,36 @@ attributeLeftLineOption : (LEFT | LEFTLINE) | (NOLEFT | NOLEFTLINE);
 attributeRightLinePption : (RIGHT | RIGHTLINE) | (NORIGHT | NORIGHTLINE);
 attributeBottomLineOption : (BOTTOM | BOTTOMLINE) | (NOBOTTOM | NOBOTTOMLINE);
 attributeTopLineOption : (TOP | TOPLINE) | (NOTOP | NOTOPLINE);
-attributeColorOption : BLUE_OPTION | RED_OPTION | PINK_OPTION | GREEN_OPTION | TURQUOISE_OPTION | YELLOW_OPTION |
-                       WHITE_OPTION | NOCOLOR_OPTION;
+attributeColorOption : blueOption | redOption | pinkOption | greenOption | turquoiseOption | yellowOption |
+                       whiteOption | noColorOption;
 
-BLUE_OPTION : BL | BLUE;
-RED_OPTION : RED;
-PINK_OPTION : PIN | PINK;
-GREEN_OPTION : GRE | GREEN;
-TURQUOISE_OPTION : TUR | TURQUOISE;
-YELLOW_OPTION : YEL | YELLOW;
-WHITE_OPTION : WHI | WHITE;
-NOCOLOR_OPTION : NOC | NOCOLOR;
+blueOption : BL | BLUE;
+redOption : RED;
+pinkOption : PIN | PINK;
+greenOption : GRE | GREEN;
+turquoiseOption : TUR | TURQUOISE;
+yellowOption : YEL | YELLOW;
+whiteOption : WHI | WHITE;
+noColorOption : NOC | NOCOLOR;
 
-decimalPoint : (DEC | DECIMAL);
+decimalPoint : (DEC | DECIMAL) POINT;
 pageable : (PAGE | PAGEABLE);
 nonPageable : (NON_PAG | NON_PAGEABLE);
 
-
-
-
-recordKeyword : (RECORDS | REC);
-records : commaDelimitedRecordIdentifier* recordIdentifier;
-commaDelimitedRecordIdentifier : recordIdentifier COMMA;
-recordIdentifier : IDENTIFIER version roleClause;
+recordKeyword : RECORDS | REC;
+records : recordIdentifier recordIdentifier*;
+//commaDelimitedRecordIdentifier : COMMACHAR recordIdentifier;
+recordIdentifier : IDENTIFIER version? roleClause?;
 roleClause : (ROLE | ROLENAME) IDENTIFIER;
 verb : (ADD | MODIFY DELETE);
 version : (VERSION | VER);
 versionClause : version (IS | EQUALCHAR)? IDENTIFIER;
 // statement clauses ----------------------------------
 
-// condition ----------------------------------
-
-condition
-   : NOT? (simpleCondition | nestedCondition | dialectNodeFiller+)
-    ((AND | OR) NOT? (simpleCondition | nestedCondition | relationCombinedComparison | dialectNodeFiller+))*
-   ;
-
-simpleCondition
-   : arithmeticExpression (relationCombinedComparison | fixedComparison)?
-   ;
-
-nestedCondition
-   : LPARENCHAR condition RPARENCHAR
-   ;
-
-relationCombinedComparison
-   : relationalOperator (arithmeticExpression
-   | LPARENCHAR arithmeticExpression ((AND | OR) arithmeticExpression)+ RPARENCHAR)
-   ;
-
-fixedComparison
-   : IS? NOT? (NUMERIC | ALPHABETIC | ALPHABETIC_LOWER | ALPHABETIC_UPPER | DBCS | KANJI | POSITIVE | NEGATIVE | ZERO
-   | className)
-   ;
-
-relationalOperator
-   : (IS | ARE)? (NOT? (GREATER THAN? | MORETHANCHAR | LESS THAN? | LESSTHANCHAR | EQUAL TO? | EQUALCHAR)
-   | NOTEQUALCHAR | GREATER THAN? OR EQUAL TO? | MORETHANOREQUAL | LESS THAN? OR EQUAL TO? | LESSTHANOREQUAL)
-   ;
-
 // identifier ----------------------------------
 
 generalIdentifier
-   : specialRegister | qualifiedDataName | functionCall
-   ;
-
-functionCall
-   : FUNCTION functionName (LPARENCHAR argument (COMMACHAR? argument)* RPARENCHAR)* referenceModifier?
+   : qualifiedDataName
    ;
 
 referenceModifier
@@ -168,44 +126,20 @@ length
    : arithmeticExpression
    ;
 
-argument
-   : arithmeticExpression
-   | TRAILING | LEADING
-   ;
-
 // qualified data name ----------------------------------
 
 qualifiedDataName
-   : variableUsageName tableCall? referenceModifier? inData*
+   : variableUsageName tableCall? referenceModifier?
    ;
 
 tableCall
    : LPARENCHAR (ALL | arithmeticExpression) (COMMACHAR? (ALL | arithmeticExpression))* RPARENCHAR
    ;
 
-specialRegister
-   : ADDRESS OF generalIdentifier
-   | LENGTH OF? generalIdentifier | LINAGE_COUNTER
-   ;
-
-// in ----------------------------------
-
-inData
-   : (IN | OF) variableUsageName tableCall? referenceModifier?
-   ;
-
-inSection
-   : (IN | OF) sectionName
-   ;
-
 // names ----------------------------------
 
 alphabetName
    : cobolWord
-   ;
-
-assignmentName
-   : systemName
    ;
 
 cdName
@@ -216,10 +150,6 @@ className
    : cobolWord
    ;
 
-computerName
-   : systemName
-   ;
-
 dataName
    : cobolWord
    ;
@@ -228,16 +158,8 @@ variableUsageName
    : cobolWord
    ;
 
-environmentName
-   : systemName
-   ;
-
 fileName
    : cobolWord
-   ;
-
-functionName
-   : INTEGER | LENGTH | RANDOM | SUM | MAX | WHEN_COMPILED | cobolWord
    ;
 
 indexName
@@ -258,30 +180,6 @@ paragraphName
 
 paragraphDefinitionName
    : cobolWord | integerLiteral
-   ;
-
-procedureName
-   : paragraphName inSection?
-   ;
-
-programName
-   : literal | cobolWord | OR | AND
-   ;
-
-recordName
-   : qualifiedDataName
-   ;
-
-reportName
-   : qualifiedDataName
-   ;
-
-sectionName
-   : cobolWord | integerLiteral
-   ;
-
-systemName
-   : cobolWord
    ;
 
 symbolicCharacter
