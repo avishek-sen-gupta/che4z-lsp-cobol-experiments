@@ -35,6 +35,7 @@ import org.eclipse.lsp.cobol.common.mapping.ExtendedText;
 import org.eclipse.lsp.cobol.common.message.MessageService;
 import org.eclipse.lsp.cobol.common.model.tree.Node;
 import org.eclipse.lsp.cobol.core.AntlrIdmsPanelDefinitionParser;
+import org.eclipse.lsp.cobol.core.PanelDefinitionParser;
 import org.eclipse.lsp.cobol.core.engine.analysis.AnalysisContext;
 import org.eclipse.lsp.cobol.core.engine.dialects.DialectService;
 import org.eclipse.lsp.cobol.core.engine.pipeline.Pipeline;
@@ -48,15 +49,13 @@ import org.eclipse.lsp.cobol.core.preprocessor.delegates.GrammarPreprocessor;
 import org.eclipse.lsp.cobol.core.semantics.CopybooksRepository;
 import org.eclipse.lsp.cobol.service.settings.CachingConfigurationService;
 import org.eclipse.lsp.cobol.service.settings.layout.CodeLayoutStore;
+import org.eclipse.lsp.cobol.visualisation.CobolTreeVisualiser;
 import org.eclipse.lsp4j.Location;
 import picocli.CommandLine;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Callable;
 
 /**
@@ -138,6 +137,22 @@ public class Cli implements Callable<Integer> {
 
     String documentUri = src.toURI().toString();
     String text = new String(Files.readAllBytes(src.toPath()));
+
+    if (action == Action.parsemap) {
+        AnalysisContext ctx =
+                new AnalysisContext(
+                        new ExtendedDocument(text, ""),
+                        createAnalysisConfiguration(),
+                        benchmarkService.startSession(),
+                        cobolParseTreeOutputPath, idmsParseTreeOutputPath);
+        PipelineResult pipelineResult = pipeline.run(ctx);
+
+        StageResult<IdmsPanelDefinitionParserStageResult> idmsAnalysisResult =
+                (StageResult<IdmsPanelDefinitionParserStageResult>) pipelineResult.getLastStageResult();
+        PanelDefinitionParser.StartRuleContext tree = idmsAnalysisResult.getData().getTree();
+        new CobolTreeVisualiser().visualiseCobolAST(tree, "/Users/asgupta/Downloads/mbrdi-poc/test-map.json");
+        return 0;
+    }
     ResultWithErrors<ExtendedText> resultWithErrors = preprocessor.cleanUpCode(documentUri, text);
     AnalysisContext ctx =
         new AnalysisContext(
@@ -151,9 +166,7 @@ public class Cli implements Callable<Integer> {
     JsonObject result = new JsonObject();
     addTiming(result, ctx.getBenchmarkSession());
     switch (action) {
-        case parsemap:
-
-      case analysis:
+        case analysis:
         StageResult<ProcessingResult> analysisResult =
             (StageResult<ProcessingResult>) pipelineResult.getLastStageResult();
         JsonArray diagnostics = new JsonArray();
@@ -224,7 +237,6 @@ public class Cli implements Callable<Integer> {
   }
 
   private static Pipeline setupPipeline(Injector diCtx, Action action) {
-    AntlrIdmsPanelDefinitionParser panelDefinitionParser = diCtx.getInstance(AntlrIdmsPanelDefinitionParser.class);
     DialectService dialectService = diCtx.getInstance(DialectService.class);
     MessageService messageService = diCtx.getInstance(MessageService.class);
     GrammarPreprocessor grammarPreprocessor = diCtx.getInstance(GrammarPreprocessor.class);
@@ -236,10 +248,11 @@ public class Cli implements Callable<Integer> {
     AstProcessor astProcessor = diCtx.getInstance(AstProcessor.class);
     CodeLayoutStore layoutStore = diCtx.getInstance(CodeLayoutStore.class);
 
-//      if (action == Action.parsemap) {
-//          Pipeline pipeline = new Pipeline();
-//          pipeline.add(new PanelDefinitionProcessingStage(messageService));
-//      }
+      if (action == Action.parsemap) {
+          Pipeline pipeline = new Pipeline();
+          pipeline.add(new PanelDefinitionProcessingStage(messageService, parseTreeListener));
+          return pipeline;
+      }
 
     Pipeline pipeline = new Pipeline();
     pipeline.add(new DialectCompilerDirectiveStage(dialectService));

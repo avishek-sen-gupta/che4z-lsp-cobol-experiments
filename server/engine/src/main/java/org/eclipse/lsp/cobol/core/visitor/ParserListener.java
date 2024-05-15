@@ -69,7 +69,6 @@ public class ParserListener extends BaseErrorListener {
                 Locality.builder()
                     .uri(location.getUri())
                     .range(location.getRange())
-                    .copybookId(copybooksRepository.getCopybookIdByUri(location.getUri()))
                     .build().toOriginalLocation())
             .suggestion(msg)
             .severity(getErrorSeverity(e))

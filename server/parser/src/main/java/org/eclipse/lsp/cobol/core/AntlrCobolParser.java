@@ -22,6 +22,8 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.DefaultErrorStrategy;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
+import javax.inject.Inject;
+
 /**
  * ANTLR Parser Wrapper
  */
