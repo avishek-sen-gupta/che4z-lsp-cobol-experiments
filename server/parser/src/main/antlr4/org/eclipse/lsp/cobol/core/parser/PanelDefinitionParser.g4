@@ -82,10 +82,10 @@ editTableClause : EDIT tableClause;
 codeTableClause : CODE tableClause;
 tableClause : (TAB | TABLE) (IS | EQUALCHAR) (NULL | editTableSubject);
 editTableSubject : tableName tableVersion? (LINK | NOLINK) usageType ;
-usageType : USAGE IS (validate | invalidate | default);
+usageType : USAGE IS (validate | invalidate | defaultKeyword);
 validate: VALID | VALIDATE;
 invalidate : INVALID | INVALIDATE;
-default : DEF | DEFAULT;
+defaultKeyword : DEF | DEFAULT;
 
 tableName : STRINGLITERAL;
 tableVersion : (VER | VERSION) INTEGERLITERAL;

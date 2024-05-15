@@ -34,6 +34,7 @@ import org.eclipse.lsp.cobol.common.mapping.ExtendedDocument;
 import org.eclipse.lsp.cobol.common.mapping.ExtendedText;
 import org.eclipse.lsp.cobol.common.message.MessageService;
 import org.eclipse.lsp.cobol.common.model.tree.Node;
+import org.eclipse.lsp.cobol.core.AntlrIdmsPanelDefinitionParser;
 import org.eclipse.lsp.cobol.core.engine.analysis.AnalysisContext;
 import org.eclipse.lsp.cobol.core.engine.dialects.DialectService;
 import org.eclipse.lsp.cobol.core.engine.pipeline.Pipeline;
@@ -66,7 +67,8 @@ import java.util.concurrent.Callable;
 public class Cli implements Callable<Integer> {
   private enum Action {
     list_copybooks,
-    analysis
+    analysis,
+    parsemap
   }
 
   @CommandLine.Parameters(description = "Values: ${COMPLETION-CANDIDATES}")
@@ -143,14 +145,14 @@ public class Cli implements Callable<Integer> {
             createAnalysisConfiguration(),
             benchmarkService.startSession(),
                 cobolParseTreeOutputPath, idmsParseTreeOutputPath);
-//                "/Users/asgupta/Downloads/mbrdi-poc/test-cobol.json",
-//                "/Users/asgupta/Downloads/mbrdi-poc/test-idms.json"
     ctx.getAccumulatedErrors().addAll(resultWithErrors.getErrors());
     PipelineResult pipelineResult = pipeline.run(ctx);
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
     JsonObject result = new JsonObject();
     addTiming(result, ctx.getBenchmarkSession());
     switch (action) {
+        case parsemap:
+
       case analysis:
         StageResult<ProcessingResult> analysisResult =
             (StageResult<ProcessingResult>) pipelineResult.getLastStageResult();
@@ -222,6 +224,7 @@ public class Cli implements Callable<Integer> {
   }
 
   private static Pipeline setupPipeline(Injector diCtx, Action action) {
+    AntlrIdmsPanelDefinitionParser panelDefinitionParser = diCtx.getInstance(AntlrIdmsPanelDefinitionParser.class);
     DialectService dialectService = diCtx.getInstance(DialectService.class);
     MessageService messageService = diCtx.getInstance(MessageService.class);
     GrammarPreprocessor grammarPreprocessor = diCtx.getInstance(GrammarPreprocessor.class);
@@ -232,6 +235,11 @@ public class Cli implements Callable<Integer> {
         diCtx.getInstance(CachingConfigurationService.class);
     AstProcessor astProcessor = diCtx.getInstance(AstProcessor.class);
     CodeLayoutStore layoutStore = diCtx.getInstance(CodeLayoutStore.class);
+
+//      if (action == Action.parsemap) {
+//          Pipeline pipeline = new Pipeline();
+//          pipeline.add(new PanelDefinitionProcessingStage(messageService));
+//      }
 
     Pipeline pipeline = new Pipeline();
     pipeline.add(new DialectCompilerDirectiveStage(dialectService));
