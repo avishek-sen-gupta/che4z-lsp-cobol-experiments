@@ -16,6 +16,7 @@ package org.eclipse.lsp.cobol.cli;
 
 import com.google.common.collect.Multimap;
 import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +35,7 @@ import org.eclipse.lsp.cobol.common.mapping.ExtendedDocument;
 import org.eclipse.lsp.cobol.common.mapping.ExtendedText;
 import org.eclipse.lsp.cobol.common.message.MessageService;
 import org.eclipse.lsp.cobol.common.model.tree.Node;
-import org.eclipse.lsp.cobol.core.AntlrIdmsPanelDefinitionParser;
+import org.eclipse.lsp.cobol.common.symbols.SymbolTable;
 import org.eclipse.lsp.cobol.core.PanelDefinitionParser;
 import org.eclipse.lsp.cobol.core.engine.analysis.AnalysisContext;
 import org.eclipse.lsp.cobol.core.engine.dialects.DialectService;
@@ -54,9 +55,12 @@ import org.eclipse.lsp4j.Location;
 import picocli.CommandLine;
 
 import java.io.File;
+import java.io.PrintWriter;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.concurrent.Callable;
+import java.util.stream.Collectors;
 
 /**
  * The Cli class represents a Command Line Interface (CLI) for interacting with the application.
@@ -162,7 +166,18 @@ public class Cli implements Callable<Integer> {
                 cobolParseTreeOutputPath, idmsParseTreeOutputPath);
     ctx.getAccumulatedErrors().addAll(resultWithErrors.getErrors());
     PipelineResult pipelineResult = pipeline.run(ctx);
-    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    Gson gson = new GsonBuilder().setPrettyPrinting().addSerializationExclusionStrategy(new ExclusionStrategy() {
+        @Override
+        public boolean shouldSkipField(FieldAttributes fieldAttributes) {
+            return "recognizer".equals(fieldAttributes.getName()) || "parent".equals(fieldAttributes.getName())
+                    || "children".equals(fieldAttributes.getName());
+        }
+
+        @Override
+        public boolean shouldSkipClass(Class<?> aClass) {
+            return false;
+        }
+    }).create();
     JsonObject result = new JsonObject();
     addTiming(result, ctx.getBenchmarkSession());
     switch (action) {
@@ -200,6 +215,17 @@ public class Cli implements Callable<Integer> {
       ProcessingResult data = (ProcessingResult) pipelineResult.getLastStageResult().getData();
       Node rootNode = data.getRootNode();
 //      new CobolTreeVisualiser().visualiseCobolAST(rootNode);
+      SymbolTable symbolTable = (SymbolTable) data.getSymbolTableMap().values().toArray()[0];
+      List<TestKv> testKvs = symbolTable.getVariables().entries().stream().map(e -> {
+          return new TestKv(e.getKey(), e.getValue());
+      }).collect(Collectors.toList());
+      ArrayList<String> objects = new ArrayList<>();
+      Type listType = new TypeToken<List<TestKv>>(){}.getType();
+      String symbolTableAsString = gson.toJson(testKvs);
+      PrintWriter out = new PrintWriter("/Users/asgupta/Downloads/mbrdi-poc/symbol-table.json");
+      out.println(symbolTableAsString);
+      out.close();
+
       return 0;
   }
 

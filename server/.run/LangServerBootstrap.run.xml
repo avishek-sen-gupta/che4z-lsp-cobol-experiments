@@ -3,7 +3,7 @@
     <output_file path="$USER_HOME$/Downloads/mbrdi-poc/V7523438-compiled-parse-tree.txt" />
     <option name="MAIN_CLASS_NAME" value="org.eclipse.lsp.cobol.LangServerBootstrap" />
     <module name="engine" />
-    <option name="PROGRAM_PARAMETERS" value="-s $USER_HOME$/Downloads/mbrdi-poc/V75M2W00.MAP.txt parsemap -cf $USER_HOME$/Downloads/mbrdi-poc -ocobol $USER_HOME$/Downloads/mbrdi-poc/test-cobol.json -oidms $USER_HOME$/Downloads/mbrdi-poc/test-idms.json" />
+    <option name="PROGRAM_PARAMETERS" value="-s $USER_HOME$/Downloads/mbrdi-poc/V7523438-compiled analysis -cf $USER_HOME$/Downloads/mbrdi-poc -ocobol $USER_HOME$/Downloads/mbrdi-poc/test-cobol.json -oidms $USER_HOME$/Downloads/mbrdi-poc/test-idms.json" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="org.eclipse.lsp.cobol.*" />
