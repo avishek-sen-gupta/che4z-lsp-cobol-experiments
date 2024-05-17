@@ -84,7 +84,7 @@ public class CobolDataDivisionVisitor extends CobolDataDivisionParserBaseVisitor
 
   @Override
   public List<Node> visitVariableUsageName(CobolDataDivisionParser.VariableUsageNameContext ctx) {
-    return addTreeNode(ctx, locality -> new VariableUsageNode(getName(ctx), locality, isVariableDefinitionMandatory(ctx)));
+    return addTreeNode(ctx, locality -> new VariableUsageNode(getName(ctx), locality, isVariableDefinitionMandatory(ctx), ctx));
   }
 
   @Override
@@ -142,6 +142,7 @@ public class CobolDataDivisionVisitor extends CobolDataDivisionParserBaseVisitor
                                     && ofNullable(ctx.dataOccursClause().get(0).dataOccursTo()).isPresent()
                                     && ofNullable(ctx.dataOccursClause().get(0).dataOccursTo().UNBOUNDED())
                                     .isPresent())
+                    .ctx(ctx)
                     .build();
 
     return addTreeNode(variableDefinitionNode, visitChildren(ctx));
@@ -174,6 +175,7 @@ public class CobolDataDivisionVisitor extends CobolDataDivisionParserBaseVisitor
                     .isSortDescription(Objects.nonNull(ctx.fileDescriptionEntryClauses().SD()))
                     .isExternal(isFDExternal(ctx))
                     .global(isFeildDescriptionEntryGlobal(ctx))
+                    .ctx(ctx)
                     .build(),
             visitChildren(ctx));
   }
@@ -206,7 +208,7 @@ public class CobolDataDivisionVisitor extends CobolDataDivisionParserBaseVisitor
                                     .map(this::extractNameAndLocality)
                                     .collect(toList()))
             .ifPresent(builder::renamesThruClause);
-    return addTreeNode(builder.build(), visitChildren(ctx));
+    return addTreeNode(builder.ctx(ctx).build(), visitChildren(ctx));
   }
 
   @Override
@@ -237,6 +239,7 @@ public class CobolDataDivisionVisitor extends CobolDataDivisionParserBaseVisitor
                                     && ofNullable(ctx.dataOccursClause().get(0).dataOccursTo()).isPresent()
                                     && ofNullable(ctx.dataOccursClause().get(0).dataOccursTo().UNBOUNDED())
                                     .isPresent())
+                    .ctx(ctx)
                     .build();
     return addTreeNode(variableDefinitionNode, visitChildren(ctx));
   }
@@ -256,6 +259,7 @@ public class CobolDataDivisionVisitor extends CobolDataDivisionParserBaseVisitor
                                             .statementLocality(retrieveLocality(ctx).orElse(null))
                                             .valueClauses(retrieveValues(ImmutableList.of(ctx.dataValueClause())))
                                             .valueToken(retrieveValueToken(valueToken))
+                                            .ctx(ctx)
                                             .build(),
                                     visitChildren(ctx)))
             .orElse(ImmutableList.of());

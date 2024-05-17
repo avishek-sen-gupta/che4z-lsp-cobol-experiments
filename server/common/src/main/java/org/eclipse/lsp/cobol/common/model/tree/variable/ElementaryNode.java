@@ -18,6 +18,7 @@ package org.eclipse.lsp.cobol.common.model.tree.variable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.eclipse.lsp.cobol.common.model.Locality;
 
 import java.util.Arrays;
@@ -67,24 +68,24 @@ public abstract class ElementaryNode extends VariableWithLevelNode
         false,
         false,
         picClause,
-        usageFormat);
+        usageFormat, null);
   }
 
   protected ElementaryNode(
-      Locality location,
-      int level,
-      String name,
-      boolean redefines,
-      VariableType variableType,
-      boolean global,
-      boolean isBlankWhenZeroPresent,
-      boolean isSignClausePresent,
-      boolean isDynamicLength,
-      boolean isJustified,
-      boolean isUnBounded,
-      String picClause,
-      UsageFormat usageFormat) {
-    super(location, level, name, redefines, variableType, global);
+          Locality location,
+          int level,
+          String name,
+          boolean redefines,
+          VariableType variableType,
+          boolean global,
+          boolean isBlankWhenZeroPresent,
+          boolean isSignClausePresent,
+          boolean isDynamicLength,
+          boolean isJustified,
+          boolean isUnBounded,
+          String picClause,
+          UsageFormat usageFormat, ParserRuleContext ctx) {
+    super(location, level, name, redefines, variableType, global, ctx);
     this.isBlankWhenZeroPresent = isBlankWhenZeroPresent;
     this.isSignClausePresent = isSignClausePresent;
     this.isDynamicLength = isDynamicLength;

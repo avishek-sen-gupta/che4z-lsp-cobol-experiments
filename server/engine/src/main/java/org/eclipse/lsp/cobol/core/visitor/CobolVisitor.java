@@ -250,6 +250,7 @@ public class CobolVisitor extends CobolParserBaseVisitor<List<Node>> {
                     .isSortDescription(Objects.nonNull(ctx.fileDescriptionEntryClauses().SD()))
                     .isExternal(isFDExternal(ctx))
                     .global(isFeildDescriptionEntryGlobal(ctx))
+                    .ctx(ctx)
                     .build(),
             visitChildren(ctx));
   }
@@ -763,6 +764,7 @@ public class CobolVisitor extends CobolParserBaseVisitor<List<Node>> {
                                     && ofNullable(ctx.dataOccursClause().get(0).dataOccursTo()).isPresent()
                                     && ofNullable(ctx.dataOccursClause().get(0).dataOccursTo().UNBOUNDED())
                                     .isPresent())
+                    .ctx(ctx)
                     .build(),
             visitChildren(ctx));
   }
@@ -780,6 +782,7 @@ public class CobolVisitor extends CobolParserBaseVisitor<List<Node>> {
                     .statementLocality(locality)
                     .variableNameAndLocality(new VariableNameAndLocality(name, locality))
                     .systemName(systemName)
+                    .ctx(ctx)
                     .build(),
             visitChildren(ctx));
   }
@@ -809,7 +812,7 @@ public class CobolVisitor extends CobolParserBaseVisitor<List<Node>> {
                                     .map(this::extractNameAndLocality)
                                     .collect(toList()))
             .ifPresent(builder::renamesThruClause);
-    return addTreeNode(builder.build(), visitChildren(ctx));
+    return addTreeNode(builder.ctx(ctx).build(), visitChildren(ctx));
   }
 
   @Override
@@ -826,6 +829,7 @@ public class CobolVisitor extends CobolParserBaseVisitor<List<Node>> {
                                             .statementLocality(retrieveLocality(ctx).orElse(null))
                                             .valueClauses(retrieveValues(ImmutableList.of(ctx.dataValueClause())))
                                             .valueToken(retrieveValueTokenOld(valueToken))
+                                            .ctx(ctx)
                                             .build(),
                                     visitChildren(ctx)))
             .orElse(ImmutableList.of());
@@ -859,6 +863,7 @@ public class CobolVisitor extends CobolParserBaseVisitor<List<Node>> {
                                     && ofNullable(ctx.dataOccursClause().get(0).dataOccursTo()).isPresent()
                                     && ofNullable(ctx.dataOccursClause().get(0).dataOccursTo().UNBOUNDED())
                                     .isPresent())
+                    .ctx(ctx)
                     .build(),
             visitChildren(ctx));
   }
@@ -912,7 +917,7 @@ public class CobolVisitor extends CobolParserBaseVisitor<List<Node>> {
 
   @Override
   public List<Node> visitVariableUsageName(VariableUsageNameContext ctx) {
-    return addTreeNode(ctx, locality -> new VariableUsageNode(getName(ctx), locality, isVariableDefinitionMandatory(ctx)));
+    return addTreeNode(ctx, locality -> new VariableUsageNode(getName(ctx), locality, isVariableDefinitionMandatory(ctx), ctx));
   }
 
   private boolean isVariableDefinitionMandatory(VariableUsageNameContext ctx) {
@@ -929,7 +934,7 @@ public class CobolVisitor extends CobolParserBaseVisitor<List<Node>> {
             ctx,
             locality -> {
               QualifiedReferenceNode reference = new QualifiedReferenceNode(locality);
-              VariableUsageNode usage = new VariableUsageNode(getName(ctx), locality);
+              VariableUsageNode usage = new VariableUsageNode(getName(ctx), locality, true, ctx);
               reference.addChild(usage);
               return reference;
             });

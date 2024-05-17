@@ -295,7 +295,7 @@ public class SectionNodeProcessorHelper {
             definitionNode.getLocality(),
             getName(definitionNode),
             definitionNode.hasRedefines(),
-            global);
+            global, definitionNode.getCtx());
     createVariableNameNode(variable, definitionNode.getVariableName());
     List<SyntaxError> errors = processRenamesBoundaries(variable, group, definitionNode);
     if (errors.isEmpty()) variable.setVarGroupParent(group);
@@ -329,7 +329,8 @@ public class SectionNodeProcessorHelper {
             variableName,
             definitionNode.hasRedefines(),
             definitionNode.getValueIntervals(),
-            definitionNode.getValueToken());
+            definitionNode.getValueToken(),
+            definitionNode.getCtx());
     createVariableNameNode(variable, definitionNode.getVariableName());
     VariableWithLevelNode precedingVariable = getVariableForConditional(definitionNode);
     List<SyntaxError> errors = ImmutableList.of();
@@ -399,7 +400,8 @@ public class SectionNodeProcessorHelper {
               definitionNode.hasRedefines(),
               definitionNode.getOccursClauses().get(0),
               definitionNode.getUsage(),
-              definitionNode.isGlobal());
+              definitionNode.isGlobal(),
+              definitionNode.getCtx());
       createVariableNameNode(variable, definitionNode.getVariableName());
       for (VariableNameAndLocality nameAndLocality : definitionNode.getOccursIndexes())
         variable.addChild(
@@ -426,7 +428,8 @@ public class SectionNodeProcessorHelper {
               getName(definitionNode),
               definitionNode.isGlobal(),
               definitionNode.hasRedefines(),
-              definitionNode.getUsage());
+              definitionNode.getUsage(),
+              definitionNode.getCtx());
       createVariableNameNode(variable, definitionNode.getVariableName());
       return new ResultWithErrors<>(variable, ImmutableList.of());
     }
@@ -483,7 +486,8 @@ public class SectionNodeProcessorHelper {
               definitionNode.isSignClausePresent(),
               definitionNode.isDynamicLength(),
               definitionNode.isJustified(),
-              definitionNode.isUnBounded());
+              definitionNode.isUnBounded(),
+              definitionNode.getCtx());
       createVariableNameNode(variable, definitionNode.getVariableName());
       return new ResultWithErrors<>(variable, errors);
     }
@@ -595,7 +599,7 @@ public class SectionNodeProcessorHelper {
 
   private void processRenameClause(
       RenameItemNode variable, VariableNameAndLocality rename, VariableNode allowedQualifier) {
-    VariableUsageNode qualifiedVar = new VariableUsageNode(rename.getName(), rename.getLocality());
+    VariableUsageNode qualifiedVar = new VariableUsageNode(rename.getName(), rename.getLocality(), true, variable.getCtx());
     variable.addChild(qualifiedVar);
     allowedQualifier.addUsage(qualifiedVar);
   }
@@ -630,7 +634,7 @@ public class SectionNodeProcessorHelper {
     VariableNameAndLocality redefinesNameAndLocality = definitionNode.getRedefines();
     String redefinesName = redefinesNameAndLocality.getName();
     Locality redefinesLocality = redefinesNameAndLocality.getLocality();
-    VariableUsageNode redefineUsage = new VariableUsageNode(redefinesName, redefinesLocality);
+    VariableUsageNode redefineUsage = new VariableUsageNode(redefinesName, redefinesLocality, true, definitionNode.getCtx());
     variableNode.addChild(redefineUsage);
     List<VariableWithLevelNode> eligibleNodesForRedefine =
         getEligibleNodesForRedefine(definitionNode);

@@ -121,6 +121,7 @@ class IdmsVisitor extends IdmsParserBaseVisitor<List<Node>> {
                         .level(LEVEL_MAP_NAME)
                         .variableNameAndLocality(varName)
                         .statementLocality(constructLocality(ctx))
+                        .ctx(ctx)
                         .build(),
                     visitChildren(ctx)))
         .orElseGet(() -> visitChildren(ctx));

@@ -86,7 +86,7 @@ public class TableDataNameNode extends ElementaryNode {
         isJustified,
         isUnBounded,
         picClause,
-        usageFormat);
+        usageFormat, null);
     this.value = value;
     this.occursTimes = occursTimes;
   }

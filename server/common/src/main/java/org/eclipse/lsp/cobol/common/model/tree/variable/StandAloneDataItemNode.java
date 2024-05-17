@@ -84,7 +84,7 @@ public class StandAloneDataItemNode extends ElementaryNode {
         isJustified,
         isUnBounded,
         picClause,
-        usageFormat);
+        usageFormat, null);
     this.value = value;
   }
 

@@ -18,6 +18,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.eclipse.lsp.cobol.common.error.ErrorSeverity;
 import org.eclipse.lsp.cobol.common.error.ErrorSource;
 import org.eclipse.lsp.cobol.common.error.SyntaxError;
@@ -49,6 +50,7 @@ public abstract class VariableNode extends Node implements DefinedAndUsedStructu
   private final String name;
   @Setter private boolean global;
   @EqualsAndHashCode.Exclude private final List<Location> usages = new ArrayList<>();
+  @EqualsAndHashCode.Exclude private transient final List<ParserRuleContext> contextUsages = new ArrayList<>();
 
   protected VariableNode(
       Locality location, String name, VariableType variableType, boolean global) {
@@ -102,6 +104,7 @@ public abstract class VariableNode extends Node implements DefinedAndUsedStructu
   public void addUsage(VariableUsageNode usageNode) {
     if (!usages.contains(usageNode.getLocality().toLocation())) {
       usages.add(usageNode.getLocality().toLocation());
+      contextUsages.add(usageNode.getCtx());
       usageNode.addDefinition(this);
     }
   }

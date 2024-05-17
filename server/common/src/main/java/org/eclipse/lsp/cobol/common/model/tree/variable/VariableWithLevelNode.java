@@ -17,6 +17,7 @@ package org.eclipse.lsp.cobol.common.model.tree.variable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.eclipse.lsp.cobol.common.model.Locality;
 import org.eclipse.lsp.cobol.common.model.tree.Node;
 
@@ -27,20 +28,22 @@ import org.eclipse.lsp.cobol.common.model.tree.Node;
 public abstract class VariableWithLevelNode extends VariableNode {
   private final int level;
   private final boolean specifiedGlobal;
-  private final boolean redefines;
+    private transient ParserRuleContext ctx;
+    private final boolean redefines;
   private static final String GLOBAL_SUFFIX = " GLOBAL";
 
   protected VariableWithLevelNode(
-      Locality location,
-      int level,
-      String name,
-      boolean redefines,
-      VariableType variableType,
-      boolean global) {
+          Locality location,
+          int level,
+          String name,
+          boolean redefines,
+          VariableType variableType,
+          boolean global, ParserRuleContext ctx) {
     super(location, name, variableType, global);
     this.level = level;
     this.redefines = redefines;
     this.specifiedGlobal = global;
+    this.ctx = ctx;
   }
 
   protected VariableWithLevelNode(

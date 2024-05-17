@@ -17,6 +17,7 @@ package org.eclipse.lsp.cobol.common.model.tree.variables;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.lsp.cobol.common.model.Locality;
 import org.eclipse.lsp.cobol.common.model.tree.variable.ValueInterval;
@@ -43,12 +44,12 @@ public class ConditionDataNameNode extends VariableWithLevelNode {
   private final String valueToken;
 
   public ConditionDataNameNode(
-      Locality location,
-      String name,
-      boolean redefines,
-      List<ValueInterval> valueIntervals,
-      String valueToken) {
-    super(location, LEVEL_88, name, redefines, VariableType.CONDITION_DATA_NAME);
+          Locality location,
+          String name,
+          boolean redefines,
+          List<ValueInterval> valueIntervals,
+          String valueToken, ParserRuleContext ctx) {
+    super(location, LEVEL_88, name, redefines, VariableType.CONDITION_DATA_NAME, false, ctx);
     this.valueIntervals = valueIntervals;
     this.valueToken = valueToken;
   }

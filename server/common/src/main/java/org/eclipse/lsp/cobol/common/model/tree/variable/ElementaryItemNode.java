@@ -17,6 +17,7 @@ package org.eclipse.lsp.cobol.common.model.tree.variable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.lsp.cobol.common.model.Locality;
 
@@ -32,8 +33,7 @@ import org.eclipse.lsp.cobol.common.model.Locality;
 @EqualsAndHashCode(callSuper = true)
 public class ElementaryItemNode extends ElementaryNode {
   private final String value;
-
-  public ElementaryItemNode(
+    public ElementaryItemNode(
       Locality location,
       int level,
       String name,
@@ -57,23 +57,25 @@ public class ElementaryItemNode extends ElementaryNode {
         isSignClausePresent,
         false,
         false,
-        false);
+        false,
+            null);
   }
 
   public ElementaryItemNode(
-      Locality location,
-      int level,
-      String name,
-      boolean global,
-      String picClause,
-      String value,
-      UsageFormat usageFormat,
-      boolean redefines,
-      boolean isBlankWhenZeroPresent,
-      boolean isSignClausePresent,
-      boolean isDynamicLength,
-      boolean isJustified,
-      boolean isUnBounded) {
+          Locality location,
+          int level,
+          String name,
+          boolean global,
+          String picClause,
+          String value,
+          UsageFormat usageFormat,
+          boolean redefines,
+          boolean isBlankWhenZeroPresent,
+          boolean isSignClausePresent,
+          boolean isDynamicLength,
+          boolean isJustified,
+          boolean isUnBounded,
+          ParserRuleContext ctx) {
     super(
         location,
         level,
@@ -87,7 +89,7 @@ public class ElementaryItemNode extends ElementaryNode {
         isJustified,
         isUnBounded,
         picClause,
-        usageFormat);
+        usageFormat, ctx);
     this.value = value;
   }
 

@@ -17,6 +17,7 @@ package org.eclipse.lsp.cobol.common.model.tree.variable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.eclipse.lsp.cobol.common.model.Locality;
 
 /**
@@ -56,7 +57,17 @@ public class GroupItemNode extends VariableWithLevelNode implements UsageClause 
       boolean global,
       boolean redefines,
       UsageFormat usageFormat) {
-    super(location, level, name, redefines, VariableType.GROUP_ITEM, global);
+    this(location, level, name, global, redefines, usageFormat, null);
+  }
+  public GroupItemNode(
+          Locality location,
+          int level,
+          String name,
+          boolean global,
+          boolean redefines,
+          UsageFormat usageFormat,
+          ParserRuleContext ctx) {
+    super(location, level, name, redefines, VariableType.GROUP_ITEM, global, ctx);
     this.usageFormat = usageFormat;
   }
 

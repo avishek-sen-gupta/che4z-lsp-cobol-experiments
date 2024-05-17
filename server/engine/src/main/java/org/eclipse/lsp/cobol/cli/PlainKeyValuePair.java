@@ -14,17 +14,21 @@
  */
 package org.eclipse.lsp.cobol.cli;
 
-import org.eclipse.lsp.cobol.common.model.tree.variable.VariableNode;
+import java.util.Map;
 
 /**
  * TestKv
  */
-public class TestKv {
+public class PlainKeyValuePair<T> {
     private String key;
-    private VariableNode value;
+    private T value;
 
-    public TestKv(String key, VariableNode value) {
+    public PlainKeyValuePair(String key, T value) {
         this.key = key;
         this.value = value;
+    }
+
+    public PlainKeyValuePair(Map.Entry<String, T> entry) {
+        this(entry.getKey(), entry.getValue());
     }
 }

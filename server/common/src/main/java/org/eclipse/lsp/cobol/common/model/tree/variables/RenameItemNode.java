@@ -18,6 +18,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.eclipse.lsp.cobol.common.model.Locality;
 import org.eclipse.lsp.cobol.common.model.NodeType;
 import org.eclipse.lsp.cobol.common.model.tree.Node;
@@ -42,8 +43,8 @@ public class RenameItemNode extends VariableWithLevelNode {
   @EqualsAndHashCode.Exclude @ToString.Exclude @Getter @Setter private GroupItemNode varGroupParent;
 
   public RenameItemNode(
-      Locality location, String name, boolean redefines, boolean global) {
-    super(location, LEVEL_66, name, redefines, VariableType.RENAME_ITEM, global);
+          Locality location, String name, boolean redefines, boolean global, ParserRuleContext ctx) {
+    super(location, LEVEL_66, name, redefines, VariableType.RENAME_ITEM, global, ctx);
   }
 
   @Override

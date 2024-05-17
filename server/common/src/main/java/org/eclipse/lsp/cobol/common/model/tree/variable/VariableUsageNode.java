@@ -18,6 +18,7 @@ import com.google.common.collect.ImmutableList;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.eclipse.lsp.cobol.common.model.DefinedAndUsedStructure;
 import org.eclipse.lsp.cobol.common.model.Describable;
 import org.eclipse.lsp.cobol.common.model.Locality;
@@ -40,8 +41,9 @@ public class VariableUsageNode extends Node implements DefinedAndUsedStructure, 
   private final String name;
   @EqualsAndHashCode.Exclude @ToString.Exclude private final List<VariableNode> definitions = new ArrayList<>();
   private final boolean isDefinitionMandatory;
+    private ParserRuleContext ctx;
 
-  public VariableUsageNode(
+    public VariableUsageNode(
       String dataName,
       Locality locality) {
     super(locality, NodeType.VARIABLE_USAGE);
@@ -52,10 +54,12 @@ public class VariableUsageNode extends Node implements DefinedAndUsedStructure, 
   public VariableUsageNode(
           String dataName,
           Locality locality,
-          boolean isDefinitionMandatory) {
+          boolean isDefinitionMandatory,
+          ParserRuleContext ctx) {
     super(locality, NodeType.VARIABLE_USAGE);
     this.name = dataName;
     this.isDefinitionMandatory = isDefinitionMandatory;
+      this.ctx = ctx;
   }
 
   @Override

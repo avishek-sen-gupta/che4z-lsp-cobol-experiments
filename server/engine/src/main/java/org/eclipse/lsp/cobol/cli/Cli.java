@@ -20,6 +20,7 @@ import com.google.gson.reflect.TypeToken;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import lombok.extern.slf4j.Slf4j;
+import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.eclipse.lsp.cobol.cli.di.CliModule;
 import org.eclipse.lsp.cobol.cli.modules.CliClientProvider;
@@ -34,7 +35,10 @@ import org.eclipse.lsp.cobol.common.error.SyntaxError;
 import org.eclipse.lsp.cobol.common.mapping.ExtendedDocument;
 import org.eclipse.lsp.cobol.common.mapping.ExtendedText;
 import org.eclipse.lsp.cobol.common.message.MessageService;
+import org.eclipse.lsp.cobol.common.model.tree.CodeBlockDefinitionNode;
 import org.eclipse.lsp.cobol.common.model.tree.Node;
+import org.eclipse.lsp.cobol.common.model.tree.variable.VariableNode;
+import org.eclipse.lsp.cobol.common.symbols.CodeBlockReference;
 import org.eclipse.lsp.cobol.common.symbols.SymbolTable;
 import org.eclipse.lsp.cobol.core.PanelDefinitionParser;
 import org.eclipse.lsp.cobol.core.engine.analysis.AnalysisContext;
@@ -169,13 +173,15 @@ public class Cli implements Callable<Integer> {
     Gson gson = new GsonBuilder().setPrettyPrinting().addSerializationExclusionStrategy(new ExclusionStrategy() {
         @Override
         public boolean shouldSkipField(FieldAttributes fieldAttributes) {
-            return "recognizer".equals(fieldAttributes.getName()) || "parent".equals(fieldAttributes.getName())
-                    || "children".equals(fieldAttributes.getName());
+            return "recognizer".equals(fieldAttributes.getName()) || "children".equals(fieldAttributes.getName())
+                    || "exception".equals(fieldAttributes.getName())
+                    || "ctx".equals(fieldAttributes.getName())
+                    || "contextUsages".equals(fieldAttributes.getName());
         }
 
         @Override
         public boolean shouldSkipClass(Class<?> aClass) {
-            return false;
+            return RecognitionException.class.equals(aClass);
         }
     }).create();
     JsonObject result = new JsonObject();
@@ -216,15 +222,31 @@ public class Cli implements Callable<Integer> {
       Node rootNode = data.getRootNode();
 //      new CobolTreeVisualiser().visualiseCobolAST(rootNode);
       SymbolTable symbolTable = (SymbolTable) data.getSymbolTableMap().values().toArray()[0];
-      List<TestKv> testKvs = symbolTable.getVariables().entries().stream().map(e -> {
-          return new TestKv(e.getKey(), e.getValue());
-      }).collect(Collectors.toList());
-      ArrayList<String> objects = new ArrayList<>();
-      Type listType = new TypeToken<List<TestKv>>(){}.getType();
-      String symbolTableAsString = gson.toJson(testKvs);
-      PrintWriter out = new PrintWriter("/Users/asgupta/Downloads/mbrdi-poc/symbol-table.json");
-      out.println(symbolTableAsString);
-      out.close();
+      Type listType = new TypeToken<List<PlainKeyValuePair>>(){}.getType();
+      Collection<Map.Entry<String, VariableNode>> variableMapEntries = symbolTable.getVariables().entries();
+      Set<Map.Entry<String, CodeBlockReference>> sectionMapEntries = symbolTable.getSectionMap().entrySet();
+      Set<Map.Entry<String, CodeBlockReference>> paragraphMapEntries = symbolTable.getParagraphMap().entrySet();
+      List<CodeBlockDefinitionNode> codeBlockDefinitions = symbolTable.getCodeBlocks();
+
+      String variableMaoAsString = gson.toJson(variableMapEntries.stream().map(PlainKeyValuePair::new).collect(Collectors.toList()));
+      String sectionMapAsString = gson.toJson(sectionMapEntries.stream().map(PlainKeyValuePair::new).collect(Collectors.toList()));
+      String paragraphMapAsString = gson.toJson(paragraphMapEntries.stream().map(PlainKeyValuePair::new).collect(Collectors.toList()));
+      String codeBlockDefinitionsAsString = gson.toJson(codeBlockDefinitions);
+      PrintWriter out1 = new PrintWriter("/Users/asgupta/Downloads/mbrdi-poc/variable-table.json");
+      out1.println(variableMaoAsString);
+      out1.close();
+
+      PrintWriter out2 = new PrintWriter("/Users/asgupta/Downloads/mbrdi-poc/section-table.json");
+      out2.println(sectionMapAsString);
+      out2.close();
+
+      PrintWriter out3 = new PrintWriter("/Users/asgupta/Downloads/mbrdi-poc/paragraph-table.json");
+      out3.println(paragraphMapAsString);
+      out3.close();
+
+      PrintWriter out4 = new PrintWriter("/Users/asgupta/Downloads/mbrdi-poc/codeblock-table.json");
+      out4.println(codeBlockDefinitionsAsString);
+      out4.close();
 
       return 0;
   }

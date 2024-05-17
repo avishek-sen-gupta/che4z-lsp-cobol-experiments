@@ -120,6 +120,7 @@ class IdmsCopybookVisitor extends IdmsCopyParserBaseVisitor<List<Node>> {
             .signClause(!ctx.dataSignClause().isEmpty())
             .isDynamicLength(!ctx.dataDynamicLengthClause().isEmpty())
             .isJustified(!ctx.dataJustifiedClause().isEmpty())
+            .ctx(ctx)
             .build(),
         visitChildren(ctx));
   }
@@ -145,7 +146,7 @@ class IdmsCopybookVisitor extends IdmsCopyParserBaseVisitor<List<Node>> {
                     .map(this::extractNameAndLocality)
                     .collect(toList()))
             .ifPresent(builder::renamesThruClause);
-    return addTreeNode(builder.build(), visitChildren(ctx));
+    return addTreeNode(builder.ctx(ctx).build(), visitChildren(ctx));
   }
 
   @Override
@@ -171,6 +172,7 @@ class IdmsCopybookVisitor extends IdmsCopyParserBaseVisitor<List<Node>> {
             .signClause(!ctx.dataSignClause().isEmpty())
             .isDynamicLength(!ctx.dataDynamicLengthClause().isEmpty())
             .isJustified(!ctx.dataJustifiedClause().isEmpty())
+            .ctx(ctx)
             .build(),
         visitChildren(ctx));
   }
@@ -189,6 +191,7 @@ class IdmsCopybookVisitor extends IdmsCopyParserBaseVisitor<List<Node>> {
                         .statementLocality(retrieveRangeLocality(ctx))
                         .valueClauses(retrieveValues(ImmutableList.of(ctx.dataValueClause())))
                         .valueToken(retrieveValueToken(valueToken))
+                        .ctx(ctx)
                         .build(),
                     visitChildren(ctx)))
         .orElse(ImmutableList.of());
@@ -209,6 +212,7 @@ class IdmsCopybookVisitor extends IdmsCopyParserBaseVisitor<List<Node>> {
             .fileDescriptor(getIntervalText(ctx.fileDescriptionEntryClauses()))
             .fileControlClause(fileControlClause)
             .isSortDescription(Objects.nonNull(ctx.fileDescriptionEntryClauses().SD()))
+            .ctx(ctx)
             .build(),
         visitChildren(ctx));
   }

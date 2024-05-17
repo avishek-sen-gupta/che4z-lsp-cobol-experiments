@@ -17,6 +17,7 @@ package org.eclipse.lsp.cobol.common.model.tree.variable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.eclipse.lsp.cobol.common.model.Locality;
 
 /**
@@ -31,14 +32,14 @@ public class MultiTableDataNameNode extends VariableWithLevelNode implements Usa
   private final UsageFormat usageFormat;
 
   public MultiTableDataNameNode(
-      Locality location,
-      int level,
-      String name,
-      boolean redefines,
-      OccursClause occursClause,
-      UsageFormat usageFormat,
-      boolean global) {
-    super(location, level, name, redefines, VariableType.MULTI_TABLE_DATA_NAME, global);
+          Locality location,
+          int level,
+          String name,
+          boolean redefines,
+          OccursClause occursClause,
+          UsageFormat usageFormat,
+          boolean global, ParserRuleContext ctx) {
+    super(location, level, name, redefines, VariableType.MULTI_TABLE_DATA_NAME, global, ctx);
     this.occursClause = occursClause;
     this.usageFormat = usageFormat;
   }

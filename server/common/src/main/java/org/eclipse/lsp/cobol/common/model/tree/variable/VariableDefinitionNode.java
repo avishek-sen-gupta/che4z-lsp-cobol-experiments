@@ -20,6 +20,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.eclipse.lsp.cobol.common.VariableConstants;
 import org.eclipse.lsp.cobol.common.error.SyntaxError;
 import org.eclipse.lsp.cobol.common.message.MessageTemplate;
@@ -63,6 +64,7 @@ public final class VariableDefinitionNode extends Node {
   private final boolean isDynamicLength;
   private final boolean isJustified;
   private final boolean isUnBounded;
+  private final ParserRuleContext ctx;
 
   private VariableDefinitionNode(
       Locality location,
@@ -87,7 +89,8 @@ public final class VariableDefinitionNode extends Node {
       boolean isDynamicLength,
       boolean isJustified,
       boolean isUnBounded,
-      boolean isExternal) {
+      boolean isExternal,
+      ParserRuleContext ctx) {
     super(location, NodeType.VARIABLE_DEFINITION);
     this.level = level;
     this.variableName = variableName;
@@ -111,6 +114,7 @@ public final class VariableDefinitionNode extends Node {
     this.isJustified = isJustified;
     this.isUnBounded = isUnBounded;
     this.isExternal = isExternal;
+    this.ctx = ctx;
   }
 
   private static SyntaxError checkClauseIsSingle(
@@ -360,7 +364,7 @@ public final class VariableDefinitionNode extends Node {
     boolean isJustified;
     boolean isUnBounded;
     boolean isExternal;
-
+    ParserRuleContext ctx;
     private Builder() {}
 
     /**
@@ -392,7 +396,8 @@ public final class VariableDefinitionNode extends Node {
           isDynamicLength,
           isJustified,
           isUnBounded,
-          isExternal);
+          isExternal,
+          ctx);
     }
   }
 }

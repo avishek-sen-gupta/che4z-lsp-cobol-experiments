@@ -68,6 +68,7 @@ public class DaCoCopybookVisitor extends VariableParserBaseVisitor<List<Node>> {
             .signClause(!ctx.dataSignClause().isEmpty())
             .isDynamicLength(!ctx.dataDynamicLengthClause().isEmpty())
             .isJustified(!ctx.dataJustifiedClause().isEmpty())
+            .ctx(ctx)
             .build();
 
     return addTreeNode(variableDefinitionNode, visitChildren(ctx));
@@ -96,7 +97,7 @@ public class DaCoCopybookVisitor extends VariableParserBaseVisitor<List<Node>> {
                     .map(this::extractNameAndLocality)
                     .collect(toList()))
             .ifPresent(builder::renamesThruClause);
-    return addTreeNode(builder.build(), visitChildren(ctx));
+    return addTreeNode(builder.ctx(ctx).build(), visitChildren(ctx));
   }
 
   @Override
@@ -121,6 +122,7 @@ public class DaCoCopybookVisitor extends VariableParserBaseVisitor<List<Node>> {
             .signClause(!ctx.dataSignClause().isEmpty())
             .isDynamicLength(!ctx.dataDynamicLengthClause().isEmpty())
             .isJustified(!ctx.dataJustifiedClause().isEmpty())
+            .ctx(ctx)
             .build();
     return addTreeNode(variableDefinitionNode, visitChildren(ctx));
   }
@@ -139,6 +141,7 @@ public class DaCoCopybookVisitor extends VariableParserBaseVisitor<List<Node>> {
                                             .statementLocality(retrieveRangeLocality(ctx))
                                             .valueClauses(retrieveValues(ImmutableList.of(ctx.dataValueClause())))
                                             .valueToken(VisitorHelper.retrieveValueToken(valueToken))
+                                            .ctx(ctx)
                                             .build(),
                                     visitChildren(ctx)))
             .orElse(ImmutableList.of());
