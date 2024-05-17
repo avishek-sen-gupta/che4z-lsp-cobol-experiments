@@ -13,21 +13,27 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class DynamicFlowAnalyser {
+    private final CobolEntityNavigator navigator;
     private ParserRuleContext tree;
+    private CobolVM vm;
 
     public DynamicFlowAnalyser(ParserRuleContext tree) {
         this.tree = tree;
+        navigator = new CobolEntityNavigator(tree);
+        vm = new CobolVM(navigator);
     }
 
     public void run() {
-        ParseTree compilationUnit = tree.getChild(0);
-        ParseTree programUnit = compilationUnit.getChild(0);
-        ParseTree procedureDivision = programUnit.getChild(3);
-        ParseTree procedureDivisionBody = procedureDivision.getChild(3);
-        List<CobolParser.SentenceContext> sentences = new ArrayList<>();
-        recurse(procedureDivisionBody, sentences);
-        System.out.println("Got all Sentences in order");
-        interpret(sentences);
+        interpret2();
+        System.out.println("One instruction");
+    }
+
+    private void interpret2() {
+        int instructionPointer = 0;
+        CobolParser.StatementContext s1 = vm.apply(new ZeroethInstruction(navigator));
+        InstructionPointerOperation iptrOp1 = vm.log(s1);
+        CobolParser.StatementContext s2 = vm.apply(iptrOp1);
+        InstructionPointerOperation iptrOp2 = vm.log(s2);
     }
 
     private void interpret(List<CobolParser.SentenceContext> sentences) {
@@ -71,12 +77,15 @@ public class DynamicFlowAnalyser {
 
         if (typedStatement.getClass() == CobolParser.GoToStatementContext.class) {
             CobolParser.GoToStatementContext gotoStatement = (CobolParser.GoToStatementContext) typedStatement;
-
-            System.out.println("It's a GO TO");
+            CobolParser.ProcedureNameContext procedureNameContext = gotoStatement.procedureName().get(0);
+            ParseTree site = navigator.transferSite(procedureNameContext);
+            List<CobolParser.SentenceContext> transferredToSentenceSequence = navigator.allSentencesFrom(site);
+            System.out.println("It's a GO TO to: " + transferredToSentenceSequence.get(0).getText());
         }
         FlowNode tail = new FlowNode(statement.getText());
         return tail;
     }
+
 
     private List<CobolParser.StatementContext> collectStatements(CobolParser.IfElseContext ifElse) {
         if (ifElse == null) return new ArrayList<>();
@@ -98,14 +107,4 @@ public class DynamicFlowAnalyser {
         return tail;
     }
 
-    private static void recurse(ParseTree parentNode, List<CobolParser.SentenceContext> sentences) {
-        for (int i = 0; i <= parentNode.getChildCount() - 1; i++) {
-            ParseTree child = parentNode.getChild(i);
-            if (child.getClass() != CobolParser.SentenceContext.class) {
-                recurse(child, sentences);
-                continue;
-            }
-            sentences.add((CobolParser.SentenceContext) child);
-        }
-    }
 }
