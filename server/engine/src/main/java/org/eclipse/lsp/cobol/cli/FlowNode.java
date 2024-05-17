@@ -1,7 +1,5 @@
 package org.eclipse.lsp.cobol.cli;
 
-import com.google.common.collect.ImmutableList;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,16 +7,16 @@ import java.util.stream.Collectors;
 public class FlowNode {
     private String text;
     protected List<FlowNode> incomingNodes;
-    protected FlowNode outgoingNode;
+    protected List<FlowNode> outgoingNodes;
 
     public FlowNode(String text) {
-        this(text, new ArrayList<>(), null);
+        this(text, new ArrayList<>(), new ArrayList<>());
     }
 
-    public FlowNode(String text, List<FlowNode> incomingNodes, FlowNode outgoingNode) {
+    public FlowNode(String text, List<FlowNode> incomingNodes, List<FlowNode> outgoingNodes) {
         this.text = text;
         this.incomingNodes = incomingNodes;
-        this.outgoingNode = outgoingNode;
+        this.outgoingNodes = outgoingNodes;
     }
 
     public void addIncomingNode(FlowNode node) {
@@ -27,7 +25,8 @@ public class FlowNode {
     }
 
     public void setOutgoingNode(FlowNode node) {
-        outgoingNode = node;
+        outgoingNodes = new ArrayList<>();
+        outgoingNodes.add(node);
     }
 
     public boolean canReturn() {
@@ -58,7 +57,7 @@ public class FlowNode {
     }
 
     protected List<FlowNode> getChildren() {
-        if (outgoingNode == null) return ImmutableList.of();
-        return ImmutableList.of(outgoingNode);
+//        if (outgoingNodes == null) return ImmutableList.of();
+        return outgoingNodes;
     }
 }

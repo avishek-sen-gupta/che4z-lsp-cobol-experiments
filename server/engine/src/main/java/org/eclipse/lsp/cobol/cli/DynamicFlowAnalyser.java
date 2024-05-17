@@ -35,8 +35,6 @@ public class DynamicFlowAnalyser {
         FlowNode tail = startNode;
         for (int i = 0; i <= sentences.size() - 1; i++) {
             FlowNode sentenceRoot = interpret(sentences.get(i), tail);
-//            tail.setOutgoingNode(sentenceRoot); // This will not always be true, will need connect logic
-//            sentenceRoot.addIncomingNode(tail);
             tail = sentenceRoot;
         }
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -66,18 +64,17 @@ public class DynamicFlowAnalyser {
             CobolParser.IfThenContext ifThen = ifStatement.ifThen();
             ConditionFlowNode conditionFlowNode = new ConditionFlowNode(ifStatement);
             FlowNode trueOutgoingPathRoot = processPath(collectStatements(ifThen), conditionFlowNode.getTrueOutgoingPathRoot());
-//            conditionFlowNode.truePathRoot(trueOutgoingPathRoot);
             CobolParser.IfElseContext ifElse = ifStatement.ifElse();
             FlowNode falseOutgoingPathRoot = processPath(collectStatements(ifElse), conditionFlowNode.getFalseOutgoingPathRoot());
-//            conditionFlowNode.falsePathRoot(falseOutgoingPathRoot);
-//            precedingNode.setOutgoingNode(conditionFlowNode);
-//            conditionFlowNode.addIncomingNode(precedingNode);
             return conditionFlowNode;
         }
 
+        if (typedStatement.getClass() == CobolParser.GoToStatementContext.class) {
+            CobolParser.GoToStatementContext gotoStatement = (CobolParser.GoToStatementContext) typedStatement;
+
+            System.out.println("It's a GO TO");
+        }
         FlowNode tail = new FlowNode(statement.getText());
-//        precedingNode.setOutgoingNode(tail);
-//        tail.addIncomingNode(precedingNode);
         return tail;
     }
 
@@ -96,13 +93,6 @@ public class DynamicFlowAnalyser {
         for (int i = 0; i <= statements.size() - 1; i++) {
             FlowNode statementTreeRoot = process(statements.get(i), tail);
             tail.connectTo(statementTreeRoot);
-//            if (statementTreeRoot.canReturn()) {
-//                tail = statementTreeRoot; // TODO : Connect correctly
-//            } else {
-//                tail = new DeadEndFlowNode();
-//            }
-            // Revisit tail connection for IF-THEN, GOTOs, etc.
-//            tail.setOutgoingNode(statementTreeRoot); // This is not always going to be true, especially when GOTOs and EXITs terminate the branch
             tail = statementTreeRoot; // This is not always going to be true, especially when GOTOs and EXITs terminate the branch
         }
         return tail;

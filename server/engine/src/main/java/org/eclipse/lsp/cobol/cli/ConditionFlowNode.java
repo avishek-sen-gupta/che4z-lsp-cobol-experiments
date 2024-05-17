@@ -12,7 +12,7 @@ public class ConditionFlowNode extends FlowNode {
     @Getter private FlowNode falseOutgoingPathRoot;
 
     public ConditionFlowNode(ParseTree conditionCtx) {
-        super(conditionCtx.getText(), new ArrayList<>(), new DeadEndFlowNode());
+        super(conditionCtx.getText(), new ArrayList<>(), new ArrayList<>());
         truePathRoot(new PlaceholderFlowNode());
         falsePathRoot(new PlaceholderFlowNode());
     }

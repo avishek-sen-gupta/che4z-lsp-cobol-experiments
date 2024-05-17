@@ -4,6 +4,6 @@ import java.util.ArrayList;
 
 public class BeginFlowNode extends FlowNode {
     public BeginFlowNode() {
-        super("BEGIN", new ArrayList<>(), new DeadEndFlowNode());
+        super("BEGIN", new ArrayList<>(), new ArrayList<>());
     }
 }
