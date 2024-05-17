@@ -2,8 +2,8 @@ package org.eclipse.lsp.cobol.cli;
 
 import java.util.UUID;
 
-public class DeadEndFlowNode extends FlowNode {
-    public DeadEndFlowNode() {
+public class PlaceholderFlowNode extends FlowNode {
+    public PlaceholderFlowNode() {
         super(UUID.randomUUID().toString());
     }
 }
