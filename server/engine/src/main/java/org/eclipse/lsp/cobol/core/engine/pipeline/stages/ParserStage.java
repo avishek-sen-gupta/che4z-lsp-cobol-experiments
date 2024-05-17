@@ -18,7 +18,6 @@ import com.google.common.collect.ImmutableList;
 import lombok.RequiredArgsConstructor;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.eclipse.lsp.cobol.common.dialects.DialectOutcome;
 import org.eclipse.lsp.cobol.common.error.ErrorSeverity;
 import org.eclipse.lsp.cobol.common.error.ErrorSource;
@@ -32,7 +31,6 @@ import org.eclipse.lsp.cobol.core.engine.pipeline.Stage;
 import org.eclipse.lsp.cobol.core.engine.pipeline.StageResult;
 import org.eclipse.lsp.cobol.core.strategy.CobolErrorStrategy;
 import org.eclipse.lsp.cobol.core.visitor.ParserListener;
-import org.eclipse.lsp.cobol.visualisation.CobolTreeVisualiser;
 import org.eclipse.lsp4j.Location;
 
 import java.util.List;
@@ -62,10 +60,6 @@ public class ParserStage implements Stage<ParserStageResult, DialectOutcome> {
                     : new AntlrCobolParser(CharStreams.fromString(context.getExtendedDocument().toString()),
                     listener, errorStrategy, treeListener);
             CobolParser.StartRuleContext tree = parser.runParser();
-            ParseTreeWalker x = new ParseTreeWalker();
-            x.walk(new CustomCobolParseTreeListener(), tree);
-            new CobolTreeVisualiser().visualiseCobolAST(tree, context.getCobolParseTreeOutputPath());
-
             context.getAccumulatedErrors().addAll(listener.getErrors());
             context.getAccumulatedErrors().addAll(getParsingError(context, parser));
             return new StageResult<>(new ParserStageResult(parser.getTokens(), tree));

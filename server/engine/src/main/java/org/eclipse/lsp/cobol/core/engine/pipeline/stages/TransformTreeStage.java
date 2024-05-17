@@ -77,7 +77,7 @@ public class TransformTreeStage implements Stage<ProcessingResult, ParserStageRe
 
     symbolsRepository.updateSymbols(symbolAccumulatorService.getProgramSymbols());
 
-    return new StageResult<>(new ProcessingResult(symbolAccumulatorService.getProgramSymbols(), rootNode));
+    return new StageResult<>(new ProcessingResult(symbolAccumulatorService.getProgramSymbols(), rootNode, prevStageResult.getData().getTree()));
   }
 
   @Override

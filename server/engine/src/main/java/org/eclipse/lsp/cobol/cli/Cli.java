@@ -20,6 +20,7 @@ import com.google.gson.reflect.TypeToken;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import lombok.extern.slf4j.Slf4j;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.eclipse.lsp.cobol.cli.di.CliModule;
@@ -190,7 +191,12 @@ public class Cli implements Callable<Integer> {
         case analysis:
         StageResult<ProcessingResult> analysisResult =
             (StageResult<ProcessingResult>) pipelineResult.getLastStageResult();
-        JsonArray diagnostics = new JsonArray();
+        ParserRuleContext tree = analysisResult.getData().getTree();
+//        ParseTreeWalker x = new ParseTreeWalker();
+//        x.walk(new CustomCobolParseTreeListener(), tree);
+        new CobolTreeVisualiser().visualiseCobolAST(tree, cobolParseTreeOutputPath);
+
+            JsonArray diagnostics = new JsonArray();
         ctx.getAccumulatedErrors()
             .forEach(
                 err -> {

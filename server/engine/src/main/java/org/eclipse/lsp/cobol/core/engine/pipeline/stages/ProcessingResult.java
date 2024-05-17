@@ -15,6 +15,7 @@
 package org.eclipse.lsp.cobol.core.engine.pipeline.stages;
 
 import lombok.Value;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.eclipse.lsp.cobol.common.model.tree.Node;
 import org.eclipse.lsp.cobol.common.symbols.SymbolTable;
 
@@ -27,4 +28,5 @@ import java.util.Map;
 public class ProcessingResult {
   Map<String, SymbolTable> symbolTableMap;
   Node rootNode;
+  ParserRuleContext tree;
 }
