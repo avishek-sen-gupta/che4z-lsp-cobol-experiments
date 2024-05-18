@@ -10,35 +10,38 @@ import java.util.stream.Collectors;
 
 public class CobolVM {
     @Getter
-    private final List<InstructionPointerOperation> stack;
+    private final List<InstructionPointerOperation> log;
     private CobolEntityNavigator navigator;
-    private int instructionPointer;
+    private CobolStackFrame frame;
 
-    public CobolVM(CobolEntityNavigator navigator) {
+    public CobolVM(CobolStackFrame frame, CobolEntityNavigator navigator) {
         this.navigator = navigator;
-        this.stack = new ArrayList<>();
-        this.instructionPointer = 0;
+        this.frame = frame;
+        this.log = new ArrayList<>();
     }
 
     public InstructionPointerOperation log(CobolParser.StatementContext statement) {
         InstructionPointerOperation ptrOp = interpret(statement);
-        stack.add(ptrOp);
         return ptrOp;
     }
 
-    public CobolParser.StatementContext read() {
-        return navigator.instruction(instructionPointer);
-    }
     public InstructionPointerOperation interpret(CobolParser.StatementContext statement) {
         ParseTree typedStatement = statement.getChild(0);
         if (typedStatement.getClass() == CobolParser.IfStatementContext.class) {
             CobolParser.IfStatementContext ifStatement = (CobolParser.IfStatementContext) typedStatement;
             CobolParser.IfThenContext ifThen = ifStatement.ifThen();
             CobolParser.IfElseContext ifElse = ifStatement.ifElse();
-            List<CobolParser.StatementContext> thenClause = collectStatements(ifThen);
-            List<CobolParser.StatementContext> elseClause = collectStatements(ifElse);
+            CobolEntityNavigator ifThenNavigator = new CobolEntityNavigator(ifThen);
+            CobolStackFrame ifThenFrame = new CobolStackFrame(ifThenNavigator);
+            CobolVM ifThenVM = new CobolVM(ifThenFrame, ifThenNavigator);
 
-            return new InstructionPointerChange(statement, thenClause.get(0), navigator);
+            InstructionPointerOperation currentInstruction = new ZeroethInstruction(ifThenNavigator);
+            CobolParser.StatementContext ifThenStmt = ifThenVM.apply(currentInstruction);
+            while (ifThenStmt != null) { // Need to allow the user to choose which branch here
+                currentInstruction = ifThenVM.log(ifThenStmt);
+                ifThenStmt = ifThenVM.apply(currentInstruction);
+            }
+            log.add(new IfBranchInstruction(ifThenVM.log));
         }
         return new NextInstruction(statement, navigator);
     }
@@ -53,8 +56,10 @@ public class CobolVM {
     }
 
     public CobolParser.StatementContext apply(InstructionPointerOperation op) {
-        InstructionContext next = op.next();
-        instructionPointer = next.getStatementPointer();
-        return navigator.instruction(instructionPointer);
+        log.add(op);
+        InstructionContext next = op.nextContext();
+        frame.setInstructionPointer(next.getStatementPointer());
+        if (next == InstructionContext.TERM) return null;
+        return navigator.instruction(frame.getInstructionPointer());
     }
 }

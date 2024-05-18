@@ -13,7 +13,7 @@ public class InstructionPointerChange implements InstructionPointerOperation {
     }
 
     @Override
-    public InstructionContext next() {
+    public InstructionContext nextContext() {
         return next;
     }
 }

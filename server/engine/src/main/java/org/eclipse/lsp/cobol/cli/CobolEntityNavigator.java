@@ -14,26 +14,24 @@ public class CobolEntityNavigator {
     private final List<CobolParser.SentenceContext> sentences;
     private final List<CobolParser.ProcedureSectionContext> sections;
     private final List<CobolParser.ParagraphContext> paragraphs;
-    private final ParseTree procedureDivisionBody;
     private final List<CobolParser.StatementContext> statements;
+    private ParserRuleContext tree;
 
     public CobolEntityNavigator(ParserRuleContext tree) {
-        ParseTree compilationUnit = tree.getChild(0);
-        ParseTree programUnit = compilationUnit.getChild(0);
-        ParseTree procedureDivision = programUnit.getChild(3);
-        procedureDivisionBody = procedureDivision.getChild(3);
+        this.tree = tree;
         sentences = new ArrayList<>();
         sections = new ArrayList<>();
         paragraphs = new ArrayList<>();
         statements = new ArrayList<>();
-        new CobolEntityFinder<>(CobolParser.StatementContext.class).recurse(procedureDivisionBody, statements);
+        new CobolEntityFinder<>(CobolParser.StatementContext.class).recurse(tree, statements);
 //        new CobolEntityFinder<CobolParser.SentenceContext>().recurse(procedureDivisionBody, sentences);
 //        new CobolEntityFinder<CobolParser.ProcedureSectionContext>().recurse(procedureDivisionBody, sections);
 //        new CobolEntityFinder<CobolParser.ParagraphContext>().recurse(procedureDivisionBody, paragraphs);
     }
 
     public ParseTree transferSite(CobolParser.ProcedureNameContext procedureNameContext) {
-        return recursivelySearch(procedureDivisionBody, procedureNameContext);
+        return null;
+//        return recursivelySearch(procedureDivisionBody, procedureNameContext);
     }
 
     private ParseTree recursivelySearch(ParseTree parent, CobolParser.ProcedureNameContext procedureNameContext) {
@@ -61,21 +59,26 @@ public class CobolEntityNavigator {
 
     private CobolParser.SentenceContext firstSentenceIn(ParseTree site) {
         List<CobolParser.SentenceContext> statements = new ArrayList<>();
-        new CobolEntityFinder<CobolParser.SentenceContext>(CobolParser.SentenceContext.class).recurse(site, statements);
+        new CobolEntityFinder<>(CobolParser.SentenceContext.class).recurse(site, statements);
         return statements.get(0);
     }
 
     public InstructionContext context(CobolParser.StatementContext statementContext) {
+        if (statementContext == null) {
+            System.out.println("WHY AGAIN?");
+        }
         int statementPointer = statements.indexOf(statementContext);
-        LocationContext context = new CobolEntityFinder<CobolParser.StatementContext>(CobolParser.StatementContext.class).context(statementContext);
+        LocationContext context = new CobolEntityFinder<>(CobolParser.StatementContext.class).context(statementContext);
         return new InstructionContext(statementPointer, context);
     }
 
     public InstructionContext next(InstructionContext currentContext) {
+        if (currentContext.getStatementPointer() + 1 >= statements.size()) return InstructionContext.TERM;
         return context(statements.get(currentContext.getStatementPointer() + 1));
     }
 
     public CobolParser.StatementContext instruction(int instructionPointer) {
+        if (statements.isEmpty()) return null;
         return statements.get(instructionPointer);
     }
 }

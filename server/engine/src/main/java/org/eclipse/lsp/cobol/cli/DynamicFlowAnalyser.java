@@ -20,20 +20,44 @@ public class DynamicFlowAnalyser {
     public DynamicFlowAnalyser(ParserRuleContext tree) {
         this.tree = tree;
         navigator = new CobolEntityNavigator(tree);
-        vm = new CobolVM(navigator);
     }
 
     public void run() {
-        interpret2();
+        ParseTree compilationUnit = tree.getChild(0);
+        ParseTree programUnit = compilationUnit.getChild(0);
+        ParseTree procedureDivision = programUnit.getChild(3);
+        ParseTree procedureDivisionBody = procedureDivision.getChild(3);
+        CobolEntityNavigator navigator = new CobolEntityNavigator(tree);
+
+        CobolStackFrame frame1 = new CobolStackFrame(navigator);
+        CobolVM vm = new CobolVM(frame1, navigator);
+
+        InstructionPointerOperation instruction = new ZeroethInstruction(navigator);
+        CobolParser.StatementContext s = vm.apply(instruction);
+
+        while (s != null) {
+            instruction = vm.log(s);
+            s = vm.apply(instruction);
+        }
+//        CobolParser.StatementContext s1 = vm.apply(instruction);
+//        InstructionPointerOperation ptr1 = vm.log(s1);
+//        CobolParser.StatementContext s2 = vm.apply(ptr1);
+//        InstructionPointerOperation ptr2 = vm.log(s2);
+//        CobolParser.StatementContext s3 = vm.apply(ptr2);
+//        InstructionPointerOperation ptr3 = vm.log(s3);
+//        CobolParser.StatementContext s4 = vm.apply(ptr3);
+//        InstructionPointerOperation ptr4 = vm.log(s4);
+//        interpret2();
         System.out.println("One instruction");
     }
 
     private void interpret2() {
-        int instructionPointer = 0;
         CobolParser.StatementContext s1 = vm.apply(new ZeroethInstruction(navigator));
         InstructionPointerOperation iptrOp1 = vm.log(s1);
         CobolParser.StatementContext s2 = vm.apply(iptrOp1);
         InstructionPointerOperation iptrOp2 = vm.log(s2);
+        CobolParser.StatementContext s3 = vm.apply(iptrOp2);
+        InstructionPointerOperation iptrOp3 = vm.log(s3);
     }
 
     private void interpret(List<CobolParser.SentenceContext> sentences) {

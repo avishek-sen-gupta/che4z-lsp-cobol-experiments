@@ -26,16 +26,16 @@ public class CobolEntityFinder<T> {
 
     public LocationContext context(ParserRuleContext node) {
         ParserRuleContext parent = node.getParent();
-        while (parent.getClass() != CobolParser.ParagraphContext.class) {
+        while (parent != null && parent.getClass() != CobolParser.ParagraphContext.class) {
             parent = parent.getParent();
         }
 
         CobolParser.ParagraphContext paragraph = (CobolParser.ParagraphContext) parent;
         parent = node.getParent();
-        while (parent.getClass() != CobolParser.ProcedureSectionContext.class) {
+        while (parent != null && parent.getClass() != CobolParser.ProcedureSectionContext.class) {
             parent = parent.getParent();
         }
         CobolParser.ProcedureSectionContext section = (CobolParser.ProcedureSectionContext) parent;
-        return new LocationContext(section, paragraph);
+        return new LocationContext(node, section, paragraph);
     }
 }

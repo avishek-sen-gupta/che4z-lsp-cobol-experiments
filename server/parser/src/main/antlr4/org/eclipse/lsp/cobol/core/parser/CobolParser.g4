@@ -791,7 +791,7 @@ statement
     initiateStatement | inspectStatement | mergeStatement | moveStatement | multiplyStatement | openStatement | performStatement | purgeStatement |
     readStatement | readyResetTraceStatement | receiveStatement | releaseStatement | returnStatement | rewriteStatement | searchStatement | sendStatement |
     serviceReloadStatement | serviceLabelStatement | setStatement | sortStatement | startStatement | stopStatement | stringStatement | subtractStatement |
-    terminateStatement | unstringStatement | writeStatement | xmlParseStatement | jsonStatement | mapStatement
+    terminateStatement | unstringStatement | writeStatement | xmlParseStatement | jsonStatement | mapStatement | nextSentence
    ;
 
 jsonStatement
@@ -1213,12 +1213,15 @@ ifStatement
    : IF (condition | dialectNodeFiller*) ifThen ifElse? END_IF?
    ;
 
+nextSentence
+    : NEXT SENTENCE;
+
 ifThen
-   : THEN? (NEXT SENTENCE | conditionalStatementCall+)
+   : THEN? (conditionalStatementCall+)
    ;
 
 ifElse
-   : ELSE (NEXT SENTENCE | conditionalStatementCall+)
+   : ELSE (conditionalStatementCall+)
    ;
 
 // initialize statement
