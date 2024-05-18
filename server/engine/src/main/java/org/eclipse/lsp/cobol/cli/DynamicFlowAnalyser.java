@@ -17,6 +17,19 @@ public class DynamicFlowAnalyser {
         this.tree = tree;
     }
 
+    public void buildPipeline() {
+        ParseTree compilationUnit = tree.getChild(0);
+        ParseTree programUnit = compilationUnit.getChild(0);
+        ParseTree procedureDivision = programUnit.getChild(3);
+        ParserRuleContext procedureDivisionBody = (ParserRuleContext) procedureDivision.getChild(3);
+        FlowUnit top = new FlowUnit(procedureDivisionBody);
+        top.buildChildren(1);
+        Stack<CobolFrame> stack = new Stack<>();
+        FlowNavigator flowNavigator = new FlowNavigator(top.units());
+        CobolFrame frame = new CobolFrame(flowNavigator, null, null);
+        CobolVM2 vm2 = new CobolVM2(frame, flowNavigator);
+        CobolVmInstruction runResult = vm2.run();
+    }
     public void run() {
         ParseTree compilationUnit = tree.getChild(0);
         ParseTree programUnit = compilationUnit.getChild(0);
@@ -26,16 +39,16 @@ public class DynamicFlowAnalyser {
         CobolEntityNavigatorFactory.procedureDivisionBody = procedureDivisionBody;
 
         Stack<CobolStackFrame> stack = new Stack<>();
-        CobolStackFrame frame1 = new CobolStackFrame(navigator, 0);
-        CobolVM vm = new CobolVM(frame1, navigator, stack);
-
+        CobolStackFrame frame = new CobolStackFrame(navigator, procedureDivisionBody, procedureDivisionBody, 0);
+        CobolVM vm = new CobolVM(frame, navigator, stack);
         InstructionPointerOperation instruction = new ZeroethInstruction(navigator);
-        CobolParser.StatementContext s = vm.apply(instruction);
-
-        while (s != null) {
-            instruction = vm.interpret(s);
-            s = vm.apply(instruction);
-        }
+        vm.run(instruction);
+//        CobolParser.StatementContext s = vm.apply(instruction);
+//
+//        while (s != null) {
+//            instruction = vm.interpret(s);
+//            s = vm.apply(instruction);
+//        }
         System.out.println("One instruction");
     }
 

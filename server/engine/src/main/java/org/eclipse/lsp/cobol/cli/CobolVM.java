@@ -68,15 +68,24 @@ public class CobolVM {
         }
 
         if (typedStatement.getClass() == CobolParser.PerformStatementContext.class) {
-            CobolEntityNavigator performNavigator = CobolEntityNavigatorFactory.navigator();
+            CobolEntityNavigator globalNavigator = CobolEntityNavigatorFactory.navigator();
             CobolParser.PerformStatementContext performStatement = (CobolParser.PerformStatementContext) typedStatement;
             CobolParser.ProcedureNameContext performTargetName = performStatement.performProcedureStatement().procedureName();
-            ParserRuleContext procedure = performNavigator.findTarget(performTargetName);
+            ParserRuleContext procedure = globalNavigator.findTarget(performTargetName);
             CobolEntityNavigator procedureNavigator = new CobolEntityNavigator(procedure);
-//            InstructionContext targetInstructionContext = performNavigator.transferSiteContext(procedure);
+//            InstructionContext targetInstructionContext = globalNavigator.transferSiteContext(procedure);
             CobolStackFrame goToFrame = new CobolStackFrame(procedureNavigator, statement, procedure);
             CobolVM performVM = new CobolVM(goToFrame, procedureNavigator, stack);
-            performVM.run(new ZeroethInstruction(navigator));
+            ZeroethInstruction firstInstruction = new ZeroethInstruction(navigator);
+            performVM.run(firstInstruction);
+            log.add(firstInstruction);
+        }
+
+        if (typedStatement.getClass() == CobolParser.ExitStatementContext.class) {
+            CobolEntityNavigator performNavigator = CobolEntityNavigatorFactory.navigator();
+            CobolParser.ExitStatementContext exitStatement = (CobolParser.ExitStatementContext) typedStatement;
+
+//            log.add(firstInstruction);
         }
         return new NextInstruction(statement, navigator);
     }

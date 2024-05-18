@@ -195,7 +195,7 @@ public class Cli implements Callable<Integer> {
 //        ParseTreeWalker x = new ParseTreeWalker();
 //        x.walk(new CustomCobolParseTreeListener(), tree);
         new CobolTreeVisualiser().visualiseCobolAST(tree, cobolParseTreeOutputPath);
-        new DynamicFlowAnalyser(tree).run();
+        new DynamicFlowAnalyser(tree).buildPipeline();
 
             JsonArray diagnostics = new JsonArray();
         ctx.getAccumulatedErrors()
