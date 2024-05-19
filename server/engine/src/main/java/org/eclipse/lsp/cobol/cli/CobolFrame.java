@@ -18,7 +18,7 @@ public class CobolFrame {
         this.navigator = navigator;
     }
 
-    public CobolFrame(FlowNavigator navigator, FlowUnit scope, CobolFrame parent) {
+    public CobolFrame(FlowNavigator navigator, CobolFrame parent, FlowUnit scope) {
         this(navigator, scope, parent,0);
     }
 

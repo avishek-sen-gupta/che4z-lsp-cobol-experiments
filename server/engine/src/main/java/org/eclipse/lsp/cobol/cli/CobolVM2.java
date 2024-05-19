@@ -16,7 +16,7 @@ public class CobolVM2 {
         FlowControl flow = new FlowControl(frame);
         FlowUnit unit = null;
         CobolVmInstruction instruction = new PassThrough();
-        do {
+        while (flow.continueExecution && unit != TERMINAL) {
             unit = frame.getInstruction();
             if (unit == TERMINAL) {
                 System.out.println("Exiting context " + frame.getScope());
@@ -29,7 +29,7 @@ public class CobolVM2 {
                 instruction = new PassThrough();
             }
             frame.advance();
-        } while (flow.continueExecution && unit != TERMINAL);
+        }
 
         // instruction will stay Passthrough in case of an empty section/paragraph/division/sentence.
         return instruction;
