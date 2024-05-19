@@ -26,7 +26,7 @@ public class DynamicFlowAnalyser {
         top.buildChildren(1);
         Stack<CobolFrame> stack = new Stack<>();
         FlowNavigator flowNavigator = new FlowNavigator(top.units());
-        CobolFrame frame = new CobolFrame(flowNavigator, null, null);
+        CobolFrame frame = new CobolFrame(flowNavigator, top, null);
         CobolVM2 vm2 = new CobolVM2(frame, flowNavigator);
         CobolVmInstruction runResult = vm2.run();
     }

@@ -10,6 +10,13 @@ public interface CobolVmInstruction {
         public CobolVmInstruction execute(NextExecution e) {
             return this;
         }
+
+        @Override
+        public boolean apply(FlowControl flow) {
+            return true;
+        }
     };
+
+    boolean apply(FlowControl flow);
 }
 

@@ -1,6 +1,5 @@
 package org.eclipse.lsp.cobol.cli;
 
-import static org.eclipse.lsp.cobol.cli.CobolVmInstruction.TERM;
 import static org.eclipse.lsp.cobol.cli.FlowUnit.TERMINAL;
 
 public class CobolVM2 {
@@ -10,18 +9,30 @@ public class CobolVM2 {
     public CobolVM2(CobolFrame frame, FlowNavigator navigator) {
         this.frame = frame;
         this.navigator = navigator;
-        System.out.println("Entering new context " + frame.getCallSite());
+        System.out.println("Entering new context " + frame.getScope());
     }
 
     public CobolVmInstruction run() {
+        FlowControl flow = new FlowControl(frame);
         FlowUnit unit = null;
+        CobolVmInstruction instruction = new PassThrough();
         do {
             unit = frame.getInstruction();
-            if (unit == TERMINAL) break;
-            CobolVmInstruction instruction = interpret(unit);
+            if (unit == TERMINAL) {
+                System.out.println("Exiting context " + frame.getScope());
+                break;
+            };
+            instruction = interpret(unit);
+            if (instruction.apply(flow)) {
+                // For a successful EXIT. We do not wish to propagate the EXIT behaviour any further.
+                instruction = new PassThrough();
+            }
             frame.advance();
-        } while (unit != TERMINAL);
-        return null;
+        } while (flow.continueExecution && unit != TERMINAL);
+
+        // instruction will stay Passthrough in case of an empty section/paragraph/division/sentence.
+        return instruction;
+
 //        FlowUnit unit = frame.getInstruction();
 //        if (unit == TERMINAL) return TERM;
 //        CobolVmInstruction instruction = interpret(unit);
@@ -35,7 +46,6 @@ public class CobolVM2 {
     private CobolVmInstruction interpret(FlowUnit unit) {
         if (unit.isAtomic()) {
             return unit.instruction();
-            // Interpret as statement
         }
         FlowNavigator flowNavigator = new FlowNavigator(unit.units());
         CobolFrame frame = new CobolFrame(flowNavigator, unit, this.frame);

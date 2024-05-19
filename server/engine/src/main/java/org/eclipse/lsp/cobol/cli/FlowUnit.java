@@ -1,5 +1,6 @@
 package org.eclipse.lsp.cobol.cli;
 
+import lombok.Getter;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;
@@ -9,15 +10,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class FlowUnit {
+    private String executionContextName() {
+        if (executionContext.getClass() == CobolParser.ProcedureSectionContext.class) return ((CobolParser.ProcedureSectionContext) executionContext).procedureSectionHeader().sectionName().getText();
+        if (executionContext.getClass() == CobolParser.ParagraphContext.class) return ((CobolParser.ParagraphContext) executionContext).paragraphDefinitionName().getText();
+        if (executionContext.getClass() == CobolParser.StatementContext.class) return ((CobolParser.StatementContext) executionContext).getText();
+        if (executionContext.getClass() == CobolParser.SentenceContext.class) return "" + ((CobolParser.SentenceContext) executionContext).start.getLine();
+        return "";
+    }
     @Override
     public String toString() {
         return "FlowUnit{" +
-                "executionContext=" + executionContext.getClass().getSimpleName() +
-                '}';
+                "executionContext=" + executionContext.getClass().getSimpleName() +  "} = " + executionContextName();
     }
 
     public static FlowUnit TERMINAL = new FlowUnit(null);
-    private ParseTree executionContext;
+    @Getter private ParseTree executionContext;
     private List<FlowUnit> children;
 
     public FlowUnit(ParseTree executionContext) {
@@ -25,6 +32,13 @@ public class FlowUnit {
         children = new ArrayList<>();
     }
 
+    public ProgramScope scope() {
+        if (executionContext.getClass() == CobolParser.ProcedureSectionContext.class) return ProgramScope.SECTION;
+        if (executionContext.getClass() == CobolParser.ParagraphContext.class) return ProgramScope.PARAGRAPH;
+        if (executionContext.getClass() == CobolParser.StatementContext.class) return ProgramScope.STATEMENT;
+        if (executionContext.getClass() == CobolParser.SentenceContext.class) return ProgramScope.SENTENCE;
+        return ProgramScope.UNKNOWN;
+    }
     public void buildChildren(int level) {
         if (level > 4) return;
         if (executionContext.getClass() == CobolParser.StatementContext.class) return;
@@ -59,13 +73,12 @@ public class FlowUnit {
     }
 
     public CobolVmInstruction instruction() {
+        CobolParser.StatementContext statement = (CobolParser.StatementContext) executionContext;
+        ParseTree typedStatement = statement.getChild(0);
+        if (typedStatement.getClass() == CobolParser.ExitStatementContext.class) {
+            System.out.println("Excountered EXIT at " + ((CobolParser.ExitStatementContext) typedStatement).start.getLine());
+            return new ExitScope();
+        }
         return new PassThrough();
-//        CobolParser.StatementContext statement = (CobolParser.StatementContext) executionContext;
-//        ParseTree typedStatement = statement.getChild(0);
-//        if (typedStatement.getClass() == CobolParser.ExitStatementContext.class) {
-//            return new ExitScope();
-//        }
-//
-//        return new GenericInstruction();
     }
 }
