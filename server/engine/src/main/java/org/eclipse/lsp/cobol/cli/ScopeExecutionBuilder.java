@@ -37,6 +37,15 @@ public class ScopeExecutionBuilder {
             System.out.println("Branching to IF...THEN at " + unit.executionContextName());
             return vm2.run();
         }
+        else if (unit.scope() == ProgramScope.GOTO) {
+            System.out.println("Encountered a GOTO statement, but ignoring for now..." + ((GoToFlowUnit) unit).getProcedureName().getText());
+            return new PassThrough();
+//            FlowNavigator flowNavigator = new FlowNavigator(unit.units());
+//            CobolFrame frame = new CobolFrame(flowNavigator, this.frame, unit);
+//            CobolVM2 vm2 = new CobolVM2(frame, flowNavigator);
+//            System.out.println("Branching to IF...THEN at " + unit.executionContextName());
+//            return vm2.run();
+        }
 
         FlowNavigator flowNavigator = new FlowNavigator(unit.units());
         CobolFrame frame = new CobolFrame(flowNavigator, this.frame, unit);

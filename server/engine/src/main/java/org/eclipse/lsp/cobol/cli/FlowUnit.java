@@ -67,6 +67,9 @@ public class FlowUnit {
             ifFlowUnit.buildChildren();
             return ifFlowUnit;
         }
+        else if (typedStatement.getClass() == CobolParser.GoToStatementContext.class) {
+            return new GoToFlowUnit(s);
+        }
         return new FlowUnit(s);
     }
 
@@ -114,10 +117,10 @@ public class FlowUnit {
         ParseTree typedStatement = statement.getChild(0);
         if (typedStatement.getClass() == CobolParser.ExitStatementContext.class) {
             if (frame.isProcedure()) {
-                System.out.println("Excountered PERFORM EXIT at " + ((CobolParser.ExitStatementContext) typedStatement).start.getLine());
+                System.out.println("Encountered PERFORM EXIT at " + ((CobolParser.ExitStatementContext) typedStatement).start.getLine());
                 return new ExitProcedure();
             } else {
-                System.out.println("Excountered EXIT at " + ((CobolParser.ExitStatementContext) typedStatement).start.getLine());
+                System.out.println("Encountered EXIT at " + ((CobolParser.ExitStatementContext) typedStatement).start.getLine());
                 return new ExitScope();
             }
         }
