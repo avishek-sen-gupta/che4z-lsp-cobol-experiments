@@ -29,4 +29,13 @@ public class CobolFrame {
     public void advance() {
         instructionPointer ++;
     }
+
+    public boolean isProcedure() {
+        CobolFrame parent = this.parent;
+        while (parent != null) {
+            if (parent.scope.scope() == ProgramScope.PERFORM) return true;
+            parent = parent.parent;
+        }
+        return false;
+    }
 }

@@ -4,13 +4,14 @@ import lombok.Getter;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;
+import org.eclipse.lsp.cobol.core.CobolProcedureDivisionParser;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class FlowUnit {
-    private String executionContextName() {
+    public String executionContextName() {
         if (executionContext.getClass() == CobolParser.ProcedureSectionContext.class) return ((CobolParser.ProcedureSectionContext) executionContext).procedureSectionHeader().sectionName().getText();
         if (executionContext.getClass() == CobolParser.ParagraphContext.class) return ((CobolParser.ParagraphContext) executionContext).paragraphDefinitionName().getText();
         if (executionContext.getClass() == CobolParser.StatementContext.class) return ((CobolParser.StatementContext) executionContext).getText();
@@ -25,20 +26,32 @@ public class FlowUnit {
 
     public static FlowUnit TERMINAL = new FlowUnit(null);
     @Getter private ParseTree executionContext;
-    private List<FlowUnit> children;
+    @Getter private List<FlowUnit> children;
 
     public FlowUnit(ParseTree executionContext) {
         this.executionContext = executionContext;
         children = new ArrayList<>();
+        if (executionContext != null && executionContext.getClass() == CobolParser.StatementContext.class
+        && ((CobolParser.StatementContext) executionContext).children.get(0).getClass() == CobolParser.CallStatementContext.class) {
+            System.out.println("Hello Call");
+        }
     }
 
     public ProgramScope scope() {
         if (executionContext.getClass() == CobolParser.ProcedureSectionContext.class) return ProgramScope.SECTION;
         if (executionContext.getClass() == CobolParser.ParagraphContext.class) return ProgramScope.PARAGRAPH;
-        if (executionContext.getClass() == CobolParser.StatementContext.class) return ProgramScope.STATEMENT;
+        if (executionContext.getClass() == CobolParser.StatementContext.class) return statementType((CobolParser.StatementContext) executionContext);
         if (executionContext.getClass() == CobolParser.SentenceContext.class) return ProgramScope.SENTENCE;
         return ProgramScope.UNKNOWN;
     }
+
+    private ProgramScope statementType(CobolParser.StatementContext statement) {
+        if (statement.children.get(0).getClass() == CobolParser.PerformStatementContext.class) {
+            return ProgramScope.PERFORM;
+        }
+        return ProgramScope.ATOMIC_STATEMENT;
+    }
+
     public void buildChildren(int level) {
         if (level > 4) return;
         if (executionContext.getClass() == CobolParser.StatementContext.class) return;
@@ -69,15 +82,21 @@ public class FlowUnit {
     }
 
     public boolean isAtomic() {
-        return executionContext.getClass() == CobolParser.StatementContext.class;
+        return executionContext.getClass() == CobolParser.StatementContext.class
+                && statementType((CobolParser.StatementContext) executionContext) == ProgramScope.ATOMIC_STATEMENT;
     }
 
-    public CobolVmInstruction instruction() {
+    public CobolVmInstruction instruction(CobolFrame frame) {
         CobolParser.StatementContext statement = (CobolParser.StatementContext) executionContext;
         ParseTree typedStatement = statement.getChild(0);
         if (typedStatement.getClass() == CobolParser.ExitStatementContext.class) {
-            System.out.println("Excountered EXIT at " + ((CobolParser.ExitStatementContext) typedStatement).start.getLine());
-            return new ExitScope();
+            if (frame.isProcedure()) {
+                System.out.println("Excountered PERFORM EXIT at " + ((CobolParser.ExitStatementContext) typedStatement).start.getLine());
+                return new ExitProcedure();
+            } else {
+                System.out.println("Excountered EXIT at " + ((CobolParser.ExitStatementContext) typedStatement).start.getLine());
+                return new ExitScope();
+            }
         }
         return new PassThrough();
     }

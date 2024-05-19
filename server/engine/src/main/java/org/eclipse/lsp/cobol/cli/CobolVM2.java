@@ -21,7 +21,8 @@ public class CobolVM2 {
             if (unit == TERMINAL) {
                 System.out.println("Exiting context " + frame.getScope());
                 break;
-            };
+            }
+            ;
             instruction = interpret(unit);
             if (instruction.apply(flow)) {
                 // For a successful EXIT. We do not wish to propagate the EXIT behaviour any further.
@@ -45,12 +46,9 @@ public class CobolVM2 {
 
     private CobolVmInstruction interpret(FlowUnit unit) {
         if (unit.isAtomic()) {
-            return unit.instruction();
+            return unit.instruction(frame);
         }
-        FlowNavigator flowNavigator = new FlowNavigator(unit.units());
-        CobolFrame frame = new CobolFrame(flowNavigator, unit, this.frame);
-        CobolVM2 vm2 = new CobolVM2(frame, flowNavigator);
-        CobolVmInstruction result = vm2.run();
-        return result;
+
+        return new ScopeExecutionBuilder(unit, CobolEntityNavigatorFactory.flowUnitnavigator(), this.frame).run();
     }
 }

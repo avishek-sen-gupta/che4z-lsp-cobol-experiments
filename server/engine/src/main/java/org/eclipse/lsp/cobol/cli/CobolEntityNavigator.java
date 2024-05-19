@@ -92,7 +92,7 @@ public class CobolEntityNavigator {
         return statements.get(instructionPointer);
     }
 
-    public ParserRuleContext findTarget(CobolParser.ProcedureNameContext gotoTargetName) {
-        return findTargetRecursive(gotoTargetName, tree);
+    public ParserRuleContext findTarget(CobolParser.ProcedureNameContext procedureName) {
+        return findTargetRecursive(procedureName, tree);
     }
 }

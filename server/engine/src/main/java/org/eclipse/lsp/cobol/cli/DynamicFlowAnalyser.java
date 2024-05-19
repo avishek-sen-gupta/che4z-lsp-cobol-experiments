@@ -23,6 +23,8 @@ public class DynamicFlowAnalyser {
         ParseTree procedureDivision = programUnit.getChild(3);
         ParserRuleContext procedureDivisionBody = (ParserRuleContext) procedureDivision.getChild(3);
         FlowUnit top = new FlowUnit(procedureDivisionBody);
+        CobolEntityNavigatorFactory.procedureDivisionBody = procedureDivisionBody;
+        CobolEntityNavigatorFactory.procedureDivisionFlowUnit = top;
         top.buildChildren(1);
         Stack<CobolFrame> stack = new Stack<>();
         FlowNavigator flowNavigator = new FlowNavigator(top.units());
