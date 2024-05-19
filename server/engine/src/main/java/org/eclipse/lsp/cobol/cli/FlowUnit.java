@@ -8,6 +8,7 @@ import org.eclipse.lsp.cobol.core.CobolParser;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class FlowUnit {
     public String executionContextName() {
@@ -24,7 +25,7 @@ public class FlowUnit {
 
     @Override
     public String toString() {
-        return "FlowUnit{" +
+        return getClass().getSimpleName() + "{" +
                 "executionContext=" + executionContext.getClass().getSimpleName() + "} = " + executionContextName();
     }
 
@@ -59,23 +60,42 @@ public class FlowUnit {
         return ProgramScope.ATOMIC_STATEMENT;
     }
 
+    public static FlowUnit statementFlowUnit(CobolParser.StatementContext s) {
+        ParseTree typedStatement = s.children.get(0);
+        if (typedStatement.getClass() == CobolParser.IfStatementContext.class) {
+            FlowUnit ifFlowUnit = new IfFlowUnit(s);
+            ifFlowUnit.buildChildren();
+            return ifFlowUnit;
+        }
+        return new FlowUnit(s);
+    }
+
     public void buildChildren() {
-        if (executionContext.getClass() == CobolParser.StatementContext.class) return;
+        if (executionContext.getClass() == CobolParser.StatementContext.class) {
+            CobolParser.StatementContext statement = (CobolParser.StatementContext) executionContext;
+            FlowUnit e = statementFlowUnit(statement);
+            children.add(e);
+            return;
+        }
         for (int i = 0; i <= executionContext.getChildCount() - 1; i++) {
             ParseTree child = executionContext.getChild(i);
+            // Unwrap ParagraphsContext to get at ParagraphContext objects
             if (child.getClass() == CobolParser.ParagraphsContext.class) {
+                // Some paragraphs can be empty
                 if (((CobolParser.ParagraphsContext) child).children == null) continue;
                 List<FlowUnit> paragraphs = ((ParserRuleContext) child).children.stream().map(FlowUnit::new).collect(Collectors.toList());
                 children.addAll(paragraphs);
-                continue;
             }
-            if (child.getClass() != CobolParser.ParagraphContext.class
-                    && child.getClass() != CobolParser.ProcedureSectionContext.class
-                    && child.getClass() != CobolParser.SentenceContext.class
-                    && child.getClass() != CobolParser.StatementContext.class) {
-                continue;
+            else if (child.getClass() == CobolParser.StatementContext.class) {
+                CobolParser.StatementContext statement = (CobolParser.StatementContext) child;
+                FlowUnit e = statementFlowUnit(statement);
+                children.add(e);
             }
-            children.add(new FlowUnit(child));
+            else if (child.getClass() == CobolParser.ParagraphContext.class
+                    || child.getClass() == CobolParser.ProcedureSectionContext.class
+                    || child.getClass() == CobolParser.SentenceContext.class) {
+                children.add(new FlowUnit(child));
+            }
         }
         children.forEach(c -> c.buildChildren());
     }

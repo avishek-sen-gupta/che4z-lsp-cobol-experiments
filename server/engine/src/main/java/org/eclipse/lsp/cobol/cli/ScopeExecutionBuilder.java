@@ -1,8 +1,11 @@
 package org.eclipse.lsp.cobol.cli;
 
+import com.google.common.collect.ImmutableList;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;
+
+import java.util.List;
 
 public class ScopeExecutionBuilder {
     private final FlowUnit unit;
@@ -25,10 +28,17 @@ public class ScopeExecutionBuilder {
             }
             String procedureName = performStatement.performProcedureStatement().procedureName().paragraphName().getText();
             FlowUnit performTarget = navigator.findTarget(procedureName);
-            FlowNavigator flowNavigator = new FlowNavigator(performTarget.units());
+            FlowNavigator flowNavigator = new FlowNavigator(ImmutableList.of(performTarget));
             CobolFrame frame = new CobolFrame(flowNavigator, unit, this.frame);
             CobolVM2 vm2 = new CobolVM2(frame, flowNavigator);
             System.out.println("Branching to PERFORM procedure at " + performTarget.executionContextName());
+            return vm2.run();
+        }
+        else if (unit.scope() == ProgramScope.IF) {
+            FlowNavigator flowNavigator = new FlowNavigator(unit.units());
+            CobolFrame frame = new CobolFrame(flowNavigator, unit, this.frame);
+            CobolVM2 vm2 = new CobolVM2(frame, flowNavigator);
+            System.out.println("Branching to IF...THEN at " + unit.executionContextName());
             return vm2.run();
         }
 

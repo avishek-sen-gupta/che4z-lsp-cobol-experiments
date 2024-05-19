@@ -46,6 +46,7 @@ public class CobolVM2 {
 
     private CobolVmInstruction interpret(FlowUnit unit) {
         if (unit.isAtomic()) {
+            System.out.println("Interpreting atomic: " + unit);
             return unit.instruction(frame);
         }
 
