@@ -1,6 +1,5 @@
 package org.eclipse.lsp.cobol.cli.flowchart;
 
-import com.google.gson.annotations.Expose;
 import lombok.Getter;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -12,25 +11,23 @@ import java.util.*;
 public class ChartNode {
     static int counter = 0;
     private String uuid = "";
-    private final Random random;
-    @Expose
     private boolean composite = false;
-    @Getter
-    @Expose
-    private List<ChartNode> outgoingNodes;
+    @Getter private List<ChartNode> outgoingNodes;
     private List<ChartNode> incomingNodes;
-    @Expose
     private ChartNode internalTreeRoot;
-    private ParseTree executionContext;
+    @Getter private ParseTree executionContext;
     private ChartNodeService nodeService;
 
     public ChartNode(ParseTree executionContext, ChartNodeService nodeService) {
-        random = new Random();
-        if (executionContext.getClass() == TerminalNodeImpl.class || executionContext.getClass() == CobolParser.ParagraphsContext.class) {
-            this.uuid = counter + "";
-            counter ++;
-        }
-//        this.uuid = random.nextInt(100) + "";
+//        if (executionContext.getClass() == TerminalNodeImpl.class ||
+//            executionContext.getClass() == CobolParser.ParagraphsContext.class ||
+//            executionContext.getClass() == CobolParser.StatementContext.class ||
+//            executionContext.getClass() == CobolParser.IfThenContext.class ||
+//            executionContext.getClass() == CobolParser.IfElseContext.class ||
+//            executionContext.getClass() == CobolParser.EndClauseContext.class) {
+//        }
+        this.uuid = counter + "";
+        counter ++;
         this.nodeService = nodeService;
         if (executionContext.getClass() == CobolParser.ProcedureSectionContext.class ||
                 executionContext.getClass() == CobolParser.ParagraphsContext.class ||
@@ -108,7 +105,7 @@ public class ChartNode {
 
     @Override
     public String toString() {
-        return executionContextName();
+        return executionContextName() + uuid;
 //        return getClass().getSimpleName() + "{" +
 //                "executionContext=" + executionContext.getClass().getSimpleName() + "} = " + executionContextName();
     }
@@ -119,34 +116,34 @@ public class ChartNode {
         if (executionContext.getClass() == CobolParser.ParagraphContext.class)
             return ((CobolParser.ParagraphContext) executionContext).paragraphDefinitionName().getText();
         if (executionContext.getClass() == CobolParser.StatementContext.class)
-            return ((CobolParser.StatementContext) executionContext).getText();
+            return executionContext.getText();
         if (executionContext.getClass() == CobolParser.SentenceContext.class)
             return "" + ((CobolParser.SentenceContext) executionContext).start.getLine();
         if (executionContext.getClass() == TerminalNodeImpl.class)
-            return executionContext.getText() + uuid;
+            return executionContext.getText();
         if (executionContext.getClass() == CobolParser.ParagraphDefinitionNameContext.class)
             return "NAME: " + executionContext.getText();
         if (executionContext.getClass() == CobolParser.ProcedureSectionHeaderContext.class)
             return executionContext.getText();
         if (executionContext.getClass() == CobolParser.ParagraphsContext.class)
-            return "para-group:" + uuid;
+            return "para-group:";
         return executionContext.getClass().getSimpleName() + "/" + uuid;
     }
 
     public void accept(ChartNodeVisitor visitor, int level) {
         if (composite) {
-            visitor.visit(this);
+            visitor.visit(this, nodeService);
             this.outgoingNodes.forEach(c -> c.accept(visitor, level));
             if (level > 4) return;
             if (internalTreeRoot == null) return;
-            visitor.visitSpecific(this, internalTreeRoot);
+
+            // Make an explicit connection between higher organisational unit and root of internal tree
+            visitor.visitSpecific(this, internalTreeRoot, nodeService);
             ChartNode current = internalTreeRoot;
             current.accept(visitor, level + 1);
         } else {
-            visitor.visit(this);
+            visitor.visit(this, nodeService);
             outgoingNodes.forEach(c -> c.accept(visitor, level));
         }
-//        visitor.visit(this);
-//        outgoingNodes.forEach(c -> c.accept(visitor, level + 1));
     }
 }

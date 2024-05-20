@@ -1,6 +1,6 @@
 package org.eclipse.lsp.cobol.cli.flowchart;
 
 public interface ChartNodeVisitor {
-    void visit(ChartNode node);
-    void visitSpecific(ChartNode parent, ChartNode internalTreeRoot);
+    void visit(ChartNode node, ChartNodeService nodeService);
+    void visitSpecific(ChartNode parent, ChartNode internalTreeRoot, ChartNodeService nodeService);
 }
