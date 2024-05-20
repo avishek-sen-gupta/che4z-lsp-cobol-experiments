@@ -16,18 +16,18 @@ public class DynamicFlowAnalyser {
         this.tree = tree;
     }
 
-    public void buildPipeline() {
+    public void run() {
         ParseTree compilationUnit = tree.getChild(0);
         ParseTree programUnit = compilationUnit.getChild(0);
         ParseTree procedureDivision = programUnit.getChild(3);
         ParserRuleContext procedureDivisionBody = (ParserRuleContext) procedureDivision.getChild(3);
-        FlowUnit procedureDivision = new FlowUnit(procedureDivisionBody);
+        FlowUnit procedureDivisionFlowUnit = new FlowUnit(procedureDivisionBody);
         CobolEntityNavigatorFactory.procedureDivisionBody = procedureDivisionBody;
-        CobolEntityNavigatorFactory.procedureDivisionFlowUnit = procedureDivision;
-        procedureDivision.buildChildren();
+        CobolEntityNavigatorFactory.procedureDivisionFlowUnit = procedureDivisionFlowUnit;
+        procedureDivisionFlowUnit.buildChildren();
         Stack<CobolFrame> stack = new Stack<>();
-        FlowNavigator flowNavigator = new FlowNavigator(procedureDivision.units());
-        CobolFrame frame = new CobolFrame(flowNavigator, null, procedureDivision);
+        FlowNavigator flowNavigator = new FlowNavigator(procedureDivisionFlowUnit.units());
+        CobolFrame frame = new CobolFrame(flowNavigator, null, procedureDivisionFlowUnit);
         CobolVirtualMachine vm2 = new CobolVirtualMachine(frame, flowNavigator);
         CobolVmInstruction runResult = vm2.run();
     }
