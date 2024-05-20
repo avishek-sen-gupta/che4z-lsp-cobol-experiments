@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 public class DynamicFlowAnalyser {
     private ParserRuleContext tree;
-    private CobolVM vm;
 
     public DynamicFlowAnalyser(ParserRuleContext tree) {
         this.tree = tree;
@@ -31,27 +30,6 @@ public class DynamicFlowAnalyser {
         CobolFrame frame = new CobolFrame(flowNavigator, null, top);
         CobolVM2 vm2 = new CobolVM2(frame, flowNavigator);
         CobolVmInstruction runResult = vm2.run();
-    }
-    public void run() {
-        ParseTree compilationUnit = tree.getChild(0);
-        ParseTree programUnit = compilationUnit.getChild(0);
-        ParseTree procedureDivision = programUnit.getChild(3);
-        ParserRuleContext procedureDivisionBody = (ParserRuleContext) procedureDivision.getChild(3);
-        CobolEntityNavigator navigator = new CobolEntityNavigator(tree);
-        CobolEntityNavigatorFactory.procedureDivisionBody = procedureDivisionBody;
-
-        Stack<CobolStackFrame> stack = new Stack<>();
-        CobolStackFrame frame = new CobolStackFrame(navigator, procedureDivisionBody, procedureDivisionBody, 0);
-        CobolVM vm = new CobolVM(frame, navigator, stack);
-        InstructionPointerOperation instruction = new ZeroethInstruction(navigator);
-        vm.run(instruction);
-//        CobolParser.StatementContext s = vm.apply(instruction);
-//
-//        while (s != null) {
-//            instruction = vm.interpret(s);
-//            s = vm.apply(instruction);
-//        }
-        System.out.println("One instruction");
     }
 
     private List<CobolParser.StatementContext> collectStatements(CobolParser.IfElseContext ifElse) {

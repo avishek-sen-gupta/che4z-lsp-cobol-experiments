@@ -19,10 +19,6 @@ public class ExitScope implements CobolVmInstruction {
             System.out.println("Breaking out of " + scope + "[" + flow.getFrame().getScope() + "]");
             return true;
         }
-//        if (scope == ProgramScope.GOTO && !hasExited) {
-//            System.out.println("Cannot unwind GO TO stack. Program has ended.");
-//            exit(0);
-//        }
         else if (!hasExited) {
             flow.setContinueExecution(false);
             System.out.println("Breaking out of " + scope + "[" + flow.getFrame().getScope() + "]");
