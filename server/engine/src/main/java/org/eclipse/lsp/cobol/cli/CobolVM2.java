@@ -19,10 +19,14 @@ public class CobolVM2 {
         while (flow.continueExecution && unit != TERMINAL) {
             unit = frame.getInstruction();
             if (unit == TERMINAL) {
+                if (frame.getScope().scope() == ProgramScope.GOTO) {
+                    System.out.println("Terminating program...");
+                    return new ProgramTermination();
+                }
                 System.out.println("Exiting context " + frame.getScope());
                 break;
             }
-            ;
+
             instruction = interpret(unit);
             if (instruction.apply(flow)) {
                 // For a successful EXIT. We do not wish to propagate the EXIT behaviour any further.

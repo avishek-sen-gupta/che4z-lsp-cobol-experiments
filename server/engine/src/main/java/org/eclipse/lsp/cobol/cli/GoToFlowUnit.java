@@ -8,14 +8,14 @@ import java.util.List;
 public class GoToFlowUnit extends FlowUnit {
 
     private final CobolParser.GoToStatementContext goToStatement;
-    @Getter private final CobolParser.ProcedureNameContext procedureName;
+    @Getter private final String procedureName;
 
     public GoToFlowUnit(CobolParser.StatementContext s) {
         super(s);
         goToStatement = (CobolParser.GoToStatementContext) s.getChild(0);
 
         // Will need to handle multiple GO TOs in the future
-        procedureName = goToStatement.procedureName().get(0);
+        procedureName = goToStatement.procedureName().get(0).getText();
     }
 
     @Override

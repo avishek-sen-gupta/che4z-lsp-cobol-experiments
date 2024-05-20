@@ -11,7 +11,7 @@ public class CobolEntityNavigatorFactory {
         return new CobolEntityNavigator(procedureDivisionBody);
     }
 
-    public static CobolFlowUnitNavigator flowUnitnavigator() {
-        return new CobolFlowUnitNavigator(procedureDivisionFlowUnit);
+    public static GlobalFlowUnitNavigator flowUnitnavigator() {
+        return new GlobalFlowUnitNavigator(procedureDivisionFlowUnit);
     }
 }

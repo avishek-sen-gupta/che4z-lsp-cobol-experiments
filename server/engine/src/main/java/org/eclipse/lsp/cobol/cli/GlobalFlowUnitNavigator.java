@@ -1,15 +1,13 @@
 package org.eclipse.lsp.cobol.cli;
 
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;
 
 import java.util.List;
 
-public class CobolFlowUnitNavigator {
+public class GlobalFlowUnitNavigator {
     private FlowUnit procedureDivisionFlowUnit;
 
-    public CobolFlowUnitNavigator(FlowUnit procedureDivisionFlowUnit) {
+    public GlobalFlowUnitNavigator(FlowUnit procedureDivisionFlowUnit) {
         this.procedureDivisionFlowUnit = procedureDivisionFlowUnit;
     }
 
@@ -26,5 +24,11 @@ public class CobolFlowUnitNavigator {
         }
 
         return null;
+    }
+
+    public List<FlowUnit> allFlowUnitsFrom(FlowUnit f) {
+        List<FlowUnit> procedureLevelGroups = procedureDivisionFlowUnit.getChildren();
+        List<FlowUnit> remainingUnits = procedureLevelGroups.subList(procedureLevelGroups.indexOf(f), procedureLevelGroups.size());
+        return remainingUnits;
     }
 }

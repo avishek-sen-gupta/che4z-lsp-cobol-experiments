@@ -10,16 +10,18 @@ public class CobolFrame {
     @Getter @Setter
     private int instructionPointer;
     private FlowNavigator navigator;
-
-    public CobolFrame(FlowNavigator navigator, FlowUnit scope, CobolFrame parent, int iptr) {
-        this.scope = scope;
-        this.parent = parent;
-        this.instructionPointer = iptr;
-        this.navigator = navigator;
-    }
+    @Getter private EntryInstructionPointer ipStrategy;
 
     public CobolFrame(FlowNavigator navigator, CobolFrame parent, FlowUnit scope) {
-        this(navigator, scope, parent,0);
+        this(navigator, parent, scope, EntryInstructionPointer.ZERO);
+    }
+
+    public CobolFrame(FlowNavigator navigator, CobolFrame parent, FlowUnit scope, EntryInstructionPointer ipStrategy) {
+        this.ipStrategy = ipStrategy;
+        this.scope = scope;
+        this.parent = parent;
+        this.instructionPointer = ipStrategy.instructionPointer(scope);
+        this.navigator = navigator;
     }
 
     public FlowUnit getInstruction() {
