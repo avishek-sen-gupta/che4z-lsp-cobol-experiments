@@ -9,15 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// TODO: Break this up
 public class FlowUnit {
-    @Getter private FlowUnit parent;
-
-    // Copy constructor
-    public FlowUnit(ParseTree executionContext, FlowUnit parent, List<FlowUnit> children) {
-        this.executionContext = executionContext;
-        this.parent = parent;
-        this.children = children;
-    }
+    public static FlowUnit TERMINAL = new FlowUnit(null);
+    @Getter
+    private ParseTree executionContext;
+    @Getter
+    private List<FlowUnit> children;
+    @Getter
+    private FlowUnit parent;
 
     public String executionContextName() {
         if (executionContext.getClass() == CobolParser.ProcedureSectionContext.class)
@@ -36,12 +36,6 @@ public class FlowUnit {
         return getClass().getSimpleName() + "{" +
                 "executionContext=" + executionContext.getClass().getSimpleName() + "} = " + executionContextName();
     }
-
-    public static FlowUnit TERMINAL = new FlowUnit(null);
-    @Getter
-    private ParseTree executionContext;
-    @Getter
-    private List<FlowUnit> children;
 
     public FlowUnit(ParseTree executionContext) {
         this.executionContext = executionContext;
@@ -74,8 +68,7 @@ public class FlowUnit {
             FlowUnit ifFlowUnit = new IfFlowUnit(s);
             ifFlowUnit.buildChildren();
             return ifFlowUnit;
-        }
-        else if (typedStatement.getClass() == CobolParser.GoToStatementContext.class) {
+        } else if (typedStatement.getClass() == CobolParser.GoToStatementContext.class) {
             return new GoToFlowUnit(s);
         }
         return new FlowUnit(s);
@@ -86,7 +79,6 @@ public class FlowUnit {
             CobolParser.StatementContext statement = (CobolParser.StatementContext) executionContext;
             FlowUnit e = statementFlowUnit(statement);
             addChild(e);
-//            children.add(e);
             return;
         }
         for (int i = 0; i <= executionContext.getChildCount() - 1; i++) {
@@ -97,20 +89,15 @@ public class FlowUnit {
                 if (((CobolParser.ParagraphsContext) child).children == null) continue;
                 List<FlowUnit> paragraphs = ((ParserRuleContext) child).children.stream().map(FlowUnit::new).collect(Collectors.toList());
                 addChildren(paragraphs);
-//                children.addAll(paragraphs);
-            }
-            else if (child.getClass() == CobolParser.StatementContext.class) {
+            } else if (child.getClass() == CobolParser.StatementContext.class) {
                 CobolParser.StatementContext statement = (CobolParser.StatementContext) child;
                 FlowUnit e = statementFlowUnit(statement);
                 addChild(e);
-//                children.add(e);
-            }
-            else if (child.getClass() == CobolParser.ParagraphContext.class
+            } else if (child.getClass() == CobolParser.ParagraphContext.class
                     || child.getClass() == CobolParser.ProcedureSectionContext.class
                     || child.getClass() == CobolParser.SentenceContext.class) {
                 FlowUnit e = new FlowUnit(child);
                 addChild(e);
-//                children.add(e);
             }
         }
         children.forEach(c -> c.buildChildren());
@@ -151,10 +138,5 @@ public class FlowUnit {
             }
         }
         return new PassThrough();
-    }
-
-    public FlowUnit excludeUpto(FlowUnit targetParaOrSection) {
-        int indexOfTarget = children.indexOf(targetParaOrSection);
-        return new FlowUnit(executionContext, parent, children.subList(indexOfTarget, children.size()));
     }
 }

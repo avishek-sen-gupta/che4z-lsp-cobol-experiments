@@ -40,6 +40,7 @@ public class ScopeExecutionBuilder {
             return vm.run();
         }
         else if (unit.scope() == ProgramScope.GOTO) {
+            // TODO: Definitely a better way to do this
             GoToFlowUnit goToFlowUnit = (GoToFlowUnit) unit;
             String procedureName = goToFlowUnit.getProcedureName();
             System.out.println("Encountered a GOTO statement..." + procedureName);
@@ -49,12 +50,12 @@ public class ScopeExecutionBuilder {
             List<FlowUnit> remainingExecutions;
             if (parentGroup.getExecutionContext().getClass() != CobolParser.ProcedureSectionContext.class) {
                 // targetParaOrSection is a top-level unit, use this as the start frame
-                return runGoToVM2(targetParaOrSection, targetParaOrSection, EntryInstructionPointer.ZERO);
+                return runGoToVM(targetParaOrSection, targetParaOrSection, EntryInstructionPointer.ZERO);
             } else {
                 // targetParaOrSection is a paragraph
                 // parentGroup is the top-level section
                 // Enter parentGroup, but start from targetParaOrSection
-                return runGoToVM2(targetParaOrSection, parentGroup, new CustomEntryPoint(targetParaOrSection));
+                return runGoToVM(targetParaOrSection, parentGroup, new CustomEntryPoint(targetParaOrSection));
             }
         }
         else if (unit.scope() == ProgramScope.SECTION) {
@@ -72,7 +73,7 @@ public class ScopeExecutionBuilder {
         return vm.run();
     }
 
-    private CobolVmInstruction runGoToVM2(FlowUnit targetParaOrSection, FlowUnit parentGroup, EntryInstructionPointer ipStrategy) {
+    private CobolVmInstruction runGoToVM(FlowUnit targetParaOrSection, FlowUnit parentGroup, EntryInstructionPointer ipStrategy) {
         List<FlowUnit> remainingExecutions = globalNavigator.allFlowUnitsFrom(parentGroup);
         FlowNavigator flowNavigator = new FlowNavigator(remainingExecutions);
         CobolFrame frame = new CobolFrame(flowNavigator, this.frame, unit, ipStrategy);
@@ -81,12 +82,4 @@ public class ScopeExecutionBuilder {
         return vm.run();
     }
 
-    private CobolVmInstruction runGoToVM(FlowUnit targetParaOrSection) {
-        List<FlowUnit> remainingExecutions = globalNavigator.allFlowUnitsFrom(targetParaOrSection);
-        FlowNavigator flowNavigator = new FlowNavigator(remainingExecutions);
-        CobolFrame frame = new CobolFrame(flowNavigator, this.frame, unit);
-        CobolVirtualMachine vm = new CobolVirtualMachine(frame, flowNavigator);
-        System.out.println("Transferring to GO TO at " + targetParaOrSection.executionContextName());
-        return vm.run();
-    }
 }
