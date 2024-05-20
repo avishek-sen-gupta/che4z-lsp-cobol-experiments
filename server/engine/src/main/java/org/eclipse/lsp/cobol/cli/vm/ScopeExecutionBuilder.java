@@ -1,7 +1,6 @@
 package org.eclipse.lsp.cobol.cli.vm;
 
 import com.google.common.collect.ImmutableList;
-import org.eclipse.lsp.cobol.cli.vm.*;
 import org.eclipse.lsp.cobol.core.CobolParser;
 
 import java.util.List;
@@ -50,22 +49,12 @@ public class ScopeExecutionBuilder {
             List<FlowUnit> remainingExecutions;
             if (parentGroup.getExecutionContext().getClass() != CobolParser.ProcedureSectionContext.class) {
                 // targetParaOrSection is a top-level unit, use this as the start frame
-                remainingExecutions = globalNavigator.allFlowUnitsFrom(targetParaOrSection);
-                flowNavigator = new FlowNavigator(remainingExecutions);
-                CobolFrame frame = new CobolFrame(flowNavigator, this.frame, unit);
-                CobolVirtualMachine vm = new CobolVirtualMachine(frame, flowNavigator);
-                System.out.println("Transferring to GO TO at " + targetParaOrSection.executionContextName());
-                return vm.run();
+                return runGoToVM2(targetParaOrSection, targetParaOrSection, EntryInstructionPointer.ZERO);
             } else {
                 // targetParaOrSection is a paragraph
                 // parentGroup is the top-level section
                 // Enter parentGroup, but start from targetParaOrSection
-                remainingExecutions = globalNavigator.allFlowUnitsFrom(parentGroup);
-                flowNavigator = new FlowNavigator(remainingExecutions);
-                CobolFrame frame = new CobolFrame(flowNavigator, this.frame, unit, new CustomEntryPoint(targetParaOrSection));
-                CobolVirtualMachine vm = new CobolVirtualMachine(frame, flowNavigator);
-                System.out.println("Transferring to GO TO at " + targetParaOrSection.executionContextName());
-                return vm.run();
+                return runGoToVM2(targetParaOrSection, parentGroup, new CustomEntryPoint(targetParaOrSection));
             }
         }
         else if (unit.scope() == ProgramScope.SECTION) {
@@ -80,6 +69,24 @@ public class ScopeExecutionBuilder {
         FlowNavigator flowNavigator = new FlowNavigator(remainingExecutions);
         CobolFrame frame = new CobolFrame(flowNavigator, this.frame, unit);
         CobolVirtualMachine vm = new CobolVirtualMachine(frame, flowNavigator);
+        return vm.run();
+    }
+
+    private CobolVmInstruction runGoToVM2(FlowUnit targetParaOrSection, FlowUnit parentGroup, EntryInstructionPointer ipStrategy) {
+        List<FlowUnit> remainingExecutions = globalNavigator.allFlowUnitsFrom(parentGroup);
+        FlowNavigator flowNavigator = new FlowNavigator(remainingExecutions);
+        CobolFrame frame = new CobolFrame(flowNavigator, this.frame, unit, ipStrategy);
+        CobolVirtualMachine vm = new CobolVirtualMachine(frame, flowNavigator);
+        System.out.println("Transferring to GO TO at " + targetParaOrSection.executionContextName());
+        return vm.run();
+    }
+
+    private CobolVmInstruction runGoToVM(FlowUnit targetParaOrSection) {
+        List<FlowUnit> remainingExecutions = globalNavigator.allFlowUnitsFrom(targetParaOrSection);
+        FlowNavigator flowNavigator = new FlowNavigator(remainingExecutions);
+        CobolFrame frame = new CobolFrame(flowNavigator, this.frame, unit);
+        CobolVirtualMachine vm = new CobolVirtualMachine(frame, flowNavigator);
+        System.out.println("Transferring to GO TO at " + targetParaOrSection.executionContextName());
         return vm.run();
     }
 }
