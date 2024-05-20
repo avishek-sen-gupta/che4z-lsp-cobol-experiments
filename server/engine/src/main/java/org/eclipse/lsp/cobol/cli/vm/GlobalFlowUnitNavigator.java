@@ -1,6 +1,6 @@
-package org.eclipse.lsp.cobol.cli;
+package org.eclipse.lsp.cobol.cli.vm;
 
-import org.eclipse.lsp.cobol.core.CobolParser;
+import org.eclipse.lsp.cobol.cli.vm.FlowUnit;
 
 import java.util.List;
 

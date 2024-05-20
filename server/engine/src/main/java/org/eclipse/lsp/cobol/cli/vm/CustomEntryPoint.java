@@ -1,4 +1,4 @@
-package org.eclipse.lsp.cobol.cli;
+package org.eclipse.lsp.cobol.cli.vm;
 
 public class CustomEntryPoint implements EntryInstructionPointer {
     private FlowUnit targetParaOrSection;

@@ -1,8 +1,8 @@
-package org.eclipse.lsp.cobol.cli;
+package org.eclipse.lsp.cobol.cli.vm;
 
 import java.util.List;
 
-import static org.eclipse.lsp.cobol.cli.FlowUnit.TERMINAL;
+import static org.eclipse.lsp.cobol.cli.vm.FlowUnit.TERMINAL;
 
 public class FlowNavigator {
     private List<FlowUnit> units;

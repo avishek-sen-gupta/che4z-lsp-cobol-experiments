@@ -1,6 +1,7 @@
-package org.eclipse.lsp.cobol.cli;
+package org.eclipse.lsp.cobol.cli.vm;
 
 import lombok.Data;
+import org.eclipse.lsp.cobol.cli.vm.CobolFrame;
 
 @Data
 public class FlowControl {

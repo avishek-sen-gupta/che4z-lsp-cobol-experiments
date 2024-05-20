@@ -1,4 +1,4 @@
-package org.eclipse.lsp.cobol.cli;
+package org.eclipse.lsp.cobol.cli.vm;
 
 public class ExitProcedure implements CobolVmInstruction {
     private boolean hasExited = false;

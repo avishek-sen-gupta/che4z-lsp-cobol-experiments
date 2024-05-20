@@ -1,6 +1,4 @@
-package org.eclipse.lsp.cobol.cli;
-
-import static java.lang.System.exit;
+package org.eclipse.lsp.cobol.cli.vm;
 
 public class ExitScope implements CobolVmInstruction {
     private boolean hasExited = false;

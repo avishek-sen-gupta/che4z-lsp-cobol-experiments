@@ -1,4 +1,4 @@
-package org.eclipse.lsp.cobol.cli;
+package org.eclipse.lsp.cobol.cli.vm;
 
 import lombok.Getter;
 import org.eclipse.lsp.cobol.core.CobolParser;

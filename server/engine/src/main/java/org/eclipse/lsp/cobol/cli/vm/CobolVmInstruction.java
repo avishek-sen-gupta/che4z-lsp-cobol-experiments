@@ -1,6 +1,4 @@
-package org.eclipse.lsp.cobol.cli;
-
-import java.util.function.IntBinaryOperator;
+package org.eclipse.lsp.cobol.cli.vm;
 
 public interface CobolVmInstruction {
     CobolVmInstruction execute(NextExecution e);

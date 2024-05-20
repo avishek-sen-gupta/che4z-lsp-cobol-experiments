@@ -1,6 +1,6 @@
-package org.eclipse.lsp.cobol.cli;
+package org.eclipse.lsp.cobol.cli.vm;
 
-import static org.eclipse.lsp.cobol.cli.FlowUnit.TERMINAL;
+import static org.eclipse.lsp.cobol.cli.vm.FlowUnit.TERMINAL;
 
 public class CobolVirtualMachine {
     private final CobolFrame frame;

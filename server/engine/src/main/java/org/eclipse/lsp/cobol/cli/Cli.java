@@ -25,6 +25,7 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.eclipse.lsp.cobol.cli.di.CliModule;
 import org.eclipse.lsp.cobol.cli.modules.CliClientProvider;
+import org.eclipse.lsp.cobol.cli.vm.DynamicFlowAnalyser;
 import org.eclipse.lsp.cobol.common.AnalysisConfig;
 import org.eclipse.lsp.cobol.common.ResultWithErrors;
 import org.eclipse.lsp.cobol.common.SubroutineService;

@@ -1,4 +1,4 @@
-package org.eclipse.lsp.cobol.cli;
+package org.eclipse.lsp.cobol.cli.vm;
 
 import lombok.Getter;
 import org.antlr.v4.runtime.ParserRuleContext;

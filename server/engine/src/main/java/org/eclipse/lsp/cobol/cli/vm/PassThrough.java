@@ -1,4 +1,8 @@
-package org.eclipse.lsp.cobol.cli;
+package org.eclipse.lsp.cobol.cli.vm;
+
+import org.eclipse.lsp.cobol.cli.vm.CobolVmInstruction;
+import org.eclipse.lsp.cobol.cli.vm.FlowControl;
+import org.eclipse.lsp.cobol.cli.vm.NextExecution;
 
 public class PassThrough implements CobolVmInstruction {
     @Override
