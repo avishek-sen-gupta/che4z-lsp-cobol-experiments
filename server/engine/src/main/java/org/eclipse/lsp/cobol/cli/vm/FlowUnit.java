@@ -40,10 +40,10 @@ public class FlowUnit {
     public FlowUnit(ParseTree executionContext) {
         this.executionContext = executionContext;
         children = new ArrayList<>();
-        if (executionContext != null && executionContext.getClass() == CobolParser.StatementContext.class
-                && ((CobolParser.StatementContext) executionContext).children.get(0).getClass() == CobolParser.CallStatementContext.class) {
-            System.out.println("Hello Call");
-        }
+//        if (executionContext != null && executionContext.getClass() == CobolParser.StatementContext.class
+//                && ((CobolParser.StatementContext) executionContext).children.get(0).getClass() == CobolParser.CallStatementContext.class) {
+//            System.out.println("Hello Call");
+//        }
     }
 
     public ProgramScope scope() {
