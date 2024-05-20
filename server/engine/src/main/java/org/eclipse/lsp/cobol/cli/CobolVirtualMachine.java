@@ -2,11 +2,11 @@ package org.eclipse.lsp.cobol.cli;
 
 import static org.eclipse.lsp.cobol.cli.FlowUnit.TERMINAL;
 
-public class CobolVM2 {
+public class CobolVirtualMachine {
     private final CobolFrame frame;
     private final FlowNavigator navigator;
 
-    public CobolVM2(CobolFrame frame, FlowNavigator navigator) {
+    public CobolVirtualMachine(CobolFrame frame, FlowNavigator navigator) {
         this.frame = frame;
         this.navigator = navigator;
         System.out.println("Entering new context " + frame.getScope());

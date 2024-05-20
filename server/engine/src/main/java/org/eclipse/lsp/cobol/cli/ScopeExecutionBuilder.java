@@ -28,16 +28,16 @@ public class ScopeExecutionBuilder {
             FlowUnit performTarget = globalNavigator.findTarget(procedureName);
             FlowNavigator flowNavigator = new FlowNavigator(ImmutableList.of(performTarget));
             CobolFrame frame = new CobolFrame(flowNavigator, this.frame, unit);
-            CobolVM2 vm2 = new CobolVM2(frame, flowNavigator);
+            CobolVirtualMachine vm = new CobolVirtualMachine(frame, flowNavigator);
             System.out.println("Branching to PERFORM procedure at " + performTarget.executionContextName());
-            return vm2.run();
+            return vm.run();
         }
         else if (unit.scope() == ProgramScope.IF) {
             FlowNavigator flowNavigator = new FlowNavigator(unit.units());
             CobolFrame frame = new CobolFrame(flowNavigator, this.frame, unit);
-            CobolVM2 vm2 = new CobolVM2(frame, flowNavigator);
+            CobolVirtualMachine vm = new CobolVirtualMachine(frame, flowNavigator);
             System.out.println("Branching to IF...THEN at " + unit.executionContextName());
-            return vm2.run();
+            return vm.run();
         }
         else if (unit.scope() == ProgramScope.GOTO) {
             GoToFlowUnit goToFlowUnit = (GoToFlowUnit) unit;
@@ -52,9 +52,9 @@ public class ScopeExecutionBuilder {
                 remainingExecutions = globalNavigator.allFlowUnitsFrom(targetParaOrSection);
                 flowNavigator = new FlowNavigator(remainingExecutions);
                 CobolFrame frame = new CobolFrame(flowNavigator, this.frame, unit);
-                CobolVM2 vm2 = new CobolVM2(frame, flowNavigator);
+                CobolVirtualMachine vm = new CobolVirtualMachine(frame, flowNavigator);
                 System.out.println("Transferring to GO TO at " + targetParaOrSection.executionContextName());
-                return vm2.run();
+                return vm.run();
             } else {
                 // targetParaOrSection is a paragraph
                 // parentGroup is the top-level section
@@ -62,23 +62,23 @@ public class ScopeExecutionBuilder {
                 remainingExecutions = globalNavigator.allFlowUnitsFrom(parentGroup);
                 flowNavigator = new FlowNavigator(remainingExecutions);
                 CobolFrame frame = new CobolFrame(flowNavigator, this.frame, unit, new CustomEntryPoint(targetParaOrSection));
-                CobolVM2 vm2 = new CobolVM2(frame, flowNavigator);
+                CobolVirtualMachine vm = new CobolVirtualMachine(frame, flowNavigator);
                 System.out.println("Transferring to GO TO at " + targetParaOrSection.executionContextName());
-                return vm2.run();
+                return vm.run();
             }
         }
         else if (unit.scope() == ProgramScope.SECTION) {
             List<FlowUnit> remainingExecutions = unit.units();
             FlowNavigator flowNavigator = new FlowNavigator(remainingExecutions);
             CobolFrame frame = new CobolFrame(flowNavigator, this.frame, unit, this.frame.getIpStrategy());
-            CobolVM2 vm2 = new CobolVM2(frame, flowNavigator);
-            return vm2.run();
+            CobolVirtualMachine vm = new CobolVirtualMachine(frame, flowNavigator);
+            return vm.run();
         }
         // Entering sections or paragraphs
         List<FlowUnit> remainingExecutions = unit.units();
         FlowNavigator flowNavigator = new FlowNavigator(remainingExecutions);
         CobolFrame frame = new CobolFrame(flowNavigator, this.frame, unit);
-        CobolVM2 vm2 = new CobolVM2(frame, flowNavigator);
-        return vm2.run();
+        CobolVirtualMachine vm = new CobolVirtualMachine(frame, flowNavigator);
+        return vm.run();
     }
 }
