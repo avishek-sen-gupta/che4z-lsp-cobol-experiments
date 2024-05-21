@@ -116,8 +116,8 @@ public class ChartNode {
         if (executionContext.getClass() == CobolParser.StatementContext.class)
             return truncated(executionContext);
         if (executionContext.getClass() == CobolParser.SentenceContext.class)
-//            return "" + ((CobolParser.SentenceContext) executionContext).start.getLine();
-            return truncated(executionContext);
+            return "" + ((CobolParser.SentenceContext) executionContext).start.getLine();
+//            return "SE:" + truncated(executionContext);
         if (executionContext.getClass() == TerminalNodeImpl.class)
             return executionContext.getText();
         if (executionContext.getClass() == CobolParser.ParagraphDefinitionNameContext.class)

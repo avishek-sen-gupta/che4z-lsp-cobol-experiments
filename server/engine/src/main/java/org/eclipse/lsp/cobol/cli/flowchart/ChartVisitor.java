@@ -75,6 +75,7 @@ public class ChartVisitor implements ChartNodeVisitor {
     @Override
     public void visitSpecific(ChartNode parent, ChartNode internalTreeRoot, ChartNodeService nodeService) {
         MutableNode o = mutNode(parent.toString());
-        g.add(o.add(Color.RED).addLink(o.linkTo(mutNode(internalTreeRoot.toString())).with("style", "dashed")));
+        MutableNode child = mutNode(internalTreeRoot.toString());
+        g.add(o.add(Color.RED).addLink(o.linkTo(child).with("style", "dashed")));
     }
 }
