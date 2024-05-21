@@ -199,8 +199,8 @@ public class Cli implements Callable<Integer> {
         ParserRuleContext tree = analysisResult.getData().getTree();
 //        new CobolTreeVisualiser().visualiseCobolAST(tree, cobolParseTreeOutputPath);
 //        new DynamicFlowAnalyser(tree).run();
-            Graphviz.useEngine(new GraphvizCmdLineEngine().timeout(5, TimeUnit.HOURS));
-            ChartNode flowchart = new FlowchartBuilder(tree).run();
+//            Graphviz.useEngine(new GraphvizCmdLineEngine().timeout(5, TimeUnit.HOURS));
+//            ChartNode flowchart = new FlowchartBuilder(tree).run();
 
             JsonArray diagnostics = new JsonArray();
         ctx.getAccumulatedErrors()

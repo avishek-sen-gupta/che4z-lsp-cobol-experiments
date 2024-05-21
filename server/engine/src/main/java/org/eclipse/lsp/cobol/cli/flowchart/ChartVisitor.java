@@ -1,10 +1,10 @@
 package org.eclipse.lsp.cobol.cli.flowchart;
 
+import com.google.common.collect.ImmutableList;
 import guru.nidi.graphviz.attribute.Color;
 import guru.nidi.graphviz.model.MutableGraph;
 import guru.nidi.graphviz.model.MutableNode;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.eclipse.lsp.cobol.cli.vm.CobolEntityNavigator;
 import org.eclipse.lsp.cobol.core.CobolParser;
 
 import java.util.List;
@@ -26,22 +26,37 @@ public class ChartVisitor implements ChartNodeVisitor {
         List<ChartNode> outgoingNodes = node.getOutgoingNodes();
         outgoingNodes.forEach(o -> {
             System.out.println("Linking " + node + " to " + o);
-            g.add(mutNode(node.toString()).add(Color.RED).addLink(mutNode(o.toString())));
-
+            ImmutableList<Color> colorScheme = overallColor(node);
+            Color fontColor = colorScheme.get(0);
+            Color backgroundColor = colorScheme.get(1);
+            g.add(mutNode(node.toString()).add("style", "filled").add("fontcolor", fontColor.value).add("fillcolor", backgroundColor.value).addLink(mutNode(o.toString())));
         });
+    }
+
+    private ImmutableList<Color> overallColor(ChartNode node) {
+        ImmutableList<Color> childColorScheme = childColor(node);
+        ImmutableList<Color> selfColorScheme = selfColor(node);
+        if (selfColorScheme.get(1) == Color.WHITE) return childColorScheme;
+        return selfColorScheme;
+    }
+
+    private ImmutableList<Color> childColor(ChartNode node) {
+        if (node.getExecutionContext().getClass() == CobolParser.StatementContext.class) {
+            ParseTree typedStatement = node.getExecutionContext().getChild(0);
+            if (typedStatement.getClass() == CobolParser.IfStatementContext.class) return ImmutableList.of(Color.WHITE, Color.PURPLE);
+            else if (typedStatement.getClass() == CobolParser.GoToStatementContext.class) return ImmutableList.of(Color.WHITE, Color.DARKORANGE2);
+        }
+        return ImmutableList.of(Color.BLACK, Color.WHITE);
+    }
+
+    private ImmutableList<Color> selfColor(ChartNode node) {
+        if (node.getExecutionContext().getClass() == CobolParser.ProcedureSectionContext.class) return ImmutableList.of(Color.WHITE, Color.RED);
+        else if (node.getExecutionContext().getClass() == CobolParser.ParagraphContext.class) return ImmutableList.of(Color.BLACK, Color.GREEN);
+        return ImmutableList.of(Color.BLACK, Color.WHITE);
     }
 
     @Override
     public void visitCluster(ChartNode compositeNode, ChartNodeService nodeService) {
-//        System.out.println("Visiting cluster: " + compositeNode);
-//        List<ChartNode> outgoingNodes = compositeNode.getOutgoingNodes();
-//        MutableGraph cluster = mutGraph(compositeNode.toString()).setCluster(true);
-////        MutableNode clusterNode = mutNode(compositeNode.toString()).setC;
-//        outgoingNodes.forEach(o -> {
-//            System.out.println("Linking " + compositeNode + " to " + o);
-//            g.add(clusterNode.add(Color.RED).add(mutNode(o.toString())).addLink());
-//
-//        });
     }
 
     private void processControlStatement(ChartNode node, ChartNodeService nodeService) {

@@ -114,9 +114,9 @@ public class ChartNode {
         if (executionContext.getClass() == CobolParser.ParagraphContext.class)
             return ((CobolParser.ParagraphContext) executionContext).paragraphDefinitionName().getText();
         if (executionContext.getClass() == CobolParser.StatementContext.class)
-            return truncated(executionContext);
+            return truncated(executionContext, 15);
         if (executionContext.getClass() == CobolParser.SentenceContext.class)
-            return "" + ((CobolParser.SentenceContext) executionContext).start.getLine();
+            return "Sentence: " + truncated(executionContext, 10);
 //            return "SE:" + truncated(executionContext);
         if (executionContext.getClass() == TerminalNodeImpl.class)
             return executionContext.getText();
@@ -129,8 +129,8 @@ public class ChartNode {
         return executionContext.getClass().getSimpleName() + "/" + uuid;
     }
 
-    private String truncated(ParseTree e) {
-        return e.getText().length() > 15 ? e.getText().substring(0, 15) : e.getText();
+    private String truncated(ParseTree e, int truncationLimit) {
+        return e.getText().length() > truncationLimit ? e.getText().substring(0, truncationLimit) : e.getText();
     }
 
     public void accept(ChartNodeVisitor visitor, int level) {

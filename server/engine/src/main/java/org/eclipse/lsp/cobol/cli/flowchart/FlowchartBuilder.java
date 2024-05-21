@@ -39,7 +39,6 @@ public class FlowchartBuilder {
         ChartNodeService chartNodeService = new ChartNodeService(cobolEntityNavigator);
         ChartNode chartNode = new ChartNode(node, chartNodeService);
         chartNode.buildFlow();
-        chartNode.smushNonEssentialNodes();
 
         Graphviz.useEngine(new GraphvizCmdLineEngine());
         MutableGraph g = mutGraph("example1").setDirected(true).graphAttrs().add("rankdir", "TB");
