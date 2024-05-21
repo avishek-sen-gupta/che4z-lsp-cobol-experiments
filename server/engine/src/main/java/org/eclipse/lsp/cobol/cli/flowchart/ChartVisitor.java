@@ -41,8 +41,7 @@ public class ChartVisitor implements ChartNodeVisitor {
 //            System.out.println("Linking " + compositeNode + " to " + o);
 //            g.add(clusterNode.add(Color.RED).add(mutNode(o.toString())).addLink());
 //
-        });
-
+//        });
     }
 
     private void processControlStatement(ChartNode node, ChartNodeService nodeService) {

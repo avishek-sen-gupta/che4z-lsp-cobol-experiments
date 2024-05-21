@@ -19,13 +19,6 @@ public class ChartNode {
     private ChartNodeService nodeService;
 
     public ChartNode(ParseTree executionContext, ChartNodeService nodeService) {
-//        if (executionContext.getClass() == TerminalNodeImpl.class ||
-//            executionContext.getClass() == CobolParser.ParagraphsContext.class ||
-//            executionContext.getClass() == CobolParser.StatementContext.class ||
-//            executionContext.getClass() == CobolParser.IfThenContext.class ||
-//            executionContext.getClass() == CobolParser.IfElseContext.class ||
-//            executionContext.getClass() == CobolParser.EndClauseContext.class) {
-//        }
         this.uuid = counter + "";
         counter ++;
         this.nodeService = nodeService;
@@ -121,7 +114,7 @@ public class ChartNode {
         if (executionContext.getClass() == CobolParser.ParagraphContext.class)
             return ((CobolParser.ParagraphContext) executionContext).paragraphDefinitionName().getText();
         if (executionContext.getClass() == CobolParser.StatementContext.class)
-            return executionContext.getText();
+            return truncated(executionContext);
         if (executionContext.getClass() == CobolParser.SentenceContext.class)
 //            return "" + ((CobolParser.SentenceContext) executionContext).start.getLine();
             return truncated(executionContext);
