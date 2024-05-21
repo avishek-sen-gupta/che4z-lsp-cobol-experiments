@@ -1,8 +1,10 @@
 package org.eclipse.lsp.cobol.cli.flowchart;
 
+import guru.nidi.graphviz.engine.Engine;
 import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
 import guru.nidi.graphviz.engine.GraphvizCmdLineEngine;
+import guru.nidi.graphviz.model.Factory;
 import guru.nidi.graphviz.model.MutableGraph;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -44,7 +46,7 @@ public class FlowchartBuilder {
         ChartVisitor chartVisitor = new ChartVisitor(g);
         chartNode.accept(chartVisitor, 1);
         try {
-            Graphviz.fromGraph(g).height(10000).render(Format.PNG).toFile(new File("/Users/asgupta/Downloads/mbrdi-poc/flowchart.png"));
+            Graphviz.fromGraph(g).engine(Engine.NEATO).height(10000).render(Format.PNG).toFile(new File("/Users/asgupta/Downloads/mbrdi-poc/flowchart.png"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

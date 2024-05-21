@@ -2,6 +2,7 @@ package org.eclipse.lsp.cobol.cli.flowchart;
 
 import guru.nidi.graphviz.attribute.Color;
 import guru.nidi.graphviz.model.MutableGraph;
+import guru.nidi.graphviz.model.MutableNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.cli.vm.CobolEntityNavigator;
 import org.eclipse.lsp.cobol.core.CobolParser;
@@ -26,7 +27,22 @@ public class ChartVisitor implements ChartNodeVisitor {
         outgoingNodes.forEach(o -> {
             System.out.println("Linking " + node + " to " + o);
             g.add(mutNode(node.toString()).add(Color.RED).addLink(mutNode(o.toString())));
+
         });
+    }
+
+    @Override
+    public void visitCluster(ChartNode compositeNode, ChartNodeService nodeService) {
+//        System.out.println("Visiting cluster: " + compositeNode);
+//        List<ChartNode> outgoingNodes = compositeNode.getOutgoingNodes();
+//        MutableGraph cluster = mutGraph(compositeNode.toString()).setCluster(true);
+////        MutableNode clusterNode = mutNode(compositeNode.toString()).setC;
+//        outgoingNodes.forEach(o -> {
+//            System.out.println("Linking " + compositeNode + " to " + o);
+//            g.add(clusterNode.add(Color.RED).add(mutNode(o.toString())).addLink());
+//
+        });
+
     }
 
     private void processControlStatement(ChartNode node, ChartNodeService nodeService) {
@@ -50,13 +66,16 @@ public class ChartVisitor implements ChartNodeVisitor {
                 System.out.println("Found a PERFORM, routing to " + procedureName);
 
                 ChartNode targetNode = nodeService.sectionOrParaWithName(procedureName.getText());
-                g.add(mutNode(node.toString()).add(Color.RED).addLink(mutNode(targetNode.toString())));
+                MutableNode origin = mutNode(node.toString()).add(Color.RED);
+                MutableNode destination = mutNode(targetNode.toString());
+                g.add(origin.addLink(origin.linkTo(destination).with("style", "bold").with("color", "blueviolet")));
             }
         }
     }
 
     @Override
     public void visitSpecific(ChartNode parent, ChartNode internalTreeRoot, ChartNodeService nodeService) {
-        g.add(mutNode(parent.toString()).add(Color.RED).addLink(mutNode(internalTreeRoot.toString())));
+        MutableNode o = mutNode(parent.toString());
+        g.add(o.add(Color.RED).addLink(o.linkTo(mutNode(internalTreeRoot.toString())).with("style", "dashed")));
     }
 }

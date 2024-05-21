@@ -56,7 +56,9 @@ public class ChartNode {
             internalTreeRoot = nodeService.node(children.get(0));
             ChartNode current = internalTreeRoot;
             for (int i = 0; i <= children.size() - 2; i++) {
-                ChartNode successor = nodeService.node(children.get(i + 1));
+                ChartNode nextNode = nodeService.node(children.get(i + 1));
+                if (".".equals(nextNode.executionContext.getText())) continue;
+                ChartNode successor = nextNode;
                 current.goesTo(successor);
                 current = successor;
             }
@@ -105,7 +107,10 @@ public class ChartNode {
 
     @Override
     public String toString() {
-        return executionContextName() + uuid;
+        if (executionContext instanceof ParserRuleContext) {
+            return executionContextName() + "/" + ((ParserRuleContext) executionContext).start.getLine();
+        }
+        return executionContextName() + "." + uuid;
 //        return getClass().getSimpleName() + "{" +
 //                "executionContext=" + executionContext.getClass().getSimpleName() + "} = " + executionContextName();
     }
@@ -118,7 +123,8 @@ public class ChartNode {
         if (executionContext.getClass() == CobolParser.StatementContext.class)
             return executionContext.getText();
         if (executionContext.getClass() == CobolParser.SentenceContext.class)
-            return "" + ((CobolParser.SentenceContext) executionContext).start.getLine();
+//            return "" + ((CobolParser.SentenceContext) executionContext).start.getLine();
+            return truncated(executionContext);
         if (executionContext.getClass() == TerminalNodeImpl.class)
             return executionContext.getText();
         if (executionContext.getClass() == CobolParser.ParagraphDefinitionNameContext.class)
@@ -130,11 +136,15 @@ public class ChartNode {
         return executionContext.getClass().getSimpleName() + "/" + uuid;
     }
 
+    private String truncated(ParseTree e) {
+        return e.getText().length() > 15 ? e.getText().substring(0, 15) : e.getText();
+    }
+
     public void accept(ChartNodeVisitor visitor, int level) {
         if (composite) {
             visitor.visit(this, nodeService);
             this.outgoingNodes.forEach(c -> c.accept(visitor, level));
-            if (level > 4) return;
+            if (level > 5) return;
             if (internalTreeRoot == null) return;
 
             // Make an explicit connection between higher organisational unit and root of internal tree
