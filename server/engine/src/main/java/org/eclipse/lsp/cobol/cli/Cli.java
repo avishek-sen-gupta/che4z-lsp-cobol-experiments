@@ -19,15 +19,11 @@ import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import guru.nidi.graphviz.engine.Graphviz;
-import guru.nidi.graphviz.engine.GraphvizCmdLineEngine;
 import lombok.extern.slf4j.Slf4j;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.eclipse.lsp.cobol.cli.di.CliModule;
-import org.eclipse.lsp.cobol.cli.flowchart.ChartNode;
-import org.eclipse.lsp.cobol.cli.flowchart.FlowchartBuilder;
 import org.eclipse.lsp.cobol.cli.modules.CliClientProvider;
 import org.eclipse.lsp.cobol.common.AnalysisConfig;
 import org.eclipse.lsp.cobol.common.ResultWithErrors;
@@ -69,7 +65,6 @@ import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.concurrent.Callable;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -197,7 +192,7 @@ public class Cli implements Callable<Integer> {
         StageResult<ProcessingResult> analysisResult =
             (StageResult<ProcessingResult>) pipelineResult.getLastStageResult();
         ParserRuleContext tree = analysisResult.getData().getTree();
-//        new CobolTreeVisualiser().visualiseCobolAST(tree, cobolParseTreeOutputPath);
+        new CobolTreeVisualiser().visualiseCobolAST(tree, cobolParseTreeOutputPath);
 //        new DynamicFlowAnalyser(tree).run();
 //            Graphviz.useEngine(new GraphvizCmdLineEngine().timeout(5, TimeUnit.HOURS));
 //            ChartNode flowchart = new FlowchartBuilder(tree).run();

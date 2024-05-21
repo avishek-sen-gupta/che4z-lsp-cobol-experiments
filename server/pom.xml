@@ -11,6 +11,7 @@
 
     <modules>
         <module>poc</module>
+        <module>idms-copybook-builder</module>
         <module>engine</module>
         <module>parser</module>
         <module>dialect-idms</module>

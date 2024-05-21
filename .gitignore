@@ -113,6 +113,7 @@ local.properties
 /server/test/gen
 /server/parser/gen
 **/parser/gen
+/server/idms-copybook-builder/gen/
 
 # TeXlipse plugin
 .texlipse
