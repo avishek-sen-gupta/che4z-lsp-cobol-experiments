@@ -10,13 +10,13 @@ import java.util.*;
 
 public class ChartNode {
     static int counter = 0;
-    private String uuid = "";
+    private final String uuid;
     private boolean composite = false;
-    @Getter private List<ChartNode> outgoingNodes;
-    private List<ChartNode> incomingNodes;
+    @Getter private final List<ChartNode> outgoingNodes;
+    private final List<ChartNode> incomingNodes;
     private ChartNode internalTreeRoot;
-    @Getter private ParseTree executionContext;
-    private ChartNodeService nodeService;
+    @Getter private final ParseTree executionContext;
+    private final ChartNodeService nodeService;
 
     public ChartNode(ParseTree executionContext, ChartNodeService nodeService) {
         this.uuid = counter + "";
@@ -39,7 +39,7 @@ public class ChartNode {
 
     public void buildFlow() {
         buildInternalFlow();
-        outgoingNodes.forEach(n -> n.buildFlow());
+        outgoingNodes.forEach(ChartNode::buildFlow);
     }
 
     private void buildInternalFlow() {
@@ -79,10 +79,6 @@ public class ChartNode {
     private void goesTo(ChartNode successor) {
         outgoingNodes.add(successor);
         successor.incomingNodes.add(this);
-    }
-
-    public void smushNonEssentialNodes() {
-        // Get rid of terminal symbols, etc.
     }
 
     @Override
