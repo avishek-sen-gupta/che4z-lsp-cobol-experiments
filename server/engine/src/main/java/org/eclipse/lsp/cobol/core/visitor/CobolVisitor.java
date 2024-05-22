@@ -817,7 +817,7 @@ public class CobolVisitor extends CobolParserBaseVisitor<List<Node>> {
 
   @Override
   public List<Node> visitDataDescriptionEntryFormat3(DataDescriptionEntryFormat3Context ctx) {
-    return ofNullable(ctx.dataValueClause())
+    return ofNullable(ctx.dataValueClause().get(0))
             .map(DataValueClauseContext::valueIsToken)
             .map(
                     valueToken ->
@@ -827,7 +827,7 @@ public class CobolVisitor extends CobolParserBaseVisitor<List<Node>> {
                                             .levelLocality(getLevelLocality(ctx.LEVEL_NUMBER_88()))
                                             .variableNameAndLocality(extractNameAndLocality(ctx.entryName()))
                                             .statementLocality(retrieveLocality(ctx).orElse(null))
-                                            .valueClauses(retrieveValues(ImmutableList.of(ctx.dataValueClause())))
+                                            .valueClauses(retrieveValues(ctx.dataValueClause()))
                                             .valueToken(retrieveValueTokenOld(valueToken))
                                             .ctx(ctx)
                                             .build(),

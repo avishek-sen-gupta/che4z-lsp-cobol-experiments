@@ -7,15 +7,7 @@
 */
 
 parser grammar CobolParser;
-options {tokenVocab = CobolLexer; superClass = MessageServiceParser; }
-
-@members {
-    // Override recover method to ignore mismatched input
-    @Override
-    public void recover(ParserRuleContext arg0, RecognitionException arg1) {
-        // Do nothing to ignore mismatched input
-    }
-}
+options {tokenVocab = CobolLexer; superClass = MessageServiceParser;}
 
 startRule : compilationUnit EOF;
 
