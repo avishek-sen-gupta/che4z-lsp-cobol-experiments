@@ -69,7 +69,10 @@ public class CopybookConstructorCli implements Callable<Integer> {
         errors.addAll(listener.getErrors());
 
         new IdmsCopyBookTreeVisualiser().visualiseIdmsAST(result, outputPath);
-        if (!errors.isEmpty()) return 1;
+        if (!errors.isEmpty()) {
+            LOG.error("There were errors while parsing.");
+            return 1;
+        }
         return 0;
     }
 }

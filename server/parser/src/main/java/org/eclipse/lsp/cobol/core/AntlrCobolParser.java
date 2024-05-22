@@ -30,7 +30,7 @@ public class AntlrCobolParser implements AstBuilder {
   private final CobolParser antlrParser;
 
   public AntlrCobolParser(CharStream input, BaseErrorListener listener, DefaultErrorStrategy errorStrategy, ParseTreeListener treeListener) {
-    CobolLexer antlrLexer = new CobolLexer(input);
+    CobolLexer antlrLexer = new SuperCustomCobolLexer(input);
     antlrLexer.removeErrorListeners();
     tokens = new CommonTokenStream(antlrLexer);
     antlrLexer.addErrorListener(listener);

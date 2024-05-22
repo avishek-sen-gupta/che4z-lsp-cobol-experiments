@@ -81,11 +81,16 @@ public class CobolContextAugmentedTreeNode extends SimpleTreeNode {
     }
 
     private String originalText(ParseTree astNode) {
+//        return astNode.getText();
         Token startToken = (astNode instanceof TerminalNode) ? ((TerminalNode) astNode).getSymbol() : ((ParserRuleContext) astNode).start;
         Token stopToken = (astNode instanceof TerminalNode) ? ((TerminalNode) astNode).getSymbol() : ((ParserRuleContext) astNode).stop;
 
         CharStream cs = startToken.getInputStream();
         int stopIndex = stopToken != null ? stopToken.getStopIndex() : -1;
+        if (cs == null) {
+//            System.out.println("Here's a null " + astNode.getText());
+            return astNode.getText();
+        }
         return stopIndex >= startToken.getStartIndex() ? cs.getText(new Interval(startToken.getStartIndex(), stopIndex)) : "<NULL>";
     }
 

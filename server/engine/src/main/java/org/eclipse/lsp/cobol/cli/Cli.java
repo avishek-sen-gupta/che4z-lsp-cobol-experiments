@@ -227,33 +227,32 @@ public class Cli implements Callable<Integer> {
     System.out.println(gson.toJson(result));
       ProcessingResult data = (ProcessingResult) pipelineResult.getLastStageResult().getData();
       Node rootNode = data.getRootNode();
-//      new CobolTreeVisualiser().visualiseCobolAST(rootNode);
-      SymbolTable symbolTable = (SymbolTable) data.getSymbolTableMap().values().toArray()[0];
-      Type listType = new TypeToken<List<PlainKeyValuePair>>(){}.getType();
-      Collection<Map.Entry<String, VariableNode>> variableMapEntries = symbolTable.getVariables().entries();
-      Set<Map.Entry<String, CodeBlockReference>> sectionMapEntries = symbolTable.getSectionMap().entrySet();
-      Set<Map.Entry<String, CodeBlockReference>> paragraphMapEntries = symbolTable.getParagraphMap().entrySet();
-      List<CodeBlockDefinitionNode> codeBlockDefinitions = symbolTable.getCodeBlocks();
-
-      String variableMaoAsString = gson.toJson(variableMapEntries.stream().map(PlainKeyValuePair::new).collect(Collectors.toList()));
-      String sectionMapAsString = gson.toJson(sectionMapEntries.stream().map(PlainKeyValuePair::new).collect(Collectors.toList()));
-      String paragraphMapAsString = gson.toJson(paragraphMapEntries.stream().map(PlainKeyValuePair::new).collect(Collectors.toList()));
-      String codeBlockDefinitionsAsString = gson.toJson(codeBlockDefinitions);
-      PrintWriter out1 = new PrintWriter("/Users/asgupta/Downloads/mbrdi-poc/variable-table.json");
-      out1.println(variableMaoAsString);
-      out1.close();
-
-      PrintWriter out2 = new PrintWriter("/Users/asgupta/Downloads/mbrdi-poc/section-table.json");
-      out2.println(sectionMapAsString);
-      out2.close();
-
-      PrintWriter out3 = new PrintWriter("/Users/asgupta/Downloads/mbrdi-poc/paragraph-table.json");
-      out3.println(paragraphMapAsString);
-      out3.close();
-
-      PrintWriter out4 = new PrintWriter("/Users/asgupta/Downloads/mbrdi-poc/codeblock-table.json");
-      out4.println(codeBlockDefinitionsAsString);
-      out4.close();
+//      SymbolTable symbolTable = (SymbolTable) data.getSymbolTableMap().values().toArray()[0];
+//      Type listType = new TypeToken<List<PlainKeyValuePair>>(){}.getType();
+//      Collection<Map.Entry<String, VariableNode>> variableMapEntries = symbolTable.getVariables().entries();
+//      Set<Map.Entry<String, CodeBlockReference>> sectionMapEntries = symbolTable.getSectionMap().entrySet();
+//      Set<Map.Entry<String, CodeBlockReference>> paragraphMapEntries = symbolTable.getParagraphMap().entrySet();
+//      List<CodeBlockDefinitionNode> codeBlockDefinitions = symbolTable.getCodeBlocks();
+//
+//      String variableMaoAsString = gson.toJson(variableMapEntries.stream().map(PlainKeyValuePair::new).collect(Collectors.toList()));
+//      String sectionMapAsString = gson.toJson(sectionMapEntries.stream().map(PlainKeyValuePair::new).collect(Collectors.toList()));
+//      String paragraphMapAsString = gson.toJson(paragraphMapEntries.stream().map(PlainKeyValuePair::new).collect(Collectors.toList()));
+//      String codeBlockDefinitionsAsString = gson.toJson(codeBlockDefinitions);
+//      PrintWriter out1 = new PrintWriter("/Users/asgupta/Downloads/mbrdi-poc/variable-table.json");
+//      out1.println(variableMaoAsString);
+//      out1.close();
+//
+//      PrintWriter out2 = new PrintWriter("/Users/asgupta/Downloads/mbrdi-poc/section-table.json");
+//      out2.println(sectionMapAsString);
+//      out2.close();
+//
+//      PrintWriter out3 = new PrintWriter("/Users/asgupta/Downloads/mbrdi-poc/paragraph-table.json");
+//      out3.println(paragraphMapAsString);
+//      out3.close();
+//
+//      PrintWriter out4 = new PrintWriter("/Users/asgupta/Downloads/mbrdi-poc/codeblock-table.json");
+//      out4.println(codeBlockDefinitionsAsString);
+//      out4.close();
 
       return 0;
   }

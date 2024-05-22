@@ -7,7 +7,15 @@
 */
 
 parser grammar CobolParser;
-options {tokenVocab = CobolLexer; superClass = MessageServiceParser;}
+options {tokenVocab = CobolLexer; superClass = MessageServiceParser; }
+
+@members {
+    // Override recover method to ignore mismatched input
+    @Override
+    public void recover(ParserRuleContext arg0, RecognitionException arg1) {
+        // Do nothing to ignore mismatched input
+    }
+}
 
 startRule : compilationUnit EOF;
 
@@ -549,6 +557,7 @@ dataDescriptionEntry
    | dataDescriptionEntryFormat1Level77
    | dataDescriptionEntryFormat3
    | dialectDescriptionEntry
+   | preprocessorStatement
    ;
 
 dataDescriptionEntryFormat1
@@ -578,7 +587,7 @@ dataDescriptionEntryFormat1Level77
 
 
 dataDescriptionEntryFormat3
-   : LEVEL_NUMBER_88 entryName? dataValueClause DOT_FS
+   : LEVEL_NUMBER_88 entryName? dataValueClause+ DOT_FS
    ;
 
 dialectDescriptionEntry
@@ -791,8 +800,27 @@ statement
     initiateStatement | inspectStatement | mergeStatement | moveStatement | multiplyStatement | openStatement | performStatement | purgeStatement |
     readStatement | readyResetTraceStatement | receiveStatement | releaseStatement | returnStatement | rewriteStatement | searchStatement | sendStatement |
     serviceReloadStatement | serviceLabelStatement | setStatement | sortStatement | startStatement | stopStatement | stringStatement | subtractStatement |
-    terminateStatement | unstringStatement | writeStatement | xmlParseStatement | jsonStatement | mapStatement | nextSentence
+    terminateStatement | unstringStatement | writeStatement | xmlParseStatement | jsonStatement | mapStatement | nextSentence |
+    addRecordStatement | delRecordStatement | languageIsCobolStatement | moduleSourceStatement
    ;
+
+addRecordStatement
+    : ADD MODULE generalIdentifier (VERSION integerLiteral)? DOT_FS?
+    ;
+
+delRecordStatement
+    : DEL MODULE generalIdentifier (VERSION integerLiteral)? DOT_FS?
+    ;
+
+languageIsCobolStatement
+    : LANGUAGE IS COBOL
+    ;
+
+moduleSourceStatement
+    : MODULE SOURCE
+    ;
+
+preprocessorStatement : addRecordStatement | delRecordStatement | languageIsCobolStatement | moduleSourceStatement;
 
 jsonStatement
     : jsonParse | jsonGenerate
@@ -2251,3 +2279,4 @@ cobolKeywords
 dialectNodeFiller
     : ZERO_WIDTH_SPACE+
     ;
+

@@ -11,7 +11,7 @@
  * Contributors:
  *   Broadcom, Inc. - initial API and implementation
  */
-    
+
 lexer grammar CobolLexer;
 
 channels{COMMENTS, TECHNICAL}
@@ -80,6 +80,7 @@ CLASS : C L A S S;
 CLOCK_UNITS : C L O C K MINUSCHAR U N I T S;
 CLOSE : C L O S E;
 CLOSE_DISPOSITION : C L O S E MINUSCHAR D I S P O S I T I O N;
+COBOL : C O B O L;
 CODE_SET : C O D E MINUSCHAR S E T;
 COLLATING : C O L L A T I N G;
 COMMA : C O M M A;
@@ -127,6 +128,7 @@ DECLARATIVES : D E C L A R A T I V E S;
 DEFAULT : D E F A U L T;
 DEFAULT_DISPLAY : D E F A U L T MINUSCHAR D I S P L A Y;
 DEFINITION : D E F I N I T I O N;
+DEL : D E L;
 DELETE : D E L E T E;
 DELIMITED : D E L I M I T E D;
 DELIMITER : D E L I M I T E R;
@@ -241,6 +243,7 @@ KANJI : K A N J I;
 KEPT : K E P T;
 KEY : K E Y;
 KEYBOARD : K E Y B O A R D;
+LANGUAGE : L A N G U A G E;
 LABEL : L A B E L;
 LAST : L A S T;
 LEADING : L E A D I N G;
@@ -268,6 +271,7 @@ MESSAGE : M E S S A G E;
 METHOD: M E T H O D;
 MMDDYYYY : M M D D Y Y Y Y;
 MODE : M O D E;
+MODULE : M O D U L E;
 MODULES : M O D U L E S;
 MOVE : M O V E;
 MULTIPLE : M U L T I P L E;
@@ -389,6 +393,7 @@ SIGN : S I G N;
 SIZE : S I Z E;
 SORT : S O R T;
 SORT_MERGE : S O R T MINUSCHAR M E R G E;
+SOURCE : S O U R C E;
 SOURCE_COMPUTER : S O U R C E MINUSCHAR C O M P U T E R;
 SPACE : S P A C E;
 SPACES : S P A C E S;
@@ -441,6 +446,7 @@ VALIDATING: V A L I D A T I N G;
 VALUE : V A L U E;
 VALUES : V A L U E S;
 VARYING : V A R Y I N G;
+VERSION : V E R S I O N;
 VIRTUAL : V I R T U A L;
 VOLATILE : V O L A T I L E;
 WAIT : W A I T;
@@ -578,3 +584,8 @@ LParIntegralRPar: LPARENCHAR INTEGERLITERAL RPARENCHAR;
 fragment PICTUREPeriodAcceptables: ('0'|'9'|B|Z|CR|D B|ASTERISKCHAR|COMMACHAR|MINUSCHAR|PLUSCHAR|SLASHCHAR);
 fragment PICTURECharAcceptedMultipleTime: (A|G|N|P|U|X|DOLLARCHAR|PICTUREPeriodAcceptables);
 fragment PICTURECharAcceptedOneTime: (V|E|S|CR|D B);
+
+UNKNOWN
+ : . -> skip
+ ;
+
