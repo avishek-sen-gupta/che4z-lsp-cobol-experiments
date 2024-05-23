@@ -36,7 +36,7 @@ public class IdmsTreeVisualiser {
      * @param startRuleContext
      * @param idmsParseTreeOutputPath
      */
-    public void visualiseIdmsAST(IdmsParser.StartRuleContext startRuleContext, String idmsParseTreeOutputPath) {
+    public void visualiseIdmsAST(IdmsParser.StartRuleContext startRuleContext, String idmsParseTreeOutputPath, boolean outputTree) {
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
         List<IdmsParser.IdmsRulesContext> idmsRulesContexts = startRuleContext.idmsRules();
         List<CobolContextAugmentedTreeNode> allAstTrees = new ArrayList<>();
@@ -44,23 +44,26 @@ public class IdmsTreeVisualiser {
         for (IdmsParser.IdmsRulesContext ctx : idmsRulesContexts) {
             IdmsParser.IdmsSectionsContext idmsSectionsContext = ctx.idmsSections();
             IdmsParser.IdmsStatementsContext idmsStatementsContext = ctx.idmsStatements();
-            if (idmsSectionsContext != null) {
+            if (idmsSectionsContext != null && outputTree) {
                 allAstTrees.addAll(drawParseTrees(idmsSectionsContext.children));
             }
-            if (idmsStatementsContext != null) {
+            if (idmsStatementsContext != null && outputTree) {
                 allAstTrees.addAll(drawParseTrees(idmsStatementsContext.children));
             }
         }
 
         try {
             String s = gson.toJson(allAstTrees);
-//            PrintWriter out = new PrintWriter("/Users/asgupta/Downloads/mbrdi-poc/V7523438-compiled-idms-parse-trees.json");
             PrintWriter out = new PrintWriter(idmsParseTreeOutputPath);
             out.println(s);
             out.close();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void visualiseIdmsAST(IdmsParser.StartRuleContext startRuleContext, String idmsParseTreeOutputPath) {
+        visualiseIdmsAST(startRuleContext, idmsParseTreeOutputPath, true);
     }
 
     private List<CobolContextAugmentedTreeNode> drawParseTrees(List<ParseTree> parseRuleContext) {

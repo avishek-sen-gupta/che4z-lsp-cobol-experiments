@@ -49,6 +49,7 @@ import static org.eclipse.lsp.cobol.common.VariableConstants.LEVEL_MAP_NAME;
 class IdmsVisitor extends IdmsParserBaseVisitor<List<Node>> {
   private static final String IF = "_IF_ ";
   private final DialectProcessingContext context;
+  @Getter private int extractions = 0;
 
   @Getter private final List<SyntaxError> errors = new LinkedList<>();
 
@@ -209,5 +210,6 @@ class IdmsVisitor extends IdmsParserBaseVisitor<List<Node>> {
         ctx.getCustomData().put("IDMS-" + contextTextReference, new Object());
         String terminator = ".".equals(ctx.stop.getText()) ? "." : "";
         addReplacementContext(ctx, String.format("%s_DIALECT_ %s %s", staticPrefix, contextTextReference, terminator));
+        extractions ++;
     }
 }

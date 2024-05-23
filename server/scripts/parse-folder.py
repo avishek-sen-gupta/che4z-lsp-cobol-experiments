@@ -6,7 +6,6 @@ copybooks = ["V75CWEUR", "V75CW88A", "V75CW880", "V75CW201", "V75CW129", "V75CW1
              "V75CW022", "V75CW013", "V75CW002", "V75CP88A", "V75CP202", "V75CP201", "V75CP129",
              "V75CP124", "V75CP123", "V75CP011"]
 # programs = ["V7523438-compiled", "V751C931", "V7588049", "V75234"]
-# programs = ["V7523438-compiled", "V751C931", "V7588049", "V75234"]
 programs = ["V751C931", "V7588049", "V75234"]
 # programs = ["V75234"]
 
@@ -57,9 +56,9 @@ def parse_programs(out_map, input_dir, copybook_dir, cobol_parser_jar_path):
 
 
 # Parse copybooks
-out_map_copybooks = output_map(copybooks)
-clean_output_dirs(out_map_copybooks, output_root_dir)
-parse_copybooks(out_map_copybooks, input_dir, copybook_parser_jar_path)
+# out_map_copybooks = output_map(copybooks)
+# clean_output_dirs(out_map_copybooks, output_root_dir)
+# parse_copybooks(out_map_copybooks, input_dir, copybook_parser_jar_path)
 
 # # Parse programs
 out_map_programs = output_map(programs)

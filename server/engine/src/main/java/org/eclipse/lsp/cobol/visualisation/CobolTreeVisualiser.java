@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import hu.webarticum.treeprinter.SimpleTreeNode;
 import hu.webarticum.treeprinter.printer.listing.ListingTreePrinter;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.cli.CobolAugmentedTreeNode;
 import org.eclipse.lsp.cobol.common.model.tree.Node;
@@ -30,37 +31,20 @@ import java.io.PrintWriter;
  * Draws Cobol AST
  */
 public class CobolTreeVisualiser {
-    private String cobolParseTreeOutputPath;
-
-    /**
-     * Draws the tree using the wrapping Node structure
-     * @param rootNode
-     */
-    public void visualiseCobolAST(Node rootNode) {
-        SimpleTreeNode graphRoot = new CobolAugmentedTreeNode(rootNode);
-        buildGraph(rootNode, graphRoot);
-        new ListingTreePrinter().print(graphRoot);
+    public void visualiseCobolAST(ParserRuleContext tree, String cobolParseTreeOutputPath) {
+        visualiseCobolAST(tree, cobolParseTreeOutputPath, true);
     }
-
-    private void buildGraph(Node astParentNode, SimpleTreeNode graphParentNode) {
-        for (Node astChildNode : astParentNode.getChildren()) {
-            SimpleTreeNode graphChildNode = new CobolAugmentedTreeNode(astChildNode);
-            graphParentNode.addChild(graphChildNode);
-            buildGraph(astChildNode, graphChildNode);
-        }
-    }
-
     /**
      * Draws the tree using the canonical Context structure
      *
      * @param tree
      * @param cobolParseTreeOutputPath
      */
-    public void visualiseCobolAST(ParseTree tree, String cobolParseTreeOutputPath) {
+    public void visualiseCobolAST(ParseTree tree, String cobolParseTreeOutputPath, boolean outputTree) {
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
         CobolContextAugmentedTreeNode graphRoot = new CobolContextAugmentedTreeNode(tree);
         buildContextGraph(tree, graphRoot);
-        new ListingTreePrinter().print(graphRoot);
+        if (outputTree) new ListingTreePrinter().print(graphRoot);
         try {
             String s = gson.toJson(graphRoot);
 //            PrintWriter out = new PrintWriter("/Users/asgupta/Downloads/mbrdi-poc/V7523438-compiled-parse-tree.json");

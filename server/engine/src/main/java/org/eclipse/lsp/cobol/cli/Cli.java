@@ -189,10 +189,11 @@ public class Cli implements Callable<Integer> {
             (StageResult<ProcessingResult>) pipelineResult.getLastStageResult();
         ParserRuleContext tree = analysisResult.getData().getTree();
       ParseTreeWalker walker = new ParseTreeWalker();
-      walker.walk(new DialectIntegratorListener(), tree);
-
+            DialectIntegratorListener dialectIntegrationListener = new DialectIntegratorListener();
+            walker.walk(dialectIntegrationListener, tree);
+            System.out.println("[INFO] Restored " + dialectIntegrationListener.getRestores() + " nodes.");
 //        integrateDialectNodes(tree);
-        new CobolTreeVisualiser().visualiseCobolAST(tree, cobolParseTreeOutputPath);
+        new CobolTreeVisualiser().visualiseCobolAST(tree, cobolParseTreeOutputPath, false);
 //        new DynamicFlowAnalyser(tree).run();
 //            Graphviz.useEngine(new GraphvizCmdLineEngine().timeout(5, TimeUnit.HOURS));
 //            ChartNode flowchart = new FlowchartBuilder(tree).run();
