@@ -25,6 +25,7 @@ import org.eclipse.lsp.cobol.common.dialects.DialectProcessingContext;
 import org.eclipse.lsp.cobol.common.error.SyntaxError;
 import org.eclipse.lsp.cobol.common.model.Locality;
 import org.eclipse.lsp.cobol.common.model.tree.Node;
+import org.eclipse.lsp.cobol.common.poc.PersistentData;
 import org.eclipse.lsp.cobol.dialects.idms.IdmsParser.*;
 import org.eclipse.lsp.cobol.common.model.tree.SectionNode;
 import org.eclipse.lsp.cobol.common.model.tree.variable.QualifiedReferenceNode;
@@ -66,14 +67,22 @@ class IdmsVisitor extends IdmsParserBaseVisitor<List<Node>> {
               DelRecordStatementContext.class,
               LanguageIsCobolStatementContext.class,
               ModuleSourceStatementContext.class))) {
-          UUID contextTextReference = UUID.randomUUID();
+//          UUID contextTextReference = UUID.randomUUID();
+          String contextTextReference = PersistentData.next();
+
+          String terminator = ".".equals(ctx.stop.getText()) ? "." : "";
           ctx.getCustomData().put("IDMS-" + contextTextReference.toString(), new Object());
-          addReplacementContext(ctx, String.format("DISPLAY \"IDMS-%s\"\n", contextTextReference));
-          addReplacementContext(ctx, String.format("_DIALECT_MARKER_ %s\n", contextTextReference));
+//          addReplacementContext(ctx, String.format("DISPLAY \"IDMS-%s\"\n", contextTextReference));
+          addReplacementContext(ctx, String.format("_DIALECT_ %s %s", contextTextReference, terminator));
       }
       else {
           System.out.println(String.format("Replacing %s with no recovery", ctx.getText()));
-          addReplacementContext(ctx);
+//          UUID contextTextReference = UUID.randomUUID();
+          String contextTextReference = PersistentData.next();
+          ctx.getCustomData().put("IDMS-" + contextTextReference.toString(), new Object());
+          String terminator = ".".equals(ctx.stop.getText()) ? "." : "";
+          addReplacementContext(ctx, String.format("_DIALECT_ %s %s", contextTextReference, terminator));
+//          addReplacementContext(ctx);
       }
     return visitChildren(ctx);
   }
@@ -89,19 +98,38 @@ class IdmsVisitor extends IdmsParserBaseVisitor<List<Node>> {
 
     @Override
   public List<Node> visitIdmsSections(IdmsSectionsContext ctx) {
-    addReplacementContext(ctx);
+        String contextTextReference = PersistentData.next();
+//    UUID contextTextReference = UUID.randomUUID();
+    ctx.getCustomData().put("IDMS-" + contextTextReference.toString(), new Object());
+        String terminator = ".".equals(ctx.stop.getText()) ? "." : "";
+        addReplacementContext(ctx, String.format("_DIALECT_ %s %s", contextTextReference, terminator));
+//    addReplacementContext(ctx);
     return visitChildren(ctx);
   }
 
   @Override
   public List<Node> visitIdmsIfStatement(IdmsIfStatementContext ctx) {
-    addReplacementContext(ctx, IF);
+//      UUID contextTextReference = UUID.randomUUID();
+      String contextTextReference = PersistentData.next();
+      ctx.getCustomData().put("IDMS-" + contextTextReference.toString(), new Object());
+    //          addReplacementContext(ctx, String.format("DISPLAY \"IDMS-%s\"\n", contextTextReference));
+      String terminator = ".".equals(ctx.stop.getText()) ? "." : "";
+      addReplacementContext(ctx, String.format("%s _DIALECT_ %s %s", IF, contextTextReference, terminator));
+//      addReplacementContext(ctx, String.format("%s _DIALECT_ %s", IF, contextTextReference));
+//    addReplacementContext(ctx, IF);
     return visitChildren(ctx);
   }
 
   @Override
   public List<Node> visitIdmsIfCondition(IdmsIfConditionContext ctx) {
-    addReplacementContext(ctx);
+//      UUID contextTextReference = UUID.randomUUID();
+      String contextTextReference = PersistentData.next();
+      ctx.getCustomData().put("IDMS-" + contextTextReference.toString(), new Object());
+      String terminator = ".".equals(ctx.stop.getText()) ? "." : "";
+      addReplacementContext(ctx, String.format("_DIALECT_ %s %s", contextTextReference, terminator));
+//          addReplacementContext(ctx, String.format("DISPLAY \"IDMS-%s\"\n", contextTextReference));
+//      addReplacementContext(ctx, String.format("_DIALECT_ %s", contextTextReference));
+//    addReplacementContext(ctx);
     return visitChildren(ctx);
   }
 

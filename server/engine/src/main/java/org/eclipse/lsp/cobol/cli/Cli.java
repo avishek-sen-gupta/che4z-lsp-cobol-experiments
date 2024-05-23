@@ -191,7 +191,7 @@ public class Cli implements Callable<Integer> {
       ParseTreeWalker walker = new ParseTreeWalker();
       walker.walk(new DialectIntegratorListener(), tree);
 
-        integrateDialectNodes(tree);
+//        integrateDialectNodes(tree);
         new CobolTreeVisualiser().visualiseCobolAST(tree, cobolParseTreeOutputPath);
 //        new DynamicFlowAnalyser(tree).run();
 //            Graphviz.useEngine(new GraphvizCmdLineEngine().timeout(5, TimeUnit.HOURS));

@@ -4,6 +4,12 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 public class PersistentData {
+    public static int counter = 0;
+
+    public static String next() {
+        counter ++;
+        return String.valueOf(counter);
+    }
     private static AnnotatedParserRuleContext tree;
 
     public static void setResult(AnnotatedParserRuleContext tree) {

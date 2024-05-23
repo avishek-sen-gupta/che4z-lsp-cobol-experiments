@@ -2189,6 +2189,7 @@ literal
    : NONNUMERICLITERAL | figurativeConstant | numericLiteral | booleanLiteral | charString | dialectLiteral | utfLiteral | hexadecimalUtfLiteral
    ;
 
+dialectGuid: integerLiteral;
 dialectLiteral: dialectNodeFiller+;
 
 utfLiteral: U_CHAR NONNUMERICLITERAL;
@@ -2248,10 +2249,13 @@ cobolKeywords
    | SERVICE | STANDARD | SUPPRESS | TERMINAL | TEST | VOLATILE
    ;
 
-dialectNodeFiller
-    : DIALECT_MARKER GUID ZERO_WIDTH_SPACE+
+eater
+    : (ZERO_WIDTH_SPACE | NEWLINE)*
     ;
 
+dialectNodeFiller
+    : DIALECT_MARKER dialectGuid DOT_FS? eater
+    ;
 //dialectNodeFiller
 //    : ZERO_WIDTH_SPACE+
 //    ;
