@@ -39,7 +39,6 @@ public class DialectProcessingStage implements Stage<DialectOutcome, Void> {
     // Dialect processing
     dialectService.updateDialects(context.getConfig().getDialectRegistry());
     DialectOutcome dialectOutcome = processDialects(context);
-    PersistentData.setResult(dialectOutcome.getTree());
     return new StageResult<>(dialectOutcome, dialectOutcome.isDialectMissed());
   }
 

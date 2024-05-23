@@ -16,12 +16,12 @@ package org.eclipse.lsp.cobol.cli;
 
 import com.google.common.collect.Multimap;
 import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import lombok.extern.slf4j.Slf4j;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.eclipse.lsp.cobol.cli.di.CliModule;
 import org.eclipse.lsp.cobol.cli.modules.CliClientProvider;
@@ -36,11 +36,9 @@ import org.eclipse.lsp.cobol.common.error.SyntaxError;
 import org.eclipse.lsp.cobol.common.mapping.ExtendedDocument;
 import org.eclipse.lsp.cobol.common.mapping.ExtendedText;
 import org.eclipse.lsp.cobol.common.message.MessageService;
-import org.eclipse.lsp.cobol.common.model.tree.CodeBlockDefinitionNode;
 import org.eclipse.lsp.cobol.common.model.tree.Node;
-import org.eclipse.lsp.cobol.common.model.tree.variable.VariableNode;
-import org.eclipse.lsp.cobol.common.symbols.CodeBlockReference;
-import org.eclipse.lsp.cobol.common.symbols.SymbolTable;
+import org.eclipse.lsp.cobol.common.poc.PersistentData;
+import org.eclipse.lsp.cobol.core.CobolParser;
 import org.eclipse.lsp.cobol.core.PanelDefinitionParser;
 import org.eclipse.lsp.cobol.core.engine.analysis.AnalysisContext;
 import org.eclipse.lsp.cobol.core.engine.dialects.DialectService;
@@ -60,12 +58,9 @@ import org.eclipse.lsp4j.Location;
 import picocli.CommandLine;
 
 import java.io.File;
-import java.io.PrintWriter;
-import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.concurrent.Callable;
-import java.util.stream.Collectors;
 
 /**
  * The Cli class represents a Command Line Interface (CLI) for interacting with the application.
@@ -192,7 +187,7 @@ public class Cli implements Callable<Integer> {
         StageResult<ProcessingResult> analysisResult =
             (StageResult<ProcessingResult>) pipelineResult.getLastStageResult();
         ParserRuleContext tree = analysisResult.getData().getTree();
-        integrateDialectNodes();
+        integrateDialectNodes(tree);
         new CobolTreeVisualiser().visualiseCobolAST(tree, cobolParseTreeOutputPath);
 //        new DynamicFlowAnalyser(tree).run();
 //            Graphviz.useEngine(new GraphvizCmdLineEngine().timeout(5, TimeUnit.HOURS));
@@ -258,10 +253,18 @@ public class Cli implements Callable<Integer> {
       return 0;
   }
 
-    private void integrateDialectNodes() {
+    private void integrateDialectNodes(ParseTree tree) {
+      if (tree.getClass() != CobolParser.DisplayStatementContext.class) {
+          for (int i = 0; i < tree.getChildCount(); i++) {
+              integrateDialectNodes(tree.getChild(i));
+          }
+          return;
+      }
 
+        CobolParser.DisplayStatementContext displayStatement = (CobolParser.DisplayStatementContext) tree;
+      ParseTree dialectNode = PersistentData.getDialectNode(displayStatement.displayOperand(0).getText().replace("\"", ""));
+      displayStatement.addChild(new IdmsContainerNode(dialectNode));
     }
-
 
     private JsonObject toJson(SyntaxError syntaxError, Gson gson) {
     JsonObject diagnostic = new JsonObject();

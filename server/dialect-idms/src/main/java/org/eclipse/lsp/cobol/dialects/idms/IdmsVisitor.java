@@ -67,8 +67,8 @@ class IdmsVisitor extends IdmsParserBaseVisitor<List<Node>> {
               LanguageIsCobolStatementContext.class,
               ModuleSourceStatementContext.class))) {
           UUID contextTextReference = UUID.randomUUID();
-          ctx.getCustomData().put(contextTextReference.toString(), ctx);
-          addReplacementContext(ctx, String.format("DISPLAY \"IDMS-%s-%s\"\n", contextTextReference, ctx.getText()));
+          ctx.getCustomData().put("IDMS-" + contextTextReference.toString(), new Object());
+          addReplacementContext(ctx, String.format("DISPLAY \"IDMS-%s\"\n", contextTextReference));
       }
       else {
           addReplacementContext(ctx);

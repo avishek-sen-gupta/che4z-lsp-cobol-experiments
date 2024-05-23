@@ -32,6 +32,7 @@ import org.eclipse.lsp.cobol.common.message.MessageService;
 import org.eclipse.lsp.cobol.common.model.Locality;
 import org.eclipse.lsp.cobol.common.model.tree.CopyNode;
 import org.eclipse.lsp.cobol.common.model.tree.Node;
+import org.eclipse.lsp.cobol.common.poc.PersistentData;
 import org.eclipse.lsp.cobol.common.utils.KeywordsUtils;
 import org.eclipse.lsp.cobol.common.utils.RangeUtils;
 import org.eclipse.lsp.cobol.dialects.idms.visualisation.IdmsTreeVisualiser;
@@ -221,7 +222,8 @@ public final class IdmsDialect implements CobolDialect {
                         .mapLocation(e.getLocation().getLocation().getRange())
                         .getRange()));
 
-    return new ResultWithErrors<>(new DialectOutcome(nodes, context, startRuleContext), errors);
+      PersistentData.setResult(startRuleContext);
+    return new ResultWithErrors<>(new DialectOutcome(nodes, context), errors);
   }
 
     @Override
