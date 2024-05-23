@@ -7,7 +7,8 @@ copybooks = ["V75CWEUR", "V75CW88A", "V75CW880", "V75CW201", "V75CW129", "V75CW1
              "V75CP124", "V75CP123", "V75CP011"]
 # programs = ["V7523438-compiled", "V751C931", "V7588049", "V75234"]
 # programs = ["V7523438-compiled", "V751C931", "V7588049", "V75234"]
-programs = ["V75234"]
+programs = ["V751C931", "V7588049", "V75234"]
+# programs = ["V75234"]
 
 
 def output_map(filenames):
@@ -46,7 +47,8 @@ def parse_programs(out_map, input_dir, copybook_dir, cobol_parser_jar_path):
     for i, o in out_map.items():
         out_dir = f"{output_root_dir}/{i}"
         print(f"Parsing {i} to {out_dir}")
-        program_parse_output_path = copybook_parse_output_path = f"{out_dir}/{o[0]}"
+        program_parse_output_path = f"{out_dir}/{o[0]}"
+        copybook_parse_output_path = f"{out_dir}/{o[1]}"
         subprocess.run(["java", "-jar", cobol_parser_jar_path, "-s", f"{input_dir}/{i}",
                         "-oidms", copybook_parse_output_path,
                         "-ocobol", program_parse_output_path,
@@ -55,9 +57,9 @@ def parse_programs(out_map, input_dir, copybook_dir, cobol_parser_jar_path):
 
 
 # Parse copybooks
-# out_map_copybooks = output_map(copybooks)
-# clean_output_dirs(out_map_copybooks, output_root_dir)
-# parse_copybooks(out_map_copybooks, input_dir, copybook_parser_jar_path)
+out_map_copybooks = output_map(copybooks)
+clean_output_dirs(out_map_copybooks, output_root_dir)
+parse_copybooks(out_map_copybooks, input_dir, copybook_parser_jar_path)
 
 # # Parse programs
 out_map_programs = output_map(programs)
