@@ -2249,6 +2249,9 @@ cobolKeywords
    ;
 
 dialectNodeFiller
-    : ZERO_WIDTH_SPACE+
+    : DIALECT_MARKER GUID ZERO_WIDTH_SPACE+
     ;
 
+//dialectNodeFiller
+//    : ZERO_WIDTH_SPACE+
+//    ;

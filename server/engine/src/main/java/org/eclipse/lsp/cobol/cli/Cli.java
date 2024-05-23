@@ -23,6 +23,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.eclipse.lsp.cobol.cli.di.CliModule;
 import org.eclipse.lsp.cobol.cli.modules.CliClientProvider;
 import org.eclipse.lsp.cobol.common.AnalysisConfig;
@@ -187,6 +188,9 @@ public class Cli implements Callable<Integer> {
         StageResult<ProcessingResult> analysisResult =
             (StageResult<ProcessingResult>) pipelineResult.getLastStageResult();
         ParserRuleContext tree = analysisResult.getData().getTree();
+      ParseTreeWalker walker = new ParseTreeWalker();
+      walker.walk(new DialectIntegratorListener(), tree);
+
         integrateDialectNodes(tree);
         new CobolTreeVisualiser().visualiseCobolAST(tree, cobolParseTreeOutputPath);
 //        new DynamicFlowAnalyser(tree).run();

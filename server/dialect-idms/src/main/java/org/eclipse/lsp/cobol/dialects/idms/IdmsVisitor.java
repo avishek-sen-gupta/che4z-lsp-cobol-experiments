@@ -69,8 +69,10 @@ class IdmsVisitor extends IdmsParserBaseVisitor<List<Node>> {
           UUID contextTextReference = UUID.randomUUID();
           ctx.getCustomData().put("IDMS-" + contextTextReference.toString(), new Object());
           addReplacementContext(ctx, String.format("DISPLAY \"IDMS-%s\"\n", contextTextReference));
+          addReplacementContext(ctx, String.format("_DIALECT_MARKER_ %s\n", contextTextReference));
       }
       else {
+          System.out.println(String.format("Replacing %s with no recovery", ctx.getText()));
           addReplacementContext(ctx);
       }
     return visitChildren(ctx);
