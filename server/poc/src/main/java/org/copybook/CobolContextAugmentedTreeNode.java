@@ -91,7 +91,11 @@ public class CobolContextAugmentedTreeNode extends SimpleTreeNode {
 //            System.out.println("Here's a null " + astNode.getText());
             return astNode.getText();
         }
-        return stopIndex >= startToken.getStartIndex() ? cs.getText(new Interval(startToken.getStartIndex(), stopIndex)) : "<NULL>";
+        Interval interval = new Interval(startToken.getStartIndex(), stopIndex);
+        if (interval.a == -1 || interval.b == -1) {
+            return astNode.getText();
+        }
+        return stopIndex >= startToken.getStartIndex() ? cs.getText(interval) : "<NULL>";
     }
 
     /**

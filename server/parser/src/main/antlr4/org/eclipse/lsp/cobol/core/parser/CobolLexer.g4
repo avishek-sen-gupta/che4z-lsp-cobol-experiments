@@ -585,7 +585,3 @@ fragment PICTUREPeriodAcceptables: ('0'|'9'|B|Z|CR|D B|ASTERISKCHAR|COMMACHAR|MI
 fragment PICTURECharAcceptedMultipleTime: (A|G|N|P|U|X|DOLLARCHAR|PICTUREPeriodAcceptables);
 fragment PICTURECharAcceptedOneTime: (V|E|S|CR|D B);
 
-UNKNOWN
- : . -> skip
- ;
-

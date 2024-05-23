@@ -19,8 +19,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.misc.Pair;
+import org.antlr.v4.runtime.tree.TerminalNode;
+import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.eclipse.lsp.cobol.common.message.MessageService;
 import org.eclipse.lsp.cobol.common.message.MessageServiceProvider;
+import org.eclipse.lsp.cobol.core.CobolLexer;
+import org.eclipse.lsp.cobol.core.CobolParser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This implementation of the error strategy customizes error messages that are extracted from the
@@ -132,7 +140,35 @@ public class CobolErrorStrategy extends DefaultErrorStrategy implements MessageS
     return recognizer.getCurrentToken();
   }
 
-  private String getOffendingToken(InputMismatchException e) {
+    @Override
+    public void recover(Parser recognizer, RecognitionException e) {
+      super.recover(recognizer, e);
+      // Uncomment the lines below only if you know what you are doing
+//        super.recover(recognizer, e);
+//        CobolLexer lexer = (CobolLexer) recognizer.getInputStream().getTokenSource();
+//
+//        StringBuilder lineBuilder = new StringBuilder(lexer.getToken().getText());
+//        TokenStream iStream = recognizer.getInputStream();
+//
+//        int i = 0;
+//        Token currentToken = lexer.nextToken();
+//        while (currentToken.getType() != Token.EOF && currentToken.getType() != CobolLexer.NEWLINE) {
+//            lineBuilder.append(currentToken.getText());
+//            if (currentToken.getChannel() == Token.DEFAULT_CHANNEL) {
+//                i ++;
+//            }
+//            currentToken = lexer.nextToken();
+//        }
+//
+//        for (int x = 0; x < i; x++) {
+//            recognizer.consume();
+//        }
+//        CommonToken idmsToken = new CommonToken(CobolParser.COBOL, lineBuilder.toString());
+//        recognizer.getContext().children.add(new TerminalNodeImpl(idmsToken));
+    }
+
+
+    private String getOffendingToken(InputMismatchException e) {
     return getTokenErrorDisplay(e.getOffendingToken());
   }
 }

@@ -725,7 +725,7 @@ putRetentionClause
    ;
 
 putScratchClause
-   : SCRATCH putAreaIdClause? idmsDmlFromClause putRecordClause? putReturnClause
+   : SCRATCH putAreaIdClause? idmsDmlFromClause putRecordClause? putReturnClause?
    ;
 
 putAreaIdClause
