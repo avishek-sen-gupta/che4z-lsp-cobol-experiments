@@ -192,6 +192,7 @@ public class Cli implements Callable<Integer> {
         StageResult<ProcessingResult> analysisResult =
             (StageResult<ProcessingResult>) pipelineResult.getLastStageResult();
         ParserRuleContext tree = analysisResult.getData().getTree();
+        integrateDialectNodes();
         new CobolTreeVisualiser().visualiseCobolAST(tree, cobolParseTreeOutputPath);
 //        new DynamicFlowAnalyser(tree).run();
 //            Graphviz.useEngine(new GraphvizCmdLineEngine().timeout(5, TimeUnit.HOURS));
@@ -256,6 +257,10 @@ public class Cli implements Callable<Integer> {
 
       return 0;
   }
+
+    private void integrateDialectNodes() {
+
+    }
 
 
     private JsonObject toJson(SyntaxError syntaxError, Gson gson) {

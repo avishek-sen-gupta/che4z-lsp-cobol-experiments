@@ -221,7 +221,7 @@ public final class IdmsDialect implements CobolDialect {
                         .mapLocation(e.getLocation().getLocation().getRange())
                         .getRange()));
 
-    return new ResultWithErrors<>(new DialectOutcome(nodes, context), errors);
+    return new ResultWithErrors<>(new DialectOutcome(nodes, context, startRuleContext), errors);
   }
 
     @Override

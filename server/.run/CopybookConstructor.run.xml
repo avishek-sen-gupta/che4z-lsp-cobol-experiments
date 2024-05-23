@@ -5,7 +5,7 @@
     <option name="PROGRAM_PARAMETERS" value="-s $USER_HOME$/Downloads/mbrdi-poc/V75CWEUR -o $USER_HOME$/Downloads/mbrdi-poc/parse-output/op.json PARSE" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="org.copybook.*" />
+        <option name="PATTERN" value="org.eclipse.lsp.cobol.common.poc.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

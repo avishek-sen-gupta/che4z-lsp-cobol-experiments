@@ -13,7 +13,7 @@
  */
 
 parser grammar IdmsParser;
-options {tokenVocab = IdmsLexer;  superClass = MessageServiceParser;}
+options {tokenVocab = IdmsLexer;  superClass = MessageServiceParser; contextSuperClass = org.eclipse.lsp.cobol.common.poc.AnnotatedParserRuleContext;}
 
 startRule: .*? idmsRules* EOF;
 idmsRules: (idmsStatements | idmsSections | idmsIfStatement | ifStatement | copyIdmsStatement) .*?;
@@ -148,7 +148,15 @@ idmsIfStatement
     ;
 
 idmsStatements
-    : idmsStmtsOptTermOn endClause? idmsOnClause? | idmsStmtsMandTermOn (SEMICOLON_FS idmsOnClause? | DOT_FS)
+    : idmsOptTermStatement | idmsMandTermStatement
+    ;
+
+idmsOptTermStatement
+    : idmsStmtsOptTermOn endClause? idmsOnClause?
+    ;
+
+idmsMandTermStatement
+    : idmsStmtsMandTermOn (SEMICOLON_FS idmsOnClause? | DOT_FS)
     ;
 
 

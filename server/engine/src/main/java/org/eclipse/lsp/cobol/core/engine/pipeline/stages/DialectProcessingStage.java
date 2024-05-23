@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.eclipse.lsp.cobol.common.dialects.DialectOutcome;
 import org.eclipse.lsp.cobol.common.dialects.DialectProcessingContext;
 import org.eclipse.lsp.cobol.common.error.SyntaxError;
+import org.eclipse.lsp.cobol.common.poc.PersistentData;
 import org.eclipse.lsp.cobol.core.engine.analysis.AnalysisContext;
 import org.eclipse.lsp.cobol.core.engine.dialects.DialectService;
 import org.eclipse.lsp.cobol.core.engine.pipeline.StageResult;
@@ -38,6 +39,7 @@ public class DialectProcessingStage implements Stage<DialectOutcome, Void> {
     // Dialect processing
     dialectService.updateDialects(context.getConfig().getDialectRegistry());
     DialectOutcome dialectOutcome = processDialects(context);
+    PersistentData.setResult(dialectOutcome.getTree());
     return new StageResult<>(dialectOutcome, dialectOutcome.isDialectMissed());
   }
 

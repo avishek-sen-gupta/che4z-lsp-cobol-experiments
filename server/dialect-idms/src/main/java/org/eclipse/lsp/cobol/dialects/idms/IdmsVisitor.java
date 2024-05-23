@@ -18,6 +18,8 @@ import com.google.common.collect.ImmutableList;
 import lombok.Getter;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.eclipse.lsp.cobol.common.poc.AnnotatedParserRuleContext;
 import org.eclipse.lsp.cobol.common.dialects.CobolDialect;
 import org.eclipse.lsp.cobol.common.dialects.DialectProcessingContext;
 import org.eclipse.lsp.cobol.common.error.SyntaxError;
@@ -35,6 +37,7 @@ import org.eclipse.lsp4j.Location;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Function;
 
 import static java.util.Optional.ofNullable;
@@ -56,11 +59,33 @@ class IdmsVisitor extends IdmsParserBaseVisitor<List<Node>> {
 
   @Override
   public List<Node> visitIdmsStatements(IdmsStatementsContext ctx) {
-    addReplacementContext(ctx);
+      IdmsOptTermStatementContext annotatedParserRuleContext = ctx.idmsOptTermStatement();
+      if (annotatedParserRuleContext != null && !isOneOf(annotatedParserRuleContext.idmsStmtsOptTermOn().getChild(0), ImmutableList.of(AddModuleStatementContext.class,
+              DelModuleStatementContext.class,
+              AddRecordStatementContext.class,
+              DelRecordStatementContext.class,
+              LanguageIsCobolStatementContext.class,
+              ModuleSourceStatementContext.class))) {
+          UUID contextTextReference = UUID.randomUUID();
+          ctx.getCustomData().put(contextTextReference.toString(), ctx);
+          addReplacementContext(ctx, String.format("DISPLAY \"IDMS-%s-%s\"\n", contextTextReference, ctx.getText()));
+      }
+      else {
+          addReplacementContext(ctx);
+      }
     return visitChildren(ctx);
   }
 
-  @Override
+    private boolean isOneOf(ParseTree annotatedParserRuleContext, ImmutableList<Class<? extends AnnotatedParserRuleContext>> classes) {
+      return classes.indexOf(annotatedParserRuleContext.getClass()) != -1;
+    }
+
+    @Override
+    public List<Node> visitIdmsStmtsOptTermOn(IdmsStmtsOptTermOnContext ctx) {
+        return super.visitIdmsStmtsOptTermOn(ctx);
+    }
+
+    @Override
   public List<Node> visitIdmsSections(IdmsSectionsContext ctx) {
     addReplacementContext(ctx);
     return visitChildren(ctx);
