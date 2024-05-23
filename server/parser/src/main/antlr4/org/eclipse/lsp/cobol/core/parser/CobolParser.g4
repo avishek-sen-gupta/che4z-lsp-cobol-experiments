@@ -549,7 +549,6 @@ dataDescriptionEntry
    | dataDescriptionEntryFormat1Level77
    | dataDescriptionEntryFormat3
    | dialectDescriptionEntry
-   | preprocessorStatement
    ;
 
 dataDescriptionEntryFormat1
@@ -792,27 +791,8 @@ statement
     initiateStatement | inspectStatement | mergeStatement | moveStatement | multiplyStatement | openStatement | performStatement | purgeStatement |
     readStatement | readyResetTraceStatement | receiveStatement | releaseStatement | returnStatement | rewriteStatement | searchStatement | sendStatement |
     serviceReloadStatement | serviceLabelStatement | setStatement | sortStatement | startStatement | stopStatement | stringStatement | subtractStatement |
-    terminateStatement | unstringStatement | writeStatement | xmlParseStatement | jsonStatement | mapStatement | nextSentence |
-    addRecordStatement | delRecordStatement | languageIsCobolStatement | moduleSourceStatement
+    terminateStatement | unstringStatement | writeStatement | xmlParseStatement | jsonStatement | mapStatement | nextSentence
    ;
-
-addRecordStatement
-    : ADD MODULE generalIdentifier (VERSION integerLiteral)? DOT_FS?
-    ;
-
-delRecordStatement
-    : DEL MODULE generalIdentifier (VERSION integerLiteral)? DOT_FS?
-    ;
-
-languageIsCobolStatement
-    : LANGUAGE IS COBOL
-    ;
-
-moduleSourceStatement
-    : MODULE SOURCE
-    ;
-
-preprocessorStatement : addRecordStatement | delRecordStatement | languageIsCobolStatement | moduleSourceStatement;
 
 jsonStatement
     : jsonParse | jsonGenerate

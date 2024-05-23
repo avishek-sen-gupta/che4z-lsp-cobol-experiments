@@ -157,7 +157,8 @@ idmsStmtsOptTermOn
      connectStatement | dcStatement | dequeueStatement | disconnectStatement | endStatement | endpageStatement | enqueueStatement | eraseStatement | findStatement |
      finishStatement | freeStatement | getStatement | inquireMapMoveStatement | keepStatement | loadStatement | mapStatement | modifyStatement | obtainStatement |
      postStatement | putStatement | readyStatement |rollbackStatement | snapStatement | startpageStatement | storeStatement | waitStatement | writeIdmsStatement |
-     readStatement | acceptStatement | deleteStatement | returnStatement | sendStatement | setStatement | addRecordStatement | delRecordStatement
+     readStatement | acceptStatement | deleteStatement | returnStatement | sendStatement | setStatement | addModuleStatement | delModuleStatement |
+     languageIsCobolStatement | moduleSourceStatement | addRecordStatement | delRecordStatement
     ;
 
 idmsStmtsMandTermOn
@@ -172,12 +173,28 @@ nextSentence
     : (NEXT SENTENCE) DOT_FS?
     ;
 
+addModuleStatement
+    : ADD MODULE generalIdentifier (VERSION integerLiteral)? DOT_FS?
+    ;
+
+delModuleStatement
+    : DEL MODULE generalIdentifier (VERSION integerLiteral)? DOT_FS?
+    ;
+
 addRecordStatement
-    : ADD RECORD copySource DOT_FS
+    : ADD RECORD generalIdentifier (VERSION integerLiteral)? DOT_FS?
     ;
 
 delRecordStatement
-    : DEL RECORD copySource DOT_FS
+    : DEL RECORD generalIdentifier (VERSION integerLiteral)? DOT_FS?
+    ;
+
+languageIsCobolStatement
+    : LANGUAGE IS COBOL
+    ;
+
+moduleSourceStatement
+    : MODULE SOURCE
     ;
 
 // abend code statement
