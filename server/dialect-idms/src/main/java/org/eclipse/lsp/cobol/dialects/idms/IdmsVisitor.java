@@ -18,7 +18,6 @@ import com.google.common.collect.ImmutableList;
 import lombok.Getter;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.common.poc.AnnotatedParserRuleContext;
 import org.eclipse.lsp.cobol.common.dialects.CobolDialect;
 import org.eclipse.lsp.cobol.common.dialects.DialectProcessingContext;
@@ -38,7 +37,6 @@ import org.eclipse.lsp4j.Location;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 import java.util.function.Function;
 
 import static java.util.Optional.ofNullable;
@@ -60,36 +58,9 @@ class IdmsVisitor extends IdmsParserBaseVisitor<List<Node>> {
 
   @Override
   public List<Node> visitIdmsStatements(IdmsStatementsContext ctx) {
-      IdmsOptTermStatementContext annotatedParserRuleContext = ctx.idmsOptTermStatement();
-      if (annotatedParserRuleContext != null && !isOneOf(annotatedParserRuleContext.idmsStmtsOptTermOn().getChild(0), ImmutableList.of(AddModuleStatementContext.class,
-              DelModuleStatementContext.class,
-              AddRecordStatementContext.class,
-              DelRecordStatementContext.class,
-              LanguageIsCobolStatementContext.class,
-              ModuleSourceStatementContext.class))) {
-//          UUID contextTextReference = UUID.randomUUID();
-          String contextTextReference = PersistentData.next();
-
-          String terminator = ".".equals(ctx.stop.getText()) ? "." : "";
-          ctx.getCustomData().put("IDMS-" + contextTextReference.toString(), new Object());
-//          addReplacementContext(ctx, String.format("DISPLAY \"IDMS-%s\"\n", contextTextReference));
-          addReplacementContext(ctx, String.format("_DIALECT_ %s %s", contextTextReference, terminator));
-      }
-      else {
-          System.out.println(String.format("Replacing %s with no recovery", ctx.getText()));
-//          UUID contextTextReference = UUID.randomUUID();
-          String contextTextReference = PersistentData.next();
-          ctx.getCustomData().put("IDMS-" + contextTextReference.toString(), new Object());
-          String terminator = ".".equals(ctx.stop.getText()) ? "." : "";
-          addReplacementContext(ctx, String.format("_DIALECT_ %s %s", contextTextReference, terminator));
-//          addReplacementContext(ctx);
-      }
-    return visitChildren(ctx);
+      replaceWithMetadata(ctx);
+      return visitChildren(ctx);
   }
-
-    private boolean isOneOf(ParseTree annotatedParserRuleContext, ImmutableList<Class<? extends AnnotatedParserRuleContext>> classes) {
-      return classes.indexOf(annotatedParserRuleContext.getClass()) != -1;
-    }
 
     @Override
     public List<Node> visitIdmsStmtsOptTermOn(IdmsStmtsOptTermOnContext ctx) {
@@ -98,39 +69,20 @@ class IdmsVisitor extends IdmsParserBaseVisitor<List<Node>> {
 
     @Override
   public List<Node> visitIdmsSections(IdmsSectionsContext ctx) {
-        String contextTextReference = PersistentData.next();
-//    UUID contextTextReference = UUID.randomUUID();
-    ctx.getCustomData().put("IDMS-" + contextTextReference.toString(), new Object());
-        String terminator = ".".equals(ctx.stop.getText()) ? "." : "";
-        addReplacementContext(ctx, String.format("_DIALECT_ %s %s", contextTextReference, terminator));
-//    addReplacementContext(ctx);
-    return visitChildren(ctx);
+      replaceWithMetadata(ctx);
+        return visitChildren(ctx);
   }
 
   @Override
   public List<Node> visitIdmsIfStatement(IdmsIfStatementContext ctx) {
-//      UUID contextTextReference = UUID.randomUUID();
-      String contextTextReference = PersistentData.next();
-      ctx.getCustomData().put("IDMS-" + contextTextReference.toString(), new Object());
-    //          addReplacementContext(ctx, String.format("DISPLAY \"IDMS-%s\"\n", contextTextReference));
-      String terminator = ".".equals(ctx.stop.getText()) ? "." : "";
-      addReplacementContext(ctx, String.format("%s _DIALECT_ %s %s", IF, contextTextReference, terminator));
-//      addReplacementContext(ctx, String.format("%s _DIALECT_ %s", IF, contextTextReference));
-//    addReplacementContext(ctx, IF);
-    return visitChildren(ctx);
+      replaceWithMetadata(ctx, IF + " ");
+      return visitChildren(ctx);
   }
 
   @Override
   public List<Node> visitIdmsIfCondition(IdmsIfConditionContext ctx) {
-//      UUID contextTextReference = UUID.randomUUID();
-      String contextTextReference = PersistentData.next();
-      ctx.getCustomData().put("IDMS-" + contextTextReference.toString(), new Object());
-      String terminator = ".".equals(ctx.stop.getText()) ? "." : "";
-      addReplacementContext(ctx, String.format("_DIALECT_ %s %s", contextTextReference, terminator));
-//          addReplacementContext(ctx, String.format("DISPLAY \"IDMS-%s\"\n", contextTextReference));
-//      addReplacementContext(ctx, String.format("_DIALECT_ %s", contextTextReference));
-//    addReplacementContext(ctx);
-    return visitChildren(ctx);
+      replaceWithMetadata(ctx);
+      return visitChildren(ctx);
   }
 
   @Override
@@ -248,4 +200,14 @@ class IdmsVisitor extends IdmsParserBaseVisitor<List<Node>> {
                 .replaceAll("[^ \n]", CobolDialect.FILLER);
     context.getExtendedDocument().replace(DialectUtils.constructRange(ctx), newText);
   }
+
+    private void replaceWithMetadata(AnnotatedParserRuleContext ctx) {
+      replaceWithMetadata(ctx, "");
+    }
+    private void replaceWithMetadata(AnnotatedParserRuleContext ctx, String staticPrefix) {
+        String contextTextReference = PersistentData.next();
+        ctx.getCustomData().put("IDMS-" + contextTextReference, new Object());
+        String terminator = ".".equals(ctx.stop.getText()) ? "." : "";
+        addReplacementContext(ctx, String.format("%s_DIALECT_ %s %s", staticPrefix, contextTextReference, terminator));
+    }
 }
