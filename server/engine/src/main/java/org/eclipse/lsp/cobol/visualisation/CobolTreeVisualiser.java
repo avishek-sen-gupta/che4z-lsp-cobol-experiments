@@ -16,13 +16,12 @@ package org.eclipse.lsp.cobol.visualisation;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import hu.webarticum.treeprinter.SimpleTreeNode;
 import hu.webarticum.treeprinter.printer.listing.ListingTreePrinter;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.eclipse.lsp.cobol.cli.CobolAugmentedTreeNode;
-import org.eclipse.lsp.cobol.common.model.tree.Node;
 import org.copybook.CobolContextAugmentedTreeNode;
+import org.eclipse.lsp.cobol.cli.IdmsContainerNode;
+import org.eclipse.lsp.cobol.core.CobolParser;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -34,6 +33,7 @@ public class CobolTreeVisualiser {
     public void visualiseCobolAST(ParserRuleContext tree, String cobolParseTreeOutputPath) {
         visualiseCobolAST(tree, cobolParseTreeOutputPath, true);
     }
+
     /**
      * Draws the tree using the canonical Context structure
      *
@@ -60,9 +60,18 @@ public class CobolTreeVisualiser {
         for (int i = 0; i <= astParentNode.getChildCount() - 1; ++i) {
             ParseTree astChildNode = astParentNode.getChild(i);
             CobolContextAugmentedTreeNode graphChildNode = new CobolContextAugmentedTreeNode(astChildNode);
-            graphParentNode.addChild(graphChildNode);
+            if (! shouldSkip(astChildNode, astParentNode))
+                graphParentNode.addChild(graphChildNode);
             buildContextGraph(astChildNode, graphChildNode);
         }
         graphParentNode.freeze();
+    }
+
+    private static boolean shouldSkip(ParseTree astChildNode, ParseTree astParentNode) {
+        if (astChildNode.getClass() == CobolParser.EaterContext.class) return true;
+        if (astParentNode.getClass() == CobolParser.DialectNodeFillerContext.class) {
+            return astChildNode.getClass() != IdmsContainerNode.class;
+        }
+        return false;
     }
 }

@@ -45,7 +45,7 @@ public class CobolContextAugmentedTreeNode extends SimpleTreeNode {
     @SerializedName("children")
     private List<TreeNode> childrenRef;
 
-    @Expose
+//    @Expose
     @SerializedName("span")
     private TextSpan span;
 
