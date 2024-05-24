@@ -4,37 +4,45 @@ import lombok.Getter;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
+import org.eclipse.lsp.cobol.cli.IdmsContainerNode;
 import org.eclipse.lsp.cobol.core.CobolParser;
 
 import java.util.*;
 
 public class ChartNode {
     static int counter = 0;
-    private final String uuid;
-    private boolean composite = false;
-    @Getter private final List<ChartNode> outgoingNodes;
-    private final List<ChartNode> incomingNodes;
+    private String uuid;
+    protected boolean composite = false;
+    @Getter protected List<ChartNode> outgoingNodes;
+    protected List<ChartNode> incomingNodes;
     private ChartNode internalTreeRoot;
     @Getter private final ParseTree executionContext;
-    private final ChartNodeService nodeService;
+    protected ChartNodeService nodeService;
 
     public ChartNode(ParseTree executionContext, ChartNodeService nodeService) {
-        this.uuid = counter + "";
+        this.uuid = String.valueOf(counter);
         counter ++;
         this.nodeService = nodeService;
-        if (executionContext.getClass() == CobolParser.ProcedureSectionContext.class ||
+        composite = isCompositeNode(executionContext);
+        this.executionContext = executionContext;
+        outgoingNodes = new ArrayList<>();
+        incomingNodes = new ArrayList<>();
+        this.nodeService.register(this);
+    }
+
+    protected boolean isCompositeNode(ParseTree executionContext) {
+        return executionContext.getClass() == CobolParser.ProcedureSectionContext.class ||
                 executionContext.getClass() == CobolParser.ParagraphsContext.class ||
                 executionContext.getClass() == CobolParser.ParagraphContext.class ||
                 executionContext.getClass() == CobolParser.SentenceContext.class ||
                 executionContext.getClass() == CobolParser.ProcedureDivisionBodyContext.class ||
                 executionContext.getClass() == CobolParser.IfThenContext.class ||
-                executionContext.getClass() == CobolParser.IfElseContext.class) {
-            composite = true;
-        }
-        this.executionContext = executionContext;
-        outgoingNodes = new ArrayList<>();
-        incomingNodes = new ArrayList<>();
-        this.nodeService.register(this);
+                executionContext.getClass() == CobolParser.ConditionalStatementCallContext.class ||
+                executionContext.getClass() == CobolParser.DialectStatementContext.class ||
+                executionContext.getClass() == CobolParser.DialectSectionContext.class ||
+                executionContext.getClass() == CobolParser.DialectNodeFillerContext.class ||
+                executionContext.getClass() == IdmsContainerNode.class
+                ;
     }
 
     public void buildFlow() {
@@ -97,7 +105,7 @@ public class ChartNode {
     @Override
     public String toString() {
         if (executionContext instanceof ParserRuleContext) {
-            return executionContextName() + "/" + ((ParserRuleContext) executionContext).start.getLine();
+            return executionContextName() + "/" + ((ParserRuleContext) executionContext).getStart().getLine();
         }
         return executionContextName() + "." + uuid;
 //        return getClass().getSimpleName() + "{" +
@@ -122,6 +130,8 @@ public class ChartNode {
             return executionContext.getText();
         if (executionContext.getClass() == CobolParser.ParagraphsContext.class)
             return "para-group:";
+        if ("IdmsStatementsContext".equals(executionContext.getClass().getSimpleName()))
+            return truncated(executionContext, 15);
         return executionContext.getClass().getSimpleName() + "/" + uuid;
     }
 
@@ -130,19 +140,23 @@ public class ChartNode {
     }
 
     public void accept(ChartNodeVisitor visitor, int level) {
+        accept(visitor, level, -1);
+    }
+    public void accept(ChartNodeVisitor visitor, int level, int maxLevel) {
+        System.out.println("Current level: " + level);
         if (composite) {
             visitor.visit(this, nodeService);
-            this.outgoingNodes.forEach(c -> c.accept(visitor, level));
-            if (level > 5) return;
+            this.outgoingNodes.forEach(c -> c.accept(visitor, level, maxLevel));
+            if (maxLevel != -1 && level > maxLevel) return;
             if (internalTreeRoot == null) return;
 
             // Make an explicit connection between higher organisational unit and root of internal tree
             visitor.visitSpecific(this, internalTreeRoot, nodeService);
             ChartNode current = internalTreeRoot;
-            current.accept(visitor, level + 1);
+            current.accept(visitor, level + 1, maxLevel);
         } else {
             visitor.visit(this, nodeService);
-            outgoingNodes.forEach(c -> c.accept(visitor, level));
+            outgoingNodes.forEach(c -> c.accept(visitor, level, maxLevel));
         }
     }
 }

@@ -63,7 +63,9 @@ public class CobolContextAugmentedTreeNode extends SimpleTreeNode {
             return new TextSpan(terminalNode.getSymbol().getLine(), terminalNode.getSymbol().getLine(), terminalNode.getSymbol().getCharPositionInLine(), -1, terminalNode.getSymbol().getStartIndex(), terminalNode.getSymbol().getStopIndex());
         }
         ParserRuleContext context = (ParserRuleContext) astNode;
-        return new TextSpan(context.start.getLine(), context.stop.getLine(), context.start.getCharPositionInLine(), context.stop.getCharPositionInLine(), context.start.getStartIndex(), context.stop.getStopIndex());
+        Token start = context.getStart();
+        Token stop = context.getStop();
+        return new TextSpan(start.getLine(), stop.getLine(), start.getCharPositionInLine(), stop.getCharPositionInLine(), start.getStartIndex(), stop.getStopIndex());
     }
     @Override
     public String content() {
@@ -85,6 +87,7 @@ public class CobolContextAugmentedTreeNode extends SimpleTreeNode {
         Token startToken = (astNode instanceof TerminalNode) ? ((TerminalNode) astNode).getSymbol() : ((ParserRuleContext) astNode).start;
         Token stopToken = (astNode instanceof TerminalNode) ? ((TerminalNode) astNode).getSymbol() : ((ParserRuleContext) astNode).stop;
 
+        if (startToken == null) return astNode.getText();
         CharStream cs = startToken.getInputStream();
         int stopIndex = stopToken != null ? stopToken.getStopIndex() : -1;
         if (cs == null) {

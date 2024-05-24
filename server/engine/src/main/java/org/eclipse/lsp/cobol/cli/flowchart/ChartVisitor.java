@@ -76,10 +76,17 @@ public class ChartVisitor implements ChartNodeVisitor {
                     g.add(mutNode("PERFORM VARYING").add(Color.RED));
                     return;
                 }
-                CobolParser.ProcedureNameContext procedureName = performProcedureStatementContext.procedureName();
+                CobolParser.ProcedureNameContext procedureNameContext = performProcedureStatementContext.procedureName();
+                String procedureName = procedureNameContext.getText();
                 System.out.println("Found a PERFORM, routing to " + procedureName);
+                if ("U-M2".equals(procedureName)) {
+                    System.out.println("Found U-M2 origin");
+                }
 
-                ChartNode targetNode = nodeService.sectionOrParaWithName(procedureName.getText());
+                ChartNode targetNode = nodeService.sectionOrParaWithName(procedureName);
+                if ("U-M2".equals(procedureName)) {
+                    System.out.println("Found U-M2 target");
+                }
                 MutableNode origin = mutNode(node.toString()).add(Color.RED);
                 MutableNode destination = mutNode(targetNode.toString());
                 g.add(origin.addLink(origin.linkTo(destination).with("style", "bold").with("color", "blueviolet")));

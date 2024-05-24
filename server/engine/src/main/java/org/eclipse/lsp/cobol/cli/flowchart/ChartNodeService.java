@@ -24,6 +24,7 @@ public class ChartNodeService {
     }
 
     public ChartNode node(ParseTree parseTree) {
+        if (parseTree == null) return new DummyChartNode(this);
         ChartNode n = new ChartNode(parseTree, this);
         int index = nodes.indexOf(n);
         if (index != -1) return nodes.get(index);

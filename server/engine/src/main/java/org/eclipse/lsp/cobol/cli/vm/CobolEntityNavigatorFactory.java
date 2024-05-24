@@ -1,6 +1,6 @@
 package org.eclipse.lsp.cobol.cli.vm;
 
-import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;
 
 public class CobolEntityNavigatorFactory {
@@ -11,7 +11,16 @@ public class CobolEntityNavigatorFactory {
     public static GlobalFlowUnitNavigator flowUnitnavigator() {
         return new GlobalFlowUnitNavigator(procedureDivisionFlowUnit);
     }
-    public static CobolEntityNavigator entityNavigator(CobolParser.ProcedureDivisionBodyContext procedureDivisionBody) {
+    public static CobolEntityNavigator procedureDivisionEntityNavigator(CobolParser.ProcedureDivisionBodyContext procedureDivisionBody) {
         return new CobolEntityNavigator(procedureDivisionBody);
+    }
+
+    public static CobolParser.ProcedureDivisionBodyContext procedureDivisionBody(ParseTree tree) {
+        if (tree instanceof CobolParser.ProcedureDivisionBodyContext) return (CobolParser.ProcedureDivisionBodyContext) tree;
+        for (int i = 0; i < tree.getChildCount(); i++) {
+            CobolParser.ProcedureDivisionBodyContext result = procedureDivisionBody(tree.getChild(i));
+            if (result != null) return result;
+        }
+        return null;
     }
 }

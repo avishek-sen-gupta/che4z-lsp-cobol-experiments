@@ -18,6 +18,8 @@ import com.google.common.collect.Multimap;
 import com.google.gson.*;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import guru.nidi.graphviz.engine.Graphviz;
+import guru.nidi.graphviz.engine.GraphvizCmdLineEngine;
 import lombok.extern.slf4j.Slf4j;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RecognitionException;
@@ -25,7 +27,11 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.eclipse.lsp.cobol.cli.di.CliModule;
+import org.eclipse.lsp.cobol.cli.flowchart.ChartNode;
+import org.eclipse.lsp.cobol.cli.flowchart.FlowchartBuilder;
 import org.eclipse.lsp.cobol.cli.modules.CliClientProvider;
+import org.eclipse.lsp.cobol.cli.vm.CobolEntityNavigator;
+import org.eclipse.lsp.cobol.cli.vm.CobolEntityNavigatorFactory;
 import org.eclipse.lsp.cobol.common.AnalysisConfig;
 import org.eclipse.lsp.cobol.common.ResultWithErrors;
 import org.eclipse.lsp.cobol.common.SubroutineService;
@@ -38,8 +44,6 @@ import org.eclipse.lsp.cobol.common.mapping.ExtendedDocument;
 import org.eclipse.lsp.cobol.common.mapping.ExtendedText;
 import org.eclipse.lsp.cobol.common.message.MessageService;
 import org.eclipse.lsp.cobol.common.model.tree.Node;
-import org.eclipse.lsp.cobol.common.poc.PersistentData;
-import org.eclipse.lsp.cobol.core.CobolParser;
 import org.eclipse.lsp.cobol.core.PanelDefinitionParser;
 import org.eclipse.lsp.cobol.core.engine.analysis.AnalysisContext;
 import org.eclipse.lsp.cobol.core.engine.dialects.DialectService;
@@ -60,7 +64,10 @@ import picocli.CommandLine;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.Callable;
 
 /**
@@ -192,12 +199,14 @@ public class Cli implements Callable<Integer> {
             DialectIntegratorListener dialectIntegrationListener = new DialectIntegratorListener();
             walker.walk(dialectIntegrationListener, tree);
             System.out.println("[INFO] Restored " + dialectIntegrationListener.getRestores() + " nodes.");
-//        integrateDialectNodes(tree);
-            System.out.println("Cleaning EaterContext Nodes");
+            System.out.println("Building tree...");
             new CobolTreeVisualiser().visualiseCobolAST(tree, cobolParseTreeOutputPath, false);
+            System.out.println("Built tree");
 //        new DynamicFlowAnalyser(tree).run();
-//            Graphviz.useEngine(new GraphvizCmdLineEngine().timeout(5, TimeUnit.HOURS));
-//            ChartNode flowchart = new FlowchartBuilder(tree).run();
+            CobolEntityNavigator navigator = CobolEntityNavigatorFactory.procedureDivisionEntityNavigator(CobolEntityNavigatorFactory.procedureDivisionBody(tree));
+            ParseTree e0 = navigator.findTarget("E0");
+            Graphviz.useEngine(new GraphvizCmdLineEngine().timeout(5, java.util.concurrent.TimeUnit.HOURS));
+            ChartNode flowchart = new FlowchartBuilder(e0, navigator).run();
 
             JsonArray diagnostics = new JsonArray();
         ctx.getAccumulatedErrors()
@@ -258,19 +267,6 @@ public class Cli implements Callable<Integer> {
 
       return 0;
   }
-
-    private void integrateDialectNodes(ParseTree tree) {
-      if (tree.getClass() != CobolParser.DisplayStatementContext.class) {
-          for (int i = 0; i < tree.getChildCount(); i++) {
-              integrateDialectNodes(tree.getChild(i));
-          }
-          return;
-      }
-
-        CobolParser.DisplayStatementContext displayStatement = (CobolParser.DisplayStatementContext) tree;
-      ParseTree dialectNode = PersistentData.getDialectNode(displayStatement.displayOperand(0).getText().replace("\"", ""));
-      displayStatement.addChild(new IdmsContainerNode(dialectNode));
-    }
 
     private JsonObject toJson(SyntaxError syntaxError, Gson gson) {
     JsonObject diagnostic = new JsonObject();
