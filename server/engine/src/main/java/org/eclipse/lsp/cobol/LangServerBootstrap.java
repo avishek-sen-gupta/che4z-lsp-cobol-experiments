@@ -66,7 +66,7 @@ public class LangServerBootstrap {
           throws ExecutionException, InterruptedException, IOException {
     if (isCliMode(args)) {
       cliMode = true;
-      int exitCode = new CommandLine(new Cli()).execute(args);
+      int exitCode = new CommandLine(new Cli(new DummyPoCOps())).execute(args);
       System.exit(exitCode);
     }
     LangServerBootstrap langServerBootstrap = new LangServerBootstrap();

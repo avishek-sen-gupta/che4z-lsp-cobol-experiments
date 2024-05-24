@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="LangCliStartup" type="Application" factoryName="Application" nameIsGenerated="true">
+    <option name="MAIN_CLASS_NAME" value="org.poc.tools.visualisation.LangCliStartup" />
+    <module name="poc-interface" />
+    <option name="PROGRAM_PARAMETERS" value="-s $USER_HOME$/Downloads/mbrdi-poc/V75234 analysis -cf $USER_HOME$/Downloads/mbrdi-poc -ocobol $USER_HOME$/Downloads/mbrdi-poc/test-cobol.json -oidms $USER_HOME$/Downloads/mbrdi-poc/test-idms.json" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="org.poc.tools.visualisation.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

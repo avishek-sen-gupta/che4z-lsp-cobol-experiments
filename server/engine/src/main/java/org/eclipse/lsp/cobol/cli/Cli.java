@@ -18,8 +18,6 @@ import com.google.common.collect.Multimap;
 import com.google.gson.*;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import guru.nidi.graphviz.engine.Graphviz;
-import guru.nidi.graphviz.engine.GraphvizCmdLineEngine;
 import lombok.extern.slf4j.Slf4j;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RecognitionException;
@@ -27,11 +25,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.eclipse.lsp.cobol.cli.di.CliModule;
-import org.eclipse.lsp.cobol.cli.flowchart.ChartNode;
-import org.eclipse.lsp.cobol.cli.flowchart.FlowchartBuilder;
 import org.eclipse.lsp.cobol.cli.modules.CliClientProvider;
-import org.eclipse.lsp.cobol.cli.vm.CobolEntityNavigator;
-import org.eclipse.lsp.cobol.cli.vm.CobolEntityNavigatorFactory;
 import org.eclipse.lsp.cobol.common.AnalysisConfig;
 import org.eclipse.lsp.cobol.common.ResultWithErrors;
 import org.eclipse.lsp.cobol.common.SubroutineService;
@@ -44,6 +38,7 @@ import org.eclipse.lsp.cobol.common.mapping.ExtendedDocument;
 import org.eclipse.lsp.cobol.common.mapping.ExtendedText;
 import org.eclipse.lsp.cobol.common.message.MessageService;
 import org.eclipse.lsp.cobol.common.model.tree.Node;
+import org.eclipse.lsp.cobol.core.CobolParser;
 import org.eclipse.lsp.cobol.core.PanelDefinitionParser;
 import org.eclipse.lsp.cobol.core.engine.analysis.AnalysisContext;
 import org.eclipse.lsp.cobol.core.engine.dialects.DialectService;
@@ -58,8 +53,11 @@ import org.eclipse.lsp.cobol.core.preprocessor.delegates.GrammarPreprocessor;
 import org.eclipse.lsp.cobol.core.semantics.CopybooksRepository;
 import org.eclipse.lsp.cobol.service.settings.CachingConfigurationService;
 import org.eclipse.lsp.cobol.service.settings.layout.CodeLayoutStore;
-import org.eclipse.lsp.cobol.visualisation.CobolTreeVisualiser;
 import org.eclipse.lsp4j.Location;
+import org.flowchart.ChartNode;
+import org.flowchart.FlowchartBuilder;
+import org.flowchart.PocOps;
+import org.poc.common.navigation.CobolEntityNavigator;
 import picocli.CommandLine;
 
 import java.io.File;
@@ -76,7 +74,13 @@ import java.util.concurrent.Callable;
 @CommandLine.Command(description = "COBOL Analysis CLI tools.")
 @Slf4j
 public class Cli implements Callable<Integer> {
-  private enum Action {
+    private PocOps ops;
+
+    public Cli(PocOps ops) {
+        this.ops = ops;
+    }
+
+    private enum Action {
     list_copybooks,
     analysis,
     parsemap
@@ -162,7 +166,7 @@ public class Cli implements Callable<Integer> {
         StageResult<IdmsPanelDefinitionParserStageResult> idmsAnalysisResult =
                 (StageResult<IdmsPanelDefinitionParserStageResult>) pipelineResult.getLastStageResult();
         PanelDefinitionParser.StartRuleContext tree = idmsAnalysisResult.getData().getTree();
-        new CobolTreeVisualiser().visualiseCobolAST(tree, "/Users/asgupta/Downloads/mbrdi-poc/test-map.json");
+//        visualiser.visualiseCobolAST(tree, "/Users/asgupta/Downloads/mbrdi-poc/test-map.json");
         return 0;
     }
     ResultWithErrors<ExtendedText> resultWithErrors = preprocessor.cleanUpCode(documentUri, text);
@@ -200,13 +204,16 @@ public class Cli implements Callable<Integer> {
             walker.walk(dialectIntegrationListener, tree);
             System.out.println("[INFO] Restored " + dialectIntegrationListener.getRestores() + " nodes.");
             System.out.println("Building tree...");
-            new CobolTreeVisualiser().visualiseCobolAST(tree, cobolParseTreeOutputPath, false);
+
+            ops.getVisualiser().visualiseCobolAST(tree, cobolParseTreeOutputPath, false);
             System.out.println("Built tree");
 //        new DynamicFlowAnalyser(tree).run();
-            CobolEntityNavigator navigator = CobolEntityNavigatorFactory.procedureDivisionEntityNavigator(CobolEntityNavigatorFactory.procedureDivisionBody(tree));
+            CobolParser.ProcedureDivisionBodyContext procedureDivisionBody = ops.getFinder().apply(tree);
+            CobolEntityNavigator navigator = ops.getNavigatorFactory().apply(procedureDivisionBody);
+//            CobolEntityNavigator navigator = CobolEntityNavigatorFactory.procedureDivisionEntityNavigator(CobolEntityNavigatorFactory.procedureDivisionBody(tree));
             ParseTree e0 = navigator.findTarget("E0");
-            Graphviz.useEngine(new GraphvizCmdLineEngine().timeout(5, java.util.concurrent.TimeUnit.HOURS));
-            ChartNode flowchart = new FlowchartBuilder(e0, navigator).run();
+            FlowchartBuilder flowchartBuilder = ops.getFlowchartBuilderFactory().apply(e0, navigator);
+            ChartNode flowchart = flowchartBuilder.run();
 
             JsonArray diagnostics = new JsonArray();
         ctx.getAccumulatedErrors()

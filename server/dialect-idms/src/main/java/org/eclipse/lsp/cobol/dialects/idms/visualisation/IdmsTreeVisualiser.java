@@ -19,7 +19,7 @@ import com.google.gson.GsonBuilder;
 import hu.webarticum.treeprinter.printer.listing.ListingTreePrinter;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.dialects.idms.IdmsParser;
-import org.copybook.CobolContextAugmentedTreeNode;
+import org.flowchart.CobolContextAugmentedTreeNode;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
