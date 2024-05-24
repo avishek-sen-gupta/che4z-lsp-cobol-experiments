@@ -1,4 +1,4 @@
-package flowchart;
+package org.poc.flowchart;
 
 import lombok.Getter;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -39,6 +39,7 @@ public class CobolChartNode implements ChartNode {
                 executionContext.getClass() == CobolParser.SentenceContext.class ||
                 executionContext.getClass() == CobolParser.ProcedureDivisionBodyContext.class ||
                 executionContext.getClass() == CobolParser.IfThenContext.class ||
+                executionContext.getClass() == CobolParser.IfElseContext.class ||
                 executionContext.getClass() == CobolParser.ConditionalStatementCallContext.class ||
                 executionContext.getClass() == CobolParser.DialectStatementContext.class ||
                 executionContext.getClass() == CobolParser.DialectSectionContext.class ||

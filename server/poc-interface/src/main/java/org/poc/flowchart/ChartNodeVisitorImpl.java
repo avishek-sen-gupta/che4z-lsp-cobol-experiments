@@ -1,4 +1,4 @@
-package flowchart;
+package org.poc.flowchart;
 
 import com.google.common.collect.ImmutableList;
 import guru.nidi.graphviz.attribute.Color;

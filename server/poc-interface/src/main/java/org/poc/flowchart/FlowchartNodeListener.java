@@ -1,4 +1,4 @@
-package flowchart;
+package org.poc.flowchart;
 
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.eclipse.lsp.cobol.core.CobolParser;

@@ -1,9 +1,6 @@
-package flowchart;
+package org.poc.flowchart;
 
-import guru.nidi.graphviz.engine.Engine;
-import guru.nidi.graphviz.engine.Format;
-import guru.nidi.graphviz.engine.Graphviz;
-import guru.nidi.graphviz.engine.GraphvizCmdLineEngine;
+import guru.nidi.graphviz.engine.*;
 import guru.nidi.graphviz.model.Factory;
 import guru.nidi.graphviz.model.MutableGraph;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -23,11 +20,11 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
     }
 
     @Override
-    public CobolChartNode run() {
-        return buildChart(root);
+    public CobolChartNode run(String dotFilePath) {
+        return buildChart(root, dotFilePath);
     }
 
-    private CobolChartNode buildChart(ParseTree node) {
+    private CobolChartNode buildChart(ParseTree node, String dotFilePath) {
         Graphviz.useEngine(new GraphvizCmdLineEngine().timeout(5, java.util.concurrent.TimeUnit.HOURS));
         ChartNodeServiceImpl chartNodeService = new ChartNodeServiceImpl(cobolEntityNavigator);
         CobolChartNode chartNode = new CobolChartNode(node, chartNodeService);
@@ -38,7 +35,9 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
         ChartNodeVisitorImpl chartVisitor = new ChartNodeVisitorImpl(g);
         chartNode.accept(chartVisitor, 1, -1);
         try {
-            Graphviz.fromGraph(g).engine(Engine.NEATO).height(10000).render(Format.PNG).toFile(new File("/Users/asgupta/Downloads/mbrdi-poc/flowchart.png"));
+            Graphviz.fromGraph(g).engine(Engine.DOT)
+                    .render(Format.DOT)
+                    .toFile(new File(dotFilePath));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

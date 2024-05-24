@@ -1,5 +1,5 @@
 package org.flowchart;
 
 public interface FlowchartBuilder {
-    ChartNode run();
+    ChartNode run(String dotFilePath);
 }
