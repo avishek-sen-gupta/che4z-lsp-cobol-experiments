@@ -3,6 +3,7 @@ package org.eclipse.lsp.cobol.cli;
 import com.google.gson.*;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RecognitionException;
@@ -56,6 +57,8 @@ public class ParsePipeline {
     private String idmsParseTreeOutputPath;
     private String cobolParseTreeOutputPath;
     private final PocOps ops;
+    @Getter
+    private CobolEntityNavigator navigator;
 
 
     public ParsePipeline(File src, File[] cpyPaths, String idmsParseTreeOutputPath, String cobolParseTreeOutputPath, PocOps ops) {
@@ -135,6 +138,9 @@ public class ParsePipeline {
 
         ops.getVisualiser().visualiseCobolAST(tree, cobolParseTreeOutputPath, false);
         System.out.println("Built tree");
+        EntityNavigatorBuilder navigatorBuilder = ops.getCobolEntityNavigatorBuilder();
+        CobolParser.ProcedureDivisionBodyContext procedureDivisionBody = navigatorBuilder.procedureDivisionBody(tree);
+        navigator = navigatorBuilder.procedureDivisionEntityNavigator(procedureDivisionBody);
         //        new DynamicFlowAnalyser(tree).run();
 
         JsonArray diagnostics = new JsonArray();
@@ -151,13 +157,9 @@ public class ParsePipeline {
         return tree;
     }
 
-    public void buildFlowchart(ParserRuleContext tree, String dotFilePath) {
-        EntityNavigatorBuilder navigatorBuilder = ops.getCobolEntityNavigatorBuilder();
-        CobolParser.ProcedureDivisionBodyContext procedureDivisionBody = navigatorBuilder.procedureDivisionBody(tree);
-        CobolEntityNavigator navigator = navigatorBuilder.procedureDivisionEntityNavigator(procedureDivisionBody);
+    public void buildFlowchart(ParseTree start, String dotFilePath) {
         //            CobolEntityNavigator navigator = CobolEntityNavigatorFactory.procedureDivisionEntityNavigator(CobolEntityNavigatorFactory.procedureDivisionBody(tree));
-        ParseTree e0 = navigator.findTarget("E0");
-        FlowchartBuilder flowchartBuilder = ops.getFlowchartBuilderFactory().apply(e0, navigator);
+        FlowchartBuilder flowchartBuilder = ops.getFlowchartBuilderFactory().apply(start, navigator);
         ChartNode flowchart = flowchartBuilder.run(dotFilePath);
     }
 
