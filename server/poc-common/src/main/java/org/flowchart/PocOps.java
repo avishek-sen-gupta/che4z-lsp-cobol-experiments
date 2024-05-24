@@ -1,14 +1,11 @@
 package org.flowchart;
 
-import org.poc.common.navigation.NavigatorFactoryMethod;
-import org.poc.common.navigation.ProcedureDivisionBodyFinder;
+import org.poc.common.navigation.EntityNavigatorBuilder;
 
 public interface PocOps {
     CobolTreeVisualiser getVisualiser();
 
-    NavigatorFactoryMethod getNavigatorFactory();
-
-    ProcedureDivisionBodyFinder getFinder();
-
     FlowchartBuilderFactoryMethod getFlowchartBuilderFactory();
+
+    EntityNavigatorBuilder getCobolEntityNavigatorBuilder();
 }

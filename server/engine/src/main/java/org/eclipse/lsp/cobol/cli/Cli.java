@@ -58,6 +58,7 @@ import org.flowchart.ChartNode;
 import org.flowchart.FlowchartBuilder;
 import org.flowchart.PocOps;
 import org.poc.common.navigation.CobolEntityNavigator;
+import org.poc.common.navigation.EntityNavigatorBuilder;
 import picocli.CommandLine;
 
 import java.io.File;
@@ -208,8 +209,9 @@ public class Cli implements Callable<Integer> {
             ops.getVisualiser().visualiseCobolAST(tree, cobolParseTreeOutputPath, false);
             System.out.println("Built tree");
 //        new DynamicFlowAnalyser(tree).run();
-            CobolParser.ProcedureDivisionBodyContext procedureDivisionBody = ops.getFinder().apply(tree);
-            CobolEntityNavigator navigator = ops.getNavigatorFactory().apply(procedureDivisionBody);
+            EntityNavigatorBuilder navigatorBuilder = ops.getCobolEntityNavigatorBuilder();
+            CobolParser.ProcedureDivisionBodyContext procedureDivisionBody = navigatorBuilder.procedureDivisionBody(tree);
+            CobolEntityNavigator navigator = navigatorBuilder.procedureDivisionEntityNavigator(procedureDivisionBody);
 //            CobolEntityNavigator navigator = CobolEntityNavigatorFactory.procedureDivisionEntityNavigator(CobolEntityNavigatorFactory.procedureDivisionBody(tree));
             ParseTree e0 = navigator.findTarget("E0");
             FlowchartBuilder flowchartBuilder = ops.getFlowchartBuilderFactory().apply(e0, navigator);

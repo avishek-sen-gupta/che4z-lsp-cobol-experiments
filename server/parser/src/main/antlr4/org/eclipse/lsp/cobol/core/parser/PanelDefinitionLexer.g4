@@ -229,6 +229,11 @@ ANY : A N Y;
 DATETIME : D A T E T I M E;
 MF : M F;
 NULL : N U L L;
+WITH : W I T H;
+AFT : A F T;
+AFTER : A F T E R;
+REQ : R E Q;
+
 
 BLUE : B L U E;
 RED : R E D;

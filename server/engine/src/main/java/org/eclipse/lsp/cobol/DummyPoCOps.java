@@ -3,8 +3,7 @@ package org.eclipse.lsp.cobol;
 import org.flowchart.CobolTreeVisualiser;
 import org.flowchart.FlowchartBuilderFactoryMethod;
 import org.flowchart.PocOps;
-import org.poc.common.navigation.NavigatorFactoryMethod;
-import org.poc.common.navigation.ProcedureDivisionBodyFinder;
+import org.poc.common.navigation.EntityNavigatorBuilder;
 
 public class DummyPoCOps implements PocOps {
     @Override
@@ -13,17 +12,12 @@ public class DummyPoCOps implements PocOps {
     }
 
     @Override
-    public NavigatorFactoryMethod getNavigatorFactory() {
-        return null;
-    }
-
-    @Override
-    public ProcedureDivisionBodyFinder getFinder() {
-        return null;
-    }
-
-    @Override
     public FlowchartBuilderFactoryMethod getFlowchartBuilderFactory() {
+        return null;
+    }
+
+    @Override
+    public EntityNavigatorBuilder getCobolEntityNavigatorBuilder() {
         return null;
     }
 }
