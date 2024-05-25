@@ -10,19 +10,34 @@ import org.flowchart.ChartNodeVisitor;
 import static guru.nidi.graphviz.model.Factory.mutNode;
 
 public class PerformChartNode extends CobolChartNode {
+
+    private ChartNode inlineStatementContext;
+
     public PerformChartNode(ParseTree parseTree, ChartNodeService nodeService) {
         super(parseTree, nodeService);
     }
 
     @Override
-    public void accept(ChartNodeVisitor visitor, int level, int maxLevel) {
-        super.accept(visitor, level, maxLevel);
+    public void buildInternalFlow() {
         CobolParser.PerformStatementContext performStatement = new StatementIdentity<CobolParser.PerformStatementContext>(getExecutionContext()).get();
         CobolParser.PerformProcedureStatementContext performProcedureStatementContext = performStatement.performProcedureStatement();
-        if (performProcedureStatementContext == null) {
-//            g.add(Factory.mutNode("PERFORM VARYING").add(Color.RED));
+        if (performProcedureStatementContext != null) return;
+        inlineStatementContext = nodeService.node(performStatement.performInlineStatement());
+        inlineStatementContext.buildFlow();
+
+    }
+
+    @Override
+    public void accept(ChartNodeVisitor visitor, int level, int maxLevel) {
+        super.accept(visitor, level, maxLevel);
+        if (inlineStatementContext != null) {
+            visitor.visitParentChildLink(this, inlineStatementContext, nodeService);
+            inlineStatementContext.accept(visitor, level, maxLevel);
             return;
         }
+
+        CobolParser.PerformStatementContext performStatement = new StatementIdentity<CobolParser.PerformStatementContext>(getExecutionContext()).get();
+        CobolParser.PerformProcedureStatementContext performProcedureStatementContext = performStatement.performProcedureStatement();
         CobolParser.ProcedureNameContext procedureNameContext = performProcedureStatementContext.procedureName();
         String procedureName = procedureNameContext.getText();
         System.out.println("Found a PERFORM, routing to " + procedureName);
