@@ -6,8 +6,6 @@ import org.flowchart.ChartNode;
 import org.flowchart.ChartNodeService;
 import org.flowchart.ChartNodeVisitor;
 
-import java.util.List;
-
 public class IfChartNode extends CobolChartNode {
     private final ChartNodeService nodeService;
     private ChartNode ifThen;
@@ -41,10 +39,5 @@ public class IfChartNode extends CobolChartNode {
         if (ifElse != null) ifElse.accept(visitor, level, maxLevel);
 
         outgoingNodes.forEach(c -> c.accept(visitor, level, maxLevel));
-    }
-
-    @Override
-    public ChartNode getInternalRoot() {
-        return null;
     }
 }

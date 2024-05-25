@@ -65,13 +65,13 @@ public class ChartNodeVisitorImpl implements ChartNodeVisitor {
     private void processControlStatement(ChartNode node, ChartNodeService nodeService) {
         if (node.getExecutionContext().getClass() == CobolParser.StatementContext.class) {
             ParseTree typedStatement = node.getExecutionContext().getChild(0);
-            if (typedStatement.getClass() == CobolParser.GoToStatementContext.class) {
-                CobolParser.GoToStatementContext goToStatement = (CobolParser.GoToStatementContext) typedStatement;
-                List<CobolParser.ProcedureNameContext> procedureNames = goToStatement.procedureName();
-                System.out.println("Found a GO TO, routing to " + procedureNames);
-                List<ChartNode> destinationNodes = procedureNames.stream().map(p -> nodeService.sectionOrParaWithName(p.paragraphName().getText())).collect(Collectors.toList());
-                destinationNodes.forEach(destinationNode -> g.add(mutNode(node.toString()).add(Color.RED).addLink(mutNode(destinationNode.toString()))));
-            }
+//            if (typedStatement.getClass() == CobolParser.GoToStatementContext.class) {
+//                CobolParser.GoToStatementContext goToStatement = (CobolParser.GoToStatementContext) typedStatement;
+//                List<CobolParser.ProcedureNameContext> procedureNames = goToStatement.procedureName();
+//                System.out.println("Found a GO TO, routing to " + procedureNames);
+//                List<ChartNode> destinationNodes = procedureNames.stream().map(p -> nodeService.sectionOrParaWithName(p.paragraphName().getText())).collect(Collectors.toList());
+//                destinationNodes.forEach(destinationNode -> g.add(mutNode(node.toString()).add(Color.RED).addLink(mutNode(destinationNode.toString()))));
+//            }
             if (typedStatement.getClass() == CobolParser.PerformStatementContext.class) {
                 CobolParser.PerformStatementContext performStatement = (CobolParser.PerformStatementContext) typedStatement;
                 CobolParser.PerformProcedureStatementContext performProcedureStatementContext = performStatement.performProcedureStatement();
@@ -100,5 +100,10 @@ public class ChartNodeVisitorImpl implements ChartNodeVisitor {
         MutableNode o = mutNode(parent.toString());
         MutableNode child = mutNode(internalTreeRoot.toString());
         g.add(o.add(Color.RED).addLink(o.linkTo(child).with("style", "dashed")));
+    }
+
+    @Override
+    public void visitControlTransfer(ChartNode from, ChartNode to) {
+        g.add(mutNode(from.toString()).add(Color.RED).addLink(mutNode(to.toString())));
     }
 }

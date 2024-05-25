@@ -185,8 +185,4 @@ public class CobolChartNode implements ChartNode {
         incomingNodes.add(chartNode);
     }
 
-    @Override
-    public ChartNode getInternalRoot() {
-        return internalTreeRoot;
-    }
 }
