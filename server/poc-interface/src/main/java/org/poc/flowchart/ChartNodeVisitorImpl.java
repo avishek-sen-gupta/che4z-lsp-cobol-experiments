@@ -72,21 +72,21 @@ public class ChartNodeVisitorImpl implements ChartNodeVisitor {
 //                List<ChartNode> destinationNodes = procedureNames.stream().map(p -> nodeService.sectionOrParaWithName(p.paragraphName().getText())).collect(Collectors.toList());
 //                destinationNodes.forEach(destinationNode -> g.add(mutNode(node.toString()).add(Color.RED).addLink(mutNode(destinationNode.toString()))));
 //            }
-            if (typedStatement.getClass() == CobolParser.PerformStatementContext.class) {
-                CobolParser.PerformStatementContext performStatement = (CobolParser.PerformStatementContext) typedStatement;
-                CobolParser.PerformProcedureStatementContext performProcedureStatementContext = performStatement.performProcedureStatement();
-                if (performProcedureStatementContext == null) {
-                    g.add(Factory.mutNode("PERFORM VARYING").add(Color.RED));
-                    return;
-                }
-                CobolParser.ProcedureNameContext procedureNameContext = performProcedureStatementContext.procedureName();
-                String procedureName = procedureNameContext.getText();
-                System.out.println("Found a PERFORM, routing to " + procedureName);
-                ChartNode targetNode = nodeService.sectionOrParaWithName(procedureName);
-                MutableNode origin = mutNode(node.toString()).add(Color.RED);
-                MutableNode destination = mutNode(targetNode.toString());
-                g.add(origin.addLink(origin.linkTo(destination).with("style", "bold").with("color", "blueviolet")));
-            }
+//            if (typedStatement.getClass() == CobolParser.PerformStatementContext.class) {
+//                CobolParser.PerformStatementContext performStatement = (CobolParser.PerformStatementContext) typedStatement;
+//                CobolParser.PerformProcedureStatementContext performProcedureStatementContext = performStatement.performProcedureStatement();
+//                if (performProcedureStatementContext == null) {
+//                    g.add(Factory.mutNode("PERFORM VARYING").add(Color.RED));
+//                    return;
+//                }
+//                CobolParser.ProcedureNameContext procedureNameContext = performProcedureStatementContext.procedureName();
+//                String procedureName = procedureNameContext.getText();
+//                System.out.println("Found a PERFORM, routing to " + procedureName);
+//                ChartNode targetNode = nodeService.sectionOrParaWithName(procedureName);
+//                MutableNode origin = mutNode(node.toString()).add(Color.RED);
+//                MutableNode destination = mutNode(targetNode.toString());
+//                g.add(origin.addLink(origin.linkTo(destination).with("style", "bold").with("color", "blueviolet")));
+//            }
 
 //            if (typedStatement.getClass() == CobolParser.IfStatementContext.class) {
 //                visitSpecific(node, node.getInternalRoot(), nodeService);
@@ -104,6 +104,9 @@ public class ChartNodeVisitorImpl implements ChartNodeVisitor {
 
     @Override
     public void visitControlTransfer(ChartNode from, ChartNode to) {
-        g.add(mutNode(from.toString()).add(Color.RED).addLink(mutNode(to.toString())));
+        MutableNode origin = mutNode(from.toString()).add(Color.RED);
+        MutableNode destination = mutNode(to.toString());
+        g.add(origin.addLink(origin.linkTo(destination).with("style", "bold").with("color", "blueviolet")));
+//        g.add(mutNode(from.toString()).add(Color.RED).addLink(mutNode(to.toString())));
     }
 }

@@ -11,6 +11,8 @@ public class CobolChartNodeFactory {
             return new IfChartNode(parseTree, nodeService);
         else if (StatementIdentity.is(parseTree, CobolParser.GoToStatementContext.class))
             return new GoToChartNode(parseTree, nodeService);
+        else if (StatementIdentity.is(parseTree, CobolParser.PerformStatementContext.class))
+            return new PerformChartNode(parseTree, nodeService);
 
         return new CobolChartNode(parseTree, nodeService);
     }
