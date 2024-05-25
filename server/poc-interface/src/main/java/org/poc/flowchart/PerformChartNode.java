@@ -15,6 +15,7 @@ public class PerformChartNode extends CobolChartNode {
 
     @Override
     public void accept(ChartNodeVisitor visitor, int level, int maxLevel) {
+        super.accept(visitor, level, maxLevel);
         CobolParser.PerformStatementContext performStatement = new StatementIdentity<CobolParser.PerformStatementContext>(getExecutionContext()).get();
         CobolParser.PerformProcedureStatementContext performProcedureStatementContext = performStatement.performProcedureStatement();
         if (performProcedureStatementContext == null) {

@@ -144,25 +144,26 @@ public class CobolChartNode implements ChartNode {
     }
     public void accept(ChartNodeVisitor visitor, int level, int maxLevel) {
         System.out.println("Current level: " + level);
-        if (composite) {
-            visitor.visit(this, nodeService);
-            this.outgoingNodes.forEach(c -> c.accept(visitor, level, maxLevel));
-            if (maxLevel != -1 && level > maxLevel) return;
-            if (internalTreeRoot == null) return;
-
-            // Make an explicit connection between higher organisational unit and root of internal tree
-            visitor.visitParentChildLink(this, internalTreeRoot, nodeService);
-            ChartNode current = internalTreeRoot;
-            current.accept(visitor, level + 1, maxLevel);
-        } else {
-            visitor.visit(this, nodeService);
-            outgoingNodes.forEach(c -> c.accept(visitor, level, maxLevel));
-        }
+        visitor.visit(this, nodeService);
+        outgoingNodes.forEach(c -> c.accept(visitor, level, maxLevel));
+//        if (composite) {
+//            visitor.visit(this, nodeService);
+//            this.outgoingNodes.forEach(c -> c.accept(visitor, level, maxLevel));
+//            if (maxLevel != -1 && level > maxLevel) return;
+//            if (internalTreeRoot == null) return;
+//
+//            // Make an explicit connection between higher organisational unit and root of internal tree
+//            visitor.visitParentChildLink(this, internalTreeRoot, nodeService);
+//            ChartNode current = internalTreeRoot;
+//            current.accept(visitor, level + 1, maxLevel);
+//        } else {
+//            visitor.visit(this, nodeService);
+//            outgoingNodes.forEach(c -> c.accept(visitor, level, maxLevel));
+//        }
     }
 
     @Override
     public void addIncomingNode(ChartNode chartNode) {
         incomingNodes.add(chartNode);
     }
-
 }

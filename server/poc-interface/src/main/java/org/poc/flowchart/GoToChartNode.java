@@ -19,6 +19,7 @@ public class GoToChartNode extends CobolChartNode {
 
     @Override
     public void accept(ChartNodeVisitor visitor, int level, int maxLevel) {
+        super.accept(visitor, level, maxLevel);
         CobolParser.GoToStatementContext goToStatement = new StatementIdentity<CobolParser.GoToStatementContext>(getExecutionContext()).get();
         List<CobolParser.ProcedureNameContext> procedureNames = goToStatement.procedureName();
         System.out.println("Found a GO TO, routing to " + procedureNames);

@@ -3,6 +3,7 @@ package org.poc.flowchart;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.cli.IdmsContainerNode;
 import org.eclipse.lsp.cobol.core.CobolParser;
+import org.eclipse.lsp.cobol.dialects.idms.IdmsParser;
 import org.flowchart.ChartNode;
 import org.flowchart.ChartNodeService;
 
@@ -18,7 +19,24 @@ public class CobolChartNodeFactory {
             return new DialectStatementChartNode(parseTree, nodeService);
         else if (StatementIdentity.isOfType(parseTree, IdmsContainerNode.class))
             return new IdmsContainerChartNode(parseTree, nodeService);
+        else if (isCompositeNode(parseTree))
+            return new CompositeCobolNode(parseTree, nodeService);
 
         return new CobolChartNode(parseTree, nodeService);
+    }
+
+    private static boolean isCompositeNode(ParseTree executionContext) {
+        return executionContext.getClass() == CobolParser.ProcedureSectionContext.class ||
+                executionContext.getClass() == CobolParser.ParagraphsContext.class ||
+                executionContext.getClass() == CobolParser.ParagraphContext.class ||
+                executionContext.getClass() == CobolParser.SentenceContext.class ||
+                executionContext.getClass() == CobolParser.ProcedureDivisionBodyContext.class ||
+                executionContext.getClass() == CobolParser.IfThenContext.class ||
+                executionContext.getClass() == CobolParser.IfElseContext.class ||
+                executionContext.getClass() == CobolParser.ConditionalStatementCallContext.class ||
+                executionContext.getClass() == CobolParser.DialectStatementContext.class ||
+                executionContext.getClass() == CobolParser.DialectSectionContext.class ||
+                executionContext.getClass() == IdmsParser.IdmsStatementsContext.class
+                ;
     }
 }

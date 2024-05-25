@@ -31,13 +31,11 @@ public class IfChartNode extends CobolChartNode {
 
     @Override
     public void accept(ChartNodeVisitor visitor, int level, int maxLevel) {
-        visitor.visit(this, nodeService);
+        super.accept(visitor, level, maxLevel);
         visitor.visitParentChildLink(this, ifThen, nodeService);
         if (ifElse != null) visitor.visitParentChildLink(this, ifElse, nodeService);
 
         ifThen.accept(visitor, level, maxLevel);
         if (ifElse != null) ifElse.accept(visitor, level, maxLevel);
-
-        outgoingNodes.forEach(c -> c.accept(visitor, level, maxLevel));
     }
 }
