@@ -3,6 +3,10 @@ package org.flowchart;
 public interface ChartNode {
     void buildFlow();
 
+    void buildOutgoingFlow();
+
+    void buildInternalFlow();
+
     void goesTo(ChartNode successor);
 
     void accept(ChartNodeVisitor visitor, int level);

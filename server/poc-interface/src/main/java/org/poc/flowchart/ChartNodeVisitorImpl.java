@@ -88,10 +88,10 @@ public class ChartNodeVisitorImpl implements ChartNodeVisitor {
                 g.add(origin.addLink(origin.linkTo(destination).with("style", "bold").with("color", "blueviolet")));
             }
 
-            if (typedStatement.getClass() == CobolParser.IfStatementContext.class) {
-                visitSpecific(node, node.getInternalRoot(), nodeService);
-                node.getInternalRoot().accept(this, -1);
-            }
+//            if (typedStatement.getClass() == CobolParser.IfStatementContext.class) {
+//                visitSpecific(node, node.getInternalRoot(), nodeService);
+//                node.getInternalRoot().accept(this, -1);
+//            }
         }
     }
 

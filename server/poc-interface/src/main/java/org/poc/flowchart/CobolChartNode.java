@@ -6,6 +6,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.eclipse.lsp.cobol.dialects.idms.IdmsParser;
 import org.flowchart.ChartNode;
+import org.flowchart.ChartNodeService;
 import org.flowchart.ChartNodeVisitor;
 import org.eclipse.lsp.cobol.cli.IdmsContainerNode;
 import org.eclipse.lsp.cobol.core.CobolParser;
@@ -19,10 +20,10 @@ public class CobolChartNode implements ChartNode {
     @Getter protected List<ChartNode> outgoingNodes;
     protected List<ChartNode> incomingNodes;
     private ChartNode internalTreeRoot;
-    @Getter private final ParseTree executionContext;
-    protected ChartNodeServiceImpl nodeService;
+    @Getter protected final ParseTree executionContext;
+    protected ChartNodeService nodeService;
 
-    public CobolChartNode(ParseTree executionContext, ChartNodeServiceImpl nodeService) {
+    public CobolChartNode(ParseTree executionContext, ChartNodeService nodeService) {
         this.uuid = String.valueOf(counter);
         counter ++;
         this.nodeService = nodeService;
@@ -53,13 +54,19 @@ public class CobolChartNode implements ChartNode {
     public void buildFlow() {
         System.out.println("Building flow for " + executionContextName());
         buildInternalFlow();
-        for (int i = 0; i < outgoingNodes.size(); i++) {
-            outgoingNodes.get(i).buildFlow();
-        }
+        buildOutgoingFlow();
 //        outgoingNodes.forEach(ChartNode::buildFlow);
     }
 
-    private void buildInternalFlow() {
+    @Override
+    public void buildOutgoingFlow() {
+        for (int i = 0; i < outgoingNodes.size(); i++) {
+            outgoingNodes.get(i).buildFlow();
+        }
+    }
+
+    @Override
+    public void buildInternalFlow() {
         System.out.println("Building internal flow for " + executionContextName());
         if (composite) {
             List<ParseTree> children = ((ParserRuleContext) executionContext).children;
@@ -74,27 +81,29 @@ public class CobolChartNode implements ChartNode {
                 current = successor;
             }
             internalTreeRoot.buildFlow();
-        } else {
-            if (executionContext.getClass() == CobolParser.StatementContext.class) {
-                ParseTree typedStatement = executionContext.getChild(0);
-                if (typedStatement.getClass() == CobolParser.IfStatementContext.class) {
-                    CobolParser.IfStatementContext ifStateement = (CobolParser.IfStatementContext) typedStatement;
-                    ChartNode ifThenBlock = nodeService.node(ifStateement.ifThen());
-//                    this.goesTo(ifThenBlock);
-                    ifThenBlock.buildFlow();
-                    this.internalTreeRoot = ifThenBlock;
-                    CobolParser.IfElseContext ifElseCtx = ifStateement.ifElse();
-                    if (ifElseCtx != null) {
-                        ChartNode ifElseBlock = nodeService.node(ifElseCtx);
-//                        this.goesTo(ifElseBlock);
-                        ifElseBlock.buildFlow();
-                    }
-                }
-            }
-            // Nothing for now
         }
+//        else {
+//            if (executionContext.getClass() == CobolParser.StatementContext.class) {
+//                ParseTree typedStatement = executionContext.getChild(0);
+//                if (typedStatement.getClass() == CobolParser.IfStatementContext.class) {
+//                    CobolParser.IfStatementContext ifStateement = (CobolParser.IfStatementContext) typedStatement;
+//                    ChartNode ifThenBlock = nodeService.node(ifStateement.ifThen());
+////                    this.goesTo(ifThenBlock);
+//                    ifThenBlock.buildFlow();
+//                    this.internalTreeRoot = ifThenBlock;
+//                    CobolParser.IfElseContext ifElseCtx = ifStateement.ifElse();
+//                    if (ifElseCtx != null) {
+//                        ChartNode ifElseBlock = nodeService.node(ifElseCtx);
+////                        this.goesTo(ifElseBlock);
+//                        ifElseBlock.buildFlow();
+//                    }
+//                }
+//            }
+//            // Nothing for now
+//        }
     }
 
+    @Override
     public void goesTo(ChartNode successor) {
         outgoingNodes.add(successor);
         successor.addIncomingNode(this);
