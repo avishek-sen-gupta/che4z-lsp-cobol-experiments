@@ -1,6 +1,7 @@
 package org.poc.flowchart;
 
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.eclipse.lsp.cobol.core.CobolParser;
 import org.flowchart.ChartNode;
 import org.flowchart.ChartNodeService;
 import org.poc.common.navigation.CobolEntityNavigator;
@@ -26,6 +27,9 @@ public class ChartNodeServiceImpl implements ChartNodeService {
     public ChartNode node(ParseTree parseTree) {
         if (parseTree == null) return new DummyChartNode(this);
         CobolChartNode n = new CobolChartNode(parseTree, this);
+        if (parseTree.getClass() == CobolParser.EaterContext.class) {
+            System.out.println("What is happening?");
+        }
         int index = nodes.indexOf(n);
         if (index != -1) return nodes.get(index);
         nodes.add(n);

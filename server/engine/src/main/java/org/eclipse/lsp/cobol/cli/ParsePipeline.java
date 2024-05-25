@@ -61,7 +61,7 @@ public class ParsePipeline {
     private CobolEntityNavigator navigator;
 
 
-    public ParsePipeline(File src, File[] cpyPaths, String idmsParseTreeOutputPath, String cobolParseTreeOutputPath, PocOps ops) {
+    public ParsePipeline(File src, File[] cpyPaths, String cobolParseTreeOutputPath, String idmsParseTreeOutputPath, PocOps ops) {
         this.src = src;
         this.cpyPaths = cpyPaths;
         this.idmsParseTreeOutputPath = idmsParseTreeOutputPath;
@@ -157,10 +157,10 @@ public class ParsePipeline {
         return tree;
     }
 
-    public void buildFlowchart(ParseTree start, String dotFilePath) {
+    public ChartNode buildFlowchart(ParseTree start, int maxLevel, String dotFilePath) {
         //            CobolEntityNavigator navigator = CobolEntityNavigatorFactory.procedureDivisionEntityNavigator(CobolEntityNavigatorFactory.procedureDivisionBody(tree));
         FlowchartBuilder flowchartBuilder = ops.getFlowchartBuilderFactory().apply(start, navigator);
-        ChartNode flowchart = flowchartBuilder.run(dotFilePath);
+        return flowchartBuilder.run(dotFilePath, maxLevel);
     }
 
     private static Pipeline setupPipeline(Injector diCtx) {

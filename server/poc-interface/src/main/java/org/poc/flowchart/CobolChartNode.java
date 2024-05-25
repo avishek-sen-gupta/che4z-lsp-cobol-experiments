@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
+import org.eclipse.lsp.cobol.dialects.idms.IdmsParser;
 import org.flowchart.ChartNode;
 import org.flowchart.ChartNodeVisitor;
 import org.eclipse.lsp.cobol.cli.IdmsContainerNode;
@@ -29,7 +30,7 @@ public class CobolChartNode implements ChartNode {
         this.executionContext = executionContext;
         outgoingNodes = new ArrayList<>();
         incomingNodes = new ArrayList<>();
-        this.nodeService.register(this);
+//        this.nodeService.register(this);
     }
 
     protected boolean isCompositeNode(ParseTree executionContext) {
@@ -50,11 +51,16 @@ public class CobolChartNode implements ChartNode {
 
     @Override
     public void buildFlow() {
+        System.out.println("Building flow for " + executionContextName());
         buildInternalFlow();
-        outgoingNodes.forEach(ChartNode::buildFlow);
+        for (int i = 0; i < outgoingNodes.size(); i++) {
+            outgoingNodes.get(i).buildFlow();
+        }
+//        outgoingNodes.forEach(ChartNode::buildFlow);
     }
 
     private void buildInternalFlow() {
+        System.out.println("Building internal flow for " + executionContextName());
         if (composite) {
             List<ParseTree> children = ((ParserRuleContext) executionContext).children;
             if (children == null) return;
@@ -74,12 +80,13 @@ public class CobolChartNode implements ChartNode {
                 if (typedStatement.getClass() == CobolParser.IfStatementContext.class) {
                     CobolParser.IfStatementContext ifStateement = (CobolParser.IfStatementContext) typedStatement;
                     ChartNode ifThenBlock = nodeService.node(ifStateement.ifThen());
-                    this.goesTo(ifThenBlock);
+//                    this.goesTo(ifThenBlock);
                     ifThenBlock.buildFlow();
+                    this.internalTreeRoot = ifThenBlock;
                     CobolParser.IfElseContext ifElseCtx = ifStateement.ifElse();
                     if (ifElseCtx != null) {
                         ChartNode ifElseBlock = nodeService.node(ifElseCtx);
-                        this.goesTo(ifElseBlock);
+//                        this.goesTo(ifElseBlock);
                         ifElseBlock.buildFlow();
                     }
                 }
@@ -122,7 +129,7 @@ public class CobolChartNode implements ChartNode {
         if (executionContext.getClass() == CobolParser.ParagraphContext.class)
             return ((CobolParser.ParagraphContext) executionContext).paragraphDefinitionName().getText();
         if (executionContext.getClass() == CobolParser.StatementContext.class)
-            return truncated(executionContext, 15);
+            return "Stmt:" + truncated(executionContext, 15);
         if (executionContext.getClass() == CobolParser.SentenceContext.class)
             return "Sentence: " + truncated(executionContext, 10);
 //            return "SE:" + truncated(executionContext);
@@ -134,7 +141,7 @@ public class CobolChartNode implements ChartNode {
             return executionContext.getText();
         if (executionContext.getClass() == CobolParser.ParagraphsContext.class)
             return "para-group:";
-        if ("IdmsStatementsContext".equals(executionContext.getClass().getSimpleName()))
+        if (executionContext.getClass() == IdmsParser.IdmsStatementsContext.class)
             return truncated(executionContext, 15);
         return executionContext.getClass().getSimpleName() + "/" + uuid;
     }
@@ -151,7 +158,7 @@ public class CobolChartNode implements ChartNode {
         if (composite) {
             visitor.visit(this, nodeService);
             this.outgoingNodes.forEach(c -> c.accept(visitor, level, maxLevel));
-            if (maxLevel != -1 && level > maxLevel) return;
+//            if (maxLevel != -1 && level > maxLevel) return;
             if (internalTreeRoot == null) return;
 
             // Make an explicit connection between higher organisational unit and root of internal tree
@@ -167,5 +174,10 @@ public class CobolChartNode implements ChartNode {
     @Override
     public void addIncomingNode(ChartNode chartNode) {
         incomingNodes.add(chartNode);
+    }
+
+    @Override
+    public ChartNode getInternalRoot() {
+        return internalTreeRoot;
     }
 }

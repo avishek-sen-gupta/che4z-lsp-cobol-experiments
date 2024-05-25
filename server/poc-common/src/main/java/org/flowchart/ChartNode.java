@@ -14,4 +14,6 @@ public interface ChartNode {
     org.antlr.v4.runtime.tree.ParseTree getExecutionContext();
 
     void addIncomingNode(ChartNode chartNode);
+
+    ChartNode getInternalRoot();
 }

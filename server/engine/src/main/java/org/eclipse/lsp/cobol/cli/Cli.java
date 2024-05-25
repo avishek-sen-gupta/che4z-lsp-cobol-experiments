@@ -215,7 +215,7 @@ public class Cli implements Callable<Integer> {
 //            CobolEntityNavigator navigator = CobolEntityNavigatorFactory.procedureDivisionEntityNavigator(CobolEntityNavigatorFactory.procedureDivisionBody(tree));
             ParseTree e0 = navigator.findTarget("E0");
             FlowchartBuilder flowchartBuilder = ops.getFlowchartBuilderFactory().apply(e0, navigator);
-            ChartNode flowchart = flowchartBuilder.run("/Users/asgupta/Downloads/mbrdi-poc/flowchart.dot");
+            ChartNode flowchart = flowchartBuilder.run("/Users/asgupta/Downloads/mbrdi-poc/flowchart.dot", -1);
 
             JsonArray diagnostics = new JsonArray();
         ctx.getAccumulatedErrors()

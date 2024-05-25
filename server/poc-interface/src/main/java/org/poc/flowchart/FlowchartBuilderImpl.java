@@ -20,11 +20,11 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
     }
 
     @Override
-    public CobolChartNode run(String dotFilePath) {
-        return buildChart(root, dotFilePath);
+    public CobolChartNode run(String dotFilePath, int maxLevel) {
+        return buildChart(root, dotFilePath, maxLevel);
     }
 
-    private CobolChartNode buildChart(ParseTree node, String dotFilePath) {
+    private CobolChartNode buildChart(ParseTree node, String dotFilePath, int maxLevel) {
         Graphviz.useEngine(new GraphvizCmdLineEngine().timeout(5, java.util.concurrent.TimeUnit.HOURS));
         ChartNodeServiceImpl chartNodeService = new ChartNodeServiceImpl(cobolEntityNavigator);
         CobolChartNode chartNode = new CobolChartNode(node, chartNodeService);
@@ -33,7 +33,7 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
 //        MutableGraph g = mutGraph("example1").setDirected(true).graphAttrs().add("rankdir", "TB");
         MutableGraph g = Factory.mutGraph("example1").setDirected(true);
         ChartNodeVisitorImpl chartVisitor = new ChartNodeVisitorImpl(g);
-        chartNode.accept(chartVisitor, 1, -1);
+        chartNode.accept(chartVisitor, 1, maxLevel);
         try {
             Graphviz.fromGraph(g).engine(Engine.DOT)
                     .render(Format.DOT)
