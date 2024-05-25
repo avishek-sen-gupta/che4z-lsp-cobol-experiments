@@ -46,6 +46,7 @@ public class ChartNodeVisitorImpl implements ChartNodeVisitor {
     private ImmutableList<Color> childColor(ChartNode node) {
         if (node.getExecutionContext().getClass() == CobolParser.StatementContext.class) {
             ParseTree typedStatement = node.getExecutionContext().getChild(0);
+            System.out.println(typedStatement.getClass());
             if (typedStatement.getClass() == CobolParser.IfStatementContext.class) return ImmutableList.of(Color.WHITE, Color.PURPLE);
             else if (typedStatement.getClass() == CobolParser.GoToStatementContext.class) return ImmutableList.of(Color.WHITE, Color.DARKORANGE2);
         }

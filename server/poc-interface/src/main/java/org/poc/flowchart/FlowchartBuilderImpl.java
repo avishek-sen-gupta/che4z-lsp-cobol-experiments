@@ -4,6 +4,8 @@ import guru.nidi.graphviz.engine.*;
 import guru.nidi.graphviz.model.Factory;
 import guru.nidi.graphviz.model.MutableGraph;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.flowchart.ChartNode;
+import org.flowchart.ChartNodeService;
 import org.poc.common.navigation.CobolEntityNavigator;
 import org.flowchart.FlowchartBuilder;
 
@@ -44,13 +46,13 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
     }
 
     private FlowchartBuilder buildChart(ParseTree node, int maxLevel) {
-        ChartNodeServiceImpl chartNodeService = new ChartNodeServiceImpl(cobolEntityNavigator);
-        CobolChartNode chartNode = new CobolChartNode(node, chartNodeService);
-        chartNode.buildFlow();
+        ChartNodeService chartNodeService = new ChartNodeServiceImpl(cobolEntityNavigator);
+        ChartNode rootChartNode = chartNodeService.node(node);
+        rootChartNode.buildFlow();
 
 //        MutableGraph g = mutGraph("example1").setDirected(true).graphAttrs().add("rankdir", "TB");
         ChartNodeVisitorImpl chartVisitor = new ChartNodeVisitorImpl(graph);
-        chartNode.accept(chartVisitor, 1, maxLevel);
+        rootChartNode.accept(chartVisitor, 1, maxLevel);
         return this;
     }
 
