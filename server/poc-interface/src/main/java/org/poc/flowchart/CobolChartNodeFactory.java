@@ -32,9 +32,11 @@ public class CobolChartNodeFactory {
                 executionContext.getClass() == CobolParser.IfThenContext.class ||
                 executionContext.getClass() == CobolParser.IfElseContext.class ||
                 executionContext.getClass() == CobolParser.ConditionalStatementCallContext.class ||
-                executionContext.getClass() == CobolParser.DialectStatementContext.class ||
                 executionContext.getClass() == CobolParser.DialectSectionContext.class ||
-                executionContext.getClass() == IdmsParser.IdmsStatementsContext.class
+                executionContext.getClass() == IdmsParser.IdmsIfStatementContext.class ||
+                executionContext.getClass() == IdmsContainerNode.class ||
+                executionContext.getClass() == IdmsParser.InquireMapIfStatementContext.class
+//                executionContext.getClass() == IdmsParser.IdmsStatementsContext.class
                 ;
     }
 }

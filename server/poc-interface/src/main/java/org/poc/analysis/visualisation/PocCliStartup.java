@@ -64,7 +64,8 @@ public class PocCliStartup {
         String dotFilePath = "/Users/asgupta/Downloads/mbrdi-poc/flowchart.dot";
         String graphOutputPath = "/Users/asgupta/Downloads/mbrdi-poc/flowchart.png";
         FlowchartBuilder flowcharter = pipeline.flowcharter();
-        flowcharter.draw(k0A).draw(k1).draw(b2).draw(u204).write(dotFilePath);
+//        flowcharter.draw(k0A).draw(k1).draw(b2).draw(u204).write(dotFilePath);
+        flowcharter.draw(navigator.root()).write(dotFilePath);
         new GraphGenerator().generateGraph(dotFilePath, graphOutputPath);
     }
 }

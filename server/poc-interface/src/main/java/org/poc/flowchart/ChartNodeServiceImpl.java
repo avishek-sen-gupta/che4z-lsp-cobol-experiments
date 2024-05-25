@@ -38,4 +38,9 @@ public class ChartNodeServiceImpl implements ChartNodeService {
         ParseTree target = navigator.target(name);
         return node(target);
     }
+
+    @Override
+    public CobolEntityNavigator getNavigator() {
+        return navigator;
+    }
 }

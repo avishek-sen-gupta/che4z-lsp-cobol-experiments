@@ -3,6 +3,7 @@ package vm;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.poc.common.navigation.CobolEntityNavigator;
 import org.eclipse.lsp.cobol.core.CobolParser;
+import org.poc.common.navigation.ParseTreeSearchCondition;
 
 public class CobolEntityNavigatorImpl implements CobolEntityNavigator {
     private CobolParser.ProcedureDivisionBodyContext root;
@@ -14,6 +15,34 @@ public class CobolEntityNavigatorImpl implements CobolEntityNavigator {
     @Override
     public ParseTree target(String procedureName) {
         return findTargetRecursive(procedureName, root);
+    }
+
+    @Override
+    public ParseTree root() {
+        return root;
+    }
+
+    @Override
+    public ParseTree findByCondition(ParseTree searchRoot, ParseTreeSearchCondition c, int maxLevel) {
+        return findByConditionRecursive(searchRoot, c, 1, maxLevel);
+    }
+
+    @Override
+    public ParseTree findByCondition(ParseTree searchRoot, ParseTreeSearchCondition c) {
+        return findByConditionRecursive(searchRoot, c, 1, -1);
+    }
+
+    private ParseTree findByConditionRecursive(ParseTree currentNode, ParseTreeSearchCondition c, int level, int maxLevel) {
+        if (c.apply(currentNode)) {
+            if (c.apply(currentNode)) return currentNode;
+        }
+        if (maxLevel != -1 && level > maxLevel) return null;
+        for (int i = 0; i <= currentNode.getChildCount() - 1; i++) {
+            ParseTree searchResult = findByConditionRecursive(currentNode.getChild(i), c, level + 1, maxLevel);
+            if (searchResult != null) return searchResult;
+        }
+
+        return null;
     }
 
     public ParseTree findTargetRecursive(String procedureName, ParseTree currentNode) {
