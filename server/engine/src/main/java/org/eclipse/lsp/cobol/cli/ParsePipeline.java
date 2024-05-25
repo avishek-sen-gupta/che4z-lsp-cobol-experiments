@@ -1,5 +1,6 @@
 package org.eclipse.lsp.cobol.cli;
 
+import com.google.common.collect.ImmutableList;
 import com.google.gson.*;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -23,7 +24,6 @@ import org.eclipse.lsp.cobol.common.error.SyntaxError;
 import org.eclipse.lsp.cobol.common.mapping.ExtendedDocument;
 import org.eclipse.lsp.cobol.common.mapping.ExtendedText;
 import org.eclipse.lsp.cobol.common.message.MessageService;
-import org.eclipse.lsp.cobol.common.model.tree.Node;
 import org.eclipse.lsp.cobol.core.CobolParser;
 import org.eclipse.lsp.cobol.core.engine.analysis.AnalysisContext;
 import org.eclipse.lsp.cobol.core.engine.dialects.DialectService;
@@ -37,7 +37,6 @@ import org.eclipse.lsp.cobol.core.preprocessor.TextPreprocessor;
 import org.eclipse.lsp.cobol.core.preprocessor.delegates.GrammarPreprocessor;
 import org.eclipse.lsp.cobol.service.settings.CachingConfigurationService;
 import org.eclipse.lsp.cobol.service.settings.layout.CodeLayoutStore;
-import org.flowchart.ChartNode;
 import org.flowchart.FlowchartBuilder;
 import org.flowchart.PocOps;
 import org.poc.common.navigation.CobolEntityNavigator;
@@ -47,6 +46,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -153,14 +153,21 @@ public class ParsePipeline {
         //        result.add("diagnostics", diagnostics);
         System.out.println(gson.toJson(result));
         ProcessingResult data = (ProcessingResult) pipelineResult.getLastStageResult().getData();
-        Node rootNode = data.getRootNode();
         return tree;
     }
 
-    public ChartNode buildFlowchartSpec(ParseTree start, int maxLevel, String dotFilePath) {
-        //            CobolEntityNavigator navigator = CobolEntityNavigatorFactory.procedureDivisionEntityNavigator(CobolEntityNavigatorFactory.procedureDivisionBody(tree));
-        FlowchartBuilder flowchartBuilder = ops.getFlowchartBuilderFactory().apply(start, navigator);
-        return flowchartBuilder.run(dotFilePath, maxLevel);
+    public FlowchartBuilder buildFlowchartSpec(ParseTree root, int maxLevel, String dotFilePath) {
+        FlowchartBuilder flowchartBuilder = ops.getFlowchartBuilderFactory().apply(navigator);
+        return flowchartBuilder.draw(ImmutableList.of(root), maxLevel);
+    }
+
+    public FlowchartBuilder buildFlowchartSpec(List<ParseTree> roots, int maxLevel, String dotFilePath) {
+        FlowchartBuilder flowchartBuilder = ops.getFlowchartBuilderFactory().apply(navigator);
+        return flowchartBuilder.draw(roots, maxLevel);
+    }
+
+    public FlowchartBuilder flowcharter() {
+        return ops.getFlowchartBuilderFactory().apply(navigator);
     }
 
     private static Pipeline setupPipeline(Injector diCtx) {

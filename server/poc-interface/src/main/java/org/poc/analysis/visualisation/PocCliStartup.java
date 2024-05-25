@@ -14,11 +14,11 @@
  */
 package org.poc.analysis.visualisation;
 
-import com.google.common.collect.ImmutableList;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.cli.ParsePipeline;
 import org.eclipse.lsp.cobol.core.CobolParser;
+import org.flowchart.FlowchartBuilder;
 import org.flowchart.GraphGenerator;
 import org.poc.common.navigation.CobolEntityNavigator;
 import org.poc.flowchart.FlowchartBuilderImpl;
@@ -60,12 +60,16 @@ public class PocCliStartup {
 
         ParserRuleContext tree = pipeline.parse();
         CobolEntityNavigator navigator = pipeline.getNavigator();
-        ParseTree e0 = navigator.findTarget("U204-CALL-COST-PRICE");
+//        ParseTree e0 = navigator.findTarget("U204-CALL-COST-PRICE");
         CobolParser.ProcedureDivisionBodyContext procedureDivisionBody = navigatorBuilder.procedureDivisionBody(tree);
-//        ParseTree e0 = navigator.findTarget("SECTION-1");
+        ParseTree k0A = navigator.findTarget("K0A");
+        ParseTree k1 = navigator.findTarget("K1");
+        ParseTree b2 = navigator.findTarget("B2");
         String dotFilePath = "/Users/asgupta/Downloads/mbrdi-poc/flowchart.dot";
         String graphOutputPath = "/Users/asgupta/Downloads/mbrdi-poc/flowchart.png";
-        pipeline.buildFlowchartSpec(procedureDivisionBody, -1, dotFilePath);
+        FlowchartBuilder flowcharter = pipeline.flowcharter();
+        flowcharter.draw(k0A).draw(k1).draw(b2).write(dotFilePath);
+//        pipeline.buildFlowchartSpec(ImmutableList.of(k0A, k1), -1, dotFilePath);
         new GraphGenerator().generateGraph(dotFilePath, graphOutputPath);
     }
 }

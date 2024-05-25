@@ -9,43 +9,64 @@ import org.flowchart.FlowchartBuilder;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class FlowchartBuilderImpl implements FlowchartBuilder {
     private ParseTree root;
     private CobolEntityNavigator cobolEntityNavigator;
+    private MutableGraph graph;
 
-    public FlowchartBuilderImpl(ParseTree root, CobolEntityNavigator cobolEntityNavigator) {
-        this.root = root;
+    public FlowchartBuilderImpl(CobolEntityNavigator cobolEntityNavigator) {
         this.cobolEntityNavigator = cobolEntityNavigator;
+        graph = Factory.mutGraph("example1").setDirected(true);
+        Graphviz.useEngine(new GraphvizCmdLineEngine().timeout(5, java.util.concurrent.TimeUnit.HOURS));
     }
 
     @Override
-    public CobolChartNode run(String dotFilePath, int maxLevel) {
-        return buildChart(root, dotFilePath, maxLevel);
+    public FlowchartBuilder draw(List<ParseTree> roots, int maxLevel) {
+        roots.forEach(r -> draw(r, maxLevel));
+        return this;
     }
 
-    private CobolChartNode buildChart(ParseTree node, String dotFilePath, int maxLevel) {
-        Graphviz.useEngine(new GraphvizCmdLineEngine().timeout(5, java.util.concurrent.TimeUnit.HOURS));
+    @Override
+    public FlowchartBuilder draw(ParseTree root, int maxLevel) {
+        return buildChart(root, maxLevel);
+    }
+
+    @Override
+    public FlowchartBuilder draw(List<ParseTree> roots) {
+        return draw(roots, -1);
+    }
+
+    @Override
+    public FlowchartBuilder draw(ParseTree root) {
+        return draw(root, -1);
+    }
+
+    private FlowchartBuilder buildChart(ParseTree node, int maxLevel) {
         ChartNodeServiceImpl chartNodeService = new ChartNodeServiceImpl(cobolEntityNavigator);
         CobolChartNode chartNode = new CobolChartNode(node, chartNodeService);
         chartNode.buildFlow();
 
 //        MutableGraph g = mutGraph("example1").setDirected(true).graphAttrs().add("rankdir", "TB");
-        MutableGraph g = Factory.mutGraph("example1").setDirected(true);
-        ChartNodeVisitorImpl chartVisitor = new ChartNodeVisitorImpl(g);
+        ChartNodeVisitorImpl chartVisitor = new ChartNodeVisitorImpl(graph);
         chartNode.accept(chartVisitor, 1, maxLevel);
+        return this;
+    }
+
+    @Override
+    public FlowchartBuilder write(String dotFilePath) {
         try {
-            Graphviz.fromGraph(g).engine(Engine.DOT)
+            Graphviz.fromGraph(graph).engine(Engine.DOT)
                     .render(Format.DOT)
                     .toFile(new File(dotFilePath));
+            return this;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        return chartNode;
     }
 
-    public static FlowchartBuilder build(ParseTree tree, CobolEntityNavigator navigator) {
-        return new FlowchartBuilderImpl(tree, navigator);
+    public static FlowchartBuilder build(CobolEntityNavigator navigator) {
+        return new FlowchartBuilderImpl(navigator);
     }
 }

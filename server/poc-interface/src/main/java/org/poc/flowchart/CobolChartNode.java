@@ -158,7 +158,7 @@ public class CobolChartNode implements ChartNode {
         if (composite) {
             visitor.visit(this, nodeService);
             this.outgoingNodes.forEach(c -> c.accept(visitor, level, maxLevel));
-//            if (maxLevel != -1 && level > maxLevel) return;
+            if (maxLevel != -1 && level > maxLevel) return;
             if (internalTreeRoot == null) return;
 
             // Make an explicit connection between higher organisational unit and root of internal tree

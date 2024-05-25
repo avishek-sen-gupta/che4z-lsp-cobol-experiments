@@ -54,7 +54,6 @@ import org.eclipse.lsp.cobol.core.semantics.CopybooksRepository;
 import org.eclipse.lsp.cobol.service.settings.CachingConfigurationService;
 import org.eclipse.lsp.cobol.service.settings.layout.CodeLayoutStore;
 import org.eclipse.lsp4j.Location;
-import org.flowchart.ChartNode;
 import org.flowchart.FlowchartBuilder;
 import org.flowchart.PocOps;
 import org.poc.common.navigation.CobolEntityNavigator;
@@ -214,8 +213,8 @@ public class Cli implements Callable<Integer> {
             CobolEntityNavigator navigator = navigatorBuilder.procedureDivisionEntityNavigator(procedureDivisionBody);
 //            CobolEntityNavigator navigator = CobolEntityNavigatorFactory.procedureDivisionEntityNavigator(CobolEntityNavigatorFactory.procedureDivisionBody(tree));
             ParseTree e0 = navigator.findTarget("E0");
-            FlowchartBuilder flowchartBuilder = ops.getFlowchartBuilderFactory().apply(e0, navigator);
-            ChartNode flowchart = flowchartBuilder.run("/Users/asgupta/Downloads/mbrdi-poc/flowchart.dot", -1);
+            FlowchartBuilder flowchartBuilder = ops.getFlowchartBuilderFactory().apply(navigator);
+            flowchartBuilder.draw(e0, -1).write("/Users/asgupta/Downloads/mbrdi-poc/flowchart.dot");
 
             JsonArray diagnostics = new JsonArray();
         ctx.getAccumulatedErrors()
