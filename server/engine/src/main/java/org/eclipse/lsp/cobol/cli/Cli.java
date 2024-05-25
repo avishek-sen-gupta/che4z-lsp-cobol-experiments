@@ -212,7 +212,7 @@ public class Cli implements Callable<Integer> {
             CobolParser.ProcedureDivisionBodyContext procedureDivisionBody = navigatorBuilder.procedureDivisionBody(tree);
             CobolEntityNavigator navigator = navigatorBuilder.procedureDivisionEntityNavigator(procedureDivisionBody);
 //            CobolEntityNavigator navigator = CobolEntityNavigatorFactory.procedureDivisionEntityNavigator(CobolEntityNavigatorFactory.procedureDivisionBody(tree));
-            ParseTree e0 = navigator.findTarget("E0");
+            ParseTree e0 = navigator.target("E0");
             FlowchartBuilder flowchartBuilder = ops.getFlowchartBuilderFactory().apply(navigator);
             flowchartBuilder.draw(e0, -1).write("/Users/asgupta/Downloads/mbrdi-poc/flowchart.dot");
 

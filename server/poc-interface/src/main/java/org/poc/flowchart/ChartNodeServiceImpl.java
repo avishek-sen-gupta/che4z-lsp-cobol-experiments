@@ -38,7 +38,7 @@ public class ChartNodeServiceImpl implements ChartNodeService {
 
     @Override
     public ChartNode sectionOrParaWithName(String name) {
-        ParseTree target = navigator.findTarget(name);
+        ParseTree target = navigator.target(name);
         return node(target);
     }
 }

@@ -14,10 +14,8 @@
  */
 package org.poc.analysis.visualisation;
 
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.cli.ParsePipeline;
-import org.eclipse.lsp.cobol.core.CobolParser;
 import org.flowchart.FlowchartBuilder;
 import org.flowchart.GraphGenerator;
 import org.poc.common.navigation.CobolEntityNavigator;
@@ -50,19 +48,19 @@ public class PocCliStartup {
      * @param args command line arguments
      */
     public static void main(String[] args) throws IOException, InterruptedException {
-        CobolEntityNavigatorBuilderImpl navigatorBuilder = new CobolEntityNavigatorBuilderImpl();
-        PocOpsImpl pocOps = new PocOpsImpl(new CobolTreeVisualiserImpl(), FlowchartBuilderImpl::build, navigatorBuilder);
+        PocOpsImpl ops = new PocOpsImpl(new CobolTreeVisualiserImpl(),
+                FlowchartBuilderImpl::build, new CobolEntityNavigatorBuilderImpl());
         ParsePipeline pipeline = new ParsePipeline(new File("/Users/asgupta/Downloads/mbrdi-poc/V75234"),
                 new File[]{new File("/Users/asgupta/Downloads/mbrdi-poc")},
                 "/Users/asgupta/Downloads/mbrdi-poc/test-cobol.json",
                 "/Users/asgupta/Downloads/mbrdi-poc/test-idms.json",
-                pocOps);
+                ops);
 
         CobolEntityNavigator navigator = pipeline.parse();
-        ParseTree u204 = navigator.findTarget("U204-CALL-COST-PRICE");
-        ParseTree k0A = navigator.findTarget("K0A");
-        ParseTree k1 = navigator.findTarget("K1");
-        ParseTree b2 = navigator.findTarget("B2");
+        ParseTree u204 = navigator.target("U204-CALL-COST-PRICE");
+        ParseTree k0A = navigator.target("K0A");
+        ParseTree k1 = navigator.target("K1");
+        ParseTree b2 = navigator.target("B2");
         String dotFilePath = "/Users/asgupta/Downloads/mbrdi-poc/flowchart.dot";
         String graphOutputPath = "/Users/asgupta/Downloads/mbrdi-poc/flowchart.png";
         FlowchartBuilder flowcharter = pipeline.flowcharter();

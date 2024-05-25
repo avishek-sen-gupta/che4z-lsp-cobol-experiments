@@ -12,7 +12,7 @@ public class CobolEntityNavigatorImpl implements CobolEntityNavigator {
     }
 
     @Override
-    public ParseTree findTarget(String procedureName) {
+    public ParseTree target(String procedureName) {
         return findTargetRecursive(procedureName, root);
     }
 
