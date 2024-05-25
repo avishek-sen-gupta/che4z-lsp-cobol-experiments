@@ -51,7 +51,7 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
         rootChartNode.buildFlow();
 
 //        MutableGraph g = mutGraph("example1").setDirected(true).graphAttrs().add("rankdir", "TB");
-        ChartNodeVisitorImpl chartVisitor = new ChartNodeVisitorImpl(graph);
+        ChartNodeGraphvizVisitor chartVisitor = new ChartNodeGraphvizVisitor(graph);
         rootChartNode.accept(chartVisitor, 1, maxLevel);
         return this;
     }

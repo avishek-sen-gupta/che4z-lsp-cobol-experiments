@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.cli.IdmsContainerNode;
 import org.flowchart.ChartNode;
 import org.flowchart.ChartNodeService;
+import org.flowchart.ChartNodeType;
 import org.flowchart.ChartNodeVisitor;
 
 public class DialectStatementChartNode extends CobolChartNode {
@@ -43,5 +44,10 @@ public class DialectStatementChartNode extends CobolChartNode {
             }
         }
         return null;
+    }
+
+    @Override
+    public ChartNodeType type() {
+        return ChartNodeType.DIALECT;
     }
 }

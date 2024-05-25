@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;
 import org.flowchart.ChartNode;
 import org.flowchart.ChartNodeService;
+import org.flowchart.ChartNodeType;
 import org.flowchart.ChartNodeVisitor;
 
 import java.util.List;
@@ -26,5 +27,10 @@ public class GoToChartNode extends CobolChartNode {
 
         destinationNodes.forEach(destinationNode -> visitor.visitControlTransfer(this, destinationNode));
 
+    }
+
+    @Override
+    public ChartNodeType type() {
+        return ChartNodeType.CONTROL_FLOW;
     }
 }

@@ -7,6 +7,7 @@ import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.eclipse.lsp.cobol.dialects.idms.IdmsParser;
 import org.flowchart.ChartNode;
 import org.flowchart.ChartNodeService;
+import org.flowchart.ChartNodeType;
 import org.flowchart.ChartNodeVisitor;
 import org.eclipse.lsp.cobol.core.CobolParser;
 
@@ -92,6 +93,11 @@ public class CobolChartNode implements ChartNode {
         if (executionContext.getClass() == IdmsParser.IdmsStatementsContext.class)
             return truncated(executionContext, 15);
         return defaultName();
+    }
+
+    @Override
+    public ChartNodeType type() {
+        return ChartNodeType.ATOMIC;
     }
 
     protected String defaultName() {

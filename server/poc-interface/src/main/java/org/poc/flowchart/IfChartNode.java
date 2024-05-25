@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;
 import org.flowchart.ChartNode;
 import org.flowchart.ChartNodeService;
+import org.flowchart.ChartNodeType;
 import org.flowchart.ChartNodeVisitor;
 
 public class IfChartNode extends CobolChartNode {
@@ -35,5 +36,10 @@ public class IfChartNode extends CobolChartNode {
 
         ifThen.accept(visitor, level, maxLevel);
         if (ifElse != null) ifElse.accept(visitor, level, maxLevel);
+    }
+
+    @Override
+    public ChartNodeType type() {
+        return ChartNodeType.CONDITIONAL;
     }
 }

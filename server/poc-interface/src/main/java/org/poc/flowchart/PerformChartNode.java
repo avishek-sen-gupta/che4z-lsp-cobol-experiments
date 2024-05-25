@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;
 import org.flowchart.ChartNode;
 import org.flowchart.ChartNodeService;
+import org.flowchart.ChartNodeType;
 import org.flowchart.ChartNodeVisitor;
 
 import static guru.nidi.graphviz.model.Factory.mutNode;
@@ -28,5 +29,10 @@ public class PerformChartNode extends CobolChartNode {
         ChartNode targetNode = nodeService.sectionOrParaWithName(procedureName);
 
         visitor.visitControlTransfer(this, targetNode);
+    }
+
+    @Override
+    public ChartNodeType type() {
+        return ChartNodeType.PERFORM;
     }
 }

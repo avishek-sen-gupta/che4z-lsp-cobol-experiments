@@ -1,5 +1,6 @@
 package org.poc.flowchart;
 
+import org.flowchart.ChartNodeType;
 import org.flowchart.ChartNodeVisitor;
 
 public class DummyChartNode extends CobolChartNode {
@@ -30,5 +31,10 @@ public class DummyChartNode extends CobolChartNode {
     @Override
     public boolean equals(Object o) {
         return o == this;
+    }
+
+    @Override
+    public ChartNodeType type() {
+        return ChartNodeType.DUMMY;
     }
 }

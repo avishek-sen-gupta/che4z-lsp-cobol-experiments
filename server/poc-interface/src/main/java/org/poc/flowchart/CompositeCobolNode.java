@@ -2,8 +2,10 @@ package org.poc.flowchart;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.eclipse.lsp.cobol.core.CobolParser;
 import org.flowchart.ChartNode;
 import org.flowchart.ChartNodeService;
+import org.flowchart.ChartNodeType;
 import org.flowchart.ChartNodeVisitor;
 
 import java.util.List;
@@ -42,5 +44,12 @@ public class CompositeCobolNode extends CobolChartNode {
         visitor.visitParentChildLink(this, internalTreeRoot, nodeService);
         ChartNode current = internalTreeRoot;
         current.accept(visitor, level + 1, maxLevel);
+    }
+
+    @Override
+    public ChartNodeType type() {
+        if (executionContext.getClass() == CobolParser.ProcedureSectionContext.class) return ChartNodeType.SECTION;
+        if (executionContext.getClass() == CobolParser.ParagraphContext.class) return ChartNodeType.PARAGRAPH;
+        return ChartNodeType.COMPOSITE;
     }
 }

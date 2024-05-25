@@ -13,6 +13,8 @@ public interface ChartNode {
 
     String name();
 
+    ChartNodeType type();
+
     void accept(ChartNodeVisitor visitor, int level);
 
     void accept(ChartNodeVisitor visitor, int level, int maxLevel);
