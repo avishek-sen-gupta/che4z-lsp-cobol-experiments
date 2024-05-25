@@ -58,18 +58,15 @@ public class PocCliStartup {
                 "/Users/asgupta/Downloads/mbrdi-poc/test-idms.json",
                 pocOps);
 
-        ParserRuleContext tree = pipeline.parse();
-        CobolEntityNavigator navigator = pipeline.getNavigator();
-//        ParseTree e0 = navigator.findTarget("U204-CALL-COST-PRICE");
-        CobolParser.ProcedureDivisionBodyContext procedureDivisionBody = navigatorBuilder.procedureDivisionBody(tree);
+        CobolEntityNavigator navigator = pipeline.parse();
+        ParseTree u204 = navigator.findTarget("U204-CALL-COST-PRICE");
         ParseTree k0A = navigator.findTarget("K0A");
         ParseTree k1 = navigator.findTarget("K1");
         ParseTree b2 = navigator.findTarget("B2");
         String dotFilePath = "/Users/asgupta/Downloads/mbrdi-poc/flowchart.dot";
         String graphOutputPath = "/Users/asgupta/Downloads/mbrdi-poc/flowchart.png";
         FlowchartBuilder flowcharter = pipeline.flowcharter();
-        flowcharter.draw(k0A).draw(k1).draw(b2).write(dotFilePath);
-//        pipeline.buildFlowchartSpec(ImmutableList.of(k0A, k1), -1, dotFilePath);
+        flowcharter.draw(k0A).draw(k1).draw(b2).draw(u204).write(dotFilePath);
         new GraphGenerator().generateGraph(dotFilePath, graphOutputPath);
     }
 }

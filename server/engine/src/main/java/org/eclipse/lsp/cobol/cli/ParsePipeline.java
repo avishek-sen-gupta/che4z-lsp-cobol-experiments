@@ -70,7 +70,7 @@ public class ParsePipeline {
         cpyExt = new String[]{"", ".cpy"};
     }
 
-    public ParserRuleContext parse() throws IOException {
+    public CobolEntityNavigator parse() throws IOException {
         Injector diCtx = Guice.createInjector(new CliModule());
         Pipeline pipeline = setupPipeline(diCtx);
 
@@ -153,7 +153,7 @@ public class ParsePipeline {
         //        result.add("diagnostics", diagnostics);
         System.out.println(gson.toJson(result));
         ProcessingResult data = (ProcessingResult) pipelineResult.getLastStageResult().getData();
-        return tree;
+        return navigator;
     }
 
     public FlowchartBuilder buildFlowchartSpec(ParseTree root, int maxLevel, String dotFilePath) {
