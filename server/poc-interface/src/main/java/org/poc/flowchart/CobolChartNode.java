@@ -45,8 +45,7 @@ public class CobolChartNode implements ChartNode {
                 executionContext.getClass() == CobolParser.ConditionalStatementCallContext.class ||
                 executionContext.getClass() == CobolParser.DialectStatementContext.class ||
                 executionContext.getClass() == CobolParser.DialectSectionContext.class ||
-                executionContext.getClass() == CobolParser.DialectNodeFillerContext.class ||
-                executionContext.getClass() == IdmsContainerNode.class
+                executionContext.getClass() == IdmsParser.IdmsStatementsContext.class
                 ;
     }
 
@@ -82,25 +81,6 @@ public class CobolChartNode implements ChartNode {
             }
             internalTreeRoot.buildFlow();
         }
-//        else {
-//            if (executionContext.getClass() == CobolParser.StatementContext.class) {
-//                ParseTree typedStatement = executionContext.getChild(0);
-//                if (typedStatement.getClass() == CobolParser.IfStatementContext.class) {
-//                    CobolParser.IfStatementContext ifStateement = (CobolParser.IfStatementContext) typedStatement;
-//                    ChartNode ifThenBlock = nodeService.node(ifStateement.ifThen());
-////                    this.goesTo(ifThenBlock);
-//                    ifThenBlock.buildFlow();
-//                    this.internalTreeRoot = ifThenBlock;
-//                    CobolParser.IfElseContext ifElseCtx = ifStateement.ifElse();
-//                    if (ifElseCtx != null) {
-//                        ChartNode ifElseBlock = nodeService.node(ifElseCtx);
-////                        this.goesTo(ifElseBlock);
-//                        ifElseBlock.buildFlow();
-//                    }
-//                }
-//            }
-//            // Nothing for now
-//        }
     }
 
     @Override
@@ -171,7 +151,7 @@ public class CobolChartNode implements ChartNode {
             if (internalTreeRoot == null) return;
 
             // Make an explicit connection between higher organisational unit and root of internal tree
-            visitor.visitSpecific(this, internalTreeRoot, nodeService);
+            visitor.visitParentChildLink(this, internalTreeRoot, nodeService);
             ChartNode current = internalTreeRoot;
             current.accept(visitor, level + 1, maxLevel);
         } else {

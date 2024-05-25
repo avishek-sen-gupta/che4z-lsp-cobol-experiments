@@ -27,9 +27,6 @@ public class ChartNodeServiceImpl implements ChartNodeService {
     public ChartNode node(ParseTree parseTree) {
         if (parseTree == null) return new DummyChartNode(this);
         ChartNode n = CobolChartNodeFactory.newNode(parseTree, this);
-        if (parseTree.getClass() == CobolParser.EaterContext.class) {
-            System.out.println("What is happening?");
-        }
         int index = nodes.indexOf(n);
         if (index != -1) return nodes.get(index);
         nodes.add(n);

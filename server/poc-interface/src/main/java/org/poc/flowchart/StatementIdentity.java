@@ -10,10 +10,14 @@ public class StatementIdentity<T> {
         this.executionContext = executionContext;
     }
 
-    public static boolean is(ParseTree parseTree, Class clazz) {
+    public static boolean isStatementOfType(ParseTree parseTree, Class clazz) {
         if (parseTree.getClass() != CobolParser.StatementContext.class) return false;
         CobolParser.StatementContext statement = (CobolParser.StatementContext) parseTree;
         return statement.getChild(0).getClass() == clazz;
+    }
+
+    public static boolean isOfType(ParseTree parseTree, Class clazz) {
+        return parseTree.getClass() == clazz;
     }
 
     public T get() {
