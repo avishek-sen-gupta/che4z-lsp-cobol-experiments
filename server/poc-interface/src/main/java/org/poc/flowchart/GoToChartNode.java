@@ -1,6 +1,5 @@
 package org.poc.flowchart;
 
-import guru.nidi.graphviz.attribute.Color;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;
 import org.flowchart.ChartNode;

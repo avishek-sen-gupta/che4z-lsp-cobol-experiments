@@ -1,11 +1,6 @@
 package org.poc.flowchart;
 
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.flowchart.ChartNode;
 import org.flowchart.ChartNodeVisitor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class DummyChartNode extends CobolChartNode {
     public DummyChartNode(ChartNodeServiceImpl nodeService) {
@@ -15,16 +10,6 @@ public class DummyChartNode extends CobolChartNode {
     @Override
     public void buildFlow() {
 
-    }
-
-    @Override
-    protected boolean isCompositeNode(ParseTree executionContext) {
-        return false;
-    }
-
-    @Override
-    public List<ChartNode> getOutgoingNodes() {
-        return new ArrayList<>();
     }
 
     @Override

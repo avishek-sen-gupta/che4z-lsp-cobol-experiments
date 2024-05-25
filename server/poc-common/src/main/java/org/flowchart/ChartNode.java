@@ -1,5 +1,7 @@
 package org.flowchart;
 
+import org.antlr.v4.runtime.tree.ParseTree;
+
 public interface ChartNode {
     void buildFlow();
 
@@ -13,9 +15,7 @@ public interface ChartNode {
 
     void accept(ChartNodeVisitor visitor, int level, int maxLevel);
 
-    java.util.List<ChartNode> getOutgoingNodes();
-
-    org.antlr.v4.runtime.tree.ParseTree getExecutionContext();
+    ParseTree getExecutionContext();
 
     void addIncomingNode(ChartNode chartNode);
 }

@@ -17,8 +17,6 @@ public class CobolChartNodeFactory {
             return new PerformChartNode(parseTree, nodeService);
         else if (StatementIdentity.isOfType(parseTree, CobolParser.DialectStatementContext.class))
             return new DialectStatementChartNode(parseTree, nodeService);
-        else if (StatementIdentity.isOfType(parseTree, IdmsContainerNode.class))
-            return new IdmsContainerChartNode(parseTree, nodeService);
         else if (isCompositeNode(parseTree))
             return new CompositeCobolNode(parseTree, nodeService);
 

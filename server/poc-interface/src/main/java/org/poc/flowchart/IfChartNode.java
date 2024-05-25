@@ -7,13 +7,11 @@ import org.flowchart.ChartNodeService;
 import org.flowchart.ChartNodeVisitor;
 
 public class IfChartNode extends CobolChartNode {
-    private final ChartNodeService nodeService;
     private ChartNode ifThen;
     private ChartNode ifElse;
 
     public IfChartNode(ParseTree parseTree, ChartNodeService nodeService) {
         super(parseTree, nodeService);
-        this.nodeService = nodeService;
     }
 
     @Override

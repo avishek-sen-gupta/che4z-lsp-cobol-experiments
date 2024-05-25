@@ -21,9 +21,8 @@ public class ChartNodeVisitorImpl implements ChartNodeVisitor {
         this.g = g;
     }
 
-    public void visit(ChartNode node, ChartNodeService nodeService) {
+    public void visit(ChartNode node, List<ChartNode> outgoingNodes, ChartNodeService nodeService) {
         System.out.println("Visiting : " + node);
-        List<ChartNode> outgoingNodes = node.getOutgoingNodes();
         outgoingNodes.forEach(o -> {
             System.out.println("Linking " + node + " to " + o);
             ImmutableList<Color> colorScheme = overallColor(node);
