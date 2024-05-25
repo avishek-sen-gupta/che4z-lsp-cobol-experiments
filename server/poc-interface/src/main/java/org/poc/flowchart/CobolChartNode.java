@@ -29,7 +29,7 @@ public class CobolChartNode implements ChartNode {
 
     @Override
     public void buildFlow() {
-        System.out.println("Building flow for " + executionContextName());
+        System.out.println("Building flow for " + name());
         buildInternalFlow();
         buildOutgoingFlow();
     }
@@ -65,12 +65,13 @@ public class CobolChartNode implements ChartNode {
     @Override
     public String toString() {
         if (executionContext instanceof ParserRuleContext) {
-            return executionContextName() + "/" + ((ParserRuleContext) executionContext).getStart().getLine();
+            return name() + "/" + ((ParserRuleContext) executionContext).getStart().getLine();
         }
-        return executionContextName() + "." + uuid;
+        return name() + "." + uuid;
     }
 
-    public String executionContextName() {
+    @Override
+    public String name() {
         if (executionContext.getClass() == CobolParser.ProcedureSectionContext.class)
             return ((CobolParser.ProcedureSectionContext) executionContext).procedureSectionHeader().sectionName().getText();
         if (executionContext.getClass() == CobolParser.ParagraphContext.class)
@@ -90,10 +91,14 @@ public class CobolChartNode implements ChartNode {
             return "para-group:";
         if (executionContext.getClass() == IdmsParser.IdmsStatementsContext.class)
             return truncated(executionContext, 15);
+        return defaultName();
+    }
+
+    protected String defaultName() {
         return executionContext.getClass().getSimpleName() + "/" + uuid;
     }
 
-    private String truncated(ParseTree e, int truncationLimit) {
+    protected String truncated(ParseTree e, int truncationLimit) {
         return e.getText().length() > truncationLimit ? e.getText().substring(0, truncationLimit) : e.getText();
     }
 

@@ -17,7 +17,7 @@ public class CompositeCobolNode extends CobolChartNode {
 
     @Override
     public void buildInternalFlow() {
-        System.out.println("Building internal flow for " + executionContextName());
+        System.out.println("Building internal flow for " + name());
         List<ParseTree> children = ((ParserRuleContext) executionContext).children;
         if (children == null) return;
         internalTreeRoot = nodeService.node(children.get(0));

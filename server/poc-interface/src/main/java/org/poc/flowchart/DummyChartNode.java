@@ -23,7 +23,7 @@ public class DummyChartNode extends CobolChartNode {
     }
 
     @Override
-    public String executionContextName() {
+    public String name() {
         return "DUMMY_EXECUTION_CONTEXT";
     }
 

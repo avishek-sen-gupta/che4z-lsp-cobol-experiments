@@ -11,6 +11,8 @@ public interface ChartNode {
 
     void goesTo(ChartNode successor);
 
+    String name();
+
     void accept(ChartNodeVisitor visitor, int level);
 
     void accept(ChartNodeVisitor visitor, int level, int maxLevel);

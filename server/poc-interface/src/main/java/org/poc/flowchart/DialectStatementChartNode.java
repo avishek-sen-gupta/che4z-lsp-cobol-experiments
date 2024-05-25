@@ -21,6 +21,11 @@ public class DialectStatementChartNode extends CobolChartNode {
     }
 
     @Override
+    public String name() {
+        return executionContext.getText();
+    }
+
+    @Override
     public void buildInternalFlow() {
         ParseTree dialectNodeFiller = executionContext.getChild(0);
         dialectContainerChartNode = innerMostIdmsBlock(dialectNodeFiller);
