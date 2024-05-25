@@ -14,10 +14,12 @@
  */
 package org.poc.analysis.visualisation;
 
+import com.google.common.collect.ImmutableList;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.cli.ParsePipeline;
 import org.eclipse.lsp.cobol.core.CobolParser;
+import org.flowchart.GraphGenerator;
 import org.poc.common.navigation.CobolEntityNavigator;
 import org.poc.flowchart.FlowchartBuilderImpl;
 import org.slf4j.Logger;
@@ -47,7 +49,7 @@ public class PocCliStartup {
      *
      * @param args command line arguments
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         CobolEntityNavigatorBuilderImpl navigatorBuilder = new CobolEntityNavigatorBuilderImpl();
         PocOpsImpl pocOps = new PocOpsImpl(new CobolTreeVisualiserImpl(), FlowchartBuilderImpl::build, navigatorBuilder);
         ParsePipeline pipeline = new ParsePipeline(new File("/Users/asgupta/Downloads/mbrdi-poc/V75234"),
@@ -61,6 +63,9 @@ public class PocCliStartup {
         ParseTree e0 = navigator.findTarget("U204-CALL-COST-PRICE");
         CobolParser.ProcedureDivisionBodyContext procedureDivisionBody = navigatorBuilder.procedureDivisionBody(tree);
 //        ParseTree e0 = navigator.findTarget("SECTION-1");
-        pipeline.buildFlowchart(procedureDivisionBody, -1, "/Users/asgupta/Downloads/mbrdi-poc/flowchart.dot");
+        String dotFilePath = "/Users/asgupta/Downloads/mbrdi-poc/flowchart.dot";
+        String graphOutputPath = "/Users/asgupta/Downloads/mbrdi-poc/flowchart.png";
+        pipeline.buildFlowchartSpec(procedureDivisionBody, -1, dotFilePath);
+        new GraphGenerator().generateGraph(dotFilePath, graphOutputPath);
     }
 }

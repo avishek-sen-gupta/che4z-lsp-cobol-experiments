@@ -157,7 +157,7 @@ public class ParsePipeline {
         return tree;
     }
 
-    public ChartNode buildFlowchart(ParseTree start, int maxLevel, String dotFilePath) {
+    public ChartNode buildFlowchartSpec(ParseTree start, int maxLevel, String dotFilePath) {
         //            CobolEntityNavigator navigator = CobolEntityNavigatorFactory.procedureDivisionEntityNavigator(CobolEntityNavigatorFactory.procedureDivisionBody(tree));
         FlowchartBuilder flowchartBuilder = ops.getFlowchartBuilderFactory().apply(start, navigator);
         return flowchartBuilder.run(dotFilePath, maxLevel);
