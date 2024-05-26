@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class OpenAiTest {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         System.out.println("Working");
         Advisor advisor = new Advisor(System.getenv(Advisor.AZURE_OPENAI_API_KEY), System.getenv(Advisor.AZURE_OPENAI_ENDPOINT));
 
@@ -38,13 +38,20 @@ public class OpenAiTest {
         FlowchartBuilder flowcharter = pipeline.flowcharter();
         ParseTree u204 = navigator.target("U204-CALL-COST-PRICE");
         String codeText = CobolContextAugmentedTreeNode.originalText(u204);
-//        System.out.println(codeText);
+        System.out.println(codeText);
 
         PromptConstructor promptConstructor = new PromptConstructor();
         promptConstructor.addLine("Assume you are mainframe COBOL expert. The following lines contain a piece of code from a legacy codebase in COBOL. What do you think it does? Explain in as much detail as you can. Group your explanations by individual paragraphs, sections, and variables. When referring to a variable, section, or paragraph, enclose it in square brackets.");
-        promptConstructor.addLine(codeText);
+//        promptConstructor.addLine(codeText);
         System.out.println("Processing your request...");
-        List<String> responses = advisor.advise(promptConstructor.getPrompt());
-        responses.forEach(System.out::println);
+//        List<String> responses = advisor.advise(promptConstructor.getPrompt());
+
+        List<String> responses = SampleResponses.ONE;
+
+        AiInterpreter interpreter = new AiInterpreter(pipeline);
+        interpreter.extractReferences(responses);
+        interpreter.assemble();
+        interpreter.write(dotFilePath, graphOutputPath);
+        System.out.println("Complete");
     }
 }

@@ -11,4 +11,5 @@ public interface FlowchartBuilder {
     FlowchartBuilder draw(ParseTree root);
     FlowchartBuilder write(String dotFilePath);
     FlowchartBuilder outline(ParseTree groupRoot, String clusterLabel);
+    FlowchartBuilder connectToComment(String explanation, ParseTree symbol);
 }

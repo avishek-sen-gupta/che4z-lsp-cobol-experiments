@@ -1,9 +1,11 @@
 package org.poc.flowchart;
 
 import guru.nidi.graphviz.attribute.Color;
+import guru.nidi.graphviz.attribute.Shape;
 import guru.nidi.graphviz.engine.*;
 import guru.nidi.graphviz.model.Factory;
 import guru.nidi.graphviz.model.MutableGraph;
+import guru.nidi.graphviz.model.MutableNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import poc.common.flowchart.ChartNode;
 import poc.common.flowchart.ChartNodeService;
@@ -48,6 +50,7 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
 
     @Override
     public FlowchartBuilder draw(ParseTree root) {
+        System.out.println("Assembling : " + root.getText());
         return draw(root, -1);
     }
 
@@ -81,6 +84,30 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
         collectorVisitor.getCollectedNodes().forEach(n -> outliningCluster.add(mutNode(n.toString())));
         graph.add(outliningCluster);
         return this;
+    }
+
+    @Override
+    public FlowchartBuilder connectToComment(String explanation, ParseTree symbol) {
+        ChartNode explainedNode = chartNodeService.node(symbol);
+        System.out.println(String.format("Linking EXPLANATION : %s to %s", explanation, explainedNode));
+        graph.add(commentStyle(mutNode(formatted(explanation, 30))).addLink(mutNode(explainedNode.toString())));
+        return this;
+    }
+
+    private String formatted(String s, int lineLength) {
+        StringBuilder builder = new StringBuilder(s);
+        int length = s.length();
+        for (int i = lineLength; i < length; i += lineLength) {
+            builder.insert(i, "\n");
+        }
+        return builder.toString();
+    }
+
+    private MutableNode commentStyle(MutableNode commentNode) {
+        return commentNode.add("shape", Shape.BOX)
+                .add("height", 4)
+                .add("style", "filled")
+                .add("fillcolor", Color.YELLOW.value);
     }
 
     public static FlowchartBuilder build(CobolEntityNavigator navigator) {
