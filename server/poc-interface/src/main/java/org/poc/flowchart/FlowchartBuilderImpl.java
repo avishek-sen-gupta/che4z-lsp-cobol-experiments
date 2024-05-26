@@ -4,10 +4,10 @@ import guru.nidi.graphviz.engine.*;
 import guru.nidi.graphviz.model.Factory;
 import guru.nidi.graphviz.model.MutableGraph;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.flowchart.ChartNode;
-import org.flowchart.ChartNodeService;
+import poc.common.flowchart.ChartNode;
+import poc.common.flowchart.ChartNodeService;
 import org.poc.common.navigation.CobolEntityNavigator;
-import org.flowchart.FlowchartBuilder;
+import poc.common.flowchart.FlowchartBuilder;
 
 import java.io.File;
 import java.io.IOException;

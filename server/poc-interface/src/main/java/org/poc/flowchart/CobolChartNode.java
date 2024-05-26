@@ -5,10 +5,10 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.eclipse.lsp.cobol.dialects.idms.IdmsParser;
-import org.flowchart.ChartNode;
-import org.flowchart.ChartNodeService;
-import org.flowchart.ChartNodeType;
-import org.flowchart.ChartNodeVisitor;
+import poc.common.flowchart.ChartNode;
+import poc.common.flowchart.ChartNodeService;
+import poc.common.flowchart.ChartNodeType;
+import poc.common.flowchart.ChartNodeVisitor;
 import org.eclipse.lsp.cobol.core.CobolParser;
 
 import java.util.*;

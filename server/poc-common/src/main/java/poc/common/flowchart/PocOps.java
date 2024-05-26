@@ -1,4 +1,4 @@
-package org.flowchart;
+package poc.common.flowchart;
 
 import org.poc.common.navigation.EntityNavigatorBuilder;
 

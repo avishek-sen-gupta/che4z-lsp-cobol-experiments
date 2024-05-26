@@ -1,4 +1,4 @@
-package org.flowchart;
+package poc.common.flowchart;
 
 import com.google.common.collect.ImmutableList;
 

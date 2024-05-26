@@ -1,4 +1,4 @@
-package org.flowchart;
+package poc.common.flowchart;
 
 import java.util.List;
 

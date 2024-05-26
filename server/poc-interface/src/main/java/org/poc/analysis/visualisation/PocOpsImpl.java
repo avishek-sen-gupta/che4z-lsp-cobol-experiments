@@ -1,8 +1,8 @@
 package org.poc.analysis.visualisation;
 
-import org.flowchart.CobolTreeVisualiser;
-import org.flowchart.FlowchartBuilderFactoryMethod;
-import org.flowchart.PocOps;
+import poc.common.flowchart.CobolTreeVisualiser;
+import poc.common.flowchart.FlowchartBuilderFactoryMethod;
+import poc.common.flowchart.PocOps;
 import vm.CobolEntityNavigatorBuilderImpl;
 import org.poc.common.navigation.EntityNavigatorBuilder;
 

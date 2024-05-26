@@ -2,8 +2,8 @@ package org.poc.flowchart;
 
 import guru.nidi.graphviz.attribute.Color;
 import guru.nidi.graphviz.attribute.Shape;
-import org.flowchart.ChartNode;
-import org.flowchart.ChartNodeType;
+import poc.common.flowchart.ChartNode;
+import poc.common.flowchart.ChartNodeType;
 
 import java.util.HashMap;
 

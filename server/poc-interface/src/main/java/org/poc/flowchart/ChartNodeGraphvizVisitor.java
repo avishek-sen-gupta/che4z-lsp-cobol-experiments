@@ -3,9 +3,9 @@ package org.poc.flowchart;
 import guru.nidi.graphviz.attribute.Color;
 import guru.nidi.graphviz.model.MutableGraph;
 import guru.nidi.graphviz.model.MutableNode;
-import org.flowchart.ChartNode;
-import org.flowchart.ChartNodeService;
-import org.flowchart.ChartNodeVisitor;
+import poc.common.flowchart.ChartNode;
+import poc.common.flowchart.ChartNodeService;
+import poc.common.flowchart.ChartNodeVisitor;
 
 import java.util.List;
 

@@ -4,8 +4,8 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.cli.IdmsContainerNode;
 import org.eclipse.lsp.cobol.core.CobolParser;
 import org.eclipse.lsp.cobol.dialects.idms.IdmsParser;
-import org.flowchart.ChartNode;
-import org.flowchart.ChartNodeService;
+import poc.common.flowchart.ChartNode;
+import poc.common.flowchart.ChartNodeService;
 
 public class CobolChartNodeFactory {
     public static ChartNode newNode(ParseTree parseTree, ChartNodeService nodeService) {

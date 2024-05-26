@@ -1,9 +1,8 @@
 package org.poc.flowchart;
 
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.eclipse.lsp.cobol.core.CobolParser;
-import org.flowchart.ChartNode;
-import org.flowchart.ChartNodeService;
+import poc.common.flowchart.ChartNode;
+import poc.common.flowchart.ChartNodeService;
 import org.poc.common.navigation.CobolEntityNavigator;
 
 import java.util.ArrayList;

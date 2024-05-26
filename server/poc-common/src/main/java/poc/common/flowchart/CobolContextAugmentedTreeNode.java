@@ -12,7 +12,7 @@
  *    Broadcom, Inc. - initial API and implementation
  *
  */
-package org.flowchart;
+package poc.common.flowchart;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

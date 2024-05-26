@@ -37,8 +37,8 @@ import org.eclipse.lsp.cobol.core.preprocessor.TextPreprocessor;
 import org.eclipse.lsp.cobol.core.preprocessor.delegates.GrammarPreprocessor;
 import org.eclipse.lsp.cobol.service.settings.CachingConfigurationService;
 import org.eclipse.lsp.cobol.service.settings.layout.CodeLayoutStore;
-import org.flowchart.FlowchartBuilder;
-import org.flowchart.PocOps;
+import poc.common.flowchart.FlowchartBuilder;
+import poc.common.flowchart.PocOps;
 import org.poc.common.navigation.CobolEntityNavigator;
 import org.poc.common.navigation.EntityNavigatorBuilder;
 

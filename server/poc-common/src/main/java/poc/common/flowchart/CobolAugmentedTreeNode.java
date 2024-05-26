@@ -12,7 +12,7 @@
  *    Broadcom, Inc. - initial API and implementation
  *
  */
-package org.flowchart;
+package poc.common.flowchart;
 
 import hu.webarticum.treeprinter.SimpleTreeNode;
 import org.eclipse.lsp.cobol.common.model.tree.*;

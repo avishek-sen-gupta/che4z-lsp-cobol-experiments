@@ -16,8 +16,8 @@ package org.poc.analysis.visualisation;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.cli.ParsePipeline;
-import org.flowchart.FlowchartBuilder;
-import org.flowchart.GraphGenerator;
+import poc.common.flowchart.FlowchartBuilder;
+import poc.common.flowchart.GraphGenerator;
 import org.poc.common.navigation.CobolEntityNavigator;
 import org.poc.flowchart.FlowchartBuilderImpl;
 import org.slf4j.Logger;

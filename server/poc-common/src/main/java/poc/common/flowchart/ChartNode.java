@@ -1,4 +1,4 @@
-package org.flowchart;
+package poc.common.flowchart;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -22,4 +22,6 @@ public interface ChartNode {
     ParseTree getExecutionContext();
 
     void addIncomingNode(ChartNode chartNode);
+
+//    DomainDocument getNotes();
 }
