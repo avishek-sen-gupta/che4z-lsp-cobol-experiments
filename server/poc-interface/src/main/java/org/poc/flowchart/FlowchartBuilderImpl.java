@@ -1,5 +1,6 @@
 package org.poc.flowchart;
 
+import guru.nidi.graphviz.attribute.Color;
 import guru.nidi.graphviz.engine.*;
 import guru.nidi.graphviz.model.Factory;
 import guru.nidi.graphviz.model.MutableGraph;
@@ -13,13 +14,18 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import static guru.nidi.graphviz.model.Factory.mutGraph;
+import static guru.nidi.graphviz.model.Factory.mutNode;
+
 public class FlowchartBuilderImpl implements FlowchartBuilder {
+    private final ChartNodeService chartNodeService;
     private ParseTree root;
     private CobolEntityNavigator cobolEntityNavigator;
     private MutableGraph graph;
 
     public FlowchartBuilderImpl(CobolEntityNavigator cobolEntityNavigator) {
         this.cobolEntityNavigator = cobolEntityNavigator;
+        chartNodeService = new ChartNodeServiceImpl(cobolEntityNavigator);
         graph = Factory.mutGraph("example1").setDirected(true);
         Graphviz.useEngine(new GraphvizCmdLineEngine().timeout(5, java.util.concurrent.TimeUnit.HOURS));
     }
@@ -46,7 +52,6 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
     }
 
     private FlowchartBuilder buildChart(ParseTree node, int maxLevel) {
-        ChartNodeService chartNodeService = new ChartNodeServiceImpl(cobolEntityNavigator);
         ChartNode rootChartNode = chartNodeService.node(node);
         rootChartNode.buildFlow();
 
@@ -66,6 +71,16 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public FlowchartBuilder outline(ParseTree groupRoot, String clusterLabel) {
+        NodeCollector collectorVisitor = new NodeCollector(chartNodeService);
+        groupRoot.accept(collectorVisitor);
+        MutableGraph outliningCluster = mutGraph(clusterLabel).setCluster(true).graphAttrs().add("bgcolor", Color.LIGHTGREY.value);
+        collectorVisitor.getCollectedNodes().forEach(n -> outliningCluster.add(mutNode(n.toString())));
+        graph.add(outliningCluster);
+        return this;
     }
 
     public static FlowchartBuilder build(CobolEntityNavigator navigator) {

@@ -42,4 +42,9 @@ public class ChartNodeServiceImpl implements ChartNodeService {
     public CobolEntityNavigator getNavigator() {
         return navigator;
     }
+
+    @Override
+    public ChartNode existingNode(ParseTree parseTree) {
+        return nodes.stream().filter(n -> n.getExecutionContext() == parseTree).findFirst().orElse(null);
+    }
 }

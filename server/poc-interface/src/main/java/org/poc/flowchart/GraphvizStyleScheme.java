@@ -26,6 +26,7 @@ public class GraphvizStyleScheme {
     }
 
     public MutableNode apply(MutableNode node) {
-        return node.add("style", "filled").add("fontcolor", fontColor.value).add("fillcolor", background.value).add("shape", shape.value).add("label", notes.getText());
+        MutableNode styledNode = node.add("style", "filled").add("fontcolor", fontColor.value).add("fillcolor", background.value).add("shape", shape.value);
+        return notes.isEmpty() ? styledNode : styledNode.add("label", notes.getText());
     }
 }

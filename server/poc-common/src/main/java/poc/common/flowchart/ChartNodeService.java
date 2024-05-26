@@ -11,4 +11,6 @@ public interface ChartNodeService {
     ChartNode sectionOrParaWithName(String name);
 
     CobolEntityNavigator getNavigator();
+
+    ChartNode existingNode(ParseTree parseTree);
 }

@@ -48,24 +48,33 @@ public class PocCliStartup {
      * @param args command line arguments
      */
     public static void main(String[] args) throws IOException, InterruptedException {
+        String dotFilePath = "/Users/asgupta/Downloads/mbrdi-poc/flowchart.dot";
+        String graphOutputPath = "/Users/asgupta/Downloads/mbrdi-poc/flowchart.png";
+        String cobolParseTreeOutputPath = "/Users/asgupta/Downloads/mbrdi-poc/test-cobol.json";
+        String idmsParseTreeOutputPath = "/Users/asgupta/Downloads/mbrdi-poc/test-idms.json";
+        File[] copyBookPaths = {new File("/Users/asgupta/Downloads/mbrdi-poc")};
+        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V75234");
+
         PocOpsImpl ops = new PocOpsImpl(new CobolTreeVisualiserImpl(),
                 FlowchartBuilderImpl::build, new CobolEntityNavigatorBuilderImpl());
-        ParsePipeline pipeline = new ParsePipeline(new File("/Users/asgupta/Downloads/mbrdi-poc/V75234"),
-                new File[]{new File("/Users/asgupta/Downloads/mbrdi-poc")},
-                "/Users/asgupta/Downloads/mbrdi-poc/test-cobol.json",
-                "/Users/asgupta/Downloads/mbrdi-poc/test-idms.json",
+        ParsePipeline pipeline = new ParsePipeline(source,
+                copyBookPaths,
+                cobolParseTreeOutputPath,
+                idmsParseTreeOutputPath,
                 ops);
 
         CobolEntityNavigator navigator = pipeline.parse();
+        FlowchartBuilder flowcharter = pipeline.flowcharter();
+
         ParseTree u204 = navigator.target("U204-CALL-COST-PRICE");
         ParseTree k0A = navigator.target("K0A");
         ParseTree k1 = navigator.target("K1");
         ParseTree b2 = navigator.target("B2");
-        String dotFilePath = "/Users/asgupta/Downloads/mbrdi-poc/flowchart.dot";
-        String graphOutputPath = "/Users/asgupta/Downloads/mbrdi-poc/flowchart.png";
-        FlowchartBuilder flowcharter = pipeline.flowcharter();
-//        flowcharter.draw(k0A).draw(k1).draw(b2).draw(u204).write(dotFilePath);
-        flowcharter.draw(navigator.root()).write(dotFilePath);
+
+        flowcharter.draw(k0A).draw(k1).draw(b2).draw(u204);
+        flowcharter.outline(b2, "SOME RANDOM STUFF");
+//        flowcharter.draw(navigator.root()).write(dotFilePath);
+        flowcharter.write(dotFilePath);
         new GraphGenerator().generateGraph(dotFilePath, graphOutputPath);
     }
 }
