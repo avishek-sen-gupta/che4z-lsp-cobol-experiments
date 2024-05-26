@@ -83,8 +83,7 @@ public class CobolContextAugmentedTreeNode extends SimpleTreeNode {
         return text.length() > 50 ? text.substring(0, 50) + " ... (truncated)" : text;
     }
 
-    private String originalText(ParseTree astNode) {
-//        return astNode.getText();
+    public static String originalText(ParseTree astNode) {
         Token startToken = (astNode instanceof TerminalNode) ? ((TerminalNode) astNode).getSymbol() : ((ParserRuleContext) astNode).start;
         Token stopToken = (astNode instanceof TerminalNode) ? ((TerminalNode) astNode).getSymbol() : ((ParserRuleContext) astNode).stop;
 

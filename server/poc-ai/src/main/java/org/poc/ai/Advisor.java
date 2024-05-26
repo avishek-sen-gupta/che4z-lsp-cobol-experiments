@@ -9,10 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Advisor {
+    public static final String AZURE_OPENAI_ENDPOINT = "AZURE_OPENAI_ENDPOINT";
+    public static final String AZURE_OPENAI_API_KEY = "AZURE_OPENAI_API_KEY";
     private final String azureOpenaiApiKey;
     private final String azureOpenaiEndpoint;
     private final OpenAIClient client;
-    private String deploymentOrModelId = "gpt35";
+    private final String deploymentOrModelId = "gpt35";
 
     public Advisor(String azureOpenaiApiKey, String azureOpenaiEndpoint) {
         this.azureOpenaiApiKey = azureOpenaiApiKey;
