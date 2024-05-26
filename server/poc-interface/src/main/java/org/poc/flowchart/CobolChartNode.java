@@ -17,7 +17,7 @@ public class CobolChartNode implements ChartNode {
     protected List<ChartNode> incomingNodes = new ArrayList<>();
     @Getter protected final ParseTree executionContext;
     protected ChartNodeService nodeService;
-    private DomainDocument document = new DomainDocument("");
+    private DomainDocument document = new DomainDocument("SOMETHING ABCD EFG");
     protected boolean initialised = false;
     protected boolean visited = false;
 
