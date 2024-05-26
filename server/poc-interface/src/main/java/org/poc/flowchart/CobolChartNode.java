@@ -5,10 +5,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.eclipse.lsp.cobol.dialects.idms.IdmsParser;
-import poc.common.flowchart.ChartNode;
-import poc.common.flowchart.ChartNodeService;
-import poc.common.flowchart.ChartNodeType;
-import poc.common.flowchart.ChartNodeVisitor;
+import poc.common.flowchart.*;
 import org.eclipse.lsp.cobol.core.CobolParser;
 
 import java.util.*;
@@ -20,6 +17,9 @@ public class CobolChartNode implements ChartNode {
     protected List<ChartNode> incomingNodes = new ArrayList<>();
     @Getter protected final ParseTree executionContext;
     protected ChartNodeService nodeService;
+    private DomainDocument document = new DomainDocument("");
+    protected boolean initialised = false;
+    protected boolean visited = false;
 
     public CobolChartNode(ParseTree executionContext, ChartNodeService nodeService) {
         this.uuid = String.valueOf(counter);
@@ -30,6 +30,8 @@ public class CobolChartNode implements ChartNode {
 
     @Override
     public void buildFlow() {
+        if (initialised) return;
+        initialised = true;
         System.out.println("Building flow for " + name());
         buildInternalFlow();
         buildOutgoingFlow();
@@ -65,6 +67,7 @@ public class CobolChartNode implements ChartNode {
 
     @Override
     public String toString() {
+//        if (!getNotes().getText().isEmpty()) return getNotes().getText();
         if (executionContext instanceof ParserRuleContext) {
             return name() + "/" + ((ParserRuleContext) executionContext).getStart().getLine();
         }
@@ -80,7 +83,7 @@ public class CobolChartNode implements ChartNode {
         if (executionContext.getClass() == CobolParser.StatementContext.class)
             return "Stmt:" + truncated(executionContext, 15);
         if (executionContext.getClass() == CobolParser.SentenceContext.class)
-            return "Sentence: " + truncated(executionContext, 10);
+            return "Sentence: " + executionContext.getText();
 //            return "SE:" + truncated(executionContext);
         if (executionContext.getClass() == TerminalNodeImpl.class)
             return executionContext.getText();
@@ -111,7 +114,14 @@ public class CobolChartNode implements ChartNode {
     public void accept(ChartNodeVisitor visitor, int level) {
         accept(visitor, level, -1);
     }
+
+    @Override
     public void accept(ChartNodeVisitor visitor, int level, int maxLevel) {
+        if (visited) return;
+        visited = true;
+        acceptUnvisited(visitor, level, maxLevel);
+    }
+    public void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel) {
         System.out.println("Current level: " + level);
         visitor.visit(this, outgoingNodes, nodeService);
         outgoingNodes.forEach(c -> c.accept(visitor, level, maxLevel));
@@ -120,5 +130,10 @@ public class CobolChartNode implements ChartNode {
     @Override
     public void addIncomingNode(ChartNode chartNode) {
         incomingNodes.add(chartNode);
+    }
+
+    @Override
+    public DomainDocument getNotes() {
+        return document;
     }
 }

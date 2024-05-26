@@ -35,8 +35,8 @@ public class CompositeCobolNode extends CobolChartNode {
     }
 
     @Override
-    public void accept(ChartNodeVisitor visitor, int level, int maxLevel) {
-        super.accept(visitor, level, maxLevel);
+    public void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel) {
+        super.acceptUnvisited(visitor, level, maxLevel);
         if (maxLevel != -1 && level > maxLevel) return;
         if (internalTreeRoot == null) return;
 

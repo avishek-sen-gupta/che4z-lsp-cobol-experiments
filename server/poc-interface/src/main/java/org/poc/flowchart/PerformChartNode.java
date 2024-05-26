@@ -24,12 +24,11 @@ public class PerformChartNode extends CobolChartNode {
         if (performProcedureStatementContext != null) return;
         inlineStatementContext = nodeService.node(performStatement.performInlineStatement());
         inlineStatementContext.buildFlow();
-
     }
 
     @Override
-    public void accept(ChartNodeVisitor visitor, int level, int maxLevel) {
-        super.accept(visitor, level, maxLevel);
+    public void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel) {
+        super.acceptUnvisited(visitor, level, maxLevel);
         if (inlineStatementContext != null) {
             visitor.visitParentChildLink(this, inlineStatementContext, nodeService);
             inlineStatementContext.accept(visitor, level, maxLevel);

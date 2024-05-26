@@ -19,9 +19,11 @@ public interface ChartNode {
 
     void accept(ChartNodeVisitor visitor, int level, int maxLevel);
 
+    void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel);
+
     ParseTree getExecutionContext();
 
     void addIncomingNode(ChartNode chartNode);
 
-//    DomainDocument getNotes();
+    DomainDocument getNotes();
 }
