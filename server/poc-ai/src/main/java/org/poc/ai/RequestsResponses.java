@@ -4,8 +4,9 @@ import com.google.common.collect.ImmutableList;
 
 import java.util.List;
 
-public class SampleResponses {
-    public static final List<String> ONE = ImmutableList.of(
+public class RequestsResponses {
+    public static final String PROMPT = "Assume that you are a mainframe COBOL expert. The following lines contain a piece of code from a legacy codebase in COBOL. What do you think it does? Explain in as much detail as you can. Break down your explanations paragraph by paragraph, sequentially. Specifically, attempt to interpret any conditional statements which look like 'IF' followed by some condition. Group your explanations by individual paragraphs, sections, and variables. When referring to a variable, section, or paragraph, it is EXTREMELY important to enclose it in square brackets. Be verbose if you need to.\n";
+    public static final List<String> SAMPLE_RESPONSE = ImmutableList.of(
             "The [U204-CALL-COST-PRICE] section in this COBOL code appears to handle various calculations and data assignments related to vendor pricing.",
             "In the [U204A] paragraph, the code checks if a vendor is the main vendor and performs various assignments based on that condition. If the vendor is the main vendor, it sets certain variables and then calls the [GET-TASI-2918] paragraph to retrieve data for that vendor. If the vendor is a vendor of TASI-2918, it sets a flag in [COPRI-IND-CHRYSLER].",
             "Following that, the code further assigns values to various fields based on conditions regarding the type of vendor. If the field [PRICE-INPUT] is true, it sets the [COPRI-SOURCE-IND] to 'M'. If a certain condition is met in the variable [VIDET-IND-ORGPRICE], it sets the [COPRI-SOURCE-IND] to different values.",

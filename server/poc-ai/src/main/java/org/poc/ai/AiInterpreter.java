@@ -28,7 +28,7 @@ public class AiInterpreter {
 
     public SymbolReferences references(String responseLine) {
         SymbolReferences allSymbols = new SymbolReferences(navigator);
-        Pattern pattern = Pattern.compile("\\[([A-Z0-9\\-]+)\\]", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("([A-Z0-9\\-]+)", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(responseLine);
         while (matcher.find()) {
             allSymbols.add(matcher.group());

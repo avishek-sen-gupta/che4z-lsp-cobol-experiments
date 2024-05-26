@@ -12,6 +12,7 @@ import vm.CobolEntityNavigatorBuilderImpl;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 public class OpenAiTest {
@@ -41,15 +42,13 @@ public class OpenAiTest {
         System.out.println(codeText);
 
         PromptConstructor promptConstructor = new PromptConstructor();
-        promptConstructor.addLine("Assume you are mainframe COBOL expert. The following lines contain a piece of code from a legacy codebase in COBOL. What do you think it does? Explain in as much detail as you can. Group your explanations by individual paragraphs, sections, and variables. When referring to a variable, section, or paragraph, enclose it in square brackets.");
-//        promptConstructor.addLine(codeText);
+        promptConstructor.addLine(RequestsResponses.PROMPT);
+        promptConstructor.addLine(codeText);
         System.out.println("Processing your request...");
-//        List<String> responses = advisor.advise(promptConstructor.getPrompt());
-
-        List<String> responses = SampleResponses.ONE;
-
+        List<String> responses = advisor.advise(promptConstructor.getPrompt());
         AiInterpreter interpreter = new AiInterpreter(pipeline);
-        interpreter.extractReferences(responses);
+        List<String> lines = Arrays.asList(responses.get(0).split("\n"));
+        interpreter.extractReferences(lines);
         interpreter.assemble();
         interpreter.write(dotFilePath, graphOutputPath);
         System.out.println("Complete");
