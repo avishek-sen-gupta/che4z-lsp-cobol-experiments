@@ -12,6 +12,7 @@ import static guru.nidi.graphviz.model.Factory.mutNode;
 public class PerformChartNode extends CobolChartNode {
 
     private ChartNode inlineStatementContext;
+    private ChartNode targetNode;
 
     public PerformChartNode(ParseTree parseTree, ChartNodeService nodeService) {
         super(parseTree, nodeService);
@@ -26,6 +27,25 @@ public class PerformChartNode extends CobolChartNode {
         inlineStatementContext.buildFlow();
     }
 
+    private boolean isVarying() {
+        CobolParser.PerformStatementContext performStatement = new StatementIdentity<CobolParser.PerformStatementContext>(getExecutionContext()).get();
+        CobolParser.PerformProcedureStatementContext performProcedureStatementContext = performStatement.performProcedureStatement();
+        return performProcedureStatementContext == null;
+    }
+
+    @Override
+    public void buildOutgoingFlow() {
+        // Call super here because this is still a normal statement which will continue its normal flow
+        super.buildOutgoingFlow();
+        if (isVarying()) return;
+        CobolParser.PerformStatementContext performStatement = new StatementIdentity<CobolParser.PerformStatementContext>(getExecutionContext()).get();
+        CobolParser.PerformProcedureStatementContext performProcedureStatementContext = performStatement.performProcedureStatement();
+        CobolParser.ProcedureNameContext procedureNameContext = performProcedureStatementContext.procedureName();
+        String procedureName = procedureNameContext.getText();
+        System.out.println("Found a PERFORM, routing to " + procedureName);
+        targetNode = nodeService.sectionOrParaWithName(procedureName);
+    }
+
     @Override
     public void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel) {
         super.acceptUnvisited(visitor, level, maxLevel);
@@ -34,14 +54,6 @@ public class PerformChartNode extends CobolChartNode {
             inlineStatementContext.accept(visitor, level, maxLevel);
             return;
         }
-
-        CobolParser.PerformStatementContext performStatement = new StatementIdentity<CobolParser.PerformStatementContext>(getExecutionContext()).get();
-        CobolParser.PerformProcedureStatementContext performProcedureStatementContext = performStatement.performProcedureStatement();
-        CobolParser.ProcedureNameContext procedureNameContext = performProcedureStatementContext.procedureName();
-        String procedureName = procedureNameContext.getText();
-        System.out.println("Found a PERFORM, routing to " + procedureName);
-        ChartNode targetNode = nodeService.sectionOrParaWithName(procedureName);
-
         visitor.visitControlTransfer(this, targetNode);
     }
 

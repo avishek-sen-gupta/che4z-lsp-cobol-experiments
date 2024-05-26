@@ -69,7 +69,7 @@ public class CobolChartNode implements ChartNode {
     public String toString() {
 //        if (!getNotes().getText().isEmpty()) return getNotes().getText();
         if (executionContext instanceof ParserRuleContext) {
-            return name() + "/" + ((ParserRuleContext) executionContext).getStart().getLine();
+            return name() + "/" + ((ParserRuleContext) executionContext).getStart().getLine() + "/" + uuid;
         }
         return name() + "." + uuid;
     }
@@ -83,7 +83,7 @@ public class CobolChartNode implements ChartNode {
         if (executionContext.getClass() == CobolParser.StatementContext.class)
             return "Stmt:" + truncated(executionContext, 15);
         if (executionContext.getClass() == CobolParser.SentenceContext.class)
-            return "Sentence: " + executionContext.getText();
+            return "SE: " + truncated(executionContext, 15);
 //            return "SE:" + truncated(executionContext);
         if (executionContext.getClass() == TerminalNodeImpl.class)
             return executionContext.getText();

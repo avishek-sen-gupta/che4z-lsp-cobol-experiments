@@ -22,6 +22,7 @@ public class GoToChartNode extends CobolChartNode {
 
     @Override
     public void buildOutgoingFlow() {
+        // Don't call super here
         CobolParser.GoToStatementContext goToStatement = new StatementIdentity<CobolParser.GoToStatementContext>(getExecutionContext()).get();
         List<CobolParser.ProcedureNameContext> procedureNames = goToStatement.procedureName();
         System.out.println("Found a GO TO, routing to " + procedureNames);
@@ -40,6 +41,13 @@ public class GoToChartNode extends CobolChartNode {
 //        destinationNodes.forEach(destinationNode -> visitor.visitControlTransfer(this, destinationNode));
 //
 //    }
+
+    @Override
+    public void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel) {
+        super.acceptUnvisited(visitor, level, maxLevel);
+        // If you want two nodes to the destination, uncomment below. The super already does the flow work.
+//        destinationNodes.forEach(destinationNode -> visitor.visitControlTransfer(this, destinationNode));
+    }
 
     @Override
     public ChartNodeType type() {

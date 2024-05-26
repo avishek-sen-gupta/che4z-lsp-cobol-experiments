@@ -21,7 +21,7 @@ public class ChartNodeGraphvizVisitor implements ChartNodeVisitor {
     public void visit(ChartNode node, List<ChartNode> outgoingNodes, ChartNodeService nodeService) {
         System.out.println("Visiting : " + node);
         outgoingNodes.forEach(o -> {
-            System.out.println("Linking " + node.getExecutionContext().getText() + " to " + o.getExecutionContext().getText());
+            System.out.println("Linking " + node + " to " + o);
             g.add(styled(node, mutNode(node.toString())).addLink(mutNode(o.toString())));
         });
     }
