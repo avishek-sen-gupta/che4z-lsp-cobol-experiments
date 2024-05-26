@@ -10,6 +10,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <modules>
+        <module>poc-ai</module>
         <module>poc-interface</module>
         <module>poc-common</module>
         <module>idms-copybook-builder</module>
