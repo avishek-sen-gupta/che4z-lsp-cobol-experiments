@@ -8,6 +8,7 @@ import org.poc.common.navigation.CobolEntityNavigator;
 import org.poc.flowchart.FlowchartBuilderImpl;
 import poc.common.flowchart.CobolContextAugmentedTreeNode;
 import poc.common.flowchart.FlowchartBuilder;
+import poc.common.flowchart.GraphGenerator;
 import vm.CobolEntityNavigatorBuilderImpl;
 
 import java.io.File;
@@ -46,6 +47,7 @@ public class OpenAiTest {
         promptConstructor.addLine(codeText);
         System.out.println("Processing your request...");
         List<String> responses = advisor.advise(promptConstructor.getPrompt());
+
         AiInterpreter interpreter = new AiInterpreter(pipeline);
         List<String> lines = Arrays.asList(responses.get(0).split("\n"));
         interpreter.extractReferences(lines);
