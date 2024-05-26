@@ -30,18 +30,6 @@ public class GoToChartNode extends CobolChartNode {
         outgoingNodes.addAll(destinationNodes);
     }
 
-//    @Override
-//    public void accept(ChartNodeVisitor visitor, int level, int maxLevel) {
-//        super.accept(visitor, level, maxLevel);
-//        CobolParser.GoToStatementContext goToStatement = new StatementIdentity<CobolParser.GoToStatementContext>(getExecutionContext()).get();
-//        List<CobolParser.ProcedureNameContext> procedureNames = goToStatement.procedureName();
-//        System.out.println("Found a GO TO, routing to " + procedureNames);
-//        List<ChartNode> destinationNodes = procedureNames.stream().map(p -> nodeService.sectionOrParaWithName(p.paragraphName().getText())).collect(Collectors.toList());
-//
-//        destinationNodes.forEach(destinationNode -> visitor.visitControlTransfer(this, destinationNode));
-//
-//    }
-
     @Override
     public void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel) {
         super.acceptUnvisited(visitor, level, maxLevel);
