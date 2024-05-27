@@ -1,9 +1,14 @@
 package vm;
 
+import com.google.common.collect.ImmutableList;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.poc.common.navigation.CobolEntityNavigator;
 import org.eclipse.lsp.cobol.core.CobolParser;
 import org.poc.common.navigation.ParseTreeSearchCondition;
+import org.poc.flowchart.StatementIdentity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CobolEntityNavigatorImpl implements CobolEntityNavigator {
     private CobolParser.ProcedureDivisionBodyContext root;
@@ -32,6 +37,16 @@ public class CobolEntityNavigatorImpl implements CobolEntityNavigator {
         return findByConditionRecursive(searchRoot, c, 1, -1);
     }
 
+    @Override
+    public List<ParseTree> statementsContaining(String symbol, ParseTree scope) {
+        List<ParseTree> trees = new ArrayList<>();
+        findAllByConditionRecursive(scope, trees, n ->
+//                !StatementIdentity.isOneOfTypes(n, ImmutableList.of(CobolParser.ParagraphContext.class, CobolParser.ProcedureSectionContext.class)) &&
+                StatementIdentity.isOfType(n, CobolParser.StatementContext.class) &&
+                        n.getText().contains(symbol), 1, -1);
+        return trees;
+    }
+
     private ParseTree findByConditionRecursive(ParseTree currentNode, ParseTreeSearchCondition c, int level, int maxLevel) {
         if (c.apply(currentNode)) {
             if (c.apply(currentNode)) return currentNode;
@@ -43,6 +58,16 @@ public class CobolEntityNavigatorImpl implements CobolEntityNavigator {
         }
 
         return null;
+    }
+
+    private void findAllByConditionRecursive(ParseTree currentNode, List<ParseTree> matchedTrees, ParseTreeSearchCondition c, int level, int maxLevel) {
+        if (c.apply(currentNode)) {
+            matchedTrees.add(currentNode);
+        }
+        if (maxLevel != -1 && level > maxLevel) return;
+        for (int i = 0; i <= currentNode.getChildCount() - 1; i++) {
+            findAllByConditionRecursive(currentNode.getChild(i), matchedTrees, c, level + 1, maxLevel);
+        }
     }
 
     public ParseTree findTargetRecursive(String procedureName, ParseTree currentNode) {

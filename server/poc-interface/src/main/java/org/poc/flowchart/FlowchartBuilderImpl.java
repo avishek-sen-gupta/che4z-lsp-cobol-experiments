@@ -88,9 +88,18 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
 
     @Override
     public FlowchartBuilder connectToComment(String explanation, ParseTree symbol) {
-        ChartNode explainedNode = chartNodeService.node(symbol);
+        ChartNode explainedNode = chartNodeService.existingNode(symbol);
+        if (explainedNode == null) return this;
         System.out.println(String.format("Linking EXPLANATION : %s to %s", explanation, explainedNode));
-        graph.add(commentStyle(mutNode(formatted(explanation, 30))).addLink(mutNode(explainedNode.toString())));
+        MutableNode explanationNode = mutNode(formatted(explanation, 30));
+        MutableNode explainedTarget = mutNode(explainedNode.toString());
+        graph.add(explanationNode.addLink(explanationNode.linkTo(explainedTarget).with("color", Color.LIGHTGREY.value)));
+        return this;
+    }
+
+    @Override
+    public FlowchartBuilder createComment(String comment) {
+        graph.add(commentStyle(mutNode(formatted(comment, 30))));
         return this;
     }
 

@@ -19,16 +19,18 @@ public class AiInterpreter {
     private HashMap<String, SymbolReferences> responseToReferences = new HashMap<>();
     private List<SymbolReferences> references;
     private FlowchartBuilder flowcharter;
+    private final ParseTree scope;
 
-    public AiInterpreter(ParsePipeline pipeline) {
+    public AiInterpreter(ParsePipeline pipeline, ParseTree scope) {
         this.pipeline = pipeline;
         this.navigator = pipeline.getNavigator();
         this.flowcharter = pipeline.flowcharter();
+        this.scope = scope;
     }
 
     public SymbolReferences references(String responseLine) {
-        SymbolReferences allSymbols = new SymbolReferences(navigator);
-        Pattern pattern = Pattern.compile("([A-Z0-9\\-]+)", Pattern.CASE_INSENSITIVE);
+        SymbolReferences allSymbols = new SymbolReferences(navigator, scope);
+        Pattern pattern = Pattern.compile("\\b([A-Z0-9\\-]+)\\b");
         Matcher matcher = pattern.matcher(responseLine);
         while (matcher.find()) {
             allSymbols.add(matcher.group());
@@ -46,17 +48,20 @@ public class AiInterpreter {
     }
 
     public void assemble() {
-        references.forEach(r -> {
-            r.getSymbols().forEach(s -> flowcharter.draw(s));
-        });
+        flowcharter.draw(scope);
+//        references.forEach(r -> {
+//            r.getSymbols().forEach(s -> flowcharter.draw(s));
+//        });
     }
 
 
     public void write(String dotFilePath, String graphOutputPath) throws IOException, InterruptedException {
         for (Map.Entry<String, SymbolReferences> responseSymbolSet : responseToReferences.entrySet()) {
             SymbolReferences references = responseSymbolSet.getValue();
-            for (ParseTree symbol: references.getSymbols())
-                flowcharter.connectToComment(responseSymbolSet.getKey(), symbol);
+            flowcharter.createComment(responseSymbolSet.getKey());
+            for (List<ParseTree> symbolReferences: references.getSymbols()) {
+                symbolReferences.forEach(ref -> flowcharter.connectToComment(responseSymbolSet.getKey(), ref));
+            }
         }
         flowcharter.write(dotFilePath);
         new GraphGenerator().generateGraph(dotFilePath, graphOutputPath);

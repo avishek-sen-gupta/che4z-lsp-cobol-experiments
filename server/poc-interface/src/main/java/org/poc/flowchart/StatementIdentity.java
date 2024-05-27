@@ -3,6 +3,8 @@ package org.poc.flowchart;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;
 
+import java.util.List;
+
 public class StatementIdentity<T> {
     private final ParseTree executionContext;
 
@@ -18,6 +20,10 @@ public class StatementIdentity<T> {
 
     public static boolean isOfType(ParseTree parseTree, Class clazz) {
         return parseTree.getClass() == clazz;
+    }
+
+    public static boolean isOneOfTypes(ParseTree parseTree, List<Class> clazzes) {
+        return clazzes.contains(parseTree.getClass());
     }
 
     public T get() {
