@@ -98,7 +98,11 @@ public class CobolContextAugmentedTreeNode extends SimpleTreeNode {
         if (interval.a == -1 || interval.b == -1) {
             return astNode.getText();
         }
-        return stopIndex >= startToken.getStartIndex() ? cs.getText(interval) : "<NULL>";
+        return stopIndex >= startToken.getStartIndex() ? dialectInlined(cs.getText(interval)) : "<NULL>";
+    }
+
+    private static String dialectInlined(String text) {
+        return text;
     }
 
     /**

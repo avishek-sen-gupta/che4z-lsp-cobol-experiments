@@ -7,6 +7,7 @@ import poc.common.flowchart.FlowchartBuilder;
 import poc.common.flowchart.GraphGenerator;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,13 +42,18 @@ public class AiInterpreter {
     }
 
     public void extractReferences(List<String> responses) {
-        references = responses.stream().map(this::references).toList();
+        List<String> lines = asSeparateLines(responses);
+        references = lines.stream().map(this::references).toList();
         references.forEach(r -> {
             System.out.println(r);
         });
     }
 
-    public void assemble() {
+    private static List<String> asSeparateLines(List<String> responses) {
+        return Arrays.asList(responses.get(0).split("\n")).stream().filter(s -> !s.isEmpty()).toList();
+    }
+
+    public void buildFlowchart() {
         flowcharter.draw(scope);
 //        references.forEach(r -> {
 //            r.getSymbols().forEach(s -> flowcharter.draw(s));

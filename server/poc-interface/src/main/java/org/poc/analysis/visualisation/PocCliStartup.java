@@ -72,9 +72,9 @@ public class PocCliStartup {
         ParseTree b2 = navigator.target("B2");
         ParseTree b2d = navigator.target("B2D");
 
-        flowcharter.draw(k0A).draw(k1).draw(b2).draw(u204);
-        flowcharter.outline(b2d, "SOME RANDOM STUFF");
-//        flowcharter.draw(navigator.root()).write(dotFilePath);
+//        flowcharter.draw(k0A).draw(k1).draw(b2).draw(u204);
+//        flowcharter.outline(b2d, "SOME RANDOM STUFF");
+        flowcharter.draw(navigator.root()).write(dotFilePath);
         flowcharter.write(dotFilePath);
         new GraphGenerator().generateGraph(dotFilePath, graphOutputPath);
     }

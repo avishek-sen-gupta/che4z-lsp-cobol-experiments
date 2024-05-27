@@ -38,6 +38,7 @@ public class OpenAiTest {
         CobolEntityNavigator navigator = pipeline.parse();
         FlowchartBuilder flowcharter = pipeline.flowcharter();
         ParseTree u204 = navigator.target("U204-CALL-COST-PRICE");
+//        ParseTree u204 = navigator.target("U204B");
         String codeText = CobolContextAugmentedTreeNode.originalText(u204);
         System.out.println(codeText);
 
@@ -48,9 +49,8 @@ public class OpenAiTest {
         List<String> responses = advisor.advise(promptConstructor.getPrompt());
 
         AiInterpreter interpreter = new AiInterpreter(pipeline, u204);
-        List<String> lines = Arrays.asList(responses.get(0).split("\n")).stream().filter(s -> !s.isEmpty()).toList();
-        interpreter.extractReferences(lines);
-        interpreter.assemble();
+        interpreter.extractReferences(responses);
+        interpreter.buildFlowchart();
         interpreter.write(dotFilePath, graphOutputPath);
         System.out.println("Complete");
     }
