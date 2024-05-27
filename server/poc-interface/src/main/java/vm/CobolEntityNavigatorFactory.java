@@ -1,17 +1,19 @@
 package vm;
 
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;
 
 public class CobolEntityNavigatorFactory {
     public static CobolParser.ProcedureDivisionBodyContext procedureDivisionBody;
+    public static ParserRuleContext fullProgramTree;
     public static FlowUnit procedureDivisionFlowUnit;
 
     public static GlobalFlowUnitNavigator flowUnitnavigator() {
         return new GlobalFlowUnitNavigator(procedureDivisionFlowUnit);
     }
     public static CobolEntityNavigatorImpl procedureDivisionEntityNavigator(CobolParser.ProcedureDivisionBodyContext procedureDivisionBody) {
-        return new CobolEntityNavigatorImpl(procedureDivisionBody);
+        return new CobolEntityNavigatorImpl(procedureDivisionBody, fullProgramTree);
     }
 
     public static CobolParser.ProcedureDivisionBodyContext procedureDivisionBody(ParseTree tree) {

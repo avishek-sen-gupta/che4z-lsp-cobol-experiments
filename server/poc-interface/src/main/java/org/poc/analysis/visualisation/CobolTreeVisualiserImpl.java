@@ -43,6 +43,7 @@ public class CobolTreeVisualiserImpl implements CobolTreeVisualiser {
      */
     @Override
     public void visualiseCobolAST(ParseTree tree, String cobolParseTreeOutputPath, boolean outputTree, CobolEntityNavigator navigator) {
+        navigator.buildDialectNodeRepository();
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
         CobolContextAugmentedTreeNode graphRoot = new CobolContextAugmentedTreeNode(tree, navigator);
         buildContextGraph(tree, graphRoot, navigator);

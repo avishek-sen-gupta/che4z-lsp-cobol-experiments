@@ -59,9 +59,9 @@ public class CobolContextAugmentedTreeNode extends SimpleTreeNode {
         super(astNode.getClass().getSimpleName());
         this.astNode = astNode;
         this.nodeType = astNode.getClass().getSimpleName();
+        this.navigator = navigator;
         this.originalText = withType(astNode, false);
         this.span = createSpan(astNode);
-        this.navigator = navigator;
     }
 
     private TextSpan createSpan(ParseTree astNode) {
@@ -81,7 +81,7 @@ public class CobolContextAugmentedTreeNode extends SimpleTreeNode {
     }
 
     private String withType(ParseTree astNode, boolean truncate) {
-        String originalText = originalText(astNode);
+        String originalText = originalText(astNode, navigator);
         return truncate ? truncated(originalText) : originalText;
     }
 
@@ -89,7 +89,7 @@ public class CobolContextAugmentedTreeNode extends SimpleTreeNode {
         return text.length() > 50 ? text.substring(0, 50) + " ... (truncated)" : text;
     }
 
-    public static String originalText(ParseTree astNode) {
+    public static String originalText(ParseTree astNode, CobolEntityNavigator navigator) {
         Token startToken = (astNode instanceof TerminalNode) ? ((TerminalNode) astNode).getSymbol() : ((ParserRuleContext) astNode).start;
         Token stopToken = (astNode instanceof TerminalNode) ? ((TerminalNode) astNode).getSymbol() : ((ParserRuleContext) astNode).stop;
 
@@ -104,21 +104,32 @@ public class CobolContextAugmentedTreeNode extends SimpleTreeNode {
         if (interval.a == -1 || interval.b == -1) {
             return astNode.getText();
         }
-        return stopIndex >= startToken.getStartIndex() ? dialectInlined(cs.getText(interval)) : "<NULL>";
+        return stopIndex >= startToken.getStartIndex() ? dialectInlined(cs.getText(interval), navigator) : "<NULL>";
     }
 
-    private static String dialectInlined(String text) {
+    private static String dialectInlined2(String text, CobolEntityNavigator navigator) {
+        return text;
+    }
+
+    private static String dialectInlined(String text, CobolEntityNavigator navigator) {
         List<String> allDialectPlaceholders = new ArrayList<>();
-        Pattern pattern = Pattern.compile("_DIALECT_ ([0-9]+)");
+        Pattern pattern = Pattern.compile("(_DIALECT_ [0-9]+)");
         Matcher matcher = pattern.matcher(text);
-        while (matcher.find()) {
-            allDialectPlaceholders.add(matcher.group());
-        }
+        StringBuilder b = new StringBuilder();
+        String xxxx = matcher.replaceAll(r -> navigator.dialectText(r.group()));
+        return xxxx;
+//        if (allDialectPlaceholders.isEmpty()) return text;
 
 //        System.out.println("--ALL DIALECT PLACEHOLDERS---");
-        allDialectPlaceholders.forEach(System.out::println);
-
-        return text;
+//        StringBuilder builder = new StringBuilder(text);
+//        for (String placeholder : allDialectPlaceholders) {
+//            currentText = currentText.replace(placeholder, navigator.dialectText(placeholder));
+//        }
+//        allDialectPlaceholders.forEach(System.out::println);
+//
+//        System.out.println("Replacing " + text + " with " + currentText);
+//        return currentText;
+//        return text;
     }
 
     /**

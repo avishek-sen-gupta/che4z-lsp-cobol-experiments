@@ -29,8 +29,8 @@
     </parent>
 
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <maven.antlr4.plugin.version>4.7</maven.antlr4.plugin.version>
         <antlr.version>4.7.1</antlr.version>
         <lombok.version>1.18.30</lombok.version>

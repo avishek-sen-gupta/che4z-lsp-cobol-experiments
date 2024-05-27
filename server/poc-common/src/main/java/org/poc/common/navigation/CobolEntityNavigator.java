@@ -14,4 +14,12 @@ public interface CobolEntityNavigator {
     ParseTree findByCondition(ParseTree searchRoot, ParseTreeSearchCondition c);
 
     List<ParseTree> statementsContaining(String symbol, ParseTree scope);
+
+    List<ParseTree> findAllByCondition(ParseTreeSearchCondition c, ParseTree scope);
+
+    List<ParseTree> findAllByCondition(ParseTreeSearchCondition c, ParseTree scope, int maxLevel);
+
+    void buildDialectNodeRepository();
+
+    String dialectText(String marker);
 }

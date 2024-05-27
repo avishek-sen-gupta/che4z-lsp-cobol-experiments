@@ -1,20 +1,28 @@
 package vm;
 
-import com.google.common.collect.ImmutableList;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.eclipse.lsp.cobol.cli.IdmsContainerNode;
 import org.poc.common.navigation.CobolEntityNavigator;
 import org.eclipse.lsp.cobol.core.CobolParser;
 import org.poc.common.navigation.ParseTreeSearchCondition;
 import org.poc.flowchart.StatementIdentity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 public class CobolEntityNavigatorImpl implements CobolEntityNavigator {
     private CobolParser.ProcedureDivisionBodyContext root;
+    private final ParserRuleContext fullProgramTree;
+    private List<ParseTree> dialectNodes;
+    private Map<String, String> symbolText;
 
-    public CobolEntityNavigatorImpl(CobolParser.ProcedureDivisionBodyContext procedureDivisionBody) {
+    public CobolEntityNavigatorImpl(CobolParser.ProcedureDivisionBodyContext procedureDivisionBody, ParserRuleContext fullProgramTree) {
         this.root = procedureDivisionBody;
+        this.fullProgramTree = fullProgramTree;
     }
 
     @Override
@@ -45,6 +53,42 @@ public class CobolEntityNavigatorImpl implements CobolEntityNavigator {
                 StatementIdentity.isOfType(n, CobolParser.StatementContext.class) &&
                         n.getText().contains(symbol), 1, -1);
         return trees;
+    }
+
+    @Override
+    public List<ParseTree> findAllByCondition(ParseTreeSearchCondition c, ParseTree scope) {
+        return this.findAllByCondition(c, scope, -1);
+    }
+
+    @Override
+    public List<ParseTree> findAllByCondition(ParseTreeSearchCondition c, ParseTree scope, int maxLevel) {
+        List<ParseTree> trees = new ArrayList<>();
+        findAllByConditionRecursive(scope, trees, c, 1, maxLevel);
+        return trees;
+    }
+
+    @Override
+    public void buildDialectNodeRepository() {
+        dialectNodes = findAllByCondition(t -> t.getClass() == CobolParser.DialectNodeFillerContext.class, fullProgramTree);
+        Pattern dialectMarkerPattern = Pattern.compile("_DIALECT_ ([0-9]+)", Pattern.MULTILINE);
+
+        symbolText = new HashMap<>();
+        dialectNodes.forEach(n -> {
+            String markerID = "_DIALECT_ " + n.getChild(1).getText();
+            ParseTree idmsContainer = findByCondition(n, c -> c.getClass() == IdmsContainerNode.class, 1);
+            String text = idmsContainer.getChild(0).getText();
+            symbolText.put(markerID, text);
+//            Matcher matcher = dialectMarkerPattern.matcher(n.getText());
+//            matcher.find();
+//            String dialectMarkerID = matcher.group();
+//            return dialectMarkerID;
+        });
+    }
+
+    @Override
+    public String dialectText(String marker) {
+        if (symbolText == null || symbolText.get(marker) == null) return marker;
+        return symbolText.get(marker);
     }
 
     private ParseTree findByConditionRecursive(ParseTree currentNode, ParseTreeSearchCondition c, int level, int maxLevel) {

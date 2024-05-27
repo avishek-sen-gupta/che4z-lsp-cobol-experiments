@@ -12,7 +12,6 @@ import vm.CobolEntityNavigatorBuilderImpl;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 public class OpenAiTest {
@@ -39,7 +38,7 @@ public class OpenAiTest {
         FlowchartBuilder flowcharter = pipeline.flowcharter();
         ParseTree u204 = navigator.target("U204-CALL-COST-PRICE");
 //        ParseTree u204 = navigator.target("U204B");
-        String codeText = CobolContextAugmentedTreeNode.originalText(u204);
+        String codeText = CobolContextAugmentedTreeNode.originalText(u204, navigator);
         System.out.println(codeText);
 
         PromptConstructor promptConstructor = new PromptConstructor();

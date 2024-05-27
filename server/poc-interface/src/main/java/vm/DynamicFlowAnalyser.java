@@ -24,6 +24,7 @@ public class DynamicFlowAnalyser {
         FlowUnit procedureDivisionFlowUnit = new FlowUnit(procedureDivisionBody);
         CobolEntityNavigatorFactory.procedureDivisionBody = (CobolParser.ProcedureDivisionBodyContext) procedureDivisionBody;
         CobolEntityNavigatorFactory.procedureDivisionFlowUnit = procedureDivisionFlowUnit;
+        CobolEntityNavigatorFactory.fullProgramTree = tree;
         procedureDivisionFlowUnit.buildChildren();
         Stack<CobolFrame> stack = new Stack<>();
         FlowNavigator flowNavigator = new FlowNavigator(procedureDivisionFlowUnit.units());

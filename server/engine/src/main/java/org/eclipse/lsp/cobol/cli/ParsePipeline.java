@@ -135,12 +135,12 @@ public class ParsePipeline {
         walker.walk(dialectIntegrationListener, tree);
         System.out.println("[INFO] Restored " + dialectIntegrationListener.getRestores() + " nodes.");
         System.out.println("Building tree...");
-
-        ops.getVisualiser().visualiseCobolAST(tree, cobolParseTreeOutputPath, false, navigator);
         System.out.println("Built tree");
+
         EntityNavigatorBuilder navigatorBuilder = ops.getCobolEntityNavigatorBuilder();
         CobolParser.ProcedureDivisionBodyContext procedureDivisionBody = navigatorBuilder.procedureDivisionBody(tree);
-        navigator = navigatorBuilder.procedureDivisionEntityNavigator(procedureDivisionBody);
+        navigator = navigatorBuilder.procedureDivisionEntityNavigator(procedureDivisionBody, tree);
+        ops.getVisualiser().visualiseCobolAST(tree, cobolParseTreeOutputPath, false, navigator);
         //        new DynamicFlowAnalyser(tree).run();
 
         JsonArray diagnostics = new JsonArray();
