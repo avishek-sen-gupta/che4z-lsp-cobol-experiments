@@ -62,6 +62,7 @@ public class CobolTreeVisualiserImpl implements CobolTreeVisualiser {
         for (int i = 0; i <= astParentNode.getChildCount() - 1; ++i) {
             ParseTree astChildNode = astParentNode.getChild(i);
             CobolContextAugmentedTreeNode graphChildNode = new CobolContextAugmentedTreeNode(astChildNode, navigator);
+            graphParentNode.addChild(graphChildNode);
             buildContextGraph(astChildNode, graphChildNode, navigator);
         }
         graphParentNode.freeze();
