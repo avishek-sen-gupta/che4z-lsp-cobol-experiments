@@ -64,18 +64,18 @@ public class PocCliStartup {
                 ops);
 
         CobolEntityNavigator navigator = pipeline.parse();
-        FlowchartBuilder flowcharter = pipeline.flowcharter();
-
-        ParseTree u204 = navigator.target("U204-CALL-COST-PRICE");
-        ParseTree k0A = navigator.target("K0A");
-        ParseTree k1 = navigator.target("K1");
-        ParseTree b2 = navigator.target("B2");
-        ParseTree b2d = navigator.target("B2D");
-
-//        flowcharter.draw(k0A).draw(k1).draw(b2).draw(u204);
-//        flowcharter.outline(b2d, "SOME RANDOM STUFF");
-        flowcharter.draw(navigator.root()).write(dotFilePath);
-        flowcharter.write(dotFilePath);
-        new GraphGenerator().generateGraph(dotFilePath, graphOutputPath);
+//        FlowchartBuilder flowcharter = pipeline.flowcharter();
+//
+//        ParseTree u204 = navigator.target("U204-CALL-COST-PRICE");
+//        ParseTree k0A = navigator.target("K0A");
+//        ParseTree k1 = navigator.target("K1");
+//        ParseTree b2 = navigator.target("B2");
+//        ParseTree b2d = navigator.target("B2D");
+//
+////        flowcharter.draw(k0A).draw(k1).draw(b2).draw(u204);
+////        flowcharter.outline(b2d, "SOME RANDOM STUFF");
+//        flowcharter.draw(navigator.root()).write(dotFilePath);
+//        flowcharter.write(dotFilePath);
+//        new GraphGenerator().generateGraph(dotFilePath, graphOutputPath);
     }
 }

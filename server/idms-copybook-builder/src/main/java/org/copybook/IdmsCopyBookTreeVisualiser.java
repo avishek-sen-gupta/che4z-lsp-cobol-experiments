@@ -49,17 +49,19 @@ public class IdmsCopyBookTreeVisualiser {
         }
     }
 
+    // TODO: Process OCCURS DEPENDING ON
     private CobolContextAugmentedTreeNode drawParseTrees(ParseTree parseRuleContext) {
-        CobolContextAugmentedTreeNode graphRoot = new CobolContextAugmentedTreeNode(parseRuleContext);
+        CobolContextAugmentedTreeNode graphRoot = new CobolContextAugmentedTreeNode(parseRuleContext, null);
         buildGraph(parseRuleContext, graphRoot);
         new ListingTreePrinter().print(graphRoot);
         return graphRoot;
     }
 
+    // TODO: Process OCCURS DEPENDING ON
     private void buildGraph(ParseTree astParentNode, CobolContextAugmentedTreeNode graphParentNode) {
         for (int i = 0; i <= astParentNode.getChildCount() - 1; ++i) {
             ParseTree astChildNode = astParentNode.getChild(i);
-            CobolContextAugmentedTreeNode graphChildNode = new CobolContextAugmentedTreeNode(astChildNode);
+            CobolContextAugmentedTreeNode graphChildNode = new CobolContextAugmentedTreeNode(astChildNode, null);
             graphParentNode.addChild(graphChildNode);
             buildGraph(astChildNode, graphChildNode);
         }

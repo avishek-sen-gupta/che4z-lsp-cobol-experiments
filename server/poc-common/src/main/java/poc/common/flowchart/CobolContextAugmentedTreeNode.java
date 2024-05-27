@@ -24,10 +24,14 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.poc.common.navigation.CobolEntityNavigator;
 import org.poc.common.navigation.TextSpan;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *  Visualisation Tree Node that encapsulates the actual AST node
@@ -49,13 +53,15 @@ public class CobolContextAugmentedTreeNode extends SimpleTreeNode {
 //    @Expose
     @SerializedName("span")
     private TextSpan span;
+    private final CobolEntityNavigator navigator;
 
-    public CobolContextAugmentedTreeNode(ParseTree astNode) {
+    public CobolContextAugmentedTreeNode(ParseTree astNode, CobolEntityNavigator navigator) {
         super(astNode.getClass().getSimpleName());
         this.astNode = astNode;
         this.nodeType = astNode.getClass().getSimpleName();
         this.originalText = withType(astNode, false);
         this.span = createSpan(astNode);
+        this.navigator = navigator;
     }
 
     private TextSpan createSpan(ParseTree astNode) {
@@ -102,6 +108,16 @@ public class CobolContextAugmentedTreeNode extends SimpleTreeNode {
     }
 
     private static String dialectInlined(String text) {
+        List<String> allDialectPlaceholders = new ArrayList<>();
+        Pattern pattern = Pattern.compile("_DIALECT_ ([0-9]+)");
+        Matcher matcher = pattern.matcher(text);
+        while (matcher.find()) {
+            allDialectPlaceholders.add(matcher.group());
+        }
+
+//        System.out.println("--ALL DIALECT PLACEHOLDERS---");
+        allDialectPlaceholders.forEach(System.out::println);
+
         return text;
     }
 

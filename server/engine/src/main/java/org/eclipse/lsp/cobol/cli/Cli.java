@@ -205,12 +205,13 @@ public class Cli implements Callable<Integer> {
             System.out.println("[INFO] Restored " + dialectIntegrationListener.getRestores() + " nodes.");
             System.out.println("Building tree...");
 
-            ops.getVisualiser().visualiseCobolAST(tree, cobolParseTreeOutputPath, false);
-            System.out.println("Built tree");
-//        new DynamicFlowAnalyser(tree).run();
             EntityNavigatorBuilder navigatorBuilder = ops.getCobolEntityNavigatorBuilder();
             CobolParser.ProcedureDivisionBodyContext procedureDivisionBody = navigatorBuilder.procedureDivisionBody(tree);
             CobolEntityNavigator navigator = navigatorBuilder.procedureDivisionEntityNavigator(procedureDivisionBody);
+
+            ops.getVisualiser().visualiseCobolAST(tree, cobolParseTreeOutputPath,false, navigator);
+            System.out.println("Built tree");
+//        new DynamicFlowAnalyser(tree).run();
 //            CobolEntityNavigator navigator = CobolEntityNavigatorFactory.procedureDivisionEntityNavigator(CobolEntityNavigatorFactory.procedureDivisionBody(tree));
             ParseTree e0 = navigator.target("E0");
             FlowchartBuilder flowchartBuilder = ops.getFlowchartBuilderFactory().apply(navigator);

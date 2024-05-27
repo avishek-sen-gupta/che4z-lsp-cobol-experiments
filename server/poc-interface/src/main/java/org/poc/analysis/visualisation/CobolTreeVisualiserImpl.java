@@ -19,6 +19,7 @@ import com.google.gson.GsonBuilder;
 import hu.webarticum.treeprinter.printer.listing.ListingTreePrinter;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.poc.common.navigation.CobolEntityNavigator;
 import poc.common.flowchart.CobolContextAugmentedTreeNode;
 import poc.common.flowchart.CobolTreeVisualiser;
 
@@ -30,8 +31,8 @@ import java.io.PrintWriter;
  */
 public class CobolTreeVisualiserImpl implements CobolTreeVisualiser {
     @Override
-    public void visualiseCobolAST(ParserRuleContext tree, String cobolParseTreeOutputPath) {
-        visualiseCobolAST(tree, cobolParseTreeOutputPath, true);
+    public void visualiseCobolAST(ParserRuleContext tree, String cobolParseTreeOutputPath, CobolEntityNavigator navigator) {
+        visualiseCobolAST(tree, cobolParseTreeOutputPath, true, navigator);
     }
 
     /**
@@ -41,10 +42,10 @@ public class CobolTreeVisualiserImpl implements CobolTreeVisualiser {
      * @param cobolParseTreeOutputPath
      */
     @Override
-    public void visualiseCobolAST(ParseTree tree, String cobolParseTreeOutputPath, boolean outputTree) {
+    public void visualiseCobolAST(ParseTree tree, String cobolParseTreeOutputPath, boolean outputTree, CobolEntityNavigator navigator) {
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
-        CobolContextAugmentedTreeNode graphRoot = new CobolContextAugmentedTreeNode(tree);
-        buildContextGraph(tree, graphRoot);
+        CobolContextAugmentedTreeNode graphRoot = new CobolContextAugmentedTreeNode(tree, navigator);
+        buildContextGraph(tree, graphRoot, navigator);
         if (outputTree) new ListingTreePrinter().print(graphRoot);
         try {
             String s = gson.toJson(graphRoot);
@@ -57,22 +58,12 @@ public class CobolTreeVisualiserImpl implements CobolTreeVisualiser {
         }
     }
 
-    private void buildContextGraph(ParseTree astParentNode, CobolContextAugmentedTreeNode graphParentNode) {
+    private void buildContextGraph(ParseTree astParentNode, CobolContextAugmentedTreeNode graphParentNode, CobolEntityNavigator navigator) {
         for (int i = 0; i <= astParentNode.getChildCount() - 1; ++i) {
             ParseTree astChildNode = astParentNode.getChild(i);
-            CobolContextAugmentedTreeNode graphChildNode = new CobolContextAugmentedTreeNode(astChildNode);
-            if (! shouldSkip(astChildNode, astParentNode))
-                graphParentNode.addChild(graphChildNode);
-            buildContextGraph(astChildNode, graphChildNode);
+            CobolContextAugmentedTreeNode graphChildNode = new CobolContextAugmentedTreeNode(astChildNode, navigator);
+            buildContextGraph(astChildNode, graphChildNode, navigator);
         }
         graphParentNode.freeze();
-    }
-
-    private static boolean shouldSkip(ParseTree astChildNode, ParseTree astParentNode) {
-//        if (astChildNode.getClass() == CobolParser.EaterContext.class) return true;
-//        if (astParentNode.getClass() == CobolParser.DialectNodeFillerContext.class) {
-//            return astChildNode.getClass() != IdmsContainerNode.class;
-//        }
-        return false;
     }
 }

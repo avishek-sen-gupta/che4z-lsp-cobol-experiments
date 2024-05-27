@@ -66,11 +66,12 @@ public class IdmsTreeVisualiser {
         visualiseIdmsAST(startRuleContext, idmsParseTreeOutputPath, true);
     }
 
+    // TODO: Inject correct navigator
     private List<CobolContextAugmentedTreeNode> drawParseTrees(List<ParseTree> parseRuleContext) {
         List<ParseTree> trees = parseRuleContext;
         List<CobolContextAugmentedTreeNode> astTrees = new ArrayList<>();
         for (ParseTree tree : trees) {
-            CobolContextAugmentedTreeNode graphRoot = new CobolContextAugmentedTreeNode(tree);
+            CobolContextAugmentedTreeNode graphRoot = new CobolContextAugmentedTreeNode(tree, null);
             buildGraph(tree, graphRoot);
             astTrees.add(graphRoot);
             new ListingTreePrinter().print(graphRoot);
@@ -78,10 +79,11 @@ public class IdmsTreeVisualiser {
         return astTrees;
     }
 
+    // TODO: Inject correct navigator
     private void buildGraph(ParseTree astParentNode, CobolContextAugmentedTreeNode graphParentNode) {
         for (int i = 0; i <= astParentNode.getChildCount() - 1; ++i) {
             ParseTree astChildNode = astParentNode.getChild(i);
-            CobolContextAugmentedTreeNode graphChildNode = new CobolContextAugmentedTreeNode(astChildNode);
+            CobolContextAugmentedTreeNode graphChildNode = new CobolContextAugmentedTreeNode(astChildNode, null);
             graphParentNode.addChild(graphChildNode);
             buildGraph(astChildNode, graphChildNode);
         }

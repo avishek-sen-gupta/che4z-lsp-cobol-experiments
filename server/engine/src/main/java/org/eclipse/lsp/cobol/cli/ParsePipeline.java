@@ -136,7 +136,7 @@ public class ParsePipeline {
         System.out.println("[INFO] Restored " + dialectIntegrationListener.getRestores() + " nodes.");
         System.out.println("Building tree...");
 
-        ops.getVisualiser().visualiseCobolAST(tree, cobolParseTreeOutputPath, false);
+        ops.getVisualiser().visualiseCobolAST(tree, cobolParseTreeOutputPath, false, navigator);
         System.out.println("Built tree");
         EntityNavigatorBuilder navigatorBuilder = ops.getCobolEntityNavigatorBuilder();
         CobolParser.ProcedureDivisionBodyContext procedureDivisionBody = navigatorBuilder.procedureDivisionBody(tree);
