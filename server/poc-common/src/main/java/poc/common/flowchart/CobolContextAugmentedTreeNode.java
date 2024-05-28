@@ -30,6 +30,7 @@ import org.poc.common.navigation.TextSpan;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -81,7 +82,7 @@ public class CobolContextAugmentedTreeNode extends SimpleTreeNode {
     }
 
     private String withType(ParseTree astNode, boolean truncate) {
-        String originalText = originalText(astNode, navigator);
+        String originalText = originalText(astNode, navigator::dialectText);
         return truncate ? truncated(originalText) : originalText;
     }
 
@@ -89,7 +90,7 @@ public class CobolContextAugmentedTreeNode extends SimpleTreeNode {
         return text.length() > 50 ? text.substring(0, 50) + " ... (truncated)" : text;
     }
 
-    public static String originalText(ParseTree astNode, CobolEntityNavigator navigator) {
+    public static String originalText(ParseTree astNode, Function<String, String> substitutionStrategy) {
         Token startToken = (astNode instanceof TerminalNode) ? ((TerminalNode) astNode).getSymbol() : ((ParserRuleContext) astNode).start;
         Token stopToken = (astNode instanceof TerminalNode) ? ((TerminalNode) astNode).getSymbol() : ((ParserRuleContext) astNode).stop;
 
@@ -104,19 +105,20 @@ public class CobolContextAugmentedTreeNode extends SimpleTreeNode {
         if (interval.a == -1 || interval.b == -1) {
             return astNode.getText();
         }
-        return stopIndex >= startToken.getStartIndex() ? dialectInlined(cs.getText(interval), navigator) : "<NULL>";
+        return stopIndex >= startToken.getStartIndex() ? dialectInlined(cs.getText(interval), substitutionStrategy) : "<NULL>";
     }
 
     private static String dialectInlined2(String text, CobolEntityNavigator navigator) {
         return text;
     }
 
-    private static String dialectInlined(String text, CobolEntityNavigator navigator) {
+    private static String dialectInlined(String text, Function<String, String> substitutionStrategy) {
         List<String> allDialectPlaceholders = new ArrayList<>();
         Pattern pattern = Pattern.compile("(_DIALECT_ [0-9]+)");
         Matcher matcher = pattern.matcher(text);
         StringBuilder b = new StringBuilder();
-        String xxxx = matcher.replaceAll(r -> navigator.dialectText(r.group()));
+//        String xxxx = matcher.replaceAll(r -> navigator.dialectText(r.group()));
+        String xxxx = matcher.replaceAll(r -> substitutionStrategy.apply(r.group()));
         return xxxx;
 //        if (allDialectPlaceholders.isEmpty()) return text;
 

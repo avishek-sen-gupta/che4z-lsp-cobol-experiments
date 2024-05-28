@@ -38,7 +38,7 @@ public class OpenAiTest {
         FlowchartBuilder flowcharter = pipeline.flowcharter();
         ParseTree u204 = navigator.target("U204-CALL-COST-PRICE");
 //        ParseTree u204 = navigator.target("U204B");
-        String codeText = CobolContextAugmentedTreeNode.originalText(u204, navigator);
+        String codeText = CobolContextAugmentedTreeNode.originalText(u204, navigator::dialectText);
         System.out.println(codeText);
 
         PromptConstructor promptConstructor = new PromptConstructor();

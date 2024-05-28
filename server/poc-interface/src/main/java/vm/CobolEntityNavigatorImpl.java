@@ -12,7 +12,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.regex.Pattern;
+
+import static poc.common.flowchart.CobolContextAugmentedTreeNode.originalText;
 
 public class CobolEntityNavigatorImpl implements CobolEntityNavigator {
     private CobolParser.ProcedureDivisionBodyContext root;
@@ -67,6 +70,10 @@ public class CobolEntityNavigatorImpl implements CobolEntityNavigator {
         return trees;
     }
 
+    private String passthrough(String text) {
+        return text;
+    }
+
     @Override
     public void buildDialectNodeRepository() {
         dialectNodes = findAllByCondition(t -> t.getClass() == CobolParser.DialectNodeFillerContext.class, fullProgramTree);
@@ -76,7 +83,8 @@ public class CobolEntityNavigatorImpl implements CobolEntityNavigator {
         dialectNodes.forEach(n -> {
             String markerID = "_DIALECT_ " + n.getChild(1).getText();
             ParseTree idmsContainer = findByCondition(n, c -> c.getClass() == IdmsContainerNode.class, 1);
-            String text = idmsContainer.getChild(0).getText();
+            Function<String, String> passthrough;
+            String text = originalText(idmsContainer.getChild(0), this::passthrough);
             symbolText.put(markerID, text);
 //            Matcher matcher = dialectMarkerPattern.matcher(n.getText());
 //            matcher.find();
