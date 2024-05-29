@@ -11,6 +11,7 @@ public class FlowchartStylePreferences {
     private static final HashMap<ChartNodeType, GraphvizStyleScheme> schemes = new HashMap<>();
     static {
         schemes.put(ChartNodeType.ATOMIC, new GraphvizStyleScheme(Color.WHEAT, Color.BLACK, Shape.POINT));
+        schemes.put(ChartNodeType.PARAGRAPHS, new GraphvizStyleScheme(Color.WHEAT, Color.BLACK, Shape.POINT));
         schemes.put(ChartNodeType.SENTENCE, new GraphvizStyleScheme(Color.WHEAT, Color.BLACK, Shape.POINT, "invisible"));
         schemes.put(ChartNodeType.COMPOSITE, new GraphvizStyleScheme(Color.WHEAT, Color.BLACK));
         schemes.put(ChartNodeType.SECTION, new GraphvizStyleScheme(Color.DEEPSKYBLUE4, Color.WHITE));

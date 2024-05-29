@@ -24,6 +24,8 @@ public class CobolChartNodeFactory {
             return new IfThenChartNode(parseTree, nodeService);
         else if (StatementIdentity.isOfType(parseTree, CobolParser.IfElseContext.class))
             return new IfElseChartNode(parseTree, nodeService);
+        else if (StatementIdentity.isOfType(parseTree, CobolParser.ParagraphsContext.class))
+            return new ParagraphsChartNode(parseTree, nodeService);
         else if (isCompositeNode(parseTree))
             return new CompositeCobolNode(parseTree, nodeService);
 
