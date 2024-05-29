@@ -180,4 +180,9 @@ public class CobolChartNode implements ChartNode {
     public boolean accessesDatabase() {
         return databaseAccess;
     }
+
+    @Override
+    public boolean isMergeable() {
+        return false;
+    }
 }

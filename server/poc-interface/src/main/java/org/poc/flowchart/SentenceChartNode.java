@@ -13,4 +13,10 @@ public class SentenceChartNode extends CompositeCobolNode {
     public ChartNodeType type() {
         return ChartNodeType.SENTENCE;
     }
+
+    @Override
+    public boolean isMergeable() {
+        CobolParser.SentenceContext e = (CobolParser.SentenceContext) executionContext;
+        return e.statement().size() == 1 && nodeService.node(e.statement(0)).isMergeable();
+    }
 }

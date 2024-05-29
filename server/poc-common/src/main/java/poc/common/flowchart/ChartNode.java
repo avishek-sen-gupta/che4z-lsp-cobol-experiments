@@ -36,4 +36,6 @@ public interface ChartNode {
     void removeIncomingNode(ChartNode chartNode);
 
     boolean accessesDatabase();
+
+    boolean isMergeable();
 }

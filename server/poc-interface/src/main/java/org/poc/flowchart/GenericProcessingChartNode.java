@@ -104,6 +104,11 @@ public class GenericProcessingChartNode implements ChartNode {
         return false;
     }
 
+    @Override
+    public boolean isMergeable() {
+        return false;
+    }
+
     public void append(ChartNode vanillaNode) {
 
     }

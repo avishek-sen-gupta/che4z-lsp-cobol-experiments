@@ -79,9 +79,8 @@ public class PocCliStartup {
         ChartNodeTransformRules rules = new ChartNodeTransformRules();
 
         flowcharter.buildAST(u204);
-//        flowcharter.compress(u204, rules);
+        flowcharter.compress(u204, rules);
         flowcharter.draw(u204);
-        flowcharter.write(dotFilePath);
         flowcharter.write(dotFilePath);
         new GraphGenerator().generateGraph(dotFilePath, graphOutputPath);
     }

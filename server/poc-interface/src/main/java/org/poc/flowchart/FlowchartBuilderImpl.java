@@ -114,9 +114,10 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
     public FlowchartBuilder compress(ParseTree node, ChartNodeTransformRules rules) {
         ChartNode rootChartNode = chartNodeService.node(node);
         rootChartNode.reset();
-        ChartNodeRuleVisitor compressionVisitor = new ChartNodeRuleVisitor(rootChartNode, rules);
+//        ChartNodeRuleVisitor compressionVisitor = new ChartNodeRuleVisitor(rootChartNode, rules);
+        ChartNodeVisitor compressionVisitor = new ChartNodeCompressionVisitor(rootChartNode, null);
         rootChartNode.accept(compressionVisitor, 1, -1);
-        compressionVisitor.applyRules();
+//        compressionVisitor.applyRules();
         return this;
     }
 
