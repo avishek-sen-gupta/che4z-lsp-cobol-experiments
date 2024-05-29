@@ -20,6 +20,10 @@ public class CobolChartNodeFactory {
             return new DialectStatementChartNode(parseTree, nodeService);
         else if (StatementIdentity.isOfType(parseTree, CobolParser.SentenceContext.class))
             return new SentenceChartNode(parseTree, nodeService);
+        else if (StatementIdentity.isOfType(parseTree, CobolParser.IfThenContext.class))
+            return new IfThenChartNode(parseTree, nodeService);
+        else if (StatementIdentity.isOfType(parseTree, CobolParser.IfElseContext.class))
+            return new IfElseChartNode(parseTree, nodeService);
         else if (isCompositeNode(parseTree))
             return new CompositeCobolNode(parseTree, nodeService);
 
