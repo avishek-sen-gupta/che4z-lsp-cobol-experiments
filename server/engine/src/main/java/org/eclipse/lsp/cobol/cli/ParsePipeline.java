@@ -1,6 +1,5 @@
 package org.eclipse.lsp.cobol.cli;
 
-import com.google.common.collect.ImmutableList;
 import com.google.gson.*;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -8,7 +7,6 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.eclipse.lsp.cobol.cli.di.CliModule;
@@ -46,7 +44,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -154,16 +151,6 @@ public class ParsePipeline {
         System.out.println(gson.toJson(result));
         ProcessingResult data = (ProcessingResult) pipelineResult.getLastStageResult().getData();
         return navigator;
-    }
-
-    public FlowchartBuilder buildFlowchartSpec(ParseTree root, int maxLevel, String dotFilePath) {
-        FlowchartBuilder flowchartBuilder = ops.getFlowchartBuilderFactory().apply(navigator);
-        return flowchartBuilder.draw(ImmutableList.of(root), maxLevel);
-    }
-
-    public FlowchartBuilder buildFlowchartSpec(List<ParseTree> roots, int maxLevel, String dotFilePath) {
-        FlowchartBuilder flowchartBuilder = ops.getFlowchartBuilderFactory().apply(navigator);
-        return flowchartBuilder.draw(roots, maxLevel);
     }
 
     public FlowchartBuilder flowcharter() {

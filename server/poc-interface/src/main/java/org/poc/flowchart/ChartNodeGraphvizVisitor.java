@@ -6,6 +6,7 @@ import guru.nidi.graphviz.model.MutableNode;
 import poc.common.flowchart.ChartNode;
 import poc.common.flowchart.ChartNodeService;
 import poc.common.flowchart.ChartNodeVisitor;
+import poc.common.flowchart.ChartOverlay;
 
 import java.util.List;
 
@@ -13,9 +14,11 @@ import static guru.nidi.graphviz.model.Factory.*;
 
 public class ChartNodeGraphvizVisitor implements ChartNodeVisitor {
     private MutableGraph g;
+    private final ChartOverlay overlay;
 
-    public ChartNodeGraphvizVisitor(MutableGraph g) {
+    public ChartNodeGraphvizVisitor(MutableGraph g, ChartOverlay overlay) {
         this.g = g;
+        this.overlay = overlay;
     }
 
     public void visit(ChartNode node, List<ChartNode> outgoingNodes, List<ChartNode> incomingNodes, ChartNodeService nodeService) {

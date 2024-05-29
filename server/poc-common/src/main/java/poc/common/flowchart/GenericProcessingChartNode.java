@@ -1,8 +1,7 @@
-package org.poc.flowchart;
+package poc.common.flowchart;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.poc.common.navigation.CobolEntityNavigator;
-import poc.common.flowchart.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,7 +112,6 @@ public class GenericProcessingChartNode implements ChartNode {
     public void add(ChartNode node) {
         nodes.add(node);
     }
-
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder("GROUP\n------------------------\n");

@@ -12,7 +12,6 @@ import org.poc.common.navigation.CobolEntityNavigator;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import static guru.nidi.graphviz.model.Factory.mutGraph;
 import static guru.nidi.graphviz.model.Factory.mutNode;
@@ -22,6 +21,7 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
     private ChartNode root;
     private CobolEntityNavigator cobolEntityNavigator;
     private MutableGraph graph;
+    private ChartOverlay overlay;
 
     public FlowchartBuilderImpl(CobolEntityNavigator cobolEntityNavigator) {
         this.cobolEntityNavigator = cobolEntityNavigator;
@@ -31,19 +31,8 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
     }
 
     @Override
-    public FlowchartBuilder draw(List<ParseTree> roots, int maxLevel) {
-        roots.forEach(r -> draw(r, maxLevel));
-        return this;
-    }
-
-    @Override
     public FlowchartBuilder draw(ParseTree root, int maxLevel) {
         return buildChart(root, maxLevel);
-    }
-
-    @Override
-    public FlowchartBuilder draw(List<ParseTree> roots) {
-        return draw(roots, -1);
     }
 
     @Override
@@ -63,10 +52,7 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
     private FlowchartBuilder buildChart(ParseTree node, int maxLevel) {
         ChartNode rootChartNode = chartNodeService.node(node);
         rootChartNode.reset();
-//        rootChartNode.buildFlow();
-
-//        MutableGraph g = mutGraph("example1").setDirected(true).graphAttrs().add("rankdir", "TB");
-        ChartNodeVisitor chartVisitor = new ChartNodeGraphvizVisitor(graph);
+        ChartNodeVisitor chartVisitor = new ChartNodeGraphvizVisitor(graph, overlay);
         rootChartNode.accept(chartVisitor, 1, maxLevel);
         return this;
     }
@@ -111,14 +97,15 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
     }
 
     @Override
-    public FlowchartBuilder compress(ParseTree node, ChartNodeTransformRules rules) {
+    public FlowchartBuilder buildOverlay(ParseTree node) {
         ChartNode rootChartNode = chartNodeService.node(node);
         rootChartNode.reset();
 //        ChartNodeRuleVisitor compressionVisitor = new ChartNodeRuleVisitor(rootChartNode, rules);
-        ChartNodeCompressionVisitor compressionVisitor = new ChartNodeCompressionVisitor(rootChartNode);
+        ChartNodeOverlayVisitor compressionVisitor = new ChartNodeOverlayVisitor(rootChartNode);
         rootChartNode.accept(compressionVisitor, 1, -1);
         compressionVisitor.report();
 //        compressionVisitor.applyRules();
+        overlay = compressionVisitor.overlay();
         return this;
     }
 

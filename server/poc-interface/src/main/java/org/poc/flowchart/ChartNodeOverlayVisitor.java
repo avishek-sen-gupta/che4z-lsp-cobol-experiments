@@ -1,26 +1,21 @@
 package org.poc.flowchart;
 
-import poc.common.flowchart.ChartNode;
-import poc.common.flowchart.ChartNodeService;
-import poc.common.flowchart.ChartNodeVisitor;
+import poc.common.flowchart.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChartNodeCompressionVisitor implements ChartNodeVisitor {
+public class ChartNodeOverlayVisitor implements ChartNodeVisitor {
     private final ChartNode enclosingScope;
     private GenericProcessingChartNode head;
     private List<GenericProcessingChartNode> groups;
-//    private final ChartNodeCompressionVisitor parentVisitor;
     private List<ChartNodeVisitor> childVisitors = new ArrayList<>();
 
-    public ChartNodeCompressionVisitor(ChartNode enclosingScope) {
+    public ChartNodeOverlayVisitor(ChartNode enclosingScope) {
         this(enclosingScope, new ArrayList<>());
-//        tail = new GenericProcessingChartNode(null, enclosingScope);
-//        head = tail;
     }
 
-    public ChartNodeCompressionVisitor(ChartNode enclosingScope, List<GenericProcessingChartNode> groups) {
+    public ChartNodeOverlayVisitor(ChartNode enclosingScope, List<GenericProcessingChartNode> groups) {
         this.enclosingScope = enclosingScope;
         this.groups = groups;
     }
@@ -58,16 +53,14 @@ public class ChartNodeCompressionVisitor implements ChartNodeVisitor {
 
     @Override
     public ChartNodeVisitor newScope(ChartNode enclosingScope) {
-        return new ChartNodeCompressionVisitor(enclosingScope, groups);
-//        return this;
-//        if (enclosingScope.getExecutionContext().getClass() == CobolParser.SentenceContext.class ||
-//                enclosingScope.getExecutionContext().getClass() == CobolParser.ParagraphsContext.class) return this;
-//        ChartNodeCompressionVisitor childVisitor = new ChartNodeCompressionVisitor(enclosingScope, this);
-//        childVisitors.add(childVisitor);
-//        return childVisitor;
+        return new ChartNodeOverlayVisitor(enclosingScope, groups);
     }
 
     public void report() {
         groups.forEach(System.out::println);
+    }
+
+    public ChartOverlay overlay() {
+        return new ChartOverlay(groups);
     }
 }
