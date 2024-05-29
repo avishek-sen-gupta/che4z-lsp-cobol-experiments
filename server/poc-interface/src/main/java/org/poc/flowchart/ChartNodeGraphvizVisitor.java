@@ -3,10 +3,7 @@ package org.poc.flowchart;
 import guru.nidi.graphviz.attribute.Color;
 import guru.nidi.graphviz.model.MutableGraph;
 import guru.nidi.graphviz.model.MutableNode;
-import poc.common.flowchart.ChartNode;
-import poc.common.flowchart.ChartNodeService;
-import poc.common.flowchart.ChartNodeVisitor;
-import poc.common.flowchart.ChartOverlay;
+import poc.common.flowchart.*;
 
 import java.util.List;
 
@@ -23,13 +20,19 @@ public class ChartNodeGraphvizVisitor implements ChartNodeVisitor {
 
     public void visit(ChartNode node, List<ChartNode> outgoingNodes, List<ChartNode> incomingNodes, ChartNodeService nodeService) {
         System.out.println("Visiting : " + node);
-        outgoingNodes.forEach(o -> {
+        ChartNode source = overlay.block(node);
+        List<ChartNode> targets = outgoingNodes.stream().map(overlay::block).toList();
+
+        targets.forEach(o -> {
             System.out.println("Linking " + node + " to " + o);
-            g.add(styled(node, mutNode(node.toString())).addLink(mutNode(o.toString())));
+            if (source == o) return;
+            MutableNode graphSource = mutNode(source.toString());
+            MutableNode graphTarget = mutNode(o.toString());
+            g.add(styled(source, graphSource).addLink(graphTarget));
         });
 
         if (node.accessesDatabase()) {
-            g.add(mutNode(node.toString()).addLink(mutNode("IDMS Database").add("shape", "cylinder")));
+            g.add(mutNode(source.toString()).addLink(mutNode("IDMS Database").add("shape", "cylinder")));
         }
     }
 
@@ -38,15 +41,20 @@ public class ChartNodeGraphvizVisitor implements ChartNodeVisitor {
 
     @Override
     public void visitParentChildLink(ChartNode parent, ChartNode internalTreeRoot, ChartNodeService nodeService) {
-        MutableNode o = styled(parent, mutNode(parent.toString()));
-        MutableNode child = styled(internalTreeRoot, mutNode(internalTreeRoot.toString()));
+        ChartNode overlayParent = overlay.block(parent);
+        if (overlayParent.getClass() == GenericProcessingChartNode.class) return;
+        ChartNode overlayInternalTreeRoot = overlay.block(internalTreeRoot);
+        MutableNode o = styled(overlayParent, mutNode(overlayParent.toString()));
+        MutableNode child = styled(overlayInternalTreeRoot, mutNode(overlayInternalTreeRoot.toString()));
         g.add(o.add(Color.RED).addLink(o.linkTo(child).with("style", "dashed")));
     }
 
     @Override
     public void visitControlTransfer(ChartNode from, ChartNode to) {
-        MutableNode origin = styled(from, mutNode(from.toString()));
-        MutableNode destination = styled(to, mutNode(to.toString()));
+        ChartNode overlayFrom = overlay.block(from);
+        ChartNode overlayTo = overlay.block(to);
+        MutableNode origin = styled(overlayFrom, mutNode(overlayFrom.toString()));
+        MutableNode destination = styled(overlayTo, mutNode(overlayTo.toString()));
         g.add(origin.addLink(origin.linkTo(destination).with("style", "bold").with("color", "blueviolet")));
     }
 

@@ -5,6 +5,7 @@ import org.poc.common.navigation.CobolEntityNavigator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class GenericProcessingChartNode implements ChartNode {
     private List<ChartNode> nodes = new ArrayList<>();
@@ -37,12 +38,12 @@ public class GenericProcessingChartNode implements ChartNode {
 
     @Override
     public String name() {
-        return "";
+        return "Processing Block: " + UUID.randomUUID().toString();
     }
 
     @Override
     public ChartNodeType type() {
-        return null;
+        return ChartNodeType.GENERIC_PROCESSING;
     }
 
     @Override
@@ -67,7 +68,6 @@ public class GenericProcessingChartNode implements ChartNode {
 
     @Override
     public void addIncomingNode(ChartNode chartNode) {
-
     }
 
     @Override
@@ -117,5 +117,10 @@ public class GenericProcessingChartNode implements ChartNode {
         StringBuilder builder = new StringBuilder("GROUP\n------------------------\n");
         nodes.forEach(n -> builder.append(CobolContextAugmentedTreeNode.originalText(n.getExecutionContext(), CobolEntityNavigator::PASSTHROUGH) + "\n"));
         return builder.toString();
+    }
+
+    public boolean contains(ChartNode node) {
+        return nodes.contains(node);
+//        return false;
     }
 }
