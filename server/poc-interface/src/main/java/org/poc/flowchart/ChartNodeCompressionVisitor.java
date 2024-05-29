@@ -1,6 +1,5 @@
 package org.poc.flowchart;
 
-import org.eclipse.lsp.cobol.core.CobolParser;
 import poc.common.flowchart.ChartNode;
 import poc.common.flowchart.ChartNodeService;
 import poc.common.flowchart.ChartNodeVisitor;
@@ -10,22 +9,36 @@ import java.util.List;
 
 public class ChartNodeCompressionVisitor implements ChartNodeVisitor {
     private final ChartNode enclosingScope;
-    private ChartNode tail;
-    private ChartNode head;
-    private final ChartNodeCompressionVisitor parentVisitor;
+    private GenericProcessingChartNode head;
+    private List<GenericProcessingChartNode> groups;
+//    private final ChartNodeCompressionVisitor parentVisitor;
     private List<ChartNodeVisitor> childVisitors = new ArrayList<>();
 
-    public ChartNodeCompressionVisitor(ChartNode enclosingScope, ChartNodeCompressionVisitor parentVisitor) {
-        this.enclosingScope = enclosingScope;
+    public ChartNodeCompressionVisitor(ChartNode enclosingScope) {
+        this(enclosingScope, new ArrayList<>());
 //        tail = new GenericProcessingChartNode(null, enclosingScope);
 //        head = tail;
-        this.parentVisitor = parentVisitor;
+    }
+
+    public ChartNodeCompressionVisitor(ChartNode enclosingScope, List<GenericProcessingChartNode> groups) {
+        this.enclosingScope = enclosingScope;
+        this.groups = groups;
     }
 
     @Override
     public void visit(ChartNode node, List<ChartNode> outgoingNodes, List<ChartNode> incomingNodes, ChartNodeService nodeService) {
-        if (node.isMergeable()) {
+        if (node.getClass() == SentenceChartNode.class && node.isMergeable()) {
             System.out.println("MERGEABLE : " + node);
+            if (head == null) {
+                head = new GenericProcessingChartNode(node, enclosingScope);
+            } else {
+                head.add(node);
+            }
+        } else {
+            if (head != null) {
+                groups.add(head);
+                head = null;
+            }
         }
     }
 
@@ -45,11 +58,16 @@ public class ChartNodeCompressionVisitor implements ChartNodeVisitor {
 
     @Override
     public ChartNodeVisitor newScope(ChartNode enclosingScope) {
-        return this;
+        return new ChartNodeCompressionVisitor(enclosingScope, groups);
+//        return this;
 //        if (enclosingScope.getExecutionContext().getClass() == CobolParser.SentenceContext.class ||
 //                enclosingScope.getExecutionContext().getClass() == CobolParser.ParagraphsContext.class) return this;
 //        ChartNodeCompressionVisitor childVisitor = new ChartNodeCompressionVisitor(enclosingScope, this);
 //        childVisitors.add(childVisitor);
 //        return childVisitor;
+    }
+
+    public void report() {
+        groups.forEach(System.out::println);
     }
 }

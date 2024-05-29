@@ -115,8 +115,9 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
         ChartNode rootChartNode = chartNodeService.node(node);
         rootChartNode.reset();
 //        ChartNodeRuleVisitor compressionVisitor = new ChartNodeRuleVisitor(rootChartNode, rules);
-        ChartNodeVisitor compressionVisitor = new ChartNodeCompressionVisitor(rootChartNode, null);
+        ChartNodeCompressionVisitor compressionVisitor = new ChartNodeCompressionVisitor(rootChartNode);
         rootChartNode.accept(compressionVisitor, 1, -1);
+        compressionVisitor.report();
 //        compressionVisitor.applyRules();
         return this;
     }

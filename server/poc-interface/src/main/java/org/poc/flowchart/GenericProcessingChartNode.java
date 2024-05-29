@@ -1,22 +1,19 @@
 package org.poc.flowchart;
 
 import org.antlr.v4.runtime.tree.ParseTree;
-import poc.common.flowchart.ChartNode;
-import poc.common.flowchart.ChartNodeType;
-import poc.common.flowchart.ChartNodeVisitor;
-import poc.common.flowchart.DomainDocument;
+import org.poc.common.navigation.CobolEntityNavigator;
+import poc.common.flowchart.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GenericProcessingChartNode implements ChartNode {
-    private List<ChartNode> outgoingNodes = new ArrayList<>();
+    private List<ChartNode> nodes = new ArrayList<>();
     private final ChartNode enclosingScope;
-    private final ChartNode node;
 
     public GenericProcessingChartNode(ChartNode node, ChartNode enclosingScope) {
         this.enclosingScope = enclosingScope;
-        this.node = node;
+        nodes.add(node);
     }
 
     @Override
@@ -36,7 +33,7 @@ public class GenericProcessingChartNode implements ChartNode {
 
     @Override
     public void goesTo(ChartNode successor) {
-        outgoingNodes.add(successor);
+        nodes.add(successor);
     }
 
     @Override
@@ -111,5 +108,16 @@ public class GenericProcessingChartNode implements ChartNode {
 
     public void append(ChartNode vanillaNode) {
 
+    }
+
+    public void add(ChartNode node) {
+        nodes.add(node);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder("GROUP\n------------------------\n");
+        nodes.forEach(n -> builder.append(CobolContextAugmentedTreeNode.originalText(n.getExecutionContext(), CobolEntityNavigator::PASSTHROUGH) + "\n"));
+        return builder.toString();
     }
 }
