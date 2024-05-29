@@ -4,14 +4,13 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.cli.IdmsContainerNode;
 import org.eclipse.lsp.cobol.core.CobolParser;
 import org.eclipse.lsp.cobol.dialects.idms.IdmsParser;
-import poc.common.flowchart.ChartNode;
-import poc.common.flowchart.ChartNodeService;
-import poc.common.flowchart.ChartNodeType;
-import poc.common.flowchart.ChartNodeVisitor;
+import poc.common.flowchart.*;
 import org.poc.common.navigation.CobolEntityNavigator;
 
 public class DialectStatementChartNode extends CobolChartNode {
     private ChartNode idmsChildNode;
+    private boolean databaseAccess = false;
+
 
     public DialectStatementChartNode(ParseTree parseTree, ChartNodeService nodeService) {
         super(parseTree, nodeService);
@@ -33,6 +32,12 @@ public class DialectStatementChartNode extends CobolChartNode {
     public void buildInternalFlow() {
         CobolEntityNavigator navigator = nodeService.getNavigator();
         ParseTree containerChild = executionContext.getChild(0);
+        System.out.println("IDMS DATA: " + containerChild.getText());
+        if (containerChild.getText().contains("PUT")) {
+            System.out.println("FOUND DB ACCESS");
+            databaseAccess = true;
+        }
+
         if (containerChild.getClass() == CobolParser.DialectIfStatmentContext.class) {
             idmsChildNode = new IdmsIfChartNode(containerChild, nodeService);
             nodeService.register(idmsChildNode);
@@ -59,5 +64,10 @@ public class DialectStatementChartNode extends CobolChartNode {
     @Override
     public ChartNodeType type() {
         return ChartNodeType.DIALECT;
+    }
+
+    @Override
+    public boolean accessesDatabase() {
+        return databaseAccess;
     }
 }

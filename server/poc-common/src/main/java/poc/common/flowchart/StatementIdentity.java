@@ -1,4 +1,4 @@
-package org.poc.flowchart;
+package poc.common.flowchart;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;
@@ -24,6 +24,19 @@ public class StatementIdentity<T> {
 
     public static boolean isOneOfTypes(ParseTree parseTree, List<Class> clazzes) {
         return clazzes.contains(parseTree.getClass());
+    }
+
+    public static boolean isClutter(ParseTree node) {
+        if (node.getClass() == CobolParser.SentenceContext.class) {
+            if (node.getChildCount() == 2) {
+                ParseTree child = node.getChild(0);
+                return !isStatementOfType(child, CobolParser.IfStatementContext.class) &&
+                        !isStatementOfType(child, CobolParser.PerformStatementContext.class) &&
+                        !isStatementOfType(child, CobolParser.DialectStatementContext.class) &&
+                        !isStatementOfType(child, CobolParser.GoToStatementContext.class);
+            }
+        }
+        return false;
     }
 
     public T get() {

@@ -36,20 +36,31 @@ public class CompositeCobolNode extends CobolChartNode {
 
     @Override
     public void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel) {
+        if (internalTreeRoot != null && (maxLevel == -1 || (maxLevel != -1 && level <= maxLevel))) {
+            visitor.visitParentChildLink(this, internalTreeRoot, nodeService);
+            ChartNode current = internalTreeRoot;
+            current.accept(visitor.newScope(this), level + 1, maxLevel);
+        }
         super.acceptUnvisited(visitor, level, maxLevel);
-        if (maxLevel != -1 && level > maxLevel) return;
-        if (internalTreeRoot == null) return;
+
+//        if (maxLevel != -1 && level > maxLevel) return;
+//        if (internalTreeRoot == null) return;
 
         // Make an explicit connection between higher organisational unit and root of internal tree
-        visitor.visitParentChildLink(this, internalTreeRoot, nodeService);
-        ChartNode current = internalTreeRoot;
-        current.accept(visitor, level + 1, maxLevel);
+    }
+
+    @Override
+    public void reset() {
+        internalTreeRoot.reset();
+        super.reset();
     }
 
     @Override
     public ChartNodeType type() {
         if (executionContext.getClass() == CobolParser.ProcedureSectionContext.class) return ChartNodeType.SECTION;
         if (executionContext.getClass() == CobolParser.ParagraphContext.class) return ChartNodeType.PARAGRAPH;
+        if (executionContext.getClass() == CobolParser.ConditionalStatementCallContext.class)
+            return ChartNodeType.CONDITION_CLAUSE;
         return ChartNodeType.COMPOSITE;
     }
 }

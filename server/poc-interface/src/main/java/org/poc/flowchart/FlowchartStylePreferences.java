@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class FlowchartStylePreferences {
     private static final HashMap<ChartNodeType, GraphvizStyleScheme> schemes = new HashMap<>();
     static {
-        schemes.put(ChartNodeType.ATOMIC, new GraphvizStyleScheme(Color.WHEAT, Color.BLACK));
+        schemes.put(ChartNodeType.ATOMIC, new GraphvizStyleScheme(Color.WHEAT, Color.BLACK, Shape.POINT));
         schemes.put(ChartNodeType.COMPOSITE, new GraphvizStyleScheme(Color.WHEAT, Color.BLACK));
         schemes.put(ChartNodeType.SECTION, new GraphvizStyleScheme(Color.DEEPSKYBLUE4, Color.WHITE));
         schemes.put(ChartNodeType.PARAGRAPH, new GraphvizStyleScheme(Color.DARKSEAGREEN4, Color.WHITE));
@@ -19,6 +19,7 @@ public class FlowchartStylePreferences {
         schemes.put(ChartNodeType.CONTROL_FLOW, new GraphvizStyleScheme(Color.DARKORANGE2, Color.WHITE, Shape.R_ARROW));
         schemes.put(ChartNodeType.PERFORM, new GraphvizStyleScheme(Color.DARKVIOLET, Color.WHITE, Shape.CDS));
         schemes.put(ChartNodeType.CONDITIONAL, new GraphvizStyleScheme(Color.CHOCOLATE4, Color.WHITE, Shape.DIAMOND));
+        schemes.put(ChartNodeType.CONDITION_CLAUSE, new GraphvizStyleScheme(Color.CHOCOLATE4, Color.WHITE, Shape.POINT));
         schemes.put(ChartNodeType.DUMMY, new GraphvizStyleScheme(Color.DARKSLATEGRAY4, Color.WHITE));
     }
 

@@ -6,6 +6,8 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolLexer;
 import org.eclipse.lsp.cobol.core.CobolParser;
+import org.poc.common.navigation.CobolEntityNavigator;
+import poc.common.flowchart.CobolContextAugmentedTreeNode;
 
 public class IdmsContainerNode extends ParserRuleContext {
     private ParseTree dialectNode;
@@ -27,8 +29,9 @@ public class IdmsContainerNode extends ParserRuleContext {
     }
 
     @Override
-    public String getText() {
-        return dialectNode.getText();
+    public String getText()
+    {
+        return CobolContextAugmentedTreeNode.originalText(dialectNode, CobolEntityNavigator::PASSTHROUGH);
     }
 
     @Override

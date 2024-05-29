@@ -116,22 +116,7 @@ public class CobolContextAugmentedTreeNode extends SimpleTreeNode {
         List<String> allDialectPlaceholders = new ArrayList<>();
         Pattern pattern = Pattern.compile("(_DIALECT_ [0-9]+)");
         Matcher matcher = pattern.matcher(text);
-        StringBuilder b = new StringBuilder();
-//        String xxxx = matcher.replaceAll(r -> navigator.dialectText(r.group()));
-        String xxxx = matcher.replaceAll(r -> substitutionStrategy.apply(r.group()));
-        return xxxx;
-//        if (allDialectPlaceholders.isEmpty()) return text;
-
-//        System.out.println("--ALL DIALECT PLACEHOLDERS---");
-//        StringBuilder builder = new StringBuilder(text);
-//        for (String placeholder : allDialectPlaceholders) {
-//            currentText = currentText.replace(placeholder, navigator.dialectText(placeholder));
-//        }
-//        allDialectPlaceholders.forEach(System.out::println);
-//
-//        System.out.println("Replacing " + text + " with " + currentText);
-//        return currentText;
-//        return text;
+        return matcher.replaceAll(r -> substitutionStrategy.apply(r.group()));
     }
 
     /**

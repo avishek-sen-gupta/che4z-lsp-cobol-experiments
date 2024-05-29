@@ -26,4 +26,14 @@ public interface ChartNode {
     void addIncomingNode(ChartNode chartNode);
 
     DomainDocument getNotes();
+
+    void reset();
+
+    void remove();
+
+    void removeOutgoingNode(ChartNode chartNode);
+
+    void removeIncomingNode(ChartNode chartNode);
+
+    boolean accessesDatabase();
 }

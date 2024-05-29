@@ -18,12 +18,17 @@ public class ChartNodeGraphvizVisitor implements ChartNodeVisitor {
         this.g = g;
     }
 
-    public void visit(ChartNode node, List<ChartNode> outgoingNodes, ChartNodeService nodeService) {
+    public void visit(ChartNode node, List<ChartNode> outgoingNodes, List<ChartNode> incomingNodes, ChartNodeService nodeService) {
         System.out.println("Visiting : " + node);
         outgoingNodes.forEach(o -> {
             System.out.println("Linking " + node + " to " + o);
             g.add(styled(node, mutNode(node.toString())).addLink(mutNode(o.toString())));
         });
+
+        System.out.println("ACCESS DB = " + node.accessesDatabase());
+        if (node.accessesDatabase()) {
+            g.add(mutNode(node.toString()).addLink(mutNode("IDMS Database").add("shape", "cylinder")));
+        }
     }
 
     public void visitCluster(ChartNode compositeNode, ChartNodeService nodeService) {
@@ -41,6 +46,11 @@ public class ChartNodeGraphvizVisitor implements ChartNodeVisitor {
         MutableNode origin = styled(from, mutNode(from.toString()));
         MutableNode destination = styled(to, mutNode(to.toString()));
         g.add(origin.addLink(origin.linkTo(destination).with("style", "bold").with("color", "blueviolet")));
+    }
+
+    @Override
+    public ChartNodeVisitor newScope(ChartNode enclosingScope) {
+        return this;
     }
 
     private MutableNode styled(ChartNode chartNode, MutableNode node) {

@@ -20,6 +20,7 @@ public class CobolChartNode implements ChartNode {
     private DomainDocument document = new DomainDocument();
     protected boolean initialised = false;
     protected boolean visited = false;
+    private boolean databaseAccess;
 
     public CobolChartNode(ParseTree executionContext, ChartNodeService nodeService) {
         this.uuid = String.valueOf(counter);
@@ -122,8 +123,8 @@ public class CobolChartNode implements ChartNode {
         acceptUnvisited(visitor, level, maxLevel);
     }
     public void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel) {
-        System.out.println("Current level: " + level);
-        visitor.visit(this, outgoingNodes, nodeService);
+//        System.out.println("Current level: " + level);
+        visitor.visit(this, outgoingNodes, incomingNodes, nodeService);
         outgoingNodes.forEach(c -> c.accept(visitor, level, maxLevel));
     }
 
@@ -135,5 +136,42 @@ public class CobolChartNode implements ChartNode {
     @Override
     public DomainDocument getNotes() {
         return document;
+    }
+
+    @Override
+    public void reset() {
+        visited = false;
+        outgoingNodes.forEach(ChartNode::reset);
+    }
+
+    @Override
+    public void remove() {
+        incomingNodes.forEach(n -> n.removeOutgoingNode(this));
+        incomingNodes.clear();
+        outgoingNodes.forEach(n -> n.removeIncomingNode(this));
+        outgoingNodes.clear();
+    }
+
+    @Override
+    public void removeOutgoingNode(ChartNode chartNode) {
+        int before = outgoingNodes.size();
+        outgoingNodes.remove(chartNode);
+        int after = outgoingNodes.size();
+        if (before != after) {
+            System.out.println("Warning: NOTHING was removed");
+        }
+        else {
+            System.out.println("Removed successfully");
+        }
+    }
+
+    @Override
+    public void removeIncomingNode(ChartNode chartNode) {
+        incomingNodes.remove(chartNode);
+    }
+
+    @Override
+    public boolean accessesDatabase() {
+        return databaseAccess;
     }
 }

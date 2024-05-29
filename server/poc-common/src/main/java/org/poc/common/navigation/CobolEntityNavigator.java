@@ -5,6 +5,10 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import java.util.List;
 
 public interface CobolEntityNavigator {
+    public static String PASSTHROUGH(String text) {
+        return text;
+    }
+
     ParseTree target(String procedureName);
 
     ParseTree root();

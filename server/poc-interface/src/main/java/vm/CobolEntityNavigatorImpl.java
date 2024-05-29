@@ -6,7 +6,7 @@ import org.eclipse.lsp.cobol.cli.IdmsContainerNode;
 import org.poc.common.navigation.CobolEntityNavigator;
 import org.eclipse.lsp.cobol.core.CobolParser;
 import org.poc.common.navigation.ParseTreeSearchCondition;
-import org.poc.flowchart.StatementIdentity;
+import poc.common.flowchart.StatementIdentity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,10 +70,6 @@ public class CobolEntityNavigatorImpl implements CobolEntityNavigator {
         return trees;
     }
 
-    private String passthrough(String text) {
-        return text;
-    }
-
     @Override
     public void buildDialectNodeRepository() {
         dialectNodes = findAllByCondition(t -> t.getClass() == CobolParser.DialectNodeFillerContext.class, fullProgramTree);
@@ -84,7 +80,7 @@ public class CobolEntityNavigatorImpl implements CobolEntityNavigator {
             String markerID = "_DIALECT_ " + n.getChild(1).getText();
             ParseTree idmsContainer = findByCondition(n, c -> c.getClass() == IdmsContainerNode.class, 1);
             Function<String, String> passthrough;
-            String text = originalText(idmsContainer.getChild(0), this::passthrough);
+            String text = originalText(idmsContainer.getChild(0), CobolEntityNavigator::PASSTHROUGH);
             symbolText.put(markerID, text);
 //            Matcher matcher = dialectMarkerPattern.matcher(n.getText());
 //            matcher.find();

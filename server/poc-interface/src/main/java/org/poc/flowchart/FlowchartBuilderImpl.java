@@ -7,10 +7,8 @@ import guru.nidi.graphviz.model.Factory;
 import guru.nidi.graphviz.model.MutableGraph;
 import guru.nidi.graphviz.model.MutableNode;
 import org.antlr.v4.runtime.tree.ParseTree;
-import poc.common.flowchart.ChartNode;
-import poc.common.flowchart.ChartNodeService;
+import poc.common.flowchart.*;
 import org.poc.common.navigation.CobolEntityNavigator;
-import poc.common.flowchart.FlowchartBuilder;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +19,7 @@ import static guru.nidi.graphviz.model.Factory.mutNode;
 
 public class FlowchartBuilderImpl implements FlowchartBuilder {
     private final ChartNodeService chartNodeService;
-    private ParseTree root;
+    private ChartNode root;
     private CobolEntityNavigator cobolEntityNavigator;
     private MutableGraph graph;
 
@@ -54,12 +52,21 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
         return draw(root, -1);
     }
 
-    private FlowchartBuilder buildChart(ParseTree node, int maxLevel) {
+    @Override
+    public FlowchartBuilder buildAST(ParseTree node) {
         ChartNode rootChartNode = chartNodeService.node(node);
         rootChartNode.buildFlow();
+        root = rootChartNode;
+        return this;
+    }
+
+    private FlowchartBuilder buildChart(ParseTree node, int maxLevel) {
+        ChartNode rootChartNode = chartNodeService.node(node);
+        rootChartNode.reset();
+//        rootChartNode.buildFlow();
 
 //        MutableGraph g = mutGraph("example1").setDirected(true).graphAttrs().add("rankdir", "TB");
-        ChartNodeGraphvizVisitor chartVisitor = new ChartNodeGraphvizVisitor(graph);
+        ChartNodeVisitor chartVisitor = new ChartNodeGraphvizVisitor(graph);
         rootChartNode.accept(chartVisitor, 1, maxLevel);
         return this;
     }
@@ -100,6 +107,16 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
     @Override
     public FlowchartBuilder createComment(String comment) {
         graph.add(commentStyle(mutNode(formatted(comment, 30))));
+        return this;
+    }
+
+    @Override
+    public FlowchartBuilder compress(ParseTree node, ChartNodeTransformRules rules) {
+        ChartNode rootChartNode = chartNodeService.node(node);
+        rootChartNode.reset();
+        ChartNodeRuleVisitor compressionVisitor = new ChartNodeRuleVisitor(rootChartNode, rules);
+        rootChartNode.accept(compressionVisitor, 1, -1);
+        compressionVisitor.applyRules();
         return this;
     }
 

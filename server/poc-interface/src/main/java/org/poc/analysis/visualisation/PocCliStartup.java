@@ -16,12 +16,13 @@ package org.poc.analysis.visualisation;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.cli.ParsePipeline;
+import poc.common.flowchart.ChartNodeTransformRules;
 import poc.common.flowchart.FlowchartBuilder;
-import poc.common.flowchart.GraphGenerator;
 import org.poc.common.navigation.CobolEntityNavigator;
 import org.poc.flowchart.FlowchartBuilderImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import poc.common.flowchart.GraphGenerator;
 import vm.CobolEntityNavigatorBuilderImpl;
 
 import java.io.File;
@@ -66,7 +67,8 @@ public class PocCliStartup {
         CobolEntityNavigator navigator = pipeline.parse();
         FlowchartBuilder flowcharter = pipeline.flowcharter();
 
-        ParseTree u204 = navigator.target("U204-CALL-COST-PRICE");
+//        ParseTree u204 = navigator.target("U204-CALL-COST-PRICE");
+        ParseTree u204 = navigator.target("R43-PUT");
         ParseTree k0A = navigator.target("K0A");
         ParseTree k1 = navigator.target("K1");
         ParseTree b2 = navigator.target("B2");
@@ -74,7 +76,12 @@ public class PocCliStartup {
 
 //        flowcharter.draw(k0A).draw(k1).draw(b2).draw(u204);
 //        flowcharter.outline(b2d, "SOME RANDOM STUFF");
-        flowcharter.draw(navigator.root()).write(dotFilePath);
+        ChartNodeTransformRules rules = new ChartNodeTransformRules();
+
+        flowcharter.buildAST(u204);
+//        flowcharter.compress(u204, rules);
+        flowcharter.draw(u204);
+        flowcharter.write(dotFilePath);
         flowcharter.write(dotFilePath);
         new GraphGenerator().generateGraph(dotFilePath, graphOutputPath);
     }

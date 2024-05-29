@@ -6,6 +6,7 @@ import org.eclipse.lsp.cobol.core.CobolParser;
 import org.eclipse.lsp.cobol.dialects.idms.IdmsParser;
 import poc.common.flowchart.ChartNode;
 import poc.common.flowchart.ChartNodeService;
+import poc.common.flowchart.StatementIdentity;
 
 public class CobolChartNodeFactory {
     public static ChartNode newNode(ParseTree parseTree, ChartNodeService nodeService) {
