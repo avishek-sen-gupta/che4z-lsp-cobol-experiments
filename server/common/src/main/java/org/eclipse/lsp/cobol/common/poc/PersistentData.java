@@ -3,6 +3,7 @@ package org.eclipse.lsp.cobol.common.poc;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+// TODO: Inject this. This is super ugly!
 public class PersistentData {
     public static int counter = 0;
 

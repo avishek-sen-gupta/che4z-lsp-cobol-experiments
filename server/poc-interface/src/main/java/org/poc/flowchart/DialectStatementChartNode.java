@@ -2,6 +2,7 @@ package org.poc.flowchart;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.cli.IdmsContainerNode;
+import org.eclipse.lsp.cobol.common.poc.PersistentData;
 import org.eclipse.lsp.cobol.core.CobolParser;
 import org.eclipse.lsp.cobol.dialects.idms.IdmsParser;
 import poc.common.flowchart.*;
@@ -23,10 +24,15 @@ public class DialectStatementChartNode extends CobolChartNode {
         idmsChildNode.accept(visitor, level, maxLevel);
     }
 
+    // TODO: Rewrite this monstrosity
     @Override
     public String name() {
-        String codeText = CobolContextAugmentedTreeNode.originalText(executionContext, CobolEntityNavigator::PASSTHROUGH);
-        return truncated(codeText, 15);
+        ParseTree dialectGuidContext = executionContext.getChild(0).getChild(1);
+        String guid = dialectGuidContext.getText();
+
+        ParseTree idmsTextNode = PersistentData.getDialectNode("IDMS-" + guid);
+        String codeText = CobolContextAugmentedTreeNode.originalText(idmsTextNode, CobolEntityNavigator::PASSTHROUGH);
+        return truncated(codeText, 30);
     }
 
     @Override
