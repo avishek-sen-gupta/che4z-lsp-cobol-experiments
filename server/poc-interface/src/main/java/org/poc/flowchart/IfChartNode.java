@@ -6,8 +6,8 @@ import org.poc.common.navigation.CobolEntityNavigator;
 import poc.common.flowchart.*;
 
 public class IfChartNode extends CobolChartNode {
-    private ChartNode ifThen;
-    private ChartNode ifElse;
+    private ChartNode ifThenBlock;
+    private ChartNode ifElseBlock;
 
     public IfChartNode(ParseTree parseTree, ChartNodeService nodeService) {
         super(parseTree, nodeService);
@@ -18,22 +18,22 @@ public class IfChartNode extends CobolChartNode {
         CobolParser.IfStatementContext ifStatement = new StatementIdentity<CobolParser.IfStatementContext>(getExecutionContext()).get();
         ChartNode ifThenBlock = nodeService.node(ifStatement.ifThen());
         ifThenBlock.buildFlow();
-        this.ifThen = ifThenBlock;
+        this.ifThenBlock = ifThenBlock;
         CobolParser.IfElseContext ifElseCtx = ifStatement.ifElse();
         if (ifElseCtx == null) return;
         ChartNode ifElseBlock = nodeService.node(ifElseCtx);
         ifElseBlock.buildFlow();
-        this.ifElse = ifElseBlock;
+        this.ifElseBlock = ifElseBlock;
     }
 
     @Override
     public void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel) {
         super.acceptUnvisited(visitor, level, maxLevel);
-        visitor.visitParentChildLink(this, ifThen, nodeService);
-        if (ifElse != null) visitor.visitParentChildLink(this, ifElse, nodeService);
+        visitor.visitParentChildLink(this, ifThenBlock, nodeService);
+        if (ifElseBlock != null) visitor.visitParentChildLink(this, ifElseBlock, nodeService);
 
-        ifThen.accept(visitor, level, maxLevel);
-        if (ifElse != null) ifElse.accept(visitor, level, maxLevel);
+        ifThenBlock.accept(visitor, level, maxLevel);
+        if (ifElseBlock != null) ifElseBlock.accept(visitor, level, maxLevel);
     }
 
     @Override
@@ -47,5 +47,12 @@ public class IfChartNode extends CobolChartNode {
         CobolParser.ConditionContext condition = (CobolParser.ConditionContext) ifStatement.getChild(1);
         String codeText = CobolContextAugmentedTreeNode.originalText(condition, CobolEntityNavigator::PASSTHROUGH);
         return "IS " + truncated(codeText, 40) + "?";
+    }
+
+    @Override
+    public void reset() {
+        super.reset();
+        ifThenBlock.reset();
+        if (ifElseBlock != null) ifElseBlock.reset();
     }
 }

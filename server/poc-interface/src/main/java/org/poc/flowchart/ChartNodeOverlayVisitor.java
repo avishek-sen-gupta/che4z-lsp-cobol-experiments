@@ -9,7 +9,6 @@ public class ChartNodeOverlayVisitor implements ChartNodeVisitor {
     private final ChartNode enclosingScope;
     private GenericProcessingChartNode head;
     private List<GenericProcessingChartNode> groups;
-    private List<ChartNodeVisitor> childVisitors = new ArrayList<>();
 
     public ChartNodeOverlayVisitor(ChartNode enclosingScope) {
         this(enclosingScope, new ArrayList<>());

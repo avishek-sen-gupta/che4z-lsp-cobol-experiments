@@ -51,7 +51,7 @@ public class CompositeCobolNode extends CobolChartNode {
 
     @Override
     public void reset() {
-        internalTreeRoot.reset();
+        if (internalTreeRoot != null) internalTreeRoot.reset();
         super.reset();
     }
 
