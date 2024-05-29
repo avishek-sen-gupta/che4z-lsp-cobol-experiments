@@ -25,7 +25,8 @@ public class DialectStatementChartNode extends CobolChartNode {
 
     @Override
     public String name() {
-        return truncated(executionContext, 15);
+        String codeText = CobolContextAugmentedTreeNode.originalText(executionContext, CobolEntityNavigator::PASSTHROUGH);
+        return truncated(codeText, 15);
     }
 
     @Override
@@ -33,6 +34,7 @@ public class DialectStatementChartNode extends CobolChartNode {
         CobolEntityNavigator navigator = nodeService.getNavigator();
         ParseTree containerChild = executionContext.getChild(0);
         System.out.println("IDMS DATA: " + containerChild.getText());
+        // TODO: Replace with proper type checking
         if (containerChild.getText().contains("PUT")) {
             System.out.println("FOUND DB ACCESS");
             databaseAccess = true;

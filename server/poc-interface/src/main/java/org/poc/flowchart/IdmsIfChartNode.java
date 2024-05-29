@@ -66,6 +66,6 @@ public class IdmsIfChartNode extends CobolChartNode {
 
     @Override
     public ChartNodeType type() {
-        return ChartNodeType.CONDITIONAL;
+        return ChartNodeType.IF_BRANCH;
     }
 }

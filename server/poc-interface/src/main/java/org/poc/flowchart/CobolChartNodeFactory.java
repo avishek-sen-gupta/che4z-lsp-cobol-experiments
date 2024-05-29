@@ -18,6 +18,8 @@ public class CobolChartNodeFactory {
             return new PerformChartNode(parseTree, nodeService);
         else if (StatementIdentity.isOfType(parseTree, CobolParser.DialectStatementContext.class))
             return new DialectStatementChartNode(parseTree, nodeService);
+        else if (StatementIdentity.isOfType(parseTree, CobolParser.SentenceContext.class))
+            return new SentenceChartNode(parseTree, nodeService);
         else if (isCompositeNode(parseTree))
             return new CompositeCobolNode(parseTree, nodeService);
 
@@ -38,7 +40,6 @@ public class CobolChartNodeFactory {
                 executionContext.getClass() == IdmsParser.IdmsIfStatementContext.class ||
                 executionContext.getClass() == IdmsContainerNode.class ||
                 executionContext.getClass() == IdmsParser.InquireMapIfStatementContext.class
-//                executionContext.getClass() == IdmsParser.IdmsStatementsContext.class
                 ;
     }
 }

@@ -11,6 +11,7 @@ public class FlowchartStylePreferences {
     private static final HashMap<ChartNodeType, GraphvizStyleScheme> schemes = new HashMap<>();
     static {
         schemes.put(ChartNodeType.ATOMIC, new GraphvizStyleScheme(Color.WHEAT, Color.BLACK, Shape.POINT));
+        schemes.put(ChartNodeType.SENTENCE, new GraphvizStyleScheme(Color.WHEAT, Color.BLACK, Shape.POINT, "invisible"));
         schemes.put(ChartNodeType.COMPOSITE, new GraphvizStyleScheme(Color.WHEAT, Color.BLACK));
         schemes.put(ChartNodeType.SECTION, new GraphvizStyleScheme(Color.DEEPSKYBLUE4, Color.WHITE));
         schemes.put(ChartNodeType.PARAGRAPH, new GraphvizStyleScheme(Color.DARKSEAGREEN4, Color.WHITE));
@@ -18,14 +19,14 @@ public class FlowchartStylePreferences {
         schemes.put(ChartNodeType.GOTO, new GraphvizStyleScheme(Color.DARKGREEN, Color.WHITE, Shape.INV_HOUSE));
         schemes.put(ChartNodeType.CONTROL_FLOW, new GraphvizStyleScheme(Color.DARKORANGE2, Color.WHITE, Shape.R_ARROW));
         schemes.put(ChartNodeType.PERFORM, new GraphvizStyleScheme(Color.DARKVIOLET, Color.WHITE, Shape.CDS));
-        schemes.put(ChartNodeType.CONDITIONAL, new GraphvizStyleScheme(Color.CHOCOLATE4, Color.WHITE, Shape.DIAMOND));
+        schemes.put(ChartNodeType.IF_BRANCH, new GraphvizStyleScheme(Color.CHOCOLATE4, Color.WHITE, Shape.DIAMOND));
         schemes.put(ChartNodeType.CONDITION_CLAUSE, new GraphvizStyleScheme(Color.CHOCOLATE4, Color.WHITE, Shape.POINT));
         schemes.put(ChartNodeType.DUMMY, new GraphvizStyleScheme(Color.DARKSLATEGRAY4, Color.WHITE));
     }
 
     public static GraphvizStyleScheme scheme(ChartNode node) {
-//        return schemes.get(node.type());
-        if (node.getNotes().isEmpty()) return schemes.get(node.type());
-        return new GraphvizStyleScheme(Color.AZURE4, Color.BLACK, Shape.NOTE, node.getNotes());
+        return schemes.get(node.type());
+//        if (node.getNotes().isEmpty()) return schemes.get(node.type());
+//        return new GraphvizStyleScheme(Color.AZURE4, Color.BLACK, Shape.NOTE, node.getNotes());
     }
 }

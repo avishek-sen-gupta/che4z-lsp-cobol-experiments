@@ -25,7 +25,6 @@ public class ChartNodeGraphvizVisitor implements ChartNodeVisitor {
             g.add(styled(node, mutNode(node.toString())).addLink(mutNode(o.toString())));
         });
 
-        System.out.println("ACCESS DB = " + node.accessesDatabase());
         if (node.accessesDatabase()) {
             g.add(mutNode(node.toString()).addLink(mutNode("IDMS Database").add("shape", "cylinder")));
         }

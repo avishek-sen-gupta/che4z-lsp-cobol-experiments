@@ -2,6 +2,7 @@ package org.poc.flowchart;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;
+import org.poc.common.navigation.CobolEntityNavigator;
 import poc.common.flowchart.*;
 
 public class IfChartNode extends CobolChartNode {
@@ -37,6 +38,14 @@ public class IfChartNode extends CobolChartNode {
 
     @Override
     public ChartNodeType type() {
-        return ChartNodeType.CONDITIONAL;
+        return ChartNodeType.IF_BRANCH;
+    }
+
+    @Override
+    public String name() {
+        CobolParser.IfStatementContext ifStatement = new StatementIdentity<CobolParser.IfStatementContext>(getExecutionContext()).get();
+        CobolParser.ConditionContext condition = (CobolParser.ConditionContext) ifStatement.getChild(1);
+        String codeText = CobolContextAugmentedTreeNode.originalText(condition, CobolEntityNavigator::PASSTHROUGH);
+        return "IS " + truncated(codeText, 40) + "?";
     }
 }

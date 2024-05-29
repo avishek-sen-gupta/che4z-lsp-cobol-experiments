@@ -5,6 +5,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.eclipse.lsp.cobol.dialects.idms.IdmsParser;
+import org.poc.common.navigation.CobolEntityNavigator;
 import poc.common.flowchart.*;
 import org.eclipse.lsp.cobol.core.CobolParser;
 
@@ -109,7 +110,12 @@ public class CobolChartNode implements ChartNode {
     }
 
     protected String truncated(ParseTree e, int truncationLimit) {
-        return e.getText().length() > truncationLimit ? e.getText().substring(0, truncationLimit) : e.getText();
+        return truncated(e.getText(), truncationLimit);
+//        return e.getText().length() > truncationLimit ? e.getText().substring(0, truncationLimit) : e.getText();
+    }
+
+    protected String truncated(String s, int truncationLimit) {
+        return s.length() > truncationLimit ? s.substring(0, truncationLimit) : s;
     }
 
     public void accept(ChartNodeVisitor visitor, int level) {
