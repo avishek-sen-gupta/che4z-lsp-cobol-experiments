@@ -83,9 +83,9 @@ public class CobolChartNode implements ChartNode {
         if (executionContext.getClass() == CobolParser.ParagraphContext.class)
             return ((CobolParser.ParagraphContext) executionContext).paragraphDefinitionName().getText();
         if (executionContext.getClass() == CobolParser.StatementContext.class)
-            return "Stmt:" + truncated(executionContext, 15);
+            return truncated(executionContext, 15);
         if (executionContext.getClass() == CobolParser.SentenceContext.class)
-            return "SE: " + truncated(executionContext, 15);
+            return truncated(executionContext, 15);
 //            return "SE:" + truncated(executionContext);
         if (executionContext.getClass() == TerminalNodeImpl.class)
             return executionContext.getText();
@@ -196,5 +196,10 @@ public class CobolChartNode implements ChartNode {
     @Override
     public List<ChartNode> getOutgoingNodes() {
         return outgoingNodes;
+    }
+
+    @Override
+    public String shortLabel() {
+        return name();
     }
 }

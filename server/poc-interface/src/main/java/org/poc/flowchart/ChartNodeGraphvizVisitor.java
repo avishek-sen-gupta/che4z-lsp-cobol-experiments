@@ -26,8 +26,8 @@ public class ChartNodeGraphvizVisitor implements ChartNodeVisitor {
         targets.forEach(t -> {
             System.out.println("Linking " + node + " to " + t);
             if (source == t) return;
-            MutableNode graphSource = mutNode(source.toString());
-            MutableNode graphTarget = mutNode(t.toString());
+            MutableNode graphSource = mutNode(source.toString()).add("label", source.shortLabel());
+            MutableNode graphTarget = mutNode(t.toString()).add("label", t.shortLabel());
             g.add(styled(source, graphSource).addLink(styled(t, graphTarget)));
         });
 
@@ -44,9 +44,10 @@ public class ChartNodeGraphvizVisitor implements ChartNodeVisitor {
         ChartNode overlayParent = overlay.block(parent);
         if (overlayParent.getClass() == GenericProcessingChartNode.class) return;
         ChartNode overlayInternalTreeRoot = overlay.block(internalTreeRoot);
-        MutableNode o = styled(overlayParent, mutNode(overlayParent.toString()));
-        MutableNode child = styled(overlayInternalTreeRoot, mutNode(overlayInternalTreeRoot.toString()));
-        g.add(o.add(Color.RED).addLink(o.linkTo(child).with("style", "dashed")));
+        MutableNode graphParent = styled(overlayParent, mutNode(overlayParent.toString())).add("label", overlayParent.shortLabel());
+        MutableNode graphChild = mutNode(overlayInternalTreeRoot.toString()).add("label", overlayInternalTreeRoot.shortLabel());
+        MutableNode child = styled(overlayInternalTreeRoot, graphChild);
+        g.add(graphParent.add(Color.RED).addLink(graphParent.linkTo(child).with("style", "dashed")));
     }
 
     @Override

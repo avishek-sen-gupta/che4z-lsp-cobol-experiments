@@ -5,6 +5,11 @@ import poc.common.flowchart.ChartNodeService;
 import poc.common.flowchart.ChartNodeType;
 
 public class IfElseChartNode extends CompositeCobolNode {
+    @Override
+    public String shortLabel() {
+        return "No";
+    }
+
     public IfElseChartNode(ParseTree parseTree, ChartNodeService nodeService) {
         super(parseTree, nodeService);
     }

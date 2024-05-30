@@ -44,4 +44,6 @@ public interface ChartNode {
     boolean contains(ChartNode node);
 
     List<ChartNode> getOutgoingNodes();
+
+    String shortLabel();
 }
