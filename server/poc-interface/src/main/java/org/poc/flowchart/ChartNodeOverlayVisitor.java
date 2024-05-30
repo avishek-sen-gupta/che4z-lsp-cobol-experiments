@@ -21,16 +21,16 @@ public class ChartNodeOverlayVisitor implements ChartNodeVisitor {
 
     @Override
     public void visit(ChartNode node, List<ChartNode> outgoingNodes, List<ChartNode> incomingNodes, ChartNodeService nodeService) {
-        if (node.getClass() == SentenceChartNode.class && node.isMergeable()) {
+        if ((node.getClass() == SentenceChartNode.class || node.getClass() == ConditionalStatementChartNode.class) && node.isMergeable()) {
             System.out.println("MERGEABLE : " + node);
             if (head == null) {
                 head = new GenericProcessingChartNode(node, enclosingScope);
+                groups.add(head);
             } else {
                 head.add(node);
             }
         } else {
             if (head != null) {
-                groups.add(head);
                 head = null;
             }
         }

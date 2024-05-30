@@ -11,7 +11,7 @@ import poc.common.flowchart.ChartNodeVisitor;
 import java.util.List;
 
 public class CompositeCobolNode extends CobolChartNode {
-    private ChartNode internalTreeRoot;
+    protected ChartNode internalTreeRoot;
 
     public CompositeCobolNode(ParseTree parseTree, ChartNodeService nodeService) {
         super(parseTree, nodeService);
@@ -59,8 +59,8 @@ public class CompositeCobolNode extends CobolChartNode {
     public ChartNodeType type() {
         if (executionContext.getClass() == CobolParser.ProcedureSectionContext.class) return ChartNodeType.SECTION;
         if (executionContext.getClass() == CobolParser.ParagraphContext.class) return ChartNodeType.PARAGRAPH;
-        if (executionContext.getClass() == CobolParser.ConditionalStatementCallContext.class)
-            return ChartNodeType.CONDITION_CLAUSE;
+//        if (executionContext.getClass() == CobolParser.ConditionalStatementCallContext.class)
+//            return ChartNodeType.CONDITION_CLAUSE;
         return ChartNodeType.COMPOSITE;
     }
 }

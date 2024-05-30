@@ -16,10 +16,13 @@ public class CobolChartNodeFactory {
             return new GoToChartNode(parseTree, nodeService);
         else if (StatementIdentity.isStatementOfType(parseTree, CobolParser.PerformStatementContext.class))
             return new PerformChartNode(parseTree, nodeService);
-        else if (StatementIdentity.isOfType(parseTree, CobolParser.StatementContext.class))
-            return new GenericStatementChartNode(parseTree, nodeService);
         else if (StatementIdentity.isOfType(parseTree, CobolParser.DialectStatementContext.class))
             return new DialectStatementChartNode(parseTree, nodeService);
+        else if (StatementIdentity.isOfType(parseTree, CobolParser.ConditionalStatementCallContext.class))
+            return new ConditionalStatementChartNode(parseTree, nodeService);
+        // This needs to come last in all the statement classifications, or things will break
+        else if (StatementIdentity.isOfType(parseTree, CobolParser.StatementContext.class))
+            return new GenericStatementChartNode(parseTree, nodeService);
         else if (StatementIdentity.isOfType(parseTree, CobolParser.SentenceContext.class))
             return new SentenceChartNode(parseTree, nodeService);
         else if (StatementIdentity.isOfType(parseTree, CobolParser.IfThenContext.class))
