@@ -47,7 +47,7 @@ public class ChartNodeGraphvizVisitor implements ChartNodeVisitor {
         MutableNode graphParent = styled(overlayParent, mutNode(overlayParent.toString())).add("label", overlayParent.shortLabel());
         MutableNode graphChild = mutNode(overlayInternalTreeRoot.toString()).add("label", overlayInternalTreeRoot.shortLabel());
         MutableNode child = styled(overlayInternalTreeRoot, graphChild);
-        g.add(graphParent.add(Color.RED).addLink(graphParent.linkTo(child).with("style", "dashed")));
+        g.add(graphParent.addLink(graphParent.linkTo(child).with("style", "dashed")));
     }
 
     @Override

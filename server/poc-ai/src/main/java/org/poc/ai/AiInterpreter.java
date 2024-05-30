@@ -54,6 +54,8 @@ public class AiInterpreter {
     }
 
     public void buildFlowchart() {
+        flowcharter.buildAST(scope);
+        flowcharter.buildOverlay(scope);
         flowcharter.draw(scope);
 //        references.forEach(r -> {
 //            r.getSymbols().forEach(s -> flowcharter.draw(s));
