@@ -1,5 +1,6 @@
 package org.poc.flowchart;
 
+import org.eclipse.lsp.cobol.core.CobolParser;
 import poc.common.flowchart.*;
 
 import java.util.ArrayList;
@@ -21,7 +22,10 @@ public class ChartNodeOverlayVisitor implements ChartNodeVisitor {
 
     @Override
     public void visit(ChartNode node, List<ChartNode> outgoingNodes, List<ChartNode> incomingNodes, ChartNodeService nodeService) {
-        if ((node.getClass() == SentenceChartNode.class || node.getClass() == ConditionalStatementChartNode.class) && node.isMergeable()) {
+        if ((node.getClass() == SentenceChartNode.class ||
+                node.getClass() == ConditionalStatementChartNode.class ||
+                node.getClass() == GenericStatementChartNode.class // This condition is a little sus because technically, statements inside sentences could also get their own groups which would show up in addition to their parent sentence groups. It's working now, need to investigate with a small test program.
+        ) && node.isMergeable()) {
             System.out.println("MERGEABLE : " + node);
             if (head == null) {
                 head = new GenericProcessingChartNode(node, enclosingScope);

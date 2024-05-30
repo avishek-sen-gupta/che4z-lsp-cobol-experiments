@@ -70,6 +70,6 @@ public class AiInterpreter {
             }
         }
         flowcharter.write(dotFilePath);
-        new GraphGenerator().generateGraph(dotFilePath, graphOutputPath);
+        new GraphGenerator("ortho").generateGraph(dotFilePath, graphOutputPath);
     }
 }
