@@ -114,7 +114,7 @@ public class GenericProcessingChartNode implements ChartNode {
     }
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder("GROUP\n------------------------\n");
+        StringBuilder builder = new StringBuilder("Processing\n------------------------\n");
         nodes.forEach(n -> builder.append(CobolContextAugmentedTreeNode.originalText(n.getExecutionContext(), CobolEntityNavigator::PASSTHROUGH) + "\n"));
         return builder.toString();
     }

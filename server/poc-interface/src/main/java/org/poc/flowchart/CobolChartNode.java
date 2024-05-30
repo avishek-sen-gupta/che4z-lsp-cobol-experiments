@@ -146,6 +146,8 @@ public class CobolChartNode implements ChartNode {
 
     @Override
     public void reset() {
+        // If visited is already false, it means I must have already set it to false and now I am looping back on myself
+        if (!visited) return;
         visited = false;
         outgoingNodes.forEach(ChartNode::reset);
     }

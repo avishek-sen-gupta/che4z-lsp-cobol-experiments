@@ -16,6 +16,7 @@ package org.poc.analysis.visualisation;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.cli.ParsePipeline;
+import org.eclipse.lsp.cobol.core.CobolParser;
 import poc.common.flowchart.ChartNodeTransformRules;
 import poc.common.flowchart.FlowchartBuilder;
 import org.poc.common.navigation.CobolEntityNavigator;
@@ -67,8 +68,9 @@ public class PocCliStartup {
         CobolEntityNavigator navigator = pipeline.parse();
         FlowchartBuilder flowcharter = pipeline.flowcharter();
 
-        ParseTree u204 = navigator.target("U204-CALL-COST-PRICE");
-//        ParseTree u204 = navigator.target("R43-PUT");
+//        ParseTree u204 = navigator.target("D1");
+//        ParseTree u204 = navigator.target("U204-CALL-COST-PRICE");
+        ParseTree u204 = navigator.root();
         ParseTree k0A = navigator.target("K0A");
         ParseTree k1 = navigator.target("K1");
         ParseTree b2 = navigator.target("B2");
@@ -76,7 +78,6 @@ public class PocCliStartup {
 
 //        flowcharter.draw(k0A).draw(k1).draw(b2).draw(u204);
 //        flowcharter.outline(b2d, "SOME RANDOM STUFF");
-        ChartNodeTransformRules rules = new ChartNodeTransformRules();
 
         flowcharter.buildAST(u204);
         flowcharter.buildOverlay(u204);

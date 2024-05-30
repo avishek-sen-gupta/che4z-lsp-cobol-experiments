@@ -27,7 +27,9 @@ public class DialectStatementChartNode extends CobolChartNode {
     // TODO: Rewrite this monstrosity
     @Override
     public String name() {
-        ParseTree dialectGuidContext = executionContext.getChild(0).getChild(1);
+        CobolEntityNavigator navigator = nodeService.getNavigator();
+        ParseTree dialectGuidContext = navigator.findByCondition(executionContext, t -> t.getClass() == CobolParser.DialectGuidContext.class);
+//        ParseTree dialectGuidContext = executionContext.getChild(0).getChild(1);
         String guid = dialectGuidContext.getText();
 
         ParseTree idmsTextNode = PersistentData.getDialectNode("IDMS-" + guid);
