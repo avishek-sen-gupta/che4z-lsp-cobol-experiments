@@ -68,9 +68,9 @@ public class PocCliStartup {
         CobolEntityNavigator navigator = pipeline.parse();
         FlowchartBuilder flowcharter = pipeline.flowcharter();
 
-        ParseTree u204 = navigator.target("D1");
+//        ParseTree u204 = navigator.target("D1");
 //        ParseTree u204 = navigator.target("U204-CALL-COST-PRICE");
-//        ParseTree u204 = navigator.root();
+        ParseTree u204 = navigator.root();
         ParseTree k0A = navigator.target("K0A");
         ParseTree k1 = navigator.target("K1");
         ParseTree b2 = navigator.target("B2");
