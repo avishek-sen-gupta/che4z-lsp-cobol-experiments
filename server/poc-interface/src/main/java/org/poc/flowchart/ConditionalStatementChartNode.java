@@ -27,4 +27,9 @@ public class ConditionalStatementChartNode extends CompositeCobolNode {
     public String name() {
         return executionContext.getText();
     }
+
+    @Override
+    public boolean contains(ChartNode node) {
+        return internalTreeRoot == node;
+    }
 }

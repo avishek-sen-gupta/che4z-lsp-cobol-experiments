@@ -120,7 +120,11 @@ public class GenericProcessingChartNode implements ChartNode {
     }
 
     public boolean contains(ChartNode node) {
-        return nodes.contains(node);
-//        return false;
+        return nodes.contains(node) || nodes.stream().anyMatch(n -> n.contains(node));
+    }
+
+    @Override
+    public List<ChartNode> getOutgoingNodes() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

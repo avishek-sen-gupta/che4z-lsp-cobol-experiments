@@ -63,4 +63,9 @@ public class CompositeCobolNode extends CobolChartNode {
 //            return ChartNodeType.CONDITION_CLAUSE;
         return ChartNodeType.COMPOSITE;
     }
+
+    @Override
+    public boolean contains(ChartNode node) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

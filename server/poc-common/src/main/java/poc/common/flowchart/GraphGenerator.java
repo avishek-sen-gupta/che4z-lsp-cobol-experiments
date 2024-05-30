@@ -20,7 +20,7 @@ dot -Kdot -v5 -Gsize=200,200\! -Goverlap=scale -Tpng -Gnslimit=4 -Gnslimit1=4 -G
 
 public class GraphGenerator {
     public void generateGraph(String dotFilePath, String graphOutputPath) throws IOException, InterruptedException {
-        ImmutableList<String> graphGenerationCommand = ImmutableList.of("dot", "-Kdot", "-v5", "-Gsize=800,800\\!", "-Goverlap=scale", "-Tpng", "-Gnslimit=7", "-Gnslimit1=7", "-Gmaxiter=5000", "-Gsplines=line", dotFilePath, String.format("-o%s", graphOutputPath));
+        ImmutableList<String> graphGenerationCommand = ImmutableList.of("dot", "-Kdot", "-v5", "-Gsize=800,800\\!", "-Goverlap=scale", "-Tpng", "-Gnslimit=7", "-Gnslimit1=7", "-Gmaxiter=5000", "-Gsplines=ortho", dotFilePath, String.format("-o%s", graphOutputPath));
 //        String graphGenerationCommand = String.format("dot -Kdot -v5 -Gsize=800,800\\! -Goverlap=scale -Tpng -Gnslimit=7 -Gnslimit1=7 -Gmaxiter=5000 -Gsplines=line %s -o%s", dotFilePath, graphOutputPath);
         Process p = new ProcessBuilder(graphGenerationCommand).inheritIO().start();
         int rc = p.waitFor();

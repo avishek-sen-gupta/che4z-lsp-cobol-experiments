@@ -2,6 +2,8 @@ package poc.common.flowchart;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import java.util.List;
+
 public interface ChartNode {
     void buildFlow();
 
@@ -38,4 +40,8 @@ public interface ChartNode {
     boolean accessesDatabase();
 
     boolean isMergeable();
+
+    boolean contains(ChartNode node);
+
+    List<ChartNode> getOutgoingNodes();
 }

@@ -187,4 +187,14 @@ public class CobolChartNode implements ChartNode {
     public boolean isMergeable() {
         return false;
     }
+
+    @Override
+    public boolean contains(ChartNode node) {
+        return false;
+    }
+
+    @Override
+    public List<ChartNode> getOutgoingNodes() {
+        return outgoingNodes;
+    }
 }
