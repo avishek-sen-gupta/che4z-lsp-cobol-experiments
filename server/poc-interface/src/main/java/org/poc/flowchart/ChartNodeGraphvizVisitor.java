@@ -37,6 +37,8 @@ public class ChartNodeGraphvizVisitor implements ChartNodeVisitor {
                     .add("shape", "cylinder")
                     .add("height", "4")
                     .add("width", "4")
+                    .add("style", "filled")
+                    .add("fillcolor", Color.LIGHTBLUE2.value)
                     .add("penwidth", "4")
             ));
         }

@@ -26,6 +26,8 @@ public class CobolChartNodeFactory {
             return new GenericStatementChartNode(parseTree, nodeService);
         else if (StatementIdentity.isOfType(parseTree, TerminalNodeImpl.class))
             return new SymbolChartNode(parseTree, nodeService);
+        else if (StatementIdentity.isOfType(parseTree, CobolParser.ProcedureSectionHeaderContext.class))
+            return new SectionHeaderChartNode(parseTree, nodeService);
         else if (StatementIdentity.isOfType(parseTree, CobolParser.ParagraphDefinitionNameContext.class))
             return new ParagraphNameChartNode(parseTree, nodeService);
         else if (StatementIdentity.isOfType(parseTree, CobolParser.SentenceContext.class))
