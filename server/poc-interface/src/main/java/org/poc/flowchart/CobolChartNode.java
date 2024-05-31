@@ -202,9 +202,4 @@ public class CobolChartNode implements ChartNode {
     public String shortLabel() {
         return name();
     }
-
-    @Override
-    public List<ChartNode> getTerminalOutgoingNodes() {
-        return List.of(this);
-    }
 }

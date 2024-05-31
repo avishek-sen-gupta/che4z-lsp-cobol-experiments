@@ -132,9 +132,4 @@ public class GenericProcessingChartNode implements ChartNode {
     public String shortLabel() {
         return toString();
     }
-
-    @Override
-    public List<ChartNode> getTerminalOutgoingNodes() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 }
