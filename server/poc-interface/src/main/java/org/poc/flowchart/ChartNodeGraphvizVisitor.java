@@ -22,15 +22,14 @@ public class ChartNodeGraphvizVisitor implements ChartNodeVisitor {
         if (node.isPassthrough()) return;
         System.out.println("Visiting : " + node);
         ChartNode source = overlay.block(node);
-        List<ChartNode> targets = outgoingNodes.stream().map(overlay::block).toList();
+        List<ChartNode> targets = outgoingNodes.stream().map(ChartNode::passthrough).map(overlay::block).toList();
 
         targets.forEach(t -> {
             System.out.println("Linking " + node + " to " + t);
             if (source == t) return;
             MutableNode graphSource = mutNode(source.toString()).add("label", source.shortLabel());
-            ChartNode passthroughTarget = t.passthrough();
-            MutableNode graphTarget = mutNode(passthroughTarget.toString()).add("label", passthroughTarget.shortLabel());
-            g.add(styled(source, graphSource).addLink(styled(passthroughTarget, graphTarget)));
+            MutableNode graphTarget = mutNode(t.toString()).add("label", t.shortLabel());
+            g.add(styled(source, graphSource).addLink(styled(t, graphTarget)));
         });
 
         if (node.accessesDatabase()) {
@@ -45,12 +44,12 @@ public class ChartNodeGraphvizVisitor implements ChartNodeVisitor {
     public void visitParentChildLink(ChartNode parent, ChartNode internalTreeRoot, ChartNodeService nodeService) {
         ChartNode overlayParent = overlay.block(parent);
         if (overlayParent.getClass() == GenericProcessingChartNode.class) return;
-        ChartNode overlayInternalTreeRoot = overlay.block(internalTreeRoot);
+        ChartNode passthroughTarget = internalTreeRoot.passthrough();
+        ChartNode overlayInternalTreeRoot = overlay.block(passthroughTarget);
         MutableNode graphParent = styled(overlayParent, mutNode(overlayParent.toString())).add("label", overlayParent.shortLabel());
-        ChartNode passthroughTarget = overlayInternalTreeRoot.passthrough();
 //        ChartNode passthroughTarget = overlayInternalTreeRoot;
-        MutableNode graphChild = mutNode(passthroughTarget.toString()).add("label", passthroughTarget.shortLabel());
-        MutableNode child = styled(passthroughTarget, graphChild);
+        MutableNode graphChild = mutNode(overlayInternalTreeRoot.toString()).add("label", overlayInternalTreeRoot.shortLabel());
+        MutableNode child = styled(overlayInternalTreeRoot, graphChild);
         g.add(graphParent.addLink(graphParent.linkTo(child).with("style", "dashed")));
     }
 

@@ -20,12 +20,12 @@ public class ParagraphNameChartNode extends CobolChartNode {
 
     @Override
     public ChartNode passthrough() {
-//        return outgoingNodes.getFirst();
-        return this;
+        return outgoingNodes.getFirst();
+//        return this;
     }
 
     @Override
     public boolean isPassthrough() {
-        return false;
+        return true;
     }
 }

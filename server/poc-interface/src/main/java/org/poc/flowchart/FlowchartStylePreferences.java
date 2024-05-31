@@ -15,7 +15,7 @@ public class FlowchartStylePreferences {
         schemes.put(ChartNodeType.ATOMIC, new GraphvizStyleScheme(Color.WHEAT, Color.BLACK, Shape.POINT));
         schemes.put(ChartNodeType.GENERIC_STATEMENT, new GraphvizStyleScheme(Color.WHEAT, Color.BLACK, Shape.INV_HOUSE));
         schemes.put(ChartNodeType.PARAGRAPHS, new GraphvizStyleScheme(Color.WHEAT, Color.BLACK, Shape.POINT));
-        schemes.put(ChartNodeType.SENTENCE, new GraphvizStyleScheme(Color.WHEAT, Color.BLACK, Shape.DOUBLE_OCTAGON));
+        schemes.put(ChartNodeType.SENTENCE, new GraphvizStyleScheme(Color.WHEAT, Color.BLACK, Shape.POINT));
         schemes.put(ChartNodeType.COMPOSITE, new GraphvizStyleScheme(Color.WHEAT, Color.BLACK));
         schemes.put(ChartNodeType.SECTION, new GraphvizStyleScheme(Color.DEEPSKYBLUE4, Color.WHITE));
         schemes.put(ChartNodeType.PARAGRAPH, new GraphvizStyleScheme(Color.DARKSEAGREEN4, Color.WHITE));
