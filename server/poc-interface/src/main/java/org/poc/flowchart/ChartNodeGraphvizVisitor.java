@@ -27,13 +27,18 @@ public class ChartNodeGraphvizVisitor implements ChartNodeVisitor {
         targets.forEach(t -> {
             System.out.println("Linking " + node + " to " + t);
             if (source == t) return;
-            MutableNode graphSource = mutNode(source.toString()).add("label", source.shortLabel());
-            MutableNode graphTarget = mutNode(t.toString()).add("label", t.shortLabel());
-            g.add(styled(source, graphSource).addLink(styled(t, graphTarget)));
+            MutableNode graphSource = styled(source, mutNode(source.toString()).add("label", source.shortLabel()));
+            MutableNode graphTarget = styled(t, mutNode(t.toString()).add("label", t.shortLabel()));
+            g.add(graphSource.addLink(graphSource.linkTo(graphTarget).with("penwidth", "3")));
         });
 
         if (node.accessesDatabase()) {
-            g.add(mutNode(source.toString()).addLink(mutNode("IDMS Database").add("shape", "cylinder")));
+            g.add(mutNode(source.toString()).addLink(mutNode("IDMS Database")
+                    .add("shape", "cylinder")
+                    .add("height", "4")
+                    .add("width", "4")
+                    .add("penwidth", "4")
+            ));
         }
     }
 

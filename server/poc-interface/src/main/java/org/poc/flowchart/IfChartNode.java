@@ -46,7 +46,7 @@ public class IfChartNode extends CobolChartNode {
         CobolParser.IfStatementContext ifStatement = new StatementIdentity<CobolParser.IfStatementContext>(getExecutionContext()).get();
         CobolParser.ConditionContext condition = (CobolParser.ConditionContext) ifStatement.getChild(1);
         String codeText = CobolContextAugmentedTreeNode.originalText(condition, CobolEntityNavigator::PASSTHROUGH);
-        return "IS " + truncated(codeText, 40) + "?";
+        return "IS \n" + truncated(codeText, 40) + "?\n";
     }
 
     @Override
