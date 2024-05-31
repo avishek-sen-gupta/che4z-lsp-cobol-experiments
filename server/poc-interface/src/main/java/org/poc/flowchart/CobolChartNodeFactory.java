@@ -1,6 +1,7 @@
 package org.poc.flowchart;
 
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.eclipse.lsp.cobol.cli.IdmsContainerNode;
 import org.eclipse.lsp.cobol.core.CobolParser;
 import org.eclipse.lsp.cobol.dialects.idms.IdmsParser;
@@ -23,6 +24,8 @@ public class CobolChartNodeFactory {
         // This needs to come last in all the statement classifications, or things will break
         else if (StatementIdentity.isOfType(parseTree, CobolParser.StatementContext.class))
             return new GenericStatementChartNode(parseTree, nodeService);
+        else if (StatementIdentity.isOfType(parseTree, TerminalNodeImpl.class))
+            return new SymbolChartNode(parseTree, nodeService);
         else if (StatementIdentity.isOfType(parseTree, CobolParser.ParagraphDefinitionNameContext.class))
             return new ParagraphNameChartNode(parseTree, nodeService);
         else if (StatementIdentity.isOfType(parseTree, CobolParser.SentenceContext.class))
