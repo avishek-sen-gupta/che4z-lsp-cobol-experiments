@@ -3,6 +3,7 @@ package org.poc.flowchart;
 import guru.nidi.graphviz.attribute.Color;
 import guru.nidi.graphviz.model.MutableGraph;
 import guru.nidi.graphviz.model.MutableNode;
+import org.eclipse.lsp.cobol.core.CobolParser;
 import poc.common.flowchart.*;
 
 import java.util.List;
@@ -49,15 +50,21 @@ public class ChartNodeGraphvizVisitor implements ChartNodeVisitor {
 
     @Override
     public void visitParentChildLink(ChartNode parent, ChartNode internalTreeRoot, ChartNodeService nodeService) {
+        visitParentChildLink(parent, internalTreeRoot, nodeService, ChartNodeCondition.ALWAYS_SHOW);
+    }
+
+    @Override
+    public void visitParentChildLink(ChartNode parent, ChartNode internalTreeRoot, ChartNodeService nodeService, ChartNodeCondition hideStrategy) {
         ChartNode overlayParent = overlay.block(parent);
         if (overlayParent.getClass() == GenericProcessingChartNode.class) return;
         ChartNode passthroughTarget = internalTreeRoot.passthrough();
         ChartNode overlayInternalTreeRoot = overlay.block(passthroughTarget);
         MutableNode graphParent = styled(overlayParent, mutNode(overlayParent.toString())).add("label", overlayParent.shortLabel());
-//        ChartNode passthroughTarget = overlayInternalTreeRoot;
         MutableNode graphChild = mutNode(overlayInternalTreeRoot.toString()).add("label", overlayInternalTreeRoot.shortLabel());
         MutableNode child = styled(overlayInternalTreeRoot, graphChild);
-        g.add(graphParent.addLink(graphParent.linkTo(child).with("style", "dashed")));
+//        if (overlayInternalTreeRoot.getExecutionContext() != null && overlayInternalTreeRoot.getExecutionContext().getClass() == CobolParser.ConditionalStatementCallContext.class)
+        String arrowStyle = hideStrategy.apply(overlayInternalTreeRoot) ? "none" : "normal";
+        g.add(graphParent.addLink(graphParent.linkTo(child).with("style", "dashed").with("arrowhead", arrowStyle)));
     }
 
     @Override

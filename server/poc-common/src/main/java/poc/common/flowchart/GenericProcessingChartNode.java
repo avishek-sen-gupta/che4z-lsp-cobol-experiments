@@ -1,6 +1,7 @@
 package poc.common.flowchart;
 
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.eclipse.lsp.cobol.core.CobolDataDivisionParser;
 import org.poc.common.navigation.CobolEntityNavigator;
 
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ public class GenericProcessingChartNode implements ChartNode {
 
     @Override
     public ParseTree getExecutionContext() {
-        return null;
+        return new CobolDataDivisionParser.LabelRecordsClauseContext(null, 1);
     }
 
     @Override
@@ -141,5 +142,10 @@ public class GenericProcessingChartNode implements ChartNode {
     @Override
     public boolean isPassthrough() {
         return false;
+    }
+
+    @Override
+    public void linkParentToChild(ChartNodeVisitor visitor) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

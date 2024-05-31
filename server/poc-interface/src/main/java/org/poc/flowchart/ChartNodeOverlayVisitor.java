@@ -50,6 +50,10 @@ public class ChartNodeOverlayVisitor implements ChartNodeVisitor {
     }
 
     @Override
+    public void visitParentChildLink(ChartNode parent, ChartNode internalTreeRoot, ChartNodeService nodeService, ChartNodeCondition hideStrategy) {
+    }
+
+    @Override
     public void visitControlTransfer(ChartNode from, ChartNode to) {
 
     }

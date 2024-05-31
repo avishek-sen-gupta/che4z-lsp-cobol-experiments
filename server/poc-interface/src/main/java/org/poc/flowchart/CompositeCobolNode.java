@@ -3,14 +3,12 @@ package org.poc.flowchart;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;
-import poc.common.flowchart.ChartNode;
-import poc.common.flowchart.ChartNodeService;
-import poc.common.flowchart.ChartNodeType;
-import poc.common.flowchart.ChartNodeVisitor;
+import poc.common.flowchart.*;
 
 import java.util.List;
 
 public class CompositeCobolNode extends CobolChartNode {
+    public static ChartNodeCondition CHILD_IS_CONDITIONAL_STATEMENT = node -> StatementIdentity.isOfType(node.getExecutionContext(), CobolParser.ConditionalStatementCallContext.class);
     protected ChartNode internalTreeRoot;
 
     public CompositeCobolNode(ParseTree parseTree, ChartNodeService nodeService) {
@@ -37,16 +35,16 @@ public class CompositeCobolNode extends CobolChartNode {
     @Override
     public void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel) {
         if (internalTreeRoot != null && (maxLevel == -1 || (maxLevel != -1 && level <= maxLevel))) {
-            visitor.visitParentChildLink(this, internalTreeRoot, nodeService);
+            linkParentToChild(visitor);
             ChartNode current = internalTreeRoot;
             current.accept(visitor.newScope(this), level + 1, maxLevel);
         }
         super.acceptUnvisited(visitor, level, maxLevel);
+    }
 
-//        if (maxLevel != -1 && level > maxLevel) return;
-//        if (internalTreeRoot == null) return;
-
-        // Make an explicit connection between higher organisational unit and root of internal tree
+    @Override
+    public void linkParentToChild(ChartNodeVisitor visitor) {
+        visitor.visitParentChildLink(this, internalTreeRoot, nodeService);
     }
 
     @Override

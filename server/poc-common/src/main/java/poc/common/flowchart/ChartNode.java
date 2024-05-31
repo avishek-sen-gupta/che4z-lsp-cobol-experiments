@@ -50,4 +50,6 @@ public interface ChartNode {
     ChartNode passthrough();
 
     boolean isPassthrough();
+
+    void linkParentToChild(ChartNodeVisitor visitor);
 }

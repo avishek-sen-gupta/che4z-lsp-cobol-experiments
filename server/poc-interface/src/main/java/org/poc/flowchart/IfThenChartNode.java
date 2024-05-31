@@ -1,8 +1,8 @@
 package org.poc.flowchart;
 
 import org.antlr.v4.runtime.tree.ParseTree;
-import poc.common.flowchart.ChartNodeService;
-import poc.common.flowchart.ChartNodeType;
+import org.eclipse.lsp.cobol.core.CobolParser;
+import poc.common.flowchart.*;
 
 public class IfThenChartNode extends CompositeCobolNode {
     public IfThenChartNode(ParseTree parseTree, ChartNodeService nodeService) {
@@ -22,5 +22,10 @@ public class IfThenChartNode extends CompositeCobolNode {
     @Override
     public String name() {
         return "Yes";
+    }
+
+    @Override
+    public void linkParentToChild(ChartNodeVisitor visitor) {
+        visitor.visitParentChildLink(this, internalTreeRoot, nodeService, CHILD_IS_CONDITIONAL_STATEMENT);
     }
 }

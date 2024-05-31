@@ -211,4 +211,8 @@ public class CobolChartNode implements ChartNode {
     public boolean isPassthrough() {
         return false;
     }
+
+    @Override
+    public void linkParentToChild(ChartNodeVisitor visitor) {
+    }
 }
