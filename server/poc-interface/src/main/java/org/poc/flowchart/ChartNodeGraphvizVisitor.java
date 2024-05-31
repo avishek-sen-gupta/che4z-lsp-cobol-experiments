@@ -6,6 +6,7 @@ import guru.nidi.graphviz.model.MutableNode;
 import poc.common.flowchart.*;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static guru.nidi.graphviz.model.Factory.*;
 
@@ -27,8 +28,12 @@ public class ChartNodeGraphvizVisitor implements ChartNodeVisitor {
             System.out.println("Linking " + node + " to " + t);
             if (source == t) return;
             MutableNode graphSource = mutNode(source.toString()).add("label", source.shortLabel());
-            MutableNode graphTarget = mutNode(t.toString()).add("label", t.shortLabel());
-            g.add(styled(source, graphSource).addLink(styled(t, graphTarget)));
+            List<ChartNode> terminalOutgoingNOdes = node.getTerminalOutgoingNodes();
+            terminalOutgoingNOdes.forEach(o -> {
+                MutableNode graphTarget = mutNode(t.toString()).add("label", t.shortLabel());
+                g.add(styled(o, graphSource).addLink(styled(t, graphTarget)));
+            });
+
         });
 
         if (node.accessesDatabase()) {

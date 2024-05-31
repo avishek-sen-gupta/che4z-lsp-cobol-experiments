@@ -46,4 +46,6 @@ public interface ChartNode {
     List<ChartNode> getOutgoingNodes();
 
     String shortLabel();
+
+    List<ChartNode> getTerminalOutgoingNodes();
 }
