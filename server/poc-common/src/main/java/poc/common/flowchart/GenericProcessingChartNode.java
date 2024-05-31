@@ -132,4 +132,14 @@ public class GenericProcessingChartNode implements ChartNode {
     public String shortLabel() {
         return toString();
     }
+
+    @Override
+    public ChartNode passthrough() {
+        return this;
+    }
+
+    @Override
+    public boolean isPassthrough() {
+        return false;
+    }
 }

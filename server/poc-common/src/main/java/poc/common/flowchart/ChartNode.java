@@ -46,4 +46,8 @@ public interface ChartNode {
     List<ChartNode> getOutgoingNodes();
 
     String shortLabel();
+
+    ChartNode passthrough();
+
+    boolean isPassthrough();
 }

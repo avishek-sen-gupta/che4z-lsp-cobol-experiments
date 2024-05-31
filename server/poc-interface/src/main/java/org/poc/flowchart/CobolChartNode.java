@@ -5,7 +5,6 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.eclipse.lsp.cobol.dialects.idms.IdmsParser;
-import org.poc.common.navigation.CobolEntityNavigator;
 import poc.common.flowchart.*;
 import org.eclipse.lsp.cobol.core.CobolParser;
 
@@ -201,5 +200,15 @@ public class CobolChartNode implements ChartNode {
     @Override
     public String shortLabel() {
         return name();
+    }
+
+    @Override
+    public ChartNode passthrough() {
+        return this;
+    }
+
+    @Override
+    public boolean isPassthrough() {
+        return false;
     }
 }
