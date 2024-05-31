@@ -1,9 +1,13 @@
 package org.poc.flowchart;
 
+import com.google.common.collect.ImmutableList;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;
 import org.poc.common.navigation.CobolEntityNavigator;
 import poc.common.flowchart.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class IfChartNode extends CobolChartNode {
     private ChartNode ifThenBlock;
@@ -47,6 +51,14 @@ public class IfChartNode extends CobolChartNode {
         CobolParser.ConditionContext condition = (CobolParser.ConditionContext) ifStatement.getChild(1);
         String codeText = CobolContextAugmentedTreeNode.originalText(condition, CobolEntityNavigator::PASSTHROUGH);
         return "IS " + truncated(codeText, 40) + "?";
+    }
+
+    @Override
+    public List<ChartNode> getTerminalOutgoingNodes() {
+        List<ChartNode> outgoingNodes = new ArrayList<>();
+        outgoingNodes.addAll(ifThenBlock.getTerminalOutgoingNodes());
+        if (ifElseBlock != null) outgoingNodes.addAll(ifElseBlock.getTerminalOutgoingNodes());
+        return outgoingNodes;
     }
 
     @Override

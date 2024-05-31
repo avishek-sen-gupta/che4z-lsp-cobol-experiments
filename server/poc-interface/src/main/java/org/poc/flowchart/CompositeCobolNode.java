@@ -1,5 +1,6 @@
 package org.poc.flowchart;
 
+import com.google.common.collect.ImmutableList;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;
@@ -62,6 +63,18 @@ public class CompositeCobolNode extends CobolChartNode {
 //        if (executionContext.getClass() == CobolParser.ConditionalStatementCallContext.class)
 //            return ChartNodeType.CONDITION_CLAUSE;
         return ChartNodeType.COMPOSITE;
+    }
+
+    @Override
+    public List<ChartNode> getTerminalOutgoingNodes() {
+        if (internalTreeRoot == null) return ImmutableList.of(this);
+        ChartNode current = internalTreeRoot;
+        while (!current.getOutgoingNodes().isEmpty()) {
+            // If multiple outgoing nodes, let subclasses handle exit. This class will go back to default Step Over flow behaviour
+            if (current.getOutgoingNodes().size() > 1) return ImmutableList.of(this);
+            current = current.getOutgoingNodes().getLast();
+        }
+        return current.getTerminalOutgoingNodes();
     }
 
     @Override

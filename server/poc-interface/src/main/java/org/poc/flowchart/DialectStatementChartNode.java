@@ -1,5 +1,6 @@
 package org.poc.flowchart;
 
+import com.google.common.collect.ImmutableList;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.cli.IdmsContainerNode;
 import org.eclipse.lsp.cobol.common.poc.PersistentData;
@@ -7,6 +8,8 @@ import org.eclipse.lsp.cobol.core.CobolParser;
 import org.eclipse.lsp.cobol.dialects.idms.IdmsParser;
 import poc.common.flowchart.*;
 import org.poc.common.navigation.CobolEntityNavigator;
+
+import java.util.List;
 
 public class DialectStatementChartNode extends CobolChartNode {
     private ChartNode idmsChildNode;
@@ -79,5 +82,10 @@ public class DialectStatementChartNode extends CobolChartNode {
     @Override
     public boolean accessesDatabase() {
         return databaseAccess;
+    }
+
+    @Override
+    public List<ChartNode> getTerminalOutgoingNodes() {
+        return ImmutableList.of(idmsChildNode);
     }
 }

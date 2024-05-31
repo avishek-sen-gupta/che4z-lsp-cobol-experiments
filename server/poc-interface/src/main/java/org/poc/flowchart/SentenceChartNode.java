@@ -26,6 +26,11 @@ public class SentenceChartNode extends CompositeCobolNode {
     }
 
     @Override
+    public List<ChartNode> getTerminalOutgoingNodes() {
+        return super.getTerminalOutgoingNodes();
+    }
+
+    @Override
     public boolean contains(ChartNode node) {
         CobolParser.SentenceContext e = (CobolParser.SentenceContext) executionContext;
         List<CobolParser.StatementContext> statements = e.statement();

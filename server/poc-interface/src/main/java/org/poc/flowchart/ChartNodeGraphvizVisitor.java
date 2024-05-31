@@ -24,12 +24,13 @@ public class ChartNodeGraphvizVisitor implements ChartNodeVisitor {
         ChartNode source = overlay.block(node);
         List<ChartNode> targets = outgoingNodes.stream().map(overlay::block).toList();
 
+        List<ChartNode> terminalOutgoingNOdes = node.getTerminalOutgoingNodes();
         targets.forEach(t -> {
             System.out.println("Linking " + node + " to " + t);
             if (source == t) return;
-            MutableNode graphSource = mutNode(source.toString()).add("label", source.shortLabel());
-            List<ChartNode> terminalOutgoingNOdes = node.getTerminalOutgoingNodes();
+//            MutableNode graphSource = mutNode(source.toString()).add("label", source.shortLabel());
             terminalOutgoingNOdes.forEach(o -> {
+                MutableNode graphSource = mutNode(o.toString()).add("label", o.shortLabel());
                 MutableNode graphTarget = mutNode(t.toString()).add("label", t.shortLabel());
                 g.add(styled(o, graphSource).addLink(styled(t, graphTarget)));
             });
