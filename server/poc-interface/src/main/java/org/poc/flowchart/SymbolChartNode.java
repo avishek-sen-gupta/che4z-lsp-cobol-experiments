@@ -6,8 +6,8 @@ import poc.common.flowchart.ChartNodeService;
 import poc.common.flowchart.ChartNodeType;
 
 public class SymbolChartNode extends CobolChartNode {
-    public SymbolChartNode(ParseTree parseTree, ChartNodeService nodeService) {
-        super(parseTree, nodeService);
+    public SymbolChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {
+        super(parseTree, scope, nodeService);
     }
 
     @Override

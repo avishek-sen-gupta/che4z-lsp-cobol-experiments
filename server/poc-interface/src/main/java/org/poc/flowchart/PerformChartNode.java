@@ -11,8 +11,8 @@ public class PerformChartNode extends CobolChartNode {
     private ChartNode inlineStatementContext;
     private ChartNode targetNode;
 
-    public PerformChartNode(ParseTree parseTree, ChartNodeService nodeService) {
-        super(parseTree, nodeService);
+    public PerformChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {
+        super(parseTree, scope, nodeService);
     }
 
     @Override
@@ -20,7 +20,7 @@ public class PerformChartNode extends CobolChartNode {
         CobolParser.PerformStatementContext performStatement = new StatementIdentity<CobolParser.PerformStatementContext>(getExecutionContext()).get();
         CobolParser.PerformProcedureStatementContext performProcedureStatementContext = performStatement.performProcedureStatement();
         if (performProcedureStatementContext != null) return;
-        inlineStatementContext = nodeService.node(performStatement.performInlineStatement());
+        inlineStatementContext = nodeService.node(performStatement.performInlineStatement(), this);
         inlineStatementContext.buildFlow();
     }
 
@@ -34,6 +34,10 @@ public class PerformChartNode extends CobolChartNode {
     public void buildOutgoingFlow() {
         // Call super here because this is still a normal statement which will continue its normal flow
         super.buildOutgoingFlow();
+    }
+
+    @Override
+    public void buildControlFlow() {
         if (isVarying()) return;
         CobolParser.PerformStatementContext performStatement = new StatementIdentity<CobolParser.PerformStatementContext>(getExecutionContext()).get();
         CobolParser.PerformProcedureStatementContext performProcedureStatementContext = performStatement.performProcedureStatement();

@@ -11,8 +11,8 @@ public class DialectStatementChartNode extends CobolChartNode {
     private ChartNode idmsChildNode;
     private boolean databaseAccess = false;
 
-    public DialectStatementChartNode(ParseTree parseTree, ChartNodeService nodeService) {
-        super(parseTree, nodeService);
+    public DialectStatementChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {
+        super(parseTree, scope, nodeService);
     }
 
     @Override
@@ -52,13 +52,13 @@ public class DialectStatementChartNode extends CobolChartNode {
         }
 
         if (containerChild.getClass() == CobolParser.DialectIfStatmentContext.class) {
-            idmsChildNode = new IdmsIfChartNode(containerChild, nodeService);
+            idmsChildNode = new IdmsIfChartNode(containerChild, this, nodeService);
             nodeService.register(idmsChildNode);
         } else {
             // Treat everything as an IDMS statement for now
             idmsChildNode = nodeService.node(
                     navigator.findByCondition(executionContext,
-                            n -> n.getClass() == IdmsParser.IdmsStatementsContext.class));
+                            n -> n.getClass() == IdmsParser.IdmsStatementsContext.class), this);
 //            idmsChildNode = idmsContainerChartNode(executionContext);
         }
         idmsChildNode.buildFlow();

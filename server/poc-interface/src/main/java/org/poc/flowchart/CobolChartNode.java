@@ -15,18 +15,21 @@ public class CobolChartNode implements ChartNode {
     private final String uuid;
     protected List<ChartNode> outgoingNodes = new ArrayList<>();
     protected List<ChartNode> incomingNodes = new ArrayList<>();
-    @Getter protected final ParseTree executionContext;
+    @Getter
+    protected final ParseTree executionContext;
     protected ChartNodeService nodeService;
     private DomainDocument document = new DomainDocument();
     protected boolean initialised = false;
     protected boolean visited = false;
     private boolean databaseAccess;
+    protected ChartNode scope;
 
-    public CobolChartNode(ParseTree executionContext, ChartNodeService nodeService) {
+    public CobolChartNode(ParseTree executionContext, ChartNode scope, ChartNodeService nodeService) {
         this.uuid = String.valueOf(counter);
-        counter ++;
+        counter++;
         this.nodeService = nodeService;
         this.executionContext = executionContext;
+        this.scope = scope;
     }
 
     @Override
@@ -48,6 +51,10 @@ public class CobolChartNode implements ChartNode {
     }
 
     @Override
+    public void buildControlFlow() {
+    }
+
+    @Override
     public void goesTo(ChartNode successor) {
         outgoingNodes.add(successor);
         successor.addIncomingNode(this);
@@ -58,7 +65,7 @@ public class CobolChartNode implements ChartNode {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CobolChartNode chartNode = (CobolChartNode) o;
-        return executionContext == chartNode.executionContext;
+        return executionContext == chartNode.executionContext && scope == chartNode.scope;
     }
 
     @Override
@@ -127,6 +134,7 @@ public class CobolChartNode implements ChartNode {
         visited = true;
         acceptUnvisited(visitor, level, maxLevel);
     }
+
     public void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel) {
 //        System.out.println("Current level: " + level);
         visitor.visit(this, outgoingNodes, incomingNodes, nodeService);
@@ -166,8 +174,7 @@ public class CobolChartNode implements ChartNode {
         int after = outgoingNodes.size();
         if (before != after) {
             System.out.println("Warning: NOTHING was removed");
-        }
-        else {
+        } else {
             System.out.println("Removed successfully");
         }
     }
@@ -214,5 +221,10 @@ public class CobolChartNode implements ChartNode {
 
     @Override
     public void linkParentToChild(ChartNodeVisitor visitor) {
+    }
+
+    @Override
+    public ChartNode nextSentence(ChartNode node) {
+        return scope.nextSentence(this);
     }
 }

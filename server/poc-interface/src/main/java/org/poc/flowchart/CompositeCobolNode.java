@@ -11,8 +11,8 @@ public class CompositeCobolNode extends CobolChartNode {
     public static ChartNodeCondition CHILD_IS_CONDITIONAL_STATEMENT = node -> StatementIdentity.isOfType(node.getExecutionContext(), CobolParser.ConditionalStatementCallContext.class);
     protected ChartNode internalTreeRoot;
 
-    public CompositeCobolNode(ParseTree parseTree, ChartNodeService nodeService) {
-        super(parseTree, nodeService);
+    public CompositeCobolNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {
+        super(parseTree, scope, nodeService);
     }
 
     @Override
@@ -20,10 +20,10 @@ public class CompositeCobolNode extends CobolChartNode {
         System.out.println("Building internal flow for " + name());
         List<ParseTree> children = ((ParserRuleContext) executionContext).children;
         if (children == null) return;
-        internalTreeRoot = nodeService.node(children.get(0));
+        internalTreeRoot = nodeService.node(children.get(0), this);
         ChartNode current = internalTreeRoot;
         for (int i = 0; i <= children.size() - 2; i++) {
-            ChartNode nextNode = nodeService.node(children.get(i + 1));
+            ChartNode nextNode = nodeService.node(children.get(i + 1), this);
             if (".".equals(nextNode.getExecutionContext().getText())) continue;
             ChartNode successor = nextNode;
             current.goesTo(successor);

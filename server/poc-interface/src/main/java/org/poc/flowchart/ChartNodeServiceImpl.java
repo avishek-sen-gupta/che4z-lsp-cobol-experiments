@@ -23,9 +23,9 @@ public class ChartNodeServiceImpl implements ChartNodeService {
         return chartNode;
     }
 
-    public ChartNode node(ParseTree parseTree) {
+    public ChartNode node(ParseTree parseTree, ChartNode scope) {
         if (parseTree == null) return new DummyChartNode(this);
-        ChartNode n = CobolChartNodeFactory.newNode(parseTree, this);
+        ChartNode n = CobolChartNodeFactory.newNode(parseTree, scope, this);
         int index = nodes.indexOf(n);
         if (index != -1) return nodes.get(index);
         nodes.add(n);
@@ -35,7 +35,10 @@ public class ChartNodeServiceImpl implements ChartNodeService {
     @Override
     public ChartNode sectionOrParaWithName(String name) {
         ParseTree target = navigator.target(name);
-        return node(target);
+        ChartNode existingGroup = existingNode(target);
+
+        // Only place where it's acceptable to have null scope since this section/para is not part of the flowchart's AST, so it's a dummy placeholder
+        return existingGroup != null ? existingGroup : node(target, null);
     }
 
     @Override

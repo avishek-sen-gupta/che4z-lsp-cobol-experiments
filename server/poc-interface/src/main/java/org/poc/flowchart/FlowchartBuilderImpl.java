@@ -32,7 +32,7 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
 
     @Override
     public FlowchartBuilder draw(ParseTree root, int maxLevel) {
-        return buildChart(root, maxLevel);
+        return buildChartGraphic(root, maxLevel);
     }
 
     @Override
@@ -42,15 +42,15 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
     }
 
     @Override
-    public FlowchartBuilder buildAST(ParseTree node) {
-        ChartNode rootChartNode = chartNodeService.node(node);
+    public FlowchartBuilder buildChartTree(ParseTree node) {
+        ChartNode rootChartNode = chartNodeService.node(node, null);
         rootChartNode.buildFlow();
         root = rootChartNode;
         return this;
     }
 
-    private FlowchartBuilder buildChart(ParseTree node, int maxLevel) {
-        ChartNode rootChartNode = chartNodeService.node(node);
+    private FlowchartBuilder buildChartGraphic(ParseTree node, int maxLevel) {
+        ChartNode rootChartNode = chartNodeService.existingNode(node);
         rootChartNode.reset();
         ChartNodeVisitor chartVisitor = new ChartNodeGraphvizVisitor(graph, overlay);
         rootChartNode.accept(chartVisitor, 1, maxLevel);
@@ -98,7 +98,7 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
 
     @Override
     public FlowchartBuilder buildOverlay(ParseTree node) {
-        ChartNode rootChartNode = chartNodeService.node(node);
+        ChartNode rootChartNode = chartNodeService.existingNode(node);
         rootChartNode.reset();
 //        ChartNodeRuleVisitor compressionVisitor = new ChartNodeRuleVisitor(rootChartNode, rules);
         ChartNodeOverlayVisitor compressionVisitor = new ChartNodeOverlayVisitor(rootChartNode);
@@ -106,6 +106,14 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
         compressionVisitor.report();
 //        compressionVisitor.applyRules();
         overlay = compressionVisitor.overlay();
+        return this;
+    }
+
+    @Override
+    public FlowchartBuilder buildControlFlow(ParseTree node) {
+        ChartNode rootChartNode = chartNodeService.existingNode(node);
+        rootChartNode.reset();
+        rootChartNode.accept(new ChartNodeControlFlowVisitor(), 1, -1);
         return this;
     }
 

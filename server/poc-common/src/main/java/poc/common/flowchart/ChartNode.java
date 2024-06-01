@@ -11,6 +11,8 @@ public interface ChartNode {
 
     void buildInternalFlow();
 
+    void buildControlFlow();
+
     void goesTo(ChartNode successor);
 
     String name();
@@ -52,4 +54,6 @@ public interface ChartNode {
     boolean isPassthrough();
 
     void linkParentToChild(ChartNodeVisitor visitor);
+
+    ChartNode nextSentence(ChartNode node);
 }

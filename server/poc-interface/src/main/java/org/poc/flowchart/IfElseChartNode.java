@@ -1,6 +1,7 @@
 package org.poc.flowchart;
 
 import org.antlr.v4.runtime.tree.ParseTree;
+import poc.common.flowchart.ChartNode;
 import poc.common.flowchart.ChartNodeService;
 import poc.common.flowchart.ChartNodeType;
 import poc.common.flowchart.ChartNodeVisitor;
@@ -11,8 +12,8 @@ public class IfElseChartNode extends CompositeCobolNode {
         return "No";
     }
 
-    public IfElseChartNode(ParseTree parseTree, ChartNodeService nodeService) {
-        super(parseTree, nodeService);
+    public IfElseChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {
+        super(parseTree, scope, nodeService);
     }
 
     @Override

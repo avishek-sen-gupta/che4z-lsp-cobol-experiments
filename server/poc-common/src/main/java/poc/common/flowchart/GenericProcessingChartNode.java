@@ -33,6 +33,11 @@ public class GenericProcessingChartNode implements ChartNode {
     }
 
     @Override
+    public void buildControlFlow() {
+
+    }
+
+    @Override
     public void goesTo(ChartNode successor) {
         nodes.add(successor);
     }
@@ -147,5 +152,10 @@ public class GenericProcessingChartNode implements ChartNode {
     @Override
     public void linkParentToChild(ChartNodeVisitor visitor) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public ChartNode nextSentence(ChartNode node) {
+        return null;
     }
 }

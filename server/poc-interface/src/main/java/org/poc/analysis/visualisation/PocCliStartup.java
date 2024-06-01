@@ -16,8 +16,6 @@ package org.poc.analysis.visualisation;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.cli.ParsePipeline;
-import org.eclipse.lsp.cobol.core.CobolParser;
-import poc.common.flowchart.ChartNodeTransformRules;
 import poc.common.flowchart.FlowchartBuilder;
 import org.poc.common.navigation.CobolEntityNavigator;
 import org.poc.flowchart.FlowchartBuilderImpl;
@@ -80,7 +78,8 @@ public class PocCliStartup {
 //        flowcharter.draw(k0A).draw(k1).draw(b2).draw(u204);
 //        flowcharter.outline(b2d, "SOME RANDOM STUFF");
 
-        flowcharter.buildAST(u204);
+        flowcharter.buildChartTree(u204);
+        flowcharter.buildControlFlow(u204);
         flowcharter.buildOverlay(u204);
         flowcharter.draw(u204);
         flowcharter.write(dotFilePath);

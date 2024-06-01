@@ -7,8 +7,14 @@ import poc.common.flowchart.*;
 import java.util.List;
 
 public class SentenceChartNode extends CompositeCobolNode {
-    public SentenceChartNode(ParseTree parseTree, ChartNodeService nodeService) {
-        super(parseTree, nodeService);
+    @Override
+    public ChartNode nextSentence(ChartNode node) {
+        if (outgoingNodes.getFirst().getClass() != SentenceChartNode.class) return scope.nextSentence(this);
+        return null;
+    }
+
+    public SentenceChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {
+        super(parseTree, scope, nodeService);
     }
 
     @Override
@@ -20,7 +26,7 @@ public class SentenceChartNode extends CompositeCobolNode {
     public boolean isMergeable() {
         CobolParser.SentenceContext e = (CobolParser.SentenceContext) executionContext;
         if (e.dialectStatement() != null) return false;
-        long unmergeableStatementCount = e.statement().stream().filter(stmt -> !nodeService.node(stmt).isMergeable()).count();
+        long unmergeableStatementCount = e.statement().stream().filter(stmt -> !nodeService.existingNode(stmt).isMergeable()).count();
         return unmergeableStatementCount == 0;
 //        return e.statement().size() == 1 && nodeService.node(e.statement(0)).isMergeable();
     }

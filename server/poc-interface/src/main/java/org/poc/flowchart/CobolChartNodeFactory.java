@@ -10,38 +10,40 @@ import poc.common.flowchart.ChartNodeService;
 import poc.common.flowchart.StatementIdentity;
 
 public class CobolChartNodeFactory {
-    public static ChartNode newNode(ParseTree parseTree, ChartNodeService nodeService) {
+    public static ChartNode newNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {
         if (StatementIdentity.isStatementOfType(parseTree, CobolParser.IfStatementContext.class))
-            return new IfChartNode(parseTree, nodeService);
+            return new IfChartNode(parseTree, scope, nodeService);
         else if (StatementIdentity.isStatementOfType(parseTree, CobolParser.GoToStatementContext.class))
-            return new GoToChartNode(parseTree, nodeService);
+            return new GoToChartNode(parseTree, scope, nodeService);
+        else if (StatementIdentity.isStatementOfType(parseTree, CobolParser.NextSentenceContext.class))
+            return new NextSentenceChartNode(parseTree, scope, nodeService);
         else if (StatementIdentity.isStatementOfType(parseTree, CobolParser.PerformStatementContext.class))
-            return new PerformChartNode(parseTree, nodeService);
+            return new PerformChartNode(parseTree, scope, nodeService);
         else if (StatementIdentity.isOfType(parseTree, CobolParser.DialectStatementContext.class))
-            return new DialectStatementChartNode(parseTree, nodeService);
+            return new DialectStatementChartNode(parseTree, scope, nodeService);
         else if (StatementIdentity.isOfType(parseTree, CobolParser.ConditionalStatementCallContext.class))
-            return new ConditionalStatementChartNode(parseTree, nodeService);
+            return new ConditionalStatementChartNode(parseTree, scope, nodeService);
         // This needs to come last in all the statement classifications, or things will break
         else if (StatementIdentity.isOfType(parseTree, CobolParser.StatementContext.class))
-            return new GenericStatementChartNode(parseTree, nodeService);
+            return new GenericStatementChartNode(parseTree, scope, nodeService);
         else if (StatementIdentity.isOfType(parseTree, TerminalNodeImpl.class))
-            return new SymbolChartNode(parseTree, nodeService);
+            return new SymbolChartNode(parseTree, scope, nodeService);
         else if (StatementIdentity.isOfType(parseTree, CobolParser.ProcedureSectionHeaderContext.class))
-            return new SectionHeaderChartNode(parseTree, nodeService);
+            return new SectionHeaderChartNode(parseTree, scope, nodeService);
         else if (StatementIdentity.isOfType(parseTree, CobolParser.ParagraphDefinitionNameContext.class))
-            return new ParagraphNameChartNode(parseTree, nodeService);
+            return new ParagraphNameChartNode(parseTree, scope, nodeService);
         else if (StatementIdentity.isOfType(parseTree, CobolParser.SentenceContext.class))
-            return new SentenceChartNode(parseTree, nodeService);
+            return new SentenceChartNode(parseTree, scope, nodeService);
         else if (StatementIdentity.isOfType(parseTree, CobolParser.IfThenContext.class))
-            return new IfThenChartNode(parseTree, nodeService);
+            return new IfThenChartNode(parseTree, scope, nodeService);
         else if (StatementIdentity.isOfType(parseTree, CobolParser.IfElseContext.class))
-            return new IfElseChartNode(parseTree, nodeService);
+            return new IfElseChartNode(parseTree, scope, nodeService);
         else if (StatementIdentity.isOfType(parseTree, CobolParser.ParagraphsContext.class))
-            return new ParagraphsChartNode(parseTree, nodeService);
+            return new ParagraphsChartNode(parseTree, scope, nodeService);
         else if (isCompositeNode(parseTree))
-            return new CompositeCobolNode(parseTree, nodeService);
+            return new CompositeCobolNode(parseTree, scope, nodeService);
 
-        return new CobolChartNode(parseTree, nodeService);
+        return new CobolChartNode(parseTree, scope, nodeService);
     }
 
     private static boolean isCompositeNode(ParseTree executionContext) {

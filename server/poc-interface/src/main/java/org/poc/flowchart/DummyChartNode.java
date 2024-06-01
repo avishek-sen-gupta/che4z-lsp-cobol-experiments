@@ -5,7 +5,7 @@ import poc.common.flowchart.ChartNodeVisitor;
 
 public class DummyChartNode extends CobolChartNode {
     public DummyChartNode(ChartNodeServiceImpl nodeService) {
-        super(null, nodeService);
+        super(null, null, nodeService);
     }
 
     @Override

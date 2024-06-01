@@ -14,8 +14,8 @@ public class IdmsIfChartNode extends CobolChartNode {
     private ChartNode ifElseBlock;
     private ChartNode condition;
 
-    public IdmsIfChartNode(ParseTree parseTree, ChartNodeService nodeService) {
-        super(parseTree, nodeService);
+    public IdmsIfChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {
+        super(parseTree, scope, nodeService);
     }
 
     @Override
@@ -25,11 +25,11 @@ public class IdmsIfChartNode extends CobolChartNode {
         condition.buildFlow();
         CobolEntityNavigator navigator = nodeService.getNavigator();
         ParseTree ifThen = navigator.findByCondition(executionContext, n -> n.getClass() == CobolParser.IfThenContext.class, 1);
-        ifThenBlock = nodeService.node(ifThen);
+        ifThenBlock = nodeService.node(ifThen, this);
         ifThenBlock.buildFlow();
         ParseTree ifElse = navigator.findByCondition(executionContext, n -> n.getClass() == CobolParser.IfElseContext.class, 1);
         if (ifElse != null) {
-            ifElseBlock = nodeService.node(ifElse);
+            ifElseBlock = nodeService.node(ifElse, this);
             ifElseBlock.buildFlow();
         }
     }
@@ -50,7 +50,7 @@ public class IdmsIfChartNode extends CobolChartNode {
     }
 
     private ChartNode conditionChartNode(ParseTree dialectStatementNode) {
-        return nodeService.node(conditionContext(dialectStatementNode));
+        return nodeService.node(conditionContext(dialectStatementNode), this);
     }
 
     private ParseTree conditionContext(ParseTree searchRoot) {
