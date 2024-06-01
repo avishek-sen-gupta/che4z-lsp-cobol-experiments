@@ -69,8 +69,8 @@ public class ChartNodeGraphvizVisitor implements ChartNodeVisitor {
 
     @Override
     public void visitControlTransfer(ChartNode from, ChartNode to) {
-        ChartNode overlayFrom = overlay.block(from);
-        ChartNode overlayTo = overlay.block(to);
+        ChartNode overlayFrom = overlay.block(from.passthrough());
+        ChartNode overlayTo = overlay.block(to.passthrough());
         MutableNode origin = styled(overlayFrom, mutNode(overlayFrom.toString()));
         MutableNode destination = styled(overlayTo, mutNode(overlayTo.toString()));
         g.add(origin.addLink(origin.linkTo(destination).with("style", "bold").with("color", "blueviolet")));

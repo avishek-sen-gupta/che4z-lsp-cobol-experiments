@@ -32,7 +32,7 @@ public class PerformChartNode extends CobolChartNode {
 
     @Override
     public void buildOutgoingFlow() {
-        // Call super here because this is still a normal statement which will continue its normal flow
+        // Call super here because this is still a normal statement which will continue its normal flow, after PERFORM returns
         super.buildOutgoingFlow();
     }
 

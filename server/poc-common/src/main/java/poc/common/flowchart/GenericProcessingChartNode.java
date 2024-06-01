@@ -68,6 +68,11 @@ public class GenericProcessingChartNode implements ChartNode {
     }
 
     @Override
+    public ChartNode find(ChartNodeCondition nodeCondition) {
+        return null;
+    }
+
+    @Override
     public ParseTree getExecutionContext() {
         return new CobolDataDivisionParser.LabelRecordsClauseContext(null, 1);
     }
@@ -150,12 +155,12 @@ public class GenericProcessingChartNode implements ChartNode {
     }
 
     @Override
-    public void linkParentToChild(ChartNodeVisitor visitor) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public ChartNode next(ChartNodeCondition nodeCondition, ChartNode startingNode) {
+        return null;
     }
 
     @Override
-    public ChartNode nextSentence(ChartNode node) {
-        return null;
+    public void linkParentToChild(ChartNodeVisitor visitor) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

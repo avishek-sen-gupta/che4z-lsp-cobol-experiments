@@ -220,11 +220,22 @@ public class CobolChartNode implements ChartNode {
     }
 
     @Override
+    public ChartNode next(ChartNodeCondition nodeCondition, ChartNode startingNode) {
+        if (this != startingNode && nodeCondition.apply(this)) return this;
+        for (ChartNode o : outgoingNodes) {
+            ChartNode next = o.next(nodeCondition, startingNode);
+            if (next != null) return next;
+        }
+        return null;
+    }
+
+    @Override
     public void linkParentToChild(ChartNodeVisitor visitor) {
     }
 
     @Override
-    public ChartNode nextSentence(ChartNode node) {
-        return scope.nextSentence(this);
+    public ChartNode find(ChartNodeCondition nodeCondition) {
+        if (nodeCondition.apply(this)) return this;
+        return scope.find(nodeCondition);
     }
 }

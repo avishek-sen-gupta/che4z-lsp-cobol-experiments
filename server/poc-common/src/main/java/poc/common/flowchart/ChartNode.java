@@ -20,7 +20,7 @@ public interface ChartNode {
     void accept(ChartNodeVisitor visitor, int level, int maxLevel);
     void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel);
 
-    ChartNode nextSentence(ChartNode node);
+    ChartNode find(ChartNodeCondition nodeCondition);
 
     ParseTree getExecutionContext();
     DomainDocument getNotes();
@@ -35,4 +35,6 @@ public interface ChartNode {
 
     ChartNode passthrough();
     boolean isPassthrough();
+
+    ChartNode next(ChartNodeCondition nodeCondition, ChartNode startingNode);
 }

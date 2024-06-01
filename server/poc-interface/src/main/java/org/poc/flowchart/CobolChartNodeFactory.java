@@ -40,6 +40,12 @@ public class CobolChartNodeFactory {
             return new IfElseChartNode(parseTree, scope, nodeService);
         else if (StatementIdentity.isOfType(parseTree, CobolParser.ParagraphsContext.class))
             return new ParagraphsChartNode(parseTree, scope, nodeService);
+        else if (StatementIdentity.isOfType(parseTree, CobolParser.ParagraphContext.class))
+            return new ParagraphChartNode(parseTree, scope, nodeService);
+        else if (StatementIdentity.isOfType(parseTree, CobolParser.ProcedureSectionContext.class))
+            return new SectionChartNode(parseTree, scope, nodeService);
+        else if (StatementIdentity.isOfType(parseTree, CobolParser.ProcedureDivisionBodyContext.class))
+            return new ProcedureDivisionBodyChartNode(parseTree, scope, nodeService);
         else if (isCompositeNode(parseTree))
             return new CompositeCobolNode(parseTree, scope, nodeService);
 
@@ -47,14 +53,15 @@ public class CobolChartNodeFactory {
     }
 
     private static boolean isCompositeNode(ParseTree executionContext) {
-        return executionContext.getClass() == CobolParser.ProcedureSectionContext.class ||
-                executionContext.getClass() == CobolParser.ParagraphsContext.class ||
-                executionContext.getClass() == CobolParser.ParagraphContext.class ||
-                executionContext.getClass() == CobolParser.SentenceContext.class ||
-                executionContext.getClass() == CobolParser.ProcedureDivisionBodyContext.class ||
-                executionContext.getClass() == CobolParser.IfThenContext.class ||
-                executionContext.getClass() == CobolParser.IfElseContext.class ||
-                executionContext.getClass() == CobolParser.ConditionalStatementCallContext.class ||
+        return
+//                  executionContext.getClass() == CobolParser.ProcedureSectionContext.class ||
+//                executionContext.getClass() == CobolParser.ParagraphsContext.class ||
+//                executionContext.getClass() == CobolParser.ParagraphContext.class ||
+//                executionContext.getClass() == CobolParser.SentenceContext.class ||
+//                executionContext.getClass() == CobolParser.ProcedureDivisionBodyContext.class ||
+//                executionContext.getClass() == CobolParser.IfThenContext.class ||
+//                executionContext.getClass() == CobolParser.IfElseContext.class ||
+//                executionContext.getClass() == CobolParser.ConditionalStatementCallContext.class ||
                 executionContext.getClass() == CobolParser.PerformInlineStatementContext.class ||
                 executionContext.getClass() == CobolParser.DialectSectionContext.class ||
                 executionContext.getClass() == IdmsParser.IdmsIfStatementContext.class ||
