@@ -9,26 +9,24 @@ public interface ChartNode {
     void buildOutgoingFlow();
     void buildInternalFlow();
     void buildControlFlow();
+
     void goesTo(ChartNode successor);
     void addIncomingNode(ChartNode chartNode);
     @Deprecated void removeOutgoingNode(ChartNode chartNode);
     @Deprecated void removeIncomingNode(ChartNode chartNode);
-
-    List<ChartNode> getOutgoingNodes();
+    @Deprecated List<ChartNode> getOutgoingNodes();
 
     ChartNode next(ChartNodeCondition nodeCondition, ChartNode startingNode, boolean isComplete);
 
     void linkParentToChild(ChartNodeVisitor visitor);
     void accept(ChartNodeVisitor visitor, int level);
     void accept(ChartNodeVisitor visitor, int level, int maxLevel);
+    void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel);
 
     List<? extends ParseTree> getChildren();
 
-    void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel);
-
     ChartNode find(ChartNodeCondition nodeCondition, ChartNode startingNode);
 
-    ParseTree getExecutionContext();
     DomainDocument getNotes();
     void reset();
     @Deprecated void remove();
@@ -40,6 +38,7 @@ public interface ChartNode {
     String label();
     String name();
     String originalText();
+    ParseTree getExecutionContext();
     ChartNodeType type();
 
     ChartNode passthrough();
