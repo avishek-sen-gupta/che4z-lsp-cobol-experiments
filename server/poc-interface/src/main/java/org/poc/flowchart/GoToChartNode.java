@@ -23,6 +23,11 @@ public class GoToChartNode extends CobolChartNode {
     }
 
     @Override
+    public String label() {
+        return originalText();
+    }
+
+    @Override
     public void buildControlFlow() {
         CobolParser.GoToStatementContext goToStatement = new StatementIdentity<CobolParser.GoToStatementContext>(getExecutionContext()).get();
         List<CobolParser.ProcedureNameContext> procedureNames = goToStatement.procedureName();

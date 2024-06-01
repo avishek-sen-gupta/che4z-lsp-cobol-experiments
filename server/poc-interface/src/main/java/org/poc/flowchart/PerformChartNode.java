@@ -59,6 +59,11 @@ public class PerformChartNode extends CobolChartNode {
     }
 
     @Override
+    public String label() {
+        return originalText();
+    }
+
+    @Override
     public ChartNodeType type() {
         return ChartNodeType.PERFORM;
     }
