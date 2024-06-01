@@ -15,6 +15,10 @@ public class ParagraphNameChartNode extends CobolChartNode {
 
     @Override
     public ChartNode passthrough() {
+        System.out.println(String.format("%s has %s outgoing nodes", executionContext.getText(), outgoingNodes.size()));
+        // In case of an empty paragraph, there is nothing to terminate with, so we return this
+        // TODO: But check why IDMS copy book MAP-BINDS is missing
+        if (outgoingNodes.isEmpty()) return this;
         return outgoingNodes.getFirst();
 //        return this;
     }

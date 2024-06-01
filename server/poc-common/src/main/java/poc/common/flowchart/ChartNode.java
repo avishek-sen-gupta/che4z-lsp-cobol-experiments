@@ -6,54 +6,33 @@ import java.util.List;
 
 public interface ChartNode {
     void buildFlow();
-
     void buildOutgoingFlow();
-
     void buildInternalFlow();
-
     void buildControlFlow();
-
     void goesTo(ChartNode successor);
-
-    String name();
-
-    ChartNodeType type();
-
-    void accept(ChartNodeVisitor visitor, int level);
-
-    void accept(ChartNodeVisitor visitor, int level, int maxLevel);
-
-    void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel);
-
-    ParseTree getExecutionContext();
-
     void addIncomingNode(ChartNode chartNode);
-
-    DomainDocument getNotes();
-
-    void reset();
-
-    void remove();
-
-    void removeOutgoingNode(ChartNode chartNode);
-
-    void removeIncomingNode(ChartNode chartNode);
-
-    boolean accessesDatabase();
-
-    boolean isMergeable();
-
-    boolean contains(ChartNode node);
+    @Deprecated void removeOutgoingNode(ChartNode chartNode);
+    @Deprecated void removeIncomingNode(ChartNode chartNode);
 
     List<ChartNode> getOutgoingNodes();
-
-    String shortLabel();
-
-    ChartNode passthrough();
-
-    boolean isPassthrough();
-
     void linkParentToChild(ChartNodeVisitor visitor);
+    void accept(ChartNodeVisitor visitor, int level);
+    void accept(ChartNodeVisitor visitor, int level, int maxLevel);
+    void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel);
 
     ChartNode nextSentence(ChartNode node);
+
+    ParseTree getExecutionContext();
+    DomainDocument getNotes();
+    void reset();
+    @Deprecated void remove();
+    boolean accessesDatabase();
+    boolean isMergeable();
+    boolean contains(ChartNode node);
+    String shortLabel();
+    String name();
+    ChartNodeType type();
+
+    ChartNode passthrough();
+    boolean isPassthrough();
 }
