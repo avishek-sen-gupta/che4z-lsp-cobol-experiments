@@ -138,6 +138,11 @@ public class NullChartNode implements ChartNode {
     }
 
     @Override
+    public String originalText() {
+        return "NULL/" + id();
+    }
+
+    @Override
     public ChartNodeType type() {
         return null;
     }

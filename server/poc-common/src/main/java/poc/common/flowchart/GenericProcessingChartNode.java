@@ -49,6 +49,11 @@ public class GenericProcessingChartNode implements ChartNode {
     }
 
     @Override
+    public String originalText() {
+        return label();
+    }
+
+    @Override
     public ChartNodeType type() {
         return ChartNodeType.GENERIC_PROCESSING;
     }
@@ -146,7 +151,7 @@ public class GenericProcessingChartNode implements ChartNode {
     @Override
     public String label() {
         StringBuilder builder = new StringBuilder("Processing\n------------------------\n");
-        nodes.forEach(n -> builder.append(CobolContextAugmentedTreeNode.originalText(n.getExecutionContext(), CobolEntityNavigator::PASSTHROUGH)).append("\n"));
+        nodes.forEach(n -> builder.append(NodeText.originalText(n.getExecutionContext(), NodeText::PASSTHROUGH)).append("\n"));
         return builder.toString();
     }
 

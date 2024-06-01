@@ -31,7 +31,7 @@ public class DialectStatementChartNode extends CobolChartNode {
         String guid = dialectGuidContext.getText();
 
         ParseTree idmsTextNode = PersistentData.getDialectNode("IDMS-" + guid);
-        String codeText = CobolContextAugmentedTreeNode.originalText(idmsTextNode, CobolEntityNavigator::PASSTHROUGH);
+        String codeText = NodeText.originalText(idmsTextNode, NodeText::PASSTHROUGH);
         return truncated(codeText, 30);
     }
 

@@ -35,11 +35,13 @@ public interface ChartNode {
     boolean accessesDatabase();
     boolean isMergeable();
     boolean contains(ChartNode node);
+
+    String id();
     String label();
     String name();
+    String originalText();
     ChartNodeType type();
 
     ChartNode passthrough();
     boolean isPassthrough();
-    String id();
 }

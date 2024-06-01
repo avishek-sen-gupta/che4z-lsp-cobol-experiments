@@ -106,6 +106,11 @@ public class CobolChartNode implements ChartNode {
     }
 
     @Override
+    public String originalText() {
+        return NodeText.originalText(executionContext, NodeText::PASSTHROUGH);
+    }
+
+    @Override
     public ChartNodeType type() {
         return ChartNodeType.ATOMIC;
     }

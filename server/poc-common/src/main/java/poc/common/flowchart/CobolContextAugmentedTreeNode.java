@@ -82,7 +82,7 @@ public class CobolContextAugmentedTreeNode extends SimpleTreeNode {
     }
 
     private String withType(ParseTree astNode, boolean truncate) {
-        String originalText = originalText(astNode, navigator::dialectText);
+        String originalText = NodeText.originalText(astNode, navigator::dialectText);
         return truncate ? truncated(originalText) : originalText;
     }
 
@@ -90,34 +90,6 @@ public class CobolContextAugmentedTreeNode extends SimpleTreeNode {
         return text.length() > 50 ? text.substring(0, 50) + " ... (truncated)" : text;
     }
 
-    public static String originalText(ParseTree astNode, Function<String, String> substitutionStrategy) {
-        Token startToken = (astNode instanceof TerminalNode) ? ((TerminalNode) astNode).getSymbol() : ((ParserRuleContext) astNode).start;
-        Token stopToken = (astNode instanceof TerminalNode) ? ((TerminalNode) astNode).getSymbol() : ((ParserRuleContext) astNode).stop;
-
-        if (startToken == null) return astNode.getText();
-        CharStream cs = startToken.getInputStream();
-        int stopIndex = stopToken != null ? stopToken.getStopIndex() : -1;
-        if (cs == null) {
-//            System.out.println("Here's a null " + astNode.getText());
-            return astNode.getText();
-        }
-        Interval interval = new Interval(startToken.getStartIndex(), stopIndex);
-        if (interval.a == -1 || interval.b == -1) {
-            return astNode.getText();
-        }
-        return stopIndex >= startToken.getStartIndex() ? dialectInlined(cs.getText(interval), substitutionStrategy) : "<NULL>";
-    }
-
-    private static String dialectInlined2(String text, CobolEntityNavigator navigator) {
-        return text;
-    }
-
-    private static String dialectInlined(String text, Function<String, String> substitutionStrategy) {
-        List<String> allDialectPlaceholders = new ArrayList<>();
-        Pattern pattern = Pattern.compile("(_DIALECT_ [0-9]+)");
-        Matcher matcher = pattern.matcher(text);
-        return matcher.replaceAll(r -> substitutionStrategy.apply(r.group()));
-    }
 
     /**
      * Creates a new reference to the children that will be used for serialisation to JSON

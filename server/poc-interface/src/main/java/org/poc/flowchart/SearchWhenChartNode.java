@@ -54,6 +54,6 @@ public class SearchWhenChartNode extends CompositeCobolNode {
     @Override
     public String name() {
         CobolParser.SearchWhenContext searchWhenStatementContext = (CobolParser.SearchWhenContext) executionContext;
-        return "When\n" + CobolContextAugmentedTreeNode.originalText(searchWhenStatementContext.condition(), CobolEntityNavigator::PASSTHROUGH);
+        return "When\n" + NodeText.originalText(searchWhenStatementContext.condition(), NodeText::PASSTHROUGH);
     }
 }

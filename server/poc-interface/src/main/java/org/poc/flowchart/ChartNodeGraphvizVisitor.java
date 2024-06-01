@@ -27,13 +27,13 @@ public class ChartNodeGraphvizVisitor implements ChartNodeVisitor {
         targets.forEach(t -> {
             System.out.println("Linking " + node + " to " + t);
             if (source == t) return;
-            MutableNode graphSource = styled(source, mutNode(source.toString()).add("label", source.label()));
-            MutableNode graphTarget = styled(t, mutNode(t.toString()).add("label", t.label()));
+            MutableNode graphSource = styled(source, mutNode(source.id()).add("label", source.label()));
+            MutableNode graphTarget = styled(t, mutNode(t.id()).add("label", t.label()));
             g.add(graphSource.addLink(graphSource.linkTo(graphTarget).with("penwidth", "3")));
         });
 
         if (node.accessesDatabase()) {
-            g.add(mutNode(source.toString()).addLink(mutNode("IDMS Database")
+            g.add(mutNode(source.id()).addLink(mutNode("IDMS Database")
                     .add("shape", "cylinder")
                     .add("height", "4")
                     .add("width", "4")
@@ -58,8 +58,8 @@ public class ChartNodeGraphvizVisitor implements ChartNodeVisitor {
         if (overlayParent.getClass() == GenericProcessingChartNode.class) return;
         ChartNode passthroughTarget = internalTreeRoot.passthrough();
         ChartNode overlayInternalTreeRoot = overlay.block(passthroughTarget);
-        MutableNode graphParent = styled(overlayParent, mutNode(overlayParent.toString())).add("label", overlayParent.label());
-        MutableNode graphChild = mutNode(overlayInternalTreeRoot.toString()).add("label", overlayInternalTreeRoot.label());
+        MutableNode graphParent = styled(overlayParent, mutNode(overlayParent.id())).add("label", overlayParent.label());
+        MutableNode graphChild = mutNode(overlayInternalTreeRoot.id()).add("label", overlayInternalTreeRoot.label());
         MutableNode child = styled(overlayInternalTreeRoot, graphChild);
 //        if (overlayInternalTreeRoot.getExecutionContext() != null && overlayInternalTreeRoot.getExecutionContext().getClass() == CobolParser.ConditionalStatementCallContext.class)
         String arrowStyle = hideStrategy.apply(overlayInternalTreeRoot) ? "none" : "normal";
@@ -70,8 +70,8 @@ public class ChartNodeGraphvizVisitor implements ChartNodeVisitor {
     public void visitControlTransfer(ChartNode from, ChartNode to) {
         ChartNode overlayFrom = overlay.block(from.passthrough());
         ChartNode overlayTo = overlay.block(to.passthrough());
-        MutableNode origin = styled(overlayFrom, mutNode(overlayFrom.toString()));
-        MutableNode destination = styled(overlayTo, mutNode(overlayTo.toString()));
+        MutableNode origin = styled(overlayFrom, mutNode(overlayFrom.id()));
+        MutableNode destination = styled(overlayTo, mutNode(overlayTo.id()));
         g.add(origin.addLink(origin.linkTo(destination).with("style", "bold").with("color", "blueviolet")));
     }
 
