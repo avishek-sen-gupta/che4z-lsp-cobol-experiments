@@ -8,7 +8,7 @@ import poc.common.flowchart.ChartNodeVisitor;
 
 public class IfElseChartNode extends CompositeCobolNode {
     @Override
-    public String shortLabel() {
+    public String label() {
         return "No";
     }
 

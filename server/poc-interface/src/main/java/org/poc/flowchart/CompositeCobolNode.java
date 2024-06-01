@@ -19,9 +19,9 @@ public class CompositeCobolNode extends CobolChartNode {
     @Override
     public void buildInternalFlow() {
         System.out.println("Building internal flow for " + name());
-        List<ParseTree> children = ((ParserRuleContext) executionContext).children;
+        List<? extends ParseTree> children = getChildren();
         if (children == null) return;
-        internalTreeRoot = nodeService.node(children.get(0), this);
+        internalTreeRoot = nodeService.node(children.getFirst(), this);
         ChartNode current = internalTreeRoot;
         for (int i = 0; i <= children.size() - 2; i++) {
             ChartNode nextNode = nodeService.node(children.get(i + 1), this);
@@ -31,6 +31,11 @@ public class CompositeCobolNode extends CobolChartNode {
             current = successor;
         }
         internalTreeRoot.buildFlow();
+    }
+
+    @Override
+    public List<? extends ParseTree> getChildren() {
+        return ((ParserRuleContext) executionContext).children;
     }
 
     @Override
@@ -54,7 +59,7 @@ public class CompositeCobolNode extends CobolChartNode {
             if (searchResult != null) return searchResult;
         }
 
-        ChartNode chainSearch = new ChartNodes(outgoingNodes).first().next(nodeCondition, startingNode, false);
+        ChartNode chainSearch = new ChartNodes(outgoingNodes, nodeService).first().next(nodeCondition, startingNode, false);
         if (chainSearch != null) return chainSearch;
         return scope != null ? scope.next(nodeCondition, startingNode, true) : new DummyChartNode(nodeService);
     }

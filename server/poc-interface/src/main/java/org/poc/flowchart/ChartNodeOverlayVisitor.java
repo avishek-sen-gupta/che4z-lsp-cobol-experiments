@@ -28,7 +28,7 @@ public class ChartNodeOverlayVisitor implements ChartNodeVisitor {
         ) && node.isMergeable()) {
             System.out.println("MERGEABLE : " + node);
             if (head == null) {
-                head = new GenericProcessingChartNode(node, enclosingScope);
+                head = new GenericProcessingChartNode(node, enclosingScope, nodeService);
                 groups.add(head);
             } else {
                 head.add(node);

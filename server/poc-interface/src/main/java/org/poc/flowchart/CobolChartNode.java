@@ -1,5 +1,6 @@
 package org.poc.flowchart;
 
+import com.google.common.collect.ImmutableList;
 import lombok.Getter;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -11,8 +12,7 @@ import org.eclipse.lsp.cobol.core.CobolParser;
 import java.util.*;
 
 public class CobolChartNode implements ChartNode {
-    static int counter = 0;
-    private final String uuid;
+    protected final String uuid;
     protected List<ChartNode> outgoingNodes = new ArrayList<>();
     protected List<ChartNode> incomingNodes = new ArrayList<>();
     @Getter
@@ -25,8 +25,7 @@ public class CobolChartNode implements ChartNode {
     protected ChartNode scope;
 
     public CobolChartNode(ParseTree executionContext, ChartNode scope, ChartNodeService nodeService) {
-        this.uuid = String.valueOf(counter);
-        counter++;
+        this.uuid = String.valueOf(nodeService.counter());
         this.nodeService = nodeService;
         this.executionContext = executionContext;
         this.scope = scope;
@@ -73,9 +72,9 @@ public class CobolChartNode implements ChartNode {
         return Objects.hash(executionContext);
     }
 
+    // Use only for debugging
     @Override
     public String toString() {
-//        if (!getNotes().getText().isEmpty()) return getNotes().getText();
         if (executionContext instanceof ParserRuleContext) {
             return name() + "/" + ((ParserRuleContext) executionContext).getStart().getLine() + "/" + uuid;
         }
@@ -205,7 +204,7 @@ public class CobolChartNode implements ChartNode {
     }
 
     @Override
-    public String shortLabel() {
+    public String label() {
         return name();
     }
 
@@ -217,6 +216,11 @@ public class CobolChartNode implements ChartNode {
     @Override
     public boolean isPassthrough() {
         return false;
+    }
+
+    @Override
+    public String id() {
+        return name() + "." + uuid;
     }
 
     @Override
@@ -239,5 +243,10 @@ public class CobolChartNode implements ChartNode {
     public ChartNode find(ChartNodeCondition nodeCondition, ChartNode startingNode) {
         if (nodeCondition.apply(this)) return this;
         return scope.find(nodeCondition, startingNode);
+    }
+
+    @Override
+    public List<? extends ParseTree> getChildren() {
+        return ImmutableList.of();
     }
 }

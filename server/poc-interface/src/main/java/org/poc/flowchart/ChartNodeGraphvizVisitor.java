@@ -3,7 +3,6 @@ package org.poc.flowchart;
 import guru.nidi.graphviz.attribute.Color;
 import guru.nidi.graphviz.model.MutableGraph;
 import guru.nidi.graphviz.model.MutableNode;
-import org.eclipse.lsp.cobol.core.CobolParser;
 import poc.common.flowchart.*;
 
 import java.util.List;
@@ -28,8 +27,8 @@ public class ChartNodeGraphvizVisitor implements ChartNodeVisitor {
         targets.forEach(t -> {
             System.out.println("Linking " + node + " to " + t);
             if (source == t) return;
-            MutableNode graphSource = styled(source, mutNode(source.toString()).add("label", source.shortLabel()));
-            MutableNode graphTarget = styled(t, mutNode(t.toString()).add("label", t.shortLabel()));
+            MutableNode graphSource = styled(source, mutNode(source.toString()).add("label", source.label()));
+            MutableNode graphTarget = styled(t, mutNode(t.toString()).add("label", t.label()));
             g.add(graphSource.addLink(graphSource.linkTo(graphTarget).with("penwidth", "3")));
         });
 
@@ -59,8 +58,8 @@ public class ChartNodeGraphvizVisitor implements ChartNodeVisitor {
         if (overlayParent.getClass() == GenericProcessingChartNode.class) return;
         ChartNode passthroughTarget = internalTreeRoot.passthrough();
         ChartNode overlayInternalTreeRoot = overlay.block(passthroughTarget);
-        MutableNode graphParent = styled(overlayParent, mutNode(overlayParent.toString())).add("label", overlayParent.shortLabel());
-        MutableNode graphChild = mutNode(overlayInternalTreeRoot.toString()).add("label", overlayInternalTreeRoot.shortLabel());
+        MutableNode graphParent = styled(overlayParent, mutNode(overlayParent.toString())).add("label", overlayParent.label());
+        MutableNode graphChild = mutNode(overlayInternalTreeRoot.toString()).add("label", overlayInternalTreeRoot.label());
         MutableNode child = styled(overlayInternalTreeRoot, graphChild);
 //        if (overlayInternalTreeRoot.getExecutionContext() != null && overlayInternalTreeRoot.getExecutionContext().getClass() == CobolParser.ConditionalStatementCallContext.class)
         String arrowStyle = hideStrategy.apply(overlayInternalTreeRoot) ? "none" : "normal";

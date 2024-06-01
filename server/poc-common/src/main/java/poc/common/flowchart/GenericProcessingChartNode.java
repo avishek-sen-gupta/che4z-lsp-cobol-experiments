@@ -6,13 +6,14 @@ import org.poc.common.navigation.CobolEntityNavigator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class GenericProcessingChartNode implements ChartNode {
     private List<ChartNode> nodes = new ArrayList<>();
     private final ChartNode enclosingScope;
+    private String uuid;
 
-    public GenericProcessingChartNode(ChartNode node, ChartNode enclosingScope) {
+    public GenericProcessingChartNode(ChartNode node, ChartNode enclosingScope, ChartNodeService nodeService) {
+        this.uuid = String.valueOf(nodeService.counter());
         this.enclosingScope = enclosingScope;
         nodes.add(node);
     }
@@ -44,7 +45,7 @@ public class GenericProcessingChartNode implements ChartNode {
 
     @Override
     public String name() {
-        return "Processing Block: " + UUID.randomUUID().toString();
+        return "Processing Block: " + uuid;
     }
 
     @Override
@@ -60,6 +61,11 @@ public class GenericProcessingChartNode implements ChartNode {
     @Override
     public void accept(ChartNodeVisitor visitor, int level, int maxLevel) {
 
+    }
+
+    @Override
+    public List<? extends ParseTree> getChildren() {
+        return List.of();
     }
 
     @Override
@@ -125,9 +131,7 @@ public class GenericProcessingChartNode implements ChartNode {
     }
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder("Processing\n------------------------\n");
-        nodes.forEach(n -> builder.append(CobolContextAugmentedTreeNode.originalText(n.getExecutionContext(), CobolEntityNavigator::PASSTHROUGH) + "\n"));
-        return builder.toString();
+        return label() + "/" + uuid;
     }
 
     public boolean contains(ChartNode node) {
@@ -140,8 +144,10 @@ public class GenericProcessingChartNode implements ChartNode {
     }
 
     @Override
-    public String shortLabel() {
-        return toString();
+    public String label() {
+        StringBuilder builder = new StringBuilder("Processing\n------------------------\n");
+        nodes.forEach(n -> builder.append(CobolContextAugmentedTreeNode.originalText(n.getExecutionContext(), CobolEntityNavigator::PASSTHROUGH)).append("\n"));
+        return builder.toString();
     }
 
     @Override
@@ -152,6 +158,11 @@ public class GenericProcessingChartNode implements ChartNode {
     @Override
     public boolean isPassthrough() {
         return false;
+    }
+
+    @Override
+    public String id() {
+        return name() + "/" + uuid;
     }
 
     @Override

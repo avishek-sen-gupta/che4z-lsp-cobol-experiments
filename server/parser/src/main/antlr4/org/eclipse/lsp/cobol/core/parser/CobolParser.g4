@@ -1216,6 +1216,9 @@ ifStatement
 nextSentence
     : NEXT SENTENCE;
 
+nextSentenceWrapperStatement
+    : nextSentence;
+
 ifThen
    : THEN? (conditionalStatementCall+)
    ;
@@ -1596,7 +1599,7 @@ searchVarying
    ;
 
 searchWhen
-   : WHEN condition (NEXT SENTENCE | conditionalStatementCall (COMMACHAR? conditionalStatementCall)*?)
+   : WHEN condition (nextSentenceWrapperStatement | conditionalStatementCall (COMMACHAR? conditionalStatementCall)*?)
    ;
 
 // send statement

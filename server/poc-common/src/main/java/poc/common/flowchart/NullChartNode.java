@@ -5,6 +5,13 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import java.util.List;
 
 public class NullChartNode implements ChartNode {
+
+    private final int uuid;
+
+    public NullChartNode(ChartNodeService nodeService) {
+        uuid = nodeService.counter();
+    }
+
     @Override
     public void buildFlow() {
 
@@ -71,6 +78,11 @@ public class NullChartNode implements ChartNode {
     }
 
     @Override
+    public List<? extends ParseTree> getChildren() {
+        return List.of();
+    }
+
+    @Override
     public void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel) {
 
     }
@@ -116,7 +128,7 @@ public class NullChartNode implements ChartNode {
     }
 
     @Override
-    public String shortLabel() {
+    public String label() {
         return "";
     }
 
@@ -138,5 +150,10 @@ public class NullChartNode implements ChartNode {
     @Override
     public boolean isPassthrough() {
         return false;
+    }
+
+    @Override
+    public String id() {
+        return "NULL/" + uuid;
     }
 }

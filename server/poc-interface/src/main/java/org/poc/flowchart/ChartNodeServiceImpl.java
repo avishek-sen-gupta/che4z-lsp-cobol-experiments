@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChartNodeServiceImpl implements ChartNodeService {
+    int counter = 0;
     private List<ChartNode> nodes = new ArrayList<>();
     private CobolEntityNavigator navigator;
 
@@ -49,5 +50,11 @@ public class ChartNodeServiceImpl implements ChartNodeService {
     @Override
     public ChartNode existingNode(ParseTree parseTree) {
         return nodes.stream().filter(n -> n.getExecutionContext() == parseTree).findFirst().orElse(null);
+    }
+
+    @Override
+    public int counter() {
+        counter ++;
+        return counter;
     }
 }

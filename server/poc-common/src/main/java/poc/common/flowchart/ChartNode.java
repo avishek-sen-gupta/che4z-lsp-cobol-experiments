@@ -21,6 +21,9 @@ public interface ChartNode {
     void linkParentToChild(ChartNodeVisitor visitor);
     void accept(ChartNodeVisitor visitor, int level);
     void accept(ChartNodeVisitor visitor, int level, int maxLevel);
+
+    List<? extends ParseTree> getChildren();
+
     void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel);
 
     ChartNode find(ChartNodeCondition nodeCondition, ChartNode startingNode);
@@ -32,10 +35,11 @@ public interface ChartNode {
     boolean accessesDatabase();
     boolean isMergeable();
     boolean contains(ChartNode node);
-    String shortLabel();
+    String label();
     String name();
     ChartNodeType type();
 
     ChartNode passthrough();
     boolean isPassthrough();
+    String id();
 }

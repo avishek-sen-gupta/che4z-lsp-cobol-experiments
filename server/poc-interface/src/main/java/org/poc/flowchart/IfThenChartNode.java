@@ -14,7 +14,7 @@ public class IfThenChartNode extends CompositeCobolNode {
     }
 
     @Override
-    public String shortLabel() {
+    public String label() {
         return "Yes";
     }
 

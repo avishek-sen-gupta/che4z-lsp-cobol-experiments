@@ -15,10 +15,13 @@ public class CobolChartNodeFactory {
             return new IfChartNode(parseTree, scope, nodeService);
         else if (StatementIdentity.isStatementOfType(parseTree, CobolParser.GoToStatementContext.class))
             return new GoToChartNode(parseTree, scope, nodeService);
-        else if (StatementIdentity.isStatementOfType(parseTree, CobolParser.NextSentenceContext.class))
+        else if (StatementIdentity.isStatementOfType(parseTree, CobolParser.NextSentenceContext.class) ||
+                StatementIdentity.isOfType(parseTree, CobolParser.NextSentenceWrapperStatementContext.class))
             return new NextSentenceChartNode(parseTree, scope, nodeService);
         else if (StatementIdentity.isStatementOfType(parseTree, CobolParser.PerformStatementContext.class))
             return new PerformChartNode(parseTree, scope, nodeService);
+        else if (StatementIdentity.isStatementOfType(parseTree, CobolParser.SearchStatementContext.class))
+            return new SearchChartNode(parseTree, scope, nodeService);
         else if (StatementIdentity.isOfType(parseTree, CobolParser.DialectStatementContext.class))
             return new DialectStatementChartNode(parseTree, scope, nodeService);
         else if (StatementIdentity.isOfType(parseTree, CobolParser.ConditionalStatementCallContext.class))
@@ -34,6 +37,10 @@ public class CobolChartNodeFactory {
             return new ParagraphNameChartNode(parseTree, scope, nodeService);
         else if (StatementIdentity.isOfType(parseTree, CobolParser.SentenceContext.class))
             return new SentenceChartNode(parseTree, scope, nodeService);
+        else if (StatementIdentity.isOfType(parseTree, CobolParser.SearchWhenContext.class))
+            return new SearchWhenChartNode(parseTree, scope, nodeService);
+        else if (StatementIdentity.isOfType(parseTree, CobolParser.AtEndPhraseContext.class))
+            return new AtEndPhraseChartNode(parseTree, scope, nodeService);
         else if (StatementIdentity.isOfType(parseTree, CobolParser.IfThenContext.class))
             return new IfThenChartNode(parseTree, scope, nodeService);
         else if (StatementIdentity.isOfType(parseTree, CobolParser.IfElseContext.class))
@@ -62,6 +69,7 @@ public class CobolChartNodeFactory {
 //                executionContext.getClass() == CobolParser.IfThenContext.class ||
 //                executionContext.getClass() == CobolParser.IfElseContext.class ||
 //                executionContext.getClass() == CobolParser.ConditionalStatementCallContext.class ||
+                executionContext.getClass() == CobolParser.SearchStatementContext.class ||
                 executionContext.getClass() == CobolParser.PerformInlineStatementContext.class ||
                 executionContext.getClass() == CobolParser.DialectSectionContext.class ||
                 executionContext.getClass() == IdmsParser.IdmsIfStatementContext.class ||
