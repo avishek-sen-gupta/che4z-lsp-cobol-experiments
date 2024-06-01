@@ -16,8 +16,6 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
-import static poc.common.flowchart.NodeText.originalText;
-
 public class CobolEntityNavigatorImpl implements CobolEntityNavigator {
     private CobolParser.ProcedureDivisionBodyContext root;
     private final ParserRuleContext fullProgramTree;
@@ -81,12 +79,8 @@ public class CobolEntityNavigatorImpl implements CobolEntityNavigator {
             String markerID = "_DIALECT_ " + n.getChild(1).getText();
             ParseTree idmsContainer = findByCondition(n, c -> c.getClass() == IdmsContainerNode.class, 1);
             Function<String, String> passthrough;
-            String text = originalText(idmsContainer.getChild(0), NodeText::PASSTHROUGH);
+            String text = NodeText.originalText(idmsContainer.getChild(0), NodeText::PASSTHROUGH);
             symbolText.put(markerID, text);
-//            Matcher matcher = dialectMarkerPattern.matcher(n.getText());
-//            matcher.find();
-//            String dialectMarkerID = matcher.group();
-//            return dialectMarkerID;
         });
     }
 
