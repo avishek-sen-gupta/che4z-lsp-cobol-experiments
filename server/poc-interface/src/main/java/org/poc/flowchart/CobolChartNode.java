@@ -164,31 +164,6 @@ public class CobolChartNode implements ChartNode {
     }
 
     @Override
-    public void remove() {
-        incomingNodes.forEach(n -> n.removeOutgoingNode(this));
-        incomingNodes.clear();
-        outgoingNodes.forEach(n -> n.removeIncomingNode(this));
-        outgoingNodes.clear();
-    }
-
-    @Override
-    public void removeOutgoingNode(ChartNode chartNode) {
-        int before = outgoingNodes.size();
-        outgoingNodes.remove(chartNode);
-        int after = outgoingNodes.size();
-        if (before != after) {
-            System.out.println("Warning: NOTHING was removed");
-        } else {
-            System.out.println("Removed successfully");
-        }
-    }
-
-    @Override
-    public void removeIncomingNode(ChartNode chartNode) {
-        incomingNodes.remove(chartNode);
-    }
-
-    @Override
     public boolean accessesDatabase() {
         return databaseAccess;
     }

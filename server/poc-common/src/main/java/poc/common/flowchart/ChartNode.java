@@ -12,10 +12,10 @@ public interface ChartNode {
 
     void goesTo(ChartNode successor);
     void addIncomingNode(ChartNode chartNode);
-    @Deprecated void removeOutgoingNode(ChartNode chartNode);
-    @Deprecated void removeIncomingNode(ChartNode chartNode);
+
     @Deprecated List<ChartNode> getOutgoingNodes();
 
+    // TODO: The implementations need rewrite. This is currently not elegant.
     ChartNode next(ChartNodeCondition nodeCondition, ChartNode startingNode, boolean isComplete);
 
     void linkParentToChild(ChartNodeVisitor visitor);
@@ -29,7 +29,7 @@ public interface ChartNode {
 
     DomainDocument getNotes();
     void reset();
-    @Deprecated void remove();
+
     boolean accessesDatabase();
     boolean isMergeable();
     boolean contains(ChartNode node);

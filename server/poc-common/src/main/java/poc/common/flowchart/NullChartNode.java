@@ -43,16 +43,6 @@ public class NullChartNode implements ChartNode {
     }
 
     @Override
-    public void removeOutgoingNode(ChartNode chartNode) {
-
-    }
-
-    @Override
-    public void removeIncomingNode(ChartNode chartNode) {
-
-    }
-
-    @Override
     public List<ChartNode> getOutgoingNodes() {
         return List.of();
     }
@@ -104,11 +94,6 @@ public class NullChartNode implements ChartNode {
 
     @Override
     public void reset() {
-
-    }
-
-    @Override
-    public void remove() {
 
     }
 

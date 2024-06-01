@@ -2,7 +2,6 @@ package poc.common.flowchart;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolDataDivisionParser;
-import org.poc.common.navigation.CobolEntityNavigator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,21 +98,6 @@ public class GenericProcessingChartNode implements ChartNode {
 
     @Override
     public void reset() {
-
-    }
-
-    @Override
-    public void remove() {
-
-    }
-
-    @Override
-    public void removeOutgoingNode(ChartNode chartNode) {
-
-    }
-
-    @Override
-    public void removeIncomingNode(ChartNode chartNode) {
 
     }
 
