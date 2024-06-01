@@ -24,7 +24,7 @@ public class AtEndPhraseChartNode extends CompositeCobolNode {
 
     @Override
     public String label() {
-        return "At End";
+        return "";
     }
 
     @Override

@@ -37,7 +37,8 @@ public class SearchWhenChartNode extends CompositeCobolNode {
     public void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel) {
         super.acceptUnvisited(visitor, level, maxLevel);
         condition.acceptUnvisited(visitor, level, maxLevel);
-        visitor.visitParentChildLink(this, condition, nodeService);
+        // Condition is already shown in parent's label, so we don't need to explicitly visit (and create) a condition graph node
+//        visitor.visitParentChildLink(this, condition, nodeService);
     }
 
     @Override

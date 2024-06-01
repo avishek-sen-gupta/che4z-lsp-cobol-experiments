@@ -49,7 +49,7 @@ public class PocCliStartup {
      */
     public static void main(String[] args) throws IOException, InterruptedException {
         String dotFilePath = "/Users/asgupta/Downloads/mbrdi-poc/flowchart.dot";
-        String graphOutputPath = "/Users/asgupta/Downloads/mbrdi-poc/flowchart.png";
+        String imageOutputPath = "/Users/asgupta/Downloads/mbrdi-poc/flowchart.png";
         String cobolParseTreeOutputPath = "/Users/asgupta/Downloads/mbrdi-poc/test-cobol.json";
         String idmsParseTreeOutputPath = "/Users/asgupta/Downloads/mbrdi-poc/test-idms.json";
         File[] copyBookPaths = {new File("/Users/asgupta/Downloads/mbrdi-poc")};
@@ -66,23 +66,16 @@ public class PocCliStartup {
         CobolEntityNavigator navigator = pipeline.parse();
         FlowchartBuilder flowcharter = pipeline.flowcharter();
 
-//        ParseTree u204 = navigator.target("D1");
 //        ParseTree u204 = navigator.target("U204-CALL-COST-PRICE");
-//        ParseTree u204 = navigator.target("B2");
-        ParseTree u204 = navigator.root();
-        ParseTree k0A = navigator.target("K0A");
-        ParseTree k1 = navigator.target("K1");
-        ParseTree b2 = navigator.target("B2");
-        ParseTree b2d = navigator.target("B2D");
-
-//        flowcharter.draw(k0A).draw(k1).draw(b2).draw(u204);
+        ParseTree u204 = navigator.target("B2");
+//        ParseTree u204 = navigator.root();
 //        flowcharter.outline(b2d, "SOME RANDOM STUFF");
 
-        flowcharter.buildChartTree(u204);
-        flowcharter.buildControlFlow(u204);
-        flowcharter.buildOverlay(u204);
-        flowcharter.draw(u204);
+        flowcharter.buildChartAST(u204);
+        flowcharter.buildControlFlow();
+        flowcharter.buildOverlay();
+        flowcharter.buildGraphic();
         flowcharter.write(dotFilePath);
-        new GraphGenerator("lines").generateGraph(dotFilePath, graphOutputPath);
+        new GraphGenerator("ortho").generateImage(dotFilePath, imageOutputPath);
     }
 }

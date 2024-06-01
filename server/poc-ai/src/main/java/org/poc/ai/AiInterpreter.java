@@ -54,9 +54,9 @@ public class AiInterpreter {
     }
 
     public void buildFlowchart() {
-        flowcharter.buildChartTree(scope);
-        flowcharter.buildOverlay(scope);
-        flowcharter.draw(scope);
+        flowcharter.buildChartAST(scope);
+        flowcharter.buildOverlay();
+        flowcharter.buildGraphic();
 //        references.forEach(r -> {
 //            r.getSymbols().forEach(s -> flowcharter.draw(s));
 //        });
@@ -72,6 +72,6 @@ public class AiInterpreter {
             }
         }
         flowcharter.write(dotFilePath);
-        new GraphGenerator("ortho").generateGraph(dotFilePath, graphOutputPath);
+        new GraphGenerator("ortho").generateImage(dotFilePath, graphOutputPath);
     }
 }

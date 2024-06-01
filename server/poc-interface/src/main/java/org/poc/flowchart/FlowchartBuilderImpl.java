@@ -18,7 +18,7 @@ import static guru.nidi.graphviz.model.Factory.mutNode;
 
 public class FlowchartBuilderImpl implements FlowchartBuilder {
     private final ChartNodeService chartNodeService;
-    private ChartNode root;
+    private ChartNode graphRoot;
     private CobolEntityNavigator cobolEntityNavigator;
     private MutableGraph graph;
     private ChartOverlay overlay;
@@ -31,26 +31,26 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
     }
 
     @Override
-    public FlowchartBuilder draw(ParseTree root, int maxLevel) {
-        return buildChartGraphic(root, maxLevel);
+    public FlowchartBuilder buildGraphic(int maxLevel) {
+        System.out.println("Assembling : " + graphRoot);
+        return buildChartGraphic(maxLevel);
     }
 
     @Override
-    public FlowchartBuilder draw(ParseTree root) {
-        System.out.println("Assembling : " + root.getText());
-        return draw(root, -1);
+    public FlowchartBuilder buildGraphic() {
+        return buildGraphic(-1);
     }
 
     @Override
-    public FlowchartBuilder buildChartTree(ParseTree node) {
+    public FlowchartBuilder buildChartAST(ParseTree node) {
         ChartNode rootChartNode = chartNodeService.node(node, null);
         rootChartNode.buildFlow();
-        root = rootChartNode;
+        graphRoot = rootChartNode;
         return this;
     }
 
-    private FlowchartBuilder buildChartGraphic(ParseTree node, int maxLevel) {
-        ChartNode rootChartNode = chartNodeService.existingNode(node);
+    private FlowchartBuilder buildChartGraphic(int maxLevel) {
+        ChartNode rootChartNode = graphRoot;
         rootChartNode.reset();
         ChartNodeVisitor chartVisitor = new ChartNodeGraphvizVisitor(graph, overlay);
         rootChartNode.accept(chartVisitor, 1, maxLevel);
@@ -97,8 +97,9 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
     }
 
     @Override
-    public FlowchartBuilder buildOverlay(ParseTree node) {
-        ChartNode rootChartNode = chartNodeService.existingNode(node);
+    public FlowchartBuilder buildOverlay() {
+//        ChartNode rootChartNode = chartNodeService.existingNode(node);
+        ChartNode rootChartNode = graphRoot;
         rootChartNode.reset();
 //        ChartNodeRuleVisitor compressionVisitor = new ChartNodeRuleVisitor(rootChartNode, rules);
         ChartNodeOverlayVisitor compressionVisitor = new ChartNodeOverlayVisitor(rootChartNode);
@@ -110,8 +111,8 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
     }
 
     @Override
-    public FlowchartBuilder buildControlFlow(ParseTree node) {
-        ChartNode rootChartNode = chartNodeService.existingNode(node);
+    public FlowchartBuilder buildControlFlow() {
+        ChartNode rootChartNode = graphRoot;
         rootChartNode.reset();
         rootChartNode.accept(new ChartNodeControlFlowVisitor(), 1, -1);
         return this;

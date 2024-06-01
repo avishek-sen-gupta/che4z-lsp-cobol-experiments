@@ -25,8 +25,8 @@ public class GraphGenerator {
         this.lineStyle = lineStyle;
     }
 
-    public void generateGraph(String dotFilePath, String graphOutputPath) throws IOException, InterruptedException {
-        ImmutableList<String> graphGenerationCommand = ImmutableList.of("dot", "-Kdot", "-v5", "-Gsize=800,800\\!", "-Goverlap=scale", "-Tpng", "-Gnslimit=7", "-Gnslimit1=7", "-Gmaxiter=5000", String.format("-Gsplines=%s", lineStyle), dotFilePath, String.format("-o%s", graphOutputPath));
+    public void generateImage(String dotFilePath, String imageOutputPath) throws IOException, InterruptedException {
+        ImmutableList<String> graphGenerationCommand = ImmutableList.of("dot", "-Kdot", "-v5", "-Gsize=800,800\\!", "-Goverlap=scale", "-Tpng", "-Gnslimit=7", "-Gnslimit1=7", "-Gmaxiter=5000", String.format("-Gsplines=%s", lineStyle), dotFilePath, String.format("-o%s", imageOutputPath));
 //        String graphGenerationCommand = String.format("dot -Kdot -v5 -Gsize=800,800\\! -Goverlap=scale -Tpng -Gnslimit=7 -Gnslimit1=7 -Gmaxiter=5000 -Gsplines=line %s -o%s", dotFilePath, graphOutputPath);
         Process p = new ProcessBuilder(graphGenerationCommand).inheritIO().start();
         int rc = p.waitFor();
