@@ -68,7 +68,7 @@ public class GenericProcessingChartNode implements ChartNode {
     }
 
     @Override
-    public ChartNode find(ChartNodeCondition nodeCondition) {
+    public ChartNode find(ChartNodeCondition nodeCondition, ChartNode startingNode) {
         return null;
     }
 
@@ -155,7 +155,7 @@ public class GenericProcessingChartNode implements ChartNode {
     }
 
     @Override
-    public ChartNode next(ChartNodeCondition nodeCondition, ChartNode startingNode) {
+    public ChartNode next(ChartNodeCondition nodeCondition, ChartNode startingNode, boolean isComplete) {
         return null;
     }
 

@@ -220,10 +220,12 @@ public class CobolChartNode implements ChartNode {
     }
 
     @Override
-    public ChartNode next(ChartNodeCondition nodeCondition, ChartNode startingNode) {
+    public ChartNode next(ChartNodeCondition nodeCondition, ChartNode startingNode, boolean isComplete) {
         if (this != startingNode && nodeCondition.apply(this)) return this;
+        System.out.println("Num outgoing nodes: " + outgoingNodes.size());
+        if (outgoingNodes.isEmpty()) return scope.next(nodeCondition, startingNode, true);
         for (ChartNode o : outgoingNodes) {
-            ChartNode next = o.next(nodeCondition, startingNode);
+            ChartNode next = o.next(nodeCondition, startingNode, true);
             if (next != null) return next;
         }
         return null;
@@ -234,8 +236,8 @@ public class CobolChartNode implements ChartNode {
     }
 
     @Override
-    public ChartNode find(ChartNodeCondition nodeCondition) {
+    public ChartNode find(ChartNodeCondition nodeCondition, ChartNode startingNode) {
         if (nodeCondition.apply(this)) return this;
-        return scope.find(nodeCondition);
+        return scope.find(nodeCondition, startingNode);
     }
 }

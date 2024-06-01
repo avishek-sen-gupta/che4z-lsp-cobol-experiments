@@ -3,6 +3,7 @@ package org.poc.flowchart;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;
+import org.poc.common.navigation.CobolEntityNavigator;
 import poc.common.flowchart.*;
 
 import java.util.List;
@@ -40,6 +41,22 @@ public class CompositeCobolNode extends CobolChartNode {
             current.accept(visitor.newScope(this), level + 1, maxLevel);
         }
         super.acceptUnvisited(visitor, level, maxLevel);
+    }
+
+    @Override
+    public ChartNode next(ChartNodeCondition nodeCondition, ChartNode startingNode, boolean isComplete) {
+        System.out.println("Moved up to " + executionContext.getClass() + executionContext.getText());
+        CobolEntityNavigator navigator = nodeService.getNavigator();
+//        boolean shouldSearch = navigator.findByCondition(executionContext, n -> n == startingNode.getExecutionContext()) == null;
+        if (!isComplete) {
+            System.out.println("ITR is " + internalTreeRoot.getClass() + " " + internalTreeRoot);
+            ChartNode searchResult = internalTreeRoot.next(nodeCondition, startingNode, false);
+            if (searchResult != null) return searchResult;
+        }
+
+        ChartNode chainSearch = new ChartNodes(outgoingNodes).first().next(nodeCondition, startingNode, false);
+        if (chainSearch != null) return chainSearch;
+        return scope != null ? scope.next(nodeCondition, startingNode, true) : new DummyChartNode(nodeService);
     }
 
     @Override

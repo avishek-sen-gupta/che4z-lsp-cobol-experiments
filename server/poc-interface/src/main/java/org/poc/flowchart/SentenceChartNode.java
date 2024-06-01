@@ -8,10 +8,10 @@ import java.util.List;
 
 public class SentenceChartNode extends CompositeCobolNode {
     @Override
-    public ChartNode next(ChartNodeCondition nodeCondition, ChartNode startingNode) {
-        ChartNode nextNode = super.next(nodeCondition, startingNode);
-        if (nextNode != null) return nextNode;
-        return scope.next(nodeCondition, startingNode);
+    public ChartNode next(ChartNodeCondition nodeCondition, ChartNode startingNode, boolean isComplete) {
+        if (this != startingNode && nodeCondition.apply(this)) return this;
+        if (outgoingNodes.isEmpty()) return scope.next(nodeCondition, startingNode, true);
+        return outgoingNodes.getFirst().next(nodeCondition, startingNode, false);
     }
 
     public SentenceChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {

@@ -17,7 +17,7 @@ public class ProcedureDivisionBodyChartNode extends CompositeCobolNode {
     }
 
     @Override
-    public ChartNode next(ChartNodeCondition nodeCondition, ChartNode startingNode) {
+    public ChartNode next(ChartNodeCondition nodeCondition, ChartNode startingNode, boolean isComplete) {
         return new DummyChartNode(nodeService);
     }
 }
