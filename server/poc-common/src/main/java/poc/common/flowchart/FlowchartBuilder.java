@@ -2,6 +2,8 @@ package poc.common.flowchart;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import java.io.IOException;
+
 public interface FlowchartBuilder {
     FlowchartBuilder buildGraphic(int maxLevel);
     FlowchartBuilder buildGraphic();
@@ -12,4 +14,5 @@ public interface FlowchartBuilder {
     FlowchartBuilder createComment(String comment);
     FlowchartBuilder buildOverlay();
     FlowchartBuilder buildControlFlow();
+    void generateFlowchart(ParseTree procedure, String dotFilePath, String imageOutputPath) throws IOException, InterruptedException;
 }

@@ -118,6 +118,17 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
         return this;
     }
 
+    @Override
+    public void generateFlowchart(ParseTree procedure, String dotFilePath, String imageOutputPath) throws IOException, InterruptedException {
+        buildChartAST(procedure)
+        .buildControlFlow()
+        .buildOverlay()
+        .buildGraphic()
+        .write(dotFilePath);
+        new GraphGenerator("ortho").generateImage(dotFilePath, imageOutputPath);
+
+    }
+
     private String formatted(String s, int lineLength) {
         StringBuilder builder = new StringBuilder(s);
         int length = s.length();

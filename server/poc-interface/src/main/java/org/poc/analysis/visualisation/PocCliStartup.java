@@ -21,7 +21,6 @@ import org.poc.common.navigation.CobolEntityNavigator;
 import org.poc.flowchart.FlowchartBuilderImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import poc.common.flowchart.GraphGenerator;
 import vm.CobolEntityNavigatorBuilderImpl;
 
 import java.io.File;
@@ -78,11 +77,6 @@ public class PocCliStartup {
         // This one is root
 //        ParseTree procedure = navigator.root();
 
-        flowcharter.buildChartAST(procedure);
-        flowcharter.buildControlFlow();
-        flowcharter.buildOverlay();
-        flowcharter.buildGraphic();
-        flowcharter.write(dotFilePath);
-        new GraphGenerator("ortho").generateImage(dotFilePath, imageOutputPath);
+        flowcharter.generateFlowchart(procedure, dotFilePath, imageOutputPath);
     }
 }
