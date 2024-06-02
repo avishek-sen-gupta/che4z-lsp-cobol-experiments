@@ -5,8 +5,8 @@ import guru.nidi.graphviz.model.MutableGraph;
 import guru.nidi.graphviz.model.MutableNode;
 import poc.common.flowchart.*;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Function;
 
 import static guru.nidi.graphviz.model.Factory.*;
@@ -87,20 +87,16 @@ public class ChartNodeGraphvizVisitor implements ChartNodeVisitor {
     }
 
     @Override
-    public void group(ChartNode root, ChartNode headConnection, ChartNode tailConnection) {
+    public void group(ChartNode root) {
         ChartNodeCollectorVisitor collector = new ChartNodeCollectorVisitor(overlay);
         root.accept(collector, -1);
         List<ChartNode> chartNodes = collector.getChartNodes();
-        MutableGraph outliningCluster = mutGraph("clusterLabel").setCluster(true).graphAttrs().add("bgcolor", Color.LIGHTGREY.value);
+        String clusterID = String.format("cluster_%s", UUID.randomUUID());
+        MutableGraph outliningCluster = mutGraph(clusterID).setCluster(true).graphAttrs().add("bgcolor", Color.LIGHTGREY.value);
         chartNodes.forEach(n -> {
-//            ChartNode overlaidBlock = overlay.block(n.passthrough());
             outliningCluster.add(mutNode(n.id()));
         });
         g.add(outliningCluster);
-//        MutableNode overlayHead = mutNode(overlay.block(headConnection.passthrough()).id());
-//        MutableNode overlayTail = mutNode(overlay.block(tailConnection.passthrough()).id());
-//        g.add(overlayHead.addLink(outliningCluster));
-//        g.add(overlayTail.addLink(outliningCluster));
     }
 
     private MutableNode styled(ChartNode chartNode, MutableNode node) {

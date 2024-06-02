@@ -41,12 +41,12 @@ public class CompositeCobolNode extends CobolChartNode {
     @Override
     public void acceptUnvisited(ChartNodeVisitor visitor, int level) {
         // super() call needs to happen first, otherwise duplicate overlays will be created, since children will get GenericProcessingNodes earlier than parents.
-        super.acceptUnvisited(visitor, level);
         if (internalTreeRoot != null) {
             linkParentToChild(visitor, level);
             ChartNode current = internalTreeRoot;
             current.accept(visitor.newScope(this), level + 1);
         }
+        super.acceptUnvisited(visitor, level);
     }
 
     @Override

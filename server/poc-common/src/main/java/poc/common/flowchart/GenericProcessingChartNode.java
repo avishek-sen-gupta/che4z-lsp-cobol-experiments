@@ -1,5 +1,6 @@
 package poc.common.flowchart;
 
+import lombok.Getter;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolDataDivisionParser;
 
@@ -7,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GenericProcessingChartNode implements ChartNode {
+    @Getter
+    private final Class<? extends ChartNode> type;
     private List<ChartNode> nodes = new ArrayList<>();
     private final ChartNode enclosingScope;
     private String uuid;
@@ -15,6 +18,7 @@ public class GenericProcessingChartNode implements ChartNode {
         this.uuid = String.valueOf(nodeService.counter());
         this.enclosingScope = enclosingScope;
         nodes.add(node);
+        type = node.getClass();
     }
 
     @Override

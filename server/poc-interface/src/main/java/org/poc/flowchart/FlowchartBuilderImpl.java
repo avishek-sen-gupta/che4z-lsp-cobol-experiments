@@ -27,7 +27,7 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
     public FlowchartBuilderImpl(CobolEntityNavigator cobolEntityNavigator) {
         this.cobolEntityNavigator = cobolEntityNavigator;
         chartNodeService = new ChartNodeServiceImpl(cobolEntityNavigator);
-        graph = Factory.mutGraph("example1").setDirected(true);
+        graph = Factory.mutGraph("example1").setDirected(true).setCluster(true);
         Graphviz.useEngine(new GraphvizCmdLineEngine().timeout(5, java.util.concurrent.TimeUnit.HOURS));
     }
 

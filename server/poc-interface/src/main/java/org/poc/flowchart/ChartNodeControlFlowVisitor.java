@@ -29,7 +29,7 @@ public class ChartNodeControlFlowVisitor implements ChartNodeVisitor {
     }
 
     @Override
-    public void group(ChartNode root, ChartNode headConnection, ChartNode tailConnection) {
+    public void group(ChartNode root) {
 
     }
 

@@ -54,8 +54,8 @@ public class PerformInlineChartNode extends CompositeCobolNode {
     @Override
     public void acceptUnvisited(ChartNodeVisitor visitor, int level) {
         super.acceptUnvisited(visitor, level);
-        ChartNode tail = internalTreeRoot.tail();
-        visitor.group(internalTreeRoot, this, this);
+        visitor.visitControlTransfer(this, condition, new VisitContext(level));
+        visitor.group(internalTreeRoot);
     }
 
     @Override

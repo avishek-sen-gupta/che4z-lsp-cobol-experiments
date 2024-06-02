@@ -19,6 +19,8 @@ public class ChartNodeOverlayVisitor implements ChartNodeVisitor {
         this.groups = groups;
     }
 
+    // TODO: This needs to become idempotent. There will be duplicate groups if the mergeable items do not come from higher up the syntax tree first.
+    // Currently, this works because super.buildInternalFlow() is called before internalTreeRoot.buildFlow() in CompositeCobolNode.
     @Override
     public void visit(ChartNode node, List<ChartNode> outgoingNodes, List<ChartNode> incomingNodes, VisitContext context, ChartNodeService nodeService) {
         if ((node.getClass() == SentenceChartNode.class ||
@@ -63,7 +65,7 @@ public class ChartNodeOverlayVisitor implements ChartNodeVisitor {
     }
 
     @Override
-    public void group(ChartNode root, ChartNode headConnection, ChartNode tailConnection) {
+    public void group(ChartNode root) {
 
     }
 
