@@ -5,10 +5,10 @@ import org.eclipse.lsp.cobol.core.CobolParser;
 
 import java.util.List;
 
-public class StatementIdentity<T> {
+public class SyntaxIdentity<T> {
     private final ParseTree executionContext;
 
-    public StatementIdentity(ParseTree executionContext) {
+    public SyntaxIdentity(ParseTree executionContext) {
         this.executionContext = executionContext;
     }
 

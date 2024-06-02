@@ -2,7 +2,6 @@ package org.poc.flowchart;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;
-import org.poc.common.navigation.CobolEntityNavigator;
 import poc.common.flowchart.*;
 
 public class IfChartNode extends CobolChartNode {
@@ -15,7 +14,7 @@ public class IfChartNode extends CobolChartNode {
 
     @Override
     public void buildInternalFlow() {
-        CobolParser.IfStatementContext ifStatement = new StatementIdentity<CobolParser.IfStatementContext>(getExecutionContext()).get();
+        CobolParser.IfStatementContext ifStatement = new SyntaxIdentity<CobolParser.IfStatementContext>(getExecutionContext()).get();
         ChartNode ifThenBlock = nodeService.node(ifStatement.ifThen(), this);
         ifThenBlock.buildFlow();
         this.ifThenBlock = ifThenBlock;
@@ -43,7 +42,7 @@ public class IfChartNode extends CobolChartNode {
 
     @Override
     public String name() {
-        CobolParser.IfStatementContext ifStatement = new StatementIdentity<CobolParser.IfStatementContext>(getExecutionContext()).get();
+        CobolParser.IfStatementContext ifStatement = new SyntaxIdentity<CobolParser.IfStatementContext>(getExecutionContext()).get();
         CobolParser.ConditionContext condition = (CobolParser.ConditionContext) ifStatement.getChild(1);
         String codeText = NodeText.originalText(condition, NodeText::PASSTHROUGH);
         return "IS \n" + truncated(codeText, 40) + "?\n";

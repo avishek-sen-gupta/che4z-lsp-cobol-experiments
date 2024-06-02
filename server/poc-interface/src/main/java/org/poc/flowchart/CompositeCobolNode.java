@@ -9,7 +9,7 @@ import poc.common.flowchart.*;
 import java.util.List;
 
 public class CompositeCobolNode extends CobolChartNode {
-    public static ChartNodeCondition CHILD_IS_CONDITIONAL_STATEMENT = node -> StatementIdentity.isOfType(node.getExecutionContext(), CobolParser.ConditionalStatementCallContext.class);
+    public static ChartNodeCondition CHILD_IS_CONDITIONAL_STATEMENT = node -> SyntaxIdentity.isOfType(node.getExecutionContext(), CobolParser.ConditionalStatementCallContext.class);
     protected ChartNode internalTreeRoot;
 
     public CompositeCobolNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {

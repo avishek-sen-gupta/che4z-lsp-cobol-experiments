@@ -2,7 +2,6 @@ package org.poc.flowchart;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;
-import org.poc.common.navigation.CobolEntityNavigator;
 import poc.common.flowchart.*;
 
 import java.util.List;
@@ -17,7 +16,7 @@ public class SearchChartNode extends CobolChartNode {
 
     @Override
     public void buildInternalFlow() {
-        CobolParser.SearchStatementContext searchStatementContext = new StatementIdentity<CobolParser.SearchStatementContext>(executionContext).get();
+        CobolParser.SearchStatementContext searchStatementContext = new SyntaxIdentity<CobolParser.SearchStatementContext>(executionContext).get();
         atEndBlock = nodeService.node(searchStatementContext.atEndPhrase(), this);
         List<CobolParser.SearchWhenContext> searchWhenContexts = searchStatementContext.searchWhen();
         whenPhrases = searchWhenContexts.stream().map(when -> nodeService.node(when, this)).toList();
@@ -55,7 +54,7 @@ public class SearchChartNode extends CobolChartNode {
 
     @Override
     public String label() {
-        CobolParser.SearchStatementContext searchStatementContext = new StatementIdentity<CobolParser.SearchStatementContext>(executionContext).get();
+        CobolParser.SearchStatementContext searchStatementContext = new SyntaxIdentity<CobolParser.SearchStatementContext>(executionContext).get();
         return searchStatementContext.SEARCH().getText() + "\n" + searchStatementContext.qualifiedDataName().getText();
 //        return CobolContextAugmentedTreeNode.originalText(executionContext, CobolEntityNavigator::PASSTHROUGH);
     }

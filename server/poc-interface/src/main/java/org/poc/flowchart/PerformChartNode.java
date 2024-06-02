@@ -17,7 +17,7 @@ public class PerformChartNode extends CobolChartNode {
 
     @Override
     public void buildInternalFlow() {
-        CobolParser.PerformStatementContext performStatement = new StatementIdentity<CobolParser.PerformStatementContext>(getExecutionContext()).get();
+        CobolParser.PerformStatementContext performStatement = new SyntaxIdentity<CobolParser.PerformStatementContext>(getExecutionContext()).get();
         CobolParser.PerformProcedureStatementContext performProcedureStatementContext = performStatement.performProcedureStatement();
         if (performProcedureStatementContext != null) return;
         inlineStatementContext = nodeService.node(performStatement.performInlineStatement(), this);
@@ -25,7 +25,7 @@ public class PerformChartNode extends CobolChartNode {
     }
 
     private boolean isVarying() {
-        CobolParser.PerformStatementContext performStatement = new StatementIdentity<CobolParser.PerformStatementContext>(getExecutionContext()).get();
+        CobolParser.PerformStatementContext performStatement = new SyntaxIdentity<CobolParser.PerformStatementContext>(getExecutionContext()).get();
         CobolParser.PerformProcedureStatementContext performProcedureStatementContext = performStatement.performProcedureStatement();
         return performProcedureStatementContext == null;
     }
@@ -39,7 +39,7 @@ public class PerformChartNode extends CobolChartNode {
     @Override
     public void buildControlFlow() {
         if (isVarying()) return;
-        CobolParser.PerformStatementContext performStatement = new StatementIdentity<CobolParser.PerformStatementContext>(getExecutionContext()).get();
+        CobolParser.PerformStatementContext performStatement = new SyntaxIdentity<CobolParser.PerformStatementContext>(getExecutionContext()).get();
         CobolParser.PerformProcedureStatementContext performProcedureStatementContext = performStatement.performProcedureStatement();
         CobolParser.ProcedureNameContext procedureNameContext = performProcedureStatementContext.procedureName();
         String procedureName = procedureNameContext.getText();

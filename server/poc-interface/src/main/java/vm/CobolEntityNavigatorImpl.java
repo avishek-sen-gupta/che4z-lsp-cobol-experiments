@@ -7,7 +7,7 @@ import org.poc.common.navigation.CobolEntityNavigator;
 import org.eclipse.lsp.cobol.core.CobolParser;
 import org.poc.common.navigation.ParseTreeSearchCondition;
 import poc.common.flowchart.NodeText;
-import poc.common.flowchart.StatementIdentity;
+import poc.common.flowchart.SyntaxIdentity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,7 +52,7 @@ public class CobolEntityNavigatorImpl implements CobolEntityNavigator {
         List<ParseTree> trees = new ArrayList<>();
         findAllByConditionRecursive(scope, trees, n ->
 //                !StatementIdentity.isOneOfTypes(n, ImmutableList.of(CobolParser.ParagraphContext.class, CobolParser.ProcedureSectionContext.class)) &&
-                StatementIdentity.isOfType(n, CobolParser.StatementContext.class) &&
+                SyntaxIdentity.isOfType(n, CobolParser.StatementContext.class) &&
                         n.getText().contains(symbol), 1, -1);
         return trees;
     }
