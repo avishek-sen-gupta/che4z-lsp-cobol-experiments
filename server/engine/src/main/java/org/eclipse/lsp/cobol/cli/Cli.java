@@ -59,6 +59,7 @@ import poc.common.flowchart.PocOps;
 import org.poc.common.navigation.CobolEntityNavigator;
 import org.poc.common.navigation.EntityNavigatorBuilder;
 import picocli.CommandLine;
+import poc.common.flowchart.VisitContext;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -215,7 +216,7 @@ public class Cli implements Callable<Integer> {
 //            CobolEntityNavigator navigator = CobolEntityNavigatorFactory.procedureDivisionEntityNavigator(CobolEntityNavigatorFactory.procedureDivisionBody(tree));
             ParseTree e0 = navigator.target("E0");
             FlowchartBuilder flowchartBuilder = ops.getFlowchartBuilderFactory().apply(navigator);
-            flowchartBuilder.buildGraphic(-1).write("/Users/asgupta/Downloads/mbrdi-poc/flowchart.dot");
+            flowchartBuilder.buildDotStructure(VisitContext.VISIT_UPTO_LEVEL(-1)).write("/Users/asgupta/Downloads/mbrdi-poc/flowchart.dot");
 
             JsonArray diagnostics = new JsonArray();
         ctx.getAccumulatedErrors()

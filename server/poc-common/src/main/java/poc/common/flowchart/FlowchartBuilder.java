@@ -3,10 +3,11 @@ package poc.common.flowchart;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.io.IOException;
+import java.util.function.Function;
 
 public interface FlowchartBuilder {
-    FlowchartBuilder buildGraphic(int maxLevel);
-    FlowchartBuilder buildGraphic();
+    FlowchartBuilder buildDotStructure(Function<VisitContext, Boolean> stopCondition);
+    FlowchartBuilder buildDotStructure();
     FlowchartBuilder buildChartAST(ParseTree node);
     FlowchartBuilder write(String dotFilePath);
     FlowchartBuilder outline(ParseTree groupRoot, String clusterLabel);

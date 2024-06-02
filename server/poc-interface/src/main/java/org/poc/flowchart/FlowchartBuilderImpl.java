@@ -12,6 +12,7 @@ import org.poc.common.navigation.CobolEntityNavigator;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.function.Function;
 
 import static guru.nidi.graphviz.model.Factory.mutGraph;
 import static guru.nidi.graphviz.model.Factory.mutNode;
@@ -31,14 +32,13 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
     }
 
     @Override
-    public FlowchartBuilder buildGraphic(int maxLevel) {
-        System.out.println("Assembling : " + graphRoot);
-        return buildChartGraphic(maxLevel);
+    public FlowchartBuilder buildDotStructure(Function<VisitContext, Boolean> stopCondition) {
+        return buildChartGraphic(stopCondition);
     }
 
     @Override
-    public FlowchartBuilder buildGraphic() {
-        return buildGraphic(-1);
+    public FlowchartBuilder buildDotStructure() {
+        return buildDotStructure(VisitContext::ALWAYS_VISIT);
     }
 
     @Override
@@ -49,10 +49,10 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
         return this;
     }
 
-    private FlowchartBuilder buildChartGraphic(int maxLevel) {
+    private FlowchartBuilder buildChartGraphic(Function<VisitContext, Boolean> stopCondition) {
         ChartNode rootChartNode = graphRoot;
         rootChartNode.reset();
-        ChartNodeVisitor chartVisitor = new ChartNodeGraphvizVisitor(graph, overlay);
+        ChartNodeVisitor chartVisitor = new ChartNodeGraphvizVisitor(graph, overlay, stopCondition);
         rootChartNode.accept(chartVisitor, 1);
         return this;
     }
@@ -123,7 +123,8 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
         buildChartAST(procedure)
         .buildControlFlow()
         .buildOverlay()
-        .buildGraphic()
+//        .buildDotStructure(VisitContext.VISIT_UPTO_LEVEL(4)) // Level 4 for only sections and paragraphs
+        .buildDotStructure()
         .write(dotFilePath);
         new GraphGenerator("ortho").generateImage(dotFilePath, imageOutputPath);
 

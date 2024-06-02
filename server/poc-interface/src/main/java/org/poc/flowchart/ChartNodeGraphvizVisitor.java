@@ -6,21 +6,24 @@ import guru.nidi.graphviz.model.MutableNode;
 import poc.common.flowchart.*;
 
 import java.util.List;
+import java.util.function.Function;
 
 import static guru.nidi.graphviz.model.Factory.*;
 
 public class ChartNodeGraphvizVisitor implements ChartNodeVisitor {
     int maxLevel = -1;
+    private final Function<VisitContext, Boolean> visitCondition;
     private final MutableGraph g;
     private final ChartOverlay overlay;
 
-    public ChartNodeGraphvizVisitor(MutableGraph g, ChartOverlay overlay) {
+    public ChartNodeGraphvizVisitor(MutableGraph g, ChartOverlay overlay, Function<VisitContext, Boolean> stopCondition) {
         this.g = g;
         this.overlay = overlay;
+        this.visitCondition = stopCondition;
     }
 
-    public void visit(ChartNode node, List<ChartNode> outgoingNodes, List<ChartNode> incomingNodes, VisitContext context, ChartNodeService nodeService) {
-        if (!shouldVisit(context)) return;
+    public void visit(ChartNode node, List<ChartNode> outgoingNodes, List<ChartNode> incomingNodes, VisitContext visitContext, ChartNodeService nodeService) {
+        if (!visitCondition.apply(visitContext)) return;
         if (node.isPassthrough()) return;
         System.out.println("Visiting : " + node);
         ChartNode source = overlay.block(node);
@@ -48,22 +51,21 @@ public class ChartNodeGraphvizVisitor implements ChartNodeVisitor {
 
     @Override
     public boolean shouldVisit(VisitContext context) {
-        return true;
-//        return maxLevel == -1 || context.getLevel() <= maxLevel;
+        return maxLevel == -1 || context.getLevel() <= maxLevel;
     }
 
     public void visitCluster(ChartNode compositeNode, ChartNodeService nodeService) {
     }
 
     @Override
-    public void visitParentChildLink(ChartNode parent, ChartNode internalTreeRoot, VisitContext ctx, ChartNodeService nodeService) {
-        if (!shouldVisit(ctx.oneLower())) return;
-        visitParentChildLink(parent, internalTreeRoot, ctx, nodeService, ChartNodeCondition.ALWAYS_SHOW);
+    public void visitParentChildLink(ChartNode parent, ChartNode internalTreeRoot, VisitContext visitContext, ChartNodeService nodeService) {
+        if (!visitCondition.apply(visitContext.oneLower())) return;
+        visitParentChildLink(parent, internalTreeRoot, visitContext, nodeService, ChartNodeCondition.ALWAYS_SHOW);
     }
 
     @Override
-    public void visitParentChildLink(ChartNode parent, ChartNode internalTreeRoot, VisitContext ctx, ChartNodeService nodeService, ChartNodeCondition hideStrategy) {
-        if (!shouldVisit(ctx)) return;
+    public void visitParentChildLink(ChartNode parent, ChartNode internalTreeRoot, VisitContext visitContext, ChartNodeService nodeService, ChartNodeCondition hideStrategy) {
+        if (!visitCondition.apply(visitContext)) return;
         ChartNode overlayParent = overlay.block(parent);
         if (overlayParent.getClass() == GenericProcessingChartNode.class) return;
         ChartNode passthroughTarget = internalTreeRoot.passthrough();
@@ -78,7 +80,7 @@ public class ChartNodeGraphvizVisitor implements ChartNodeVisitor {
 
     @Override
     public void visitControlTransfer(ChartNode from, ChartNode to, VisitContext visitContext) {
-        if (!shouldVisit(visitContext)) return;
+        if (!visitCondition.apply(visitContext)) return;
         ChartNode overlayFrom = overlay.block(from.passthrough());
         ChartNode overlayTo = overlay.block(to.passthrough());
         MutableNode origin = styled(overlayFrom, mutNode(overlayFrom.id()));
