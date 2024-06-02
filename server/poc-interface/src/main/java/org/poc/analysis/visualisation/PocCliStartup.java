@@ -66,17 +66,23 @@ public class PocCliStartup {
         CobolEntityNavigator navigator = pipeline.parse();
         FlowchartBuilder flowcharter = pipeline.flowcharter();
 
-//        ParseTree u204 = navigator.target("U204-CALL-COST-PRICE");
-//        ParseTree u204 = navigator.target("B2");
-//        ParseTree u204 = navigator.target("A0");
-        ParseTree u204 = navigator.root();
-//        flowcharter.outline(b2d, "SOME RANDOM STUFF");
+        // This one demonstrates a moderately complex section
+//        ParseTree procedure = navigator.target("U204-CALL-COST-PRICE");
 
-        flowcharter.buildChartAST(u204);
+        // This one demonstrates SEARCH...WHEN with multiple Search...When conditions
+//        ParseTree procedure = navigator.target("B2");
+
+        // This one demonstrates ON clauses and SEARCH...WHEN with one Search...When condition
+        ParseTree procedure = navigator.target("A0");
+
+        // This one is root
+//        ParseTree procedure = navigator.root();
+
+        flowcharter.buildChartAST(procedure);
         flowcharter.buildControlFlow();
         flowcharter.buildOverlay();
         flowcharter.buildGraphic();
         flowcharter.write(dotFilePath);
-        new GraphGenerator("line").generateImage(dotFilePath, imageOutputPath);
+        new GraphGenerator("ortho").generateImage(dotFilePath, imageOutputPath);
     }
 }
