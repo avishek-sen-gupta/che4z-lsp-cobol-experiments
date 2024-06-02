@@ -791,7 +791,7 @@ statement
     initiateStatement | inspectStatement | mergeStatement | moveStatement | multiplyStatement | openStatement | performStatement | purgeStatement |
     readStatement | readyResetTraceStatement | receiveStatement | releaseStatement | returnStatement | rewriteStatement | searchStatement | sendStatement |
     serviceReloadStatement | serviceLabelStatement | setStatement | sortStatement | startStatement | stopStatement | stringStatement | subtractStatement |
-    terminateStatement | unstringStatement | writeStatement | xmlParseStatement | jsonStatement | mapStatement | nextSentence
+    terminateStatement | unstringStatement | writeStatement | xmlParseStatement | jsonStatement | mapStatement | nextSentence | genericOnClauseStatement
    ;
 
 jsonStatement
@@ -1997,6 +1997,10 @@ onExceptionClause
 notOnExceptionClause
    : NOT ON? EXCEPTION (COMMACHAR? conditionalStatementCall)+
    ;
+
+genericOnClauseStatement
+    : ON generalIdentifier statement+
+    ;
 
 // condition ----------------------------------
 

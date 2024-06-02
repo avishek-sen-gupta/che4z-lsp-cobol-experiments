@@ -174,7 +174,8 @@ idmsStmtsMandTermOn
     ;
 
 idmsOnClause
-    : ON generalIdentifier nextSentence?
+    : DOT_FS?
+//    : ON generalIdentifier nextSentence?
     ;
 
 nextSentence
