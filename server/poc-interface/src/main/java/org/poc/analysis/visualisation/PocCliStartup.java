@@ -72,7 +72,10 @@ public class PocCliStartup {
 //        ParseTree procedure = navigator.target("B2");
 
         // This one demonstrates ON clauses and SEARCH...WHEN with one Search...When condition
-        ParseTree procedure = navigator.target("A0");
+//        ParseTree procedure = navigator.target("A0");
+
+        // This one demonstrates PERFORM THRU
+        ParseTree procedure = navigator.target("S0");
 
         // This one is root
 //        ParseTree procedure = navigator.root();

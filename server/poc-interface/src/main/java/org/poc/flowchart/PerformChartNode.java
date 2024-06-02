@@ -1,15 +1,20 @@
 package org.poc.flowchart;
 
+import com.google.common.collect.ImmutableList;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;
+import org.eclipse.lsp.cobol.core.engine.pipeline.Pipeline;
 import poc.common.flowchart.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static guru.nidi.graphviz.model.Factory.mutNode;
 
 public class PerformChartNode extends CobolChartNode {
 
     private ChartNode inlineStatementContext;
-    private ChartNode targetNode;
+    private List<ChartNode> procedures = new ArrayList<>();
 
     public PerformChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {
         super(parseTree, scope, nodeService);
@@ -44,7 +49,26 @@ public class PerformChartNode extends CobolChartNode {
         CobolParser.ProcedureNameContext procedureNameContext = performProcedureStatementContext.procedureName();
         String procedureName = procedureNameContext.getText();
         System.out.println("Found a PERFORM, routing to " + procedureName);
-        targetNode = nodeService.sectionOrParaWithName(procedureName);
+        ChartNode startNode = nodeService.sectionOrParaWithName(procedureName);
+        if (performStatement.performProcedureStatement().through() == null) {
+            procedures.add(startNode);
+            return;
+        }
+        CobolParser.ProcedureNameContext endProcedureNameContext = performStatement.performProcedureStatement().through().procedureName();
+        ChartNode endNode = nodeService.sectionOrParaWithName(endProcedureNameContext.getText());
+        procedures.addAll(allProcedures(startNode, endNode));
+    }
+
+    private List<ChartNode> allProcedures(ChartNode startProcedure, ChartNode endProcedure) {
+        ChartNode current = startProcedure;
+        List<ChartNode> allInclusiveProcedures = new ArrayList<>();
+        while (current != endProcedure && !current.getOutgoingNodes().isEmpty()) {
+            allInclusiveProcedures.add(current);
+            current = current.getOutgoingNodes().getFirst();
+        }
+        allInclusiveProcedures.add(endProcedure);
+
+        return allInclusiveProcedures;
     }
 
     @Override
@@ -55,7 +79,9 @@ public class PerformChartNode extends CobolChartNode {
             inlineStatementContext.accept(visitor, level);
             return;
         }
-        visitor.visitControlTransfer(this, targetNode, new VisitContext(level));
+
+        procedures.forEach(p -> visitor.visitControlTransfer(this, p, new VisitContext(level)));
+//        visitor.visitControlTransfer(this, targetNode, new VisitContext(level));
     }
 
     @Override
