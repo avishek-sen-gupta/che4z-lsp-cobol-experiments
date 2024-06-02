@@ -83,8 +83,8 @@ public class ChartNodeGraphvizVisitor implements ChartNodeVisitor {
         if (!visitCondition.apply(visitContext)) return;
         ChartNode overlayFrom = overlay.block(from.passthrough());
         ChartNode overlayTo = overlay.block(to.passthrough());
-        MutableNode origin = styled(overlayFrom, mutNode(overlayFrom.id()));
-        MutableNode destination = styled(overlayTo, mutNode(overlayTo.id()));
+        MutableNode origin = styled(overlayFrom, mutNode(overlayFrom.id())).add("label", overlayFrom.label());
+        MutableNode destination = styled(overlayTo, mutNode(overlayTo.id())).add("label", overlayTo.label());
         g.add(origin.addLink(origin.linkTo(destination).with("style", "bold").with("color", "blueviolet")));
     }
 

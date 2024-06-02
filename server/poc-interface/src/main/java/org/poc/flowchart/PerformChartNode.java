@@ -15,6 +15,7 @@ public class PerformChartNode extends CobolChartNode {
 
     private ChartNode inlineStatementContext;
     private List<ChartNode> procedures = new ArrayList<>();
+    private ChartNode condition;
 
     public PerformChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {
         super(parseTree, scope, nodeService);
@@ -24,6 +25,10 @@ public class PerformChartNode extends CobolChartNode {
     public void buildInternalFlow() {
         CobolParser.PerformStatementContext performStatement = new SyntaxIdentity<CobolParser.PerformStatementContext>(getExecutionContext()).get();
         CobolParser.PerformProcedureStatementContext performProcedureStatementContext = performStatement.performProcedureStatement();
+        if (isVarying()) {
+            condition = nodeService.node(performProcedureStatementContext.performType(), this);
+        }
+
         if (performProcedureStatementContext != null) return;
         inlineStatementContext = nodeService.node(performStatement.performInlineStatement(), this);
         inlineStatementContext.buildFlow();
@@ -32,7 +37,7 @@ public class PerformChartNode extends CobolChartNode {
     private boolean isVarying() {
         CobolParser.PerformStatementContext performStatement = new SyntaxIdentity<CobolParser.PerformStatementContext>(getExecutionContext()).get();
         CobolParser.PerformProcedureStatementContext performProcedureStatementContext = performStatement.performProcedureStatement();
-        return performProcedureStatementContext == null;
+        return performProcedureStatementContext.performType() != null && performProcedureStatementContext.performType().performVarying() != null;
     }
 
     @Override
@@ -43,7 +48,6 @@ public class PerformChartNode extends CobolChartNode {
 
     @Override
     public void buildControlFlow() {
-        if (isVarying()) return;
         CobolParser.PerformStatementContext performStatement = new SyntaxIdentity<CobolParser.PerformStatementContext>(getExecutionContext()).get();
         CobolParser.PerformProcedureStatementContext performProcedureStatementContext = performStatement.performProcedureStatement();
         CobolParser.ProcedureNameContext procedureNameContext = performProcedureStatementContext.procedureName();
@@ -52,11 +56,11 @@ public class PerformChartNode extends CobolChartNode {
         ChartNode startNode = nodeService.sectionOrParaWithName(procedureName);
         if (performStatement.performProcedureStatement().through() == null) {
             procedures.add(startNode);
-            return;
+        } else {
+            CobolParser.ProcedureNameContext endProcedureNameContext = performStatement.performProcedureStatement().through().procedureName();
+            ChartNode endNode = nodeService.sectionOrParaWithName(endProcedureNameContext.getText());
+            procedures.addAll(allProcedures(startNode, endNode));
         }
-        CobolParser.ProcedureNameContext endProcedureNameContext = performStatement.performProcedureStatement().through().procedureName();
-        ChartNode endNode = nodeService.sectionOrParaWithName(endProcedureNameContext.getText());
-        procedures.addAll(allProcedures(startNode, endNode));
     }
 
     private List<ChartNode> allProcedures(ChartNode startProcedure, ChartNode endProcedure) {
@@ -67,7 +71,6 @@ public class PerformChartNode extends CobolChartNode {
             current = current.getOutgoingNodes().getFirst();
         }
         allInclusiveProcedures.add(endProcedure);
-
         return allInclusiveProcedures;
     }
 
@@ -81,12 +84,17 @@ public class PerformChartNode extends CobolChartNode {
         }
 
         procedures.forEach(p -> visitor.visitControlTransfer(this, p, new VisitContext(level)));
+
+        if (isVarying()) {
+            procedures.forEach(p -> visitor.visitControlTransfer(p, condition, new VisitContext(level)));
+            visitor.visitControlTransfer(condition, this, new VisitContext(level));
+        }
 //        visitor.visitControlTransfer(this, targetNode, new VisitContext(level));
     }
 
     @Override
     public String label() {
-        return originalText();
+        return truncated(originalText(), 30);
     }
 
     @Override

@@ -28,6 +28,7 @@ public class FlowchartStylePreferences {
         schemes.put(ChartNodeType.GOTO, new GraphvizStyleScheme(Color.DARKGREEN, Color.WHITE, Shape.INV_HOUSE));
         schemes.put(ChartNodeType.CONTROL_FLOW, new GraphvizStyleScheme(Color.DARKORANGE2, Color.WHITE, Shape.R_ARROW));
         schemes.put(ChartNodeType.PERFORM, new GraphvizStyleScheme(Color.DARKVIOLET, Color.WHITE, Shape.CDS));
+        schemes.put(ChartNodeType.PERFORM_TEST, new GraphvizStyleScheme(Color.WHITE, Color.BLACK, Shape.UNDERLINE));
         schemes.put(ChartNodeType.NEXT_SENTENCE, new GraphvizStyleScheme(Color.DARKSLATEGRAY4, Color.WHITE, Shape.R_ARROW));
         schemes.put(ChartNodeType.IF_BRANCH, new GraphvizStyleScheme(Color.CHOCOLATE4, Color.WHITE, Shape.DIAMOND));
         schemes.put(ChartNodeType.CONDITIONAL_STATEMENT, new GraphvizStyleScheme(Color.CHOCOLATE4, Color.WHITE, Shape.POINT));

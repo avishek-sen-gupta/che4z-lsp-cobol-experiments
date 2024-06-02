@@ -75,11 +75,17 @@ public class PocCliStartup {
 //        ParseTree procedure = navigator.target("A0");
 
         // This one demonstrates PERFORM THRU
-        ParseTree procedure = navigator.target("S0");
+//        ParseTree procedure = navigator.target("S0");
+
+        // This one demonstrates PERFORM VARYING for a procedure
+//        ParseTree procedure = navigator.target("E0");
+
+        // This one demonstrates PERFORM INLINE VARYING
+        ParseTree procedure = navigator.target("U2030-TASI-2603");
 
         // This one is root
 //        ParseTree procedure = navigator.root();
 
-        flowcharter.generateFlowchart(procedure, dotFilePath, imageOutputPath);
+        flowcharter.generateFlowchart(procedure, dotFilePath, imageOutputPath, "line");
     }
 }

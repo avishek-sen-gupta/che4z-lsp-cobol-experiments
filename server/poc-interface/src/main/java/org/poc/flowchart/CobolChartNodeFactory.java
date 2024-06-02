@@ -31,6 +31,9 @@ public class CobolChartNodeFactory {
         // This needs to come last in all the statement classifications, or things will break
         else if (SyntaxIdentity.isOfType(parseTree, CobolParser.StatementContext.class))
             return new GenericStatementChartNode(parseTree, scope, nodeService);
+
+        else if (SyntaxIdentity.isOfType(parseTree, CobolParser.PerformTypeContext.class))
+            return new PerformTestChartNode(parseTree, scope, nodeService);
         else if (SyntaxIdentity.isOfType(parseTree, TerminalNodeImpl.class))
             return new SymbolChartNode(parseTree, scope, nodeService);
         else if (SyntaxIdentity.isOfType(parseTree, CobolParser.ProcedureSectionHeaderContext.class))

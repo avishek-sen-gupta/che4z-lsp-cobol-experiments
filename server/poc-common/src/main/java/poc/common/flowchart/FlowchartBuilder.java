@@ -15,5 +15,5 @@ public interface FlowchartBuilder {
     FlowchartBuilder createComment(String comment);
     FlowchartBuilder buildOverlay();
     FlowchartBuilder buildControlFlow();
-    void generateFlowchart(ParseTree procedure, String dotFilePath, String imageOutputPath) throws IOException, InterruptedException;
+    void generateFlowchart(ParseTree procedure, String dotFilePath, String imageOutputPath, String splineStyle) throws IOException, InterruptedException;
 }
