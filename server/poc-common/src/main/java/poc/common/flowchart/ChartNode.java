@@ -18,10 +18,9 @@ public interface ChartNode {
     // TODO: The implementations need rewrite. This is currently not elegant.
     ChartNode next(ChartNodeCondition nodeCondition, ChartNode startingNode, boolean isComplete);
 
-    void linkParentToChild(ChartNodeVisitor visitor);
+    void linkParentToChild(ChartNodeVisitor visitor, int level);
     void accept(ChartNodeVisitor visitor, int level);
-    void accept(ChartNodeVisitor visitor, int level, int maxLevel);
-    void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel);
+    void acceptUnvisited(ChartNodeVisitor visitor, int level);
 
     List<? extends ParseTree> getChildren();
 

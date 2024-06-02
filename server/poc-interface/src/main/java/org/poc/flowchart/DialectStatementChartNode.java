@@ -16,8 +16,8 @@ public class DialectStatementChartNode extends CobolChartNode {
     }
 
     @Override
-    public void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel) {
-        super.acceptUnvisited(visitor, level, maxLevel);
+    public void acceptUnvisited(ChartNodeVisitor visitor, int level) {
+        super.acceptUnvisited(visitor, level);
 //        visitor.visitParentChildLink(this, idmsChildNode, nodeService);
 //        idmsChildNode.accept(visitor, level, maxLevel);
     }

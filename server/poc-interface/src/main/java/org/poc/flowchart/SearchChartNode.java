@@ -38,13 +38,13 @@ public class SearchChartNode extends CobolChartNode {
     }
 
     @Override
-    public void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel) {
-        super.acceptUnvisited(visitor, level, maxLevel);
-        whenPhrases.forEach(w -> w.acceptUnvisited(visitor, level, maxLevel));
-        whenPhrases.forEach(w -> visitor.visitParentChildLink(this, w, nodeService));
+    public void acceptUnvisited(ChartNodeVisitor visitor, int level) {
+        super.acceptUnvisited(visitor, level);
+        whenPhrases.forEach(w -> w.acceptUnvisited(visitor, level));
+        whenPhrases.forEach(w -> visitor.visitParentChildLink(this, w, new VisitContext(level), nodeService));
 
-        atEndBlock.accept(visitor, level, maxLevel);
-        visitor.visitParentChildLink(this, atEndBlock, nodeService);
+        atEndBlock.accept(visitor, level);
+        visitor.visitParentChildLink(this, atEndBlock, new VisitContext(level), nodeService);
     }
 
     @Override

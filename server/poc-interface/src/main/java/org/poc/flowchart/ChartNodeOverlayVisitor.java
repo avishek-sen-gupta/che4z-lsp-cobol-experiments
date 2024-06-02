@@ -1,6 +1,5 @@
 package org.poc.flowchart;
 
-import org.eclipse.lsp.cobol.core.CobolParser;
 import poc.common.flowchart.*;
 
 import java.util.ArrayList;
@@ -21,7 +20,7 @@ public class ChartNodeOverlayVisitor implements ChartNodeVisitor {
     }
 
     @Override
-    public void visit(ChartNode node, List<ChartNode> outgoingNodes, List<ChartNode> incomingNodes, ChartNodeService nodeService) {
+    public void visit(ChartNode node, List<ChartNode> outgoingNodes, List<ChartNode> incomingNodes, VisitContext context, ChartNodeService nodeService) {
         if ((node.getClass() == SentenceChartNode.class ||
                 node.getClass() == ConditionalStatementChartNode.class ||
                 node.getClass() == GenericStatementChartNode.class // This condition is a little sus because technically, statements inside sentences could also get their own groups which would show up in addition to their parent sentence groups. It's working now, need to investigate with a small test program.
@@ -41,20 +40,25 @@ public class ChartNodeOverlayVisitor implements ChartNodeVisitor {
     }
 
     @Override
+    public boolean shouldVisit(VisitContext context) {
+        return true;
+    }
+
+    @Override
     public void visitCluster(ChartNode node, ChartNodeService nodeService) {
 
     }
 
     @Override
-    public void visitParentChildLink(ChartNode parent, ChartNode internalTreeRoot, ChartNodeService nodeService) {
+    public void visitParentChildLink(ChartNode parent, ChartNode internalTreeRoot, VisitContext ctx, ChartNodeService nodeService) {
     }
 
     @Override
-    public void visitParentChildLink(ChartNode parent, ChartNode internalTreeRoot, ChartNodeService nodeService, ChartNodeCondition hideStrategy) {
+    public void visitParentChildLink(ChartNode parent, ChartNode internalTreeRoot, VisitContext ctx, ChartNodeService nodeService, ChartNodeCondition hideStrategy) {
     }
 
     @Override
-    public void visitControlTransfer(ChartNode from, ChartNode to) {
+    public void visitControlTransfer(ChartNode from, ChartNode to, VisitContext visitContext) {
 
     }
 

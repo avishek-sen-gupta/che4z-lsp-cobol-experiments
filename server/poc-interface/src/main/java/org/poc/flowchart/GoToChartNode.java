@@ -37,10 +37,10 @@ public class GoToChartNode extends CobolChartNode {
     }
 
     @Override
-    public void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel) {
-        super.acceptUnvisited(visitor, level, maxLevel);
+    public void acceptUnvisited(ChartNodeVisitor visitor, int level) {
+        super.acceptUnvisited(visitor, level);
         // If you want two nodes to the destination, uncomment below. The super already does the flow work.
-        destinationNodes.forEach(destinationNode -> visitor.visitControlTransfer(this, destinationNode));
+        destinationNodes.forEach(destinationNode -> visitor.visitControlTransfer(this, destinationNode, new VisitContext(level)));
     }
 
     @Override

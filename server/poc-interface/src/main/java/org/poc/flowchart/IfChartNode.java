@@ -26,13 +26,13 @@ public class IfChartNode extends CobolChartNode {
     }
 
     @Override
-    public void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel) {
-        super.acceptUnvisited(visitor, level, maxLevel);
-        visitor.visitParentChildLink(this, ifThenBlock, nodeService);
-        if (ifElseBlock != null) visitor.visitParentChildLink(this, ifElseBlock, nodeService);
+    public void acceptUnvisited(ChartNodeVisitor visitor, int level) {
+        super.acceptUnvisited(visitor, level);
+        visitor.visitParentChildLink(this, ifThenBlock, new VisitContext(level), nodeService);
+        if (ifElseBlock != null) visitor.visitParentChildLink(this, ifElseBlock, new VisitContext(level), nodeService);
 
-        ifThenBlock.accept(visitor, level, maxLevel);
-        if (ifElseBlock != null) ifElseBlock.accept(visitor, level, maxLevel);
+        ifThenBlock.accept(visitor, level);
+        if (ifElseBlock != null) ifElseBlock.accept(visitor, level);
     }
 
     @Override

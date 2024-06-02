@@ -39,13 +39,13 @@ public class CompositeCobolNode extends CobolChartNode {
     }
 
     @Override
-    public void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel) {
-        if (internalTreeRoot != null && (maxLevel == -1 || (maxLevel != -1 && level <= maxLevel))) {
-            linkParentToChild(visitor);
+    public void acceptUnvisited(ChartNodeVisitor visitor, int level) {
+        if (internalTreeRoot != null) {
+            linkParentToChild(visitor, level);
             ChartNode current = internalTreeRoot;
-            current.accept(visitor.newScope(this), level + 1, maxLevel);
+            current.accept(visitor.newScope(this), level + 1);
         }
-        super.acceptUnvisited(visitor, level, maxLevel);
+        super.acceptUnvisited(visitor, level);
     }
 
     @Override
@@ -65,8 +65,8 @@ public class CompositeCobolNode extends CobolChartNode {
     }
 
     @Override
-    public void linkParentToChild(ChartNodeVisitor visitor) {
-        visitor.visitParentChildLink(this, internalTreeRoot, nodeService);
+    public void linkParentToChild(ChartNodeVisitor visitor, int level) {
+        visitor.visitParentChildLink(this, internalTreeRoot, new VisitContext(level), nodeService);
     }
 
     @Override

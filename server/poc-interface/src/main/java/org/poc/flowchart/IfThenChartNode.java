@@ -24,7 +24,7 @@ public class IfThenChartNode extends CompositeCobolNode {
     }
 
     @Override
-    public void linkParentToChild(ChartNodeVisitor visitor) {
-        visitor.visitParentChildLink(this, internalTreeRoot, nodeService, CHILD_IS_CONDITIONAL_STATEMENT);
+    public void linkParentToChild(ChartNodeVisitor visitor, int level) {
+        visitor.visitParentChildLink(this, internalTreeRoot, new VisitContext(level), nodeService, CHILD_IS_CONDITIONAL_STATEMENT);
     }
 }

@@ -128,21 +128,17 @@ public class CobolChartNode implements ChartNode {
         return s.length() > truncationLimit ? s.substring(0, truncationLimit) : s;
     }
 
-    public void accept(ChartNodeVisitor visitor, int level) {
-        accept(visitor, level, -1);
-    }
-
     @Override
-    public void accept(ChartNodeVisitor visitor, int level, int maxLevel) {
+    public void accept(ChartNodeVisitor visitor, int level) {
         if (visited) return;
         visited = true;
-        acceptUnvisited(visitor, level, maxLevel);
+        acceptUnvisited(visitor, level);
     }
 
-    public void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel) {
+    public void acceptUnvisited(ChartNodeVisitor visitor, int level) {
 //        System.out.println("Current level: " + level);
-        visitor.visit(this, outgoingNodes, incomingNodes, nodeService);
-        outgoingNodes.forEach(c -> c.accept(visitor, level, maxLevel));
+        visitor.visit(this, outgoingNodes, incomingNodes, new VisitContext(level), nodeService);
+        outgoingNodes.forEach(c -> c.accept(visitor, level));
     }
 
     @Override
@@ -216,7 +212,7 @@ public class CobolChartNode implements ChartNode {
     }
 
     @Override
-    public void linkParentToChild(ChartNodeVisitor visitor) {
+    public void linkParentToChild(ChartNodeVisitor visitor, int level) {
     }
 
     @Override

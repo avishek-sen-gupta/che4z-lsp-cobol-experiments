@@ -53,7 +53,7 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
         ChartNode rootChartNode = graphRoot;
         rootChartNode.reset();
         ChartNodeVisitor chartVisitor = new ChartNodeGraphvizVisitor(graph, overlay);
-        rootChartNode.accept(chartVisitor, 1, maxLevel);
+        rootChartNode.accept(chartVisitor, 1);
         return this;
     }
 
@@ -103,7 +103,7 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
         rootChartNode.reset();
 //        ChartNodeRuleVisitor compressionVisitor = new ChartNodeRuleVisitor(rootChartNode, rules);
         ChartNodeOverlayVisitor compressionVisitor = new ChartNodeOverlayVisitor(rootChartNode);
-        rootChartNode.accept(compressionVisitor, 1, -1);
+        rootChartNode.accept(compressionVisitor, 1);
         compressionVisitor.report();
 //        compressionVisitor.applyRules();
         overlay = compressionVisitor.overlay();
@@ -114,7 +114,7 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
     public FlowchartBuilder buildControlFlow() {
         ChartNode rootChartNode = graphRoot;
         rootChartNode.reset();
-        rootChartNode.accept(new ChartNodeControlFlowVisitor(), 1, -1);
+        rootChartNode.accept(new ChartNodeControlFlowVisitor(), 1);
         return this;
     }
 

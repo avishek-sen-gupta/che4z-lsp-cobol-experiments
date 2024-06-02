@@ -3,7 +3,6 @@ package org.poc.flowchart;
 import com.google.common.collect.ImmutableList;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;
-import org.poc.common.navigation.CobolEntityNavigator;
 import poc.common.flowchart.*;
 
 import java.util.List;
@@ -33,9 +32,9 @@ public class SearchWhenChartNode extends CompositeCobolNode {
     }
 
     @Override
-    public void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel) {
-        super.acceptUnvisited(visitor, level, maxLevel);
-        condition.acceptUnvisited(visitor, level, maxLevel);
+    public void acceptUnvisited(ChartNodeVisitor visitor, int level) {
+        super.acceptUnvisited(visitor, level);
+        condition.acceptUnvisited(visitor, level);
         // Condition is already shown in parent's label, so we don't need to explicitly visit (and create) a condition graph node
 //        visitor.visitParentChildLink(this, condition, nodeService);
     }

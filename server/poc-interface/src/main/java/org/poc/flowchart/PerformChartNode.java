@@ -48,14 +48,14 @@ public class PerformChartNode extends CobolChartNode {
     }
 
     @Override
-    public void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel) {
-        super.acceptUnvisited(visitor, level, maxLevel);
+    public void acceptUnvisited(ChartNodeVisitor visitor, int level) {
+        super.acceptUnvisited(visitor, level);
         if (inlineStatementContext != null) {
-            visitor.visitParentChildLink(this, inlineStatementContext, nodeService);
-            inlineStatementContext.accept(visitor, level, maxLevel);
+            visitor.visitParentChildLink(this, inlineStatementContext, new VisitContext(level), nodeService);
+            inlineStatementContext.accept(visitor, level);
             return;
         }
-        visitor.visitControlTransfer(this, targetNode);
+        visitor.visitControlTransfer(this, targetNode, new VisitContext(level));
     }
 
     @Override

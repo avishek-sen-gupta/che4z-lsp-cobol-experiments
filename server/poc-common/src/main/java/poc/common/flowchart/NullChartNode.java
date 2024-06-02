@@ -53,7 +53,7 @@ public class NullChartNode implements ChartNode {
     }
 
     @Override
-    public void linkParentToChild(ChartNodeVisitor visitor) {
+    public void linkParentToChild(ChartNodeVisitor visitor, int level) {
 
     }
 
@@ -63,17 +63,12 @@ public class NullChartNode implements ChartNode {
     }
 
     @Override
-    public void accept(ChartNodeVisitor visitor, int level, int maxLevel) {
-
-    }
-
-    @Override
     public List<? extends ParseTree> getChildren() {
         return List.of();
     }
 
     @Override
-    public void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel) {
+    public void acceptUnvisited(ChartNodeVisitor visitor, int level) {
 
     }
 

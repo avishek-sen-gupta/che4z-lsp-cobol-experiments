@@ -3,10 +3,7 @@ package org.poc.flowchart;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;
 import org.eclipse.lsp.cobol.dialects.idms.IdmsParser;
-import poc.common.flowchart.ChartNode;
-import poc.common.flowchart.ChartNodeService;
-import poc.common.flowchart.ChartNodeType;
-import poc.common.flowchart.ChartNodeVisitor;
+import poc.common.flowchart.*;
 import org.poc.common.navigation.CobolEntityNavigator;
 
 public class IdmsIfChartNode extends CobolChartNode {
@@ -35,17 +32,17 @@ public class IdmsIfChartNode extends CobolChartNode {
     }
 
     @Override
-    public void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel) {
-        super.acceptUnvisited(visitor, level, maxLevel);
-        visitor.visitParentChildLink(this, condition, nodeService);
-        condition.accept(visitor, level, maxLevel);
+    public void acceptUnvisited(ChartNodeVisitor visitor, int level) {
+        super.acceptUnvisited(visitor, level);
+        visitor.visitParentChildLink(this, condition, new VisitContext(level), nodeService);
+        condition.accept(visitor, level);
 
-        visitor.visitParentChildLink(this, ifThenBlock, nodeService);
-        ifThenBlock.accept(visitor, level, maxLevel);
+        visitor.visitParentChildLink(this, ifThenBlock, new VisitContext(level), nodeService);
+        ifThenBlock.accept(visitor, level);
 
         if (ifElseBlock != null) {
-            visitor.visitParentChildLink(this, ifElseBlock, nodeService);
-            ifElseBlock.accept(visitor, level, maxLevel);
+            visitor.visitParentChildLink(this, ifElseBlock, new VisitContext(level), nodeService);
+            ifElseBlock.accept(visitor, level);
         }
     }
 

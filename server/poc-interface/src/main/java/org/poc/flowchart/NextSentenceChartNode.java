@@ -25,9 +25,9 @@ public class NextSentenceChartNode extends CobolChartNode {
     }
 
     @Override
-    public void acceptUnvisited(ChartNodeVisitor visitor, int level, int maxLevel) {
-        super.acceptUnvisited(visitor, level, maxLevel);
-        visitor.visitControlTransfer(this, destinationSentenceNode);
+    public void acceptUnvisited(ChartNodeVisitor visitor, int level) {
+        super.acceptUnvisited(visitor, level);
+        visitor.visitControlTransfer(this, destinationSentenceNode, new VisitContext(level));
     }
 
     @Override
