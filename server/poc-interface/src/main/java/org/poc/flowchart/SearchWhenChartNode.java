@@ -10,7 +10,6 @@ import java.util.List;
 
 public class SearchWhenChartNode extends CompositeCobolNode {
     private ChartNode condition;
-//    private List<ChartNode> conditionalStatements;
 
     public SearchWhenChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {
         super(parseTree, scope, nodeService);

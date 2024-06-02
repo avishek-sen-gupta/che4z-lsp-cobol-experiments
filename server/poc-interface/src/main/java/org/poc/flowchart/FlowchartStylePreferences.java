@@ -32,6 +32,7 @@ public class FlowchartStylePreferences {
         schemes.put(ChartNodeType.IF_BRANCH, new GraphvizStyleScheme(Color.CHOCOLATE4, Color.WHITE, Shape.DIAMOND));
         schemes.put(ChartNodeType.CONDITIONAL_STATEMENT, new GraphvizStyleScheme(Color.CHOCOLATE4, Color.WHITE, Shape.POINT));
         schemes.put(ChartNodeType.CONDITION_CLAUSE, new GraphvizStyleScheme(Color.CHOCOLATE4, Color.WHITE, Shape.POINT));
+        schemes.put(ChartNodeType.ON_CLAUSE, new GraphvizStyleScheme(Color.PURPLE4, Color.WHITE, Shape.HEXAGON));
         schemes.put(ChartNodeType.IF_YES, new GraphvizStyleScheme(Color.DARKGREEN, Color.WHITE, Shape.DOUBLE_CIRCLE));
         schemes.put(ChartNodeType.IF_NO, new GraphvizStyleScheme(Color.RED, Color.WHITE, Shape.DOUBLE_CIRCLE));
         schemes.put(ChartNodeType.DUMMY, new GraphvizStyleScheme(Color.DARKSLATEGRAY4, Color.WHITE));

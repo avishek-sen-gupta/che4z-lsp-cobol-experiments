@@ -68,7 +68,7 @@ public class PocCliStartup {
 
 //        ParseTree u204 = navigator.target("U204-CALL-COST-PRICE");
 //        ParseTree u204 = navigator.target("B2");
-        ParseTree u204 = navigator.target("R43-GET1");
+        ParseTree u204 = navigator.target("A0");
 //        ParseTree u204 = navigator.root();
 //        flowcharter.outline(b2d, "SOME RANDOM STUFF");
 
