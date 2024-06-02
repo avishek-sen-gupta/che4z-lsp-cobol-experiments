@@ -33,8 +33,8 @@ public class CobolChartNode implements ChartNode {
 
     @Override
     public void buildFlow() {
-        if (initialised) return;
-        initialised = true;
+//        if (initialised) return;
+//        initialised = true;
         System.out.println("Building flow for " + name());
         buildInternalFlow();
         buildOutgoingFlow();
@@ -130,8 +130,8 @@ public class CobolChartNode implements ChartNode {
 
     @Override
     public void accept(ChartNodeVisitor visitor, int level) {
-        if (visited) return;
-        visited = true;
+//        if (visited) return;
+//        visited = true;
         acceptUnvisited(visitor, level);
     }
 
@@ -154,8 +154,8 @@ public class CobolChartNode implements ChartNode {
     @Override
     public void reset() {
         // If visited is already false, it means I must have already set it to false and now I am looping back on myself
-        if (!visited) return;
-        visited = false;
+//        if (!visited) return;
+//        visited = false;
         outgoingNodes.forEach(ChartNode::reset);
     }
 
@@ -216,9 +216,18 @@ public class CobolChartNode implements ChartNode {
     }
 
     @Override
-    public ChartNode find(ChartNodeCondition nodeCondition, ChartNode startingNode) {
+    public ChartNode findUpwards(ChartNodeCondition nodeCondition, ChartNode startingNode) {
         if (nodeCondition.apply(this)) return this;
-        return scope.find(nodeCondition, startingNode);
+        return scope.findUpwards(nodeCondition, startingNode);
+    }
+
+    @Override
+    public ChartNode tail() {
+        ChartNode current = this;
+        while (!current.getOutgoingNodes().isEmpty()) {
+            current = current.getOutgoingNodes().getFirst();
+        }
+        return current;
     }
 
     @Override

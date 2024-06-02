@@ -44,7 +44,7 @@ public class GenericProcessingChartNode implements ChartNode {
 
     @Override
     public String name() {
-        return "Processing Block: " + uuid;
+        return "Processing Block: " + uuid + label();
     }
 
     @Override
@@ -73,8 +73,13 @@ public class GenericProcessingChartNode implements ChartNode {
     }
 
     @Override
-    public ChartNode find(ChartNodeCondition nodeCondition, ChartNode startingNode) {
+    public ChartNode findUpwards(ChartNodeCondition nodeCondition, ChartNode startingNode) {
         return null;
+    }
+
+    @Override
+    public ChartNode tail() {
+        return this;
     }
 
     @Override

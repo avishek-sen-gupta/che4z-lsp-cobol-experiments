@@ -1,9 +1,7 @@
 package org.poc.flowchart;
 
-import com.google.common.collect.ImmutableList;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;
-import org.eclipse.lsp.cobol.core.engine.pipeline.Pipeline;
 import poc.common.flowchart.*;
 
 import java.util.ArrayList;
@@ -11,13 +9,13 @@ import java.util.List;
 
 import static guru.nidi.graphviz.model.Factory.mutNode;
 
-public class PerformChartNode extends CobolChartNode {
+public class PerformProcedureChartNode extends CobolChartNode {
 
     private ChartNode inlineStatementContext;
     private List<ChartNode> procedures = new ArrayList<>();
     private ChartNode condition;
 
-    public PerformChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {
+    public PerformProcedureChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {
         super(parseTree, scope, nodeService);
     }
 

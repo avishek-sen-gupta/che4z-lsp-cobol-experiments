@@ -11,16 +11,6 @@ public class ChartNodeControlFlowVisitor implements ChartNodeVisitor {
     }
 
     @Override
-    public boolean shouldVisit(VisitContext context) {
-        return true;
-    }
-
-    @Override
-    public void visitCluster(ChartNode node, ChartNodeService nodeService) {
-
-    }
-
-    @Override
     public void visitParentChildLink(ChartNode parent, ChartNode internalTreeRoot, VisitContext ctx, ChartNodeService nodeService) {
     }
 
@@ -37,4 +27,10 @@ public class ChartNodeControlFlowVisitor implements ChartNodeVisitor {
     public ChartNodeVisitor newScope(ChartNode enclosingScope) {
         return new ChartNodeControlFlowVisitor();
     }
+
+    @Override
+    public void group(ChartNode root, ChartNode headConnection, ChartNode tailConnection) {
+
+    }
+
 }

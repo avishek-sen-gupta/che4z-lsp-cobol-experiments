@@ -14,8 +14,8 @@ public class NextSentenceChartNode extends CobolChartNode {
     public void buildControlFlow() {
         // scope is the actual SentenceChartNode
         ChartNodeCondition isSentence = n -> n.getClass() == SentenceChartNode.class;
-        ChartNode containingSentence = scope.find(isSentence, null);
-        destinationSentenceNode = ((SentenceChartNode) containingSentence).next(isSentence, containingSentence, true);
+        ChartNode containingSentence = scope.findUpwards(isSentence, null);
+        destinationSentenceNode = containingSentence.next(isSentence, containingSentence, true);
         System.out.println("Next sentence is " + destinationSentenceNode);
     }
 

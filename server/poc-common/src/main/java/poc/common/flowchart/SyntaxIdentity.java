@@ -4,9 +4,24 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;
 
 import java.util.List;
+import java.util.function.Function;
 
 public class SyntaxIdentity<T> {
     private final ParseTree executionContext;
+
+    public static boolean PERFORM_PROCEDURE(ParseTree t) {
+        if (!isStatementOfType(t, CobolParser.PerformStatementContext.class)) return false;
+        CobolParser.StatementContext statement = (CobolParser.StatementContext) t;
+        CobolParser.PerformStatementContext performStatementContext = (CobolParser.PerformStatementContext) statement.getChild(0);
+        return performStatementContext.performProcedureStatement() != null;
+    }
+
+    public static boolean PERFORM_INLINE(ParseTree t) {
+        if (!isStatementOfType(t, CobolParser.PerformStatementContext.class)) return false;
+        CobolParser.StatementContext statement = (CobolParser.StatementContext) t;
+        CobolParser.PerformStatementContext performStatementContext = (CobolParser.PerformStatementContext) statement.getChild(0);
+        return performStatementContext.performInlineStatement() != null;
+    }
 
     public SyntaxIdentity(ParseTree executionContext) {
         this.executionContext = executionContext;
@@ -16,6 +31,10 @@ public class SyntaxIdentity<T> {
         if (parseTree.getClass() != CobolParser.StatementContext.class) return false;
         CobolParser.StatementContext statement = (CobolParser.StatementContext) parseTree;
         return statement.getChild(0).getClass() == clazz;
+    }
+
+    public static boolean satisfies(ParseTree parseTree, Function<ParseTree, Boolean> condition) {
+        return condition.apply(parseTree);
     }
 
     public static boolean isOfType(ParseTree parseTree, Class clazz) {

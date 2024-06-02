@@ -23,7 +23,7 @@ public class ChartNodeOverlayVisitor implements ChartNodeVisitor {
     public void visit(ChartNode node, List<ChartNode> outgoingNodes, List<ChartNode> incomingNodes, VisitContext context, ChartNodeService nodeService) {
         if ((node.getClass() == SentenceChartNode.class ||
                 node.getClass() == ConditionalStatementChartNode.class ||
-                node.getClass() == GenericStatementChartNode.class // This condition is a little sus because technically, statements inside sentences could also get their own groups which would show up in addition to their parent sentence groups. It's working now, need to investigate with a small test program.
+                (node.getClass() == GenericStatementChartNode.class && !contained(node)) // This condition is a little sus because technically, statements inside sentences could also get their own groups which would show up in addition to their parent sentence groups. It's working now, need to investigate with a small test program.
         ) && node.isMergeable()) {
             System.out.println("MERGEABLE : " + node);
             if (head == null) {
@@ -39,14 +39,9 @@ public class ChartNodeOverlayVisitor implements ChartNodeVisitor {
         }
     }
 
-    @Override
-    public boolean shouldVisit(VisitContext context) {
-        return true;
-    }
-
-    @Override
-    public void visitCluster(ChartNode node, ChartNodeService nodeService) {
-
+    private boolean contained(ChartNode node) {
+        boolean exists = groups.stream().anyMatch(g -> g.contains(node));
+        return exists;
     }
 
     @Override
@@ -65,6 +60,11 @@ public class ChartNodeOverlayVisitor implements ChartNodeVisitor {
     @Override
     public ChartNodeVisitor newScope(ChartNode enclosingScope) {
         return new ChartNodeOverlayVisitor(enclosingScope, groups);
+    }
+
+    @Override
+    public void group(ChartNode root, ChartNode headConnection, ChartNode tailConnection) {
+
     }
 
     public void report() {

@@ -5,6 +5,7 @@ import guru.nidi.graphviz.model.MutableGraph;
 import guru.nidi.graphviz.model.MutableNode;
 import poc.common.flowchart.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -50,14 +51,6 @@ public class ChartNodeGraphvizVisitor implements ChartNodeVisitor {
     }
 
     @Override
-    public boolean shouldVisit(VisitContext context) {
-        return maxLevel == -1 || context.getLevel() <= maxLevel;
-    }
-
-    public void visitCluster(ChartNode compositeNode, ChartNodeService nodeService) {
-    }
-
-    @Override
     public void visitParentChildLink(ChartNode parent, ChartNode internalTreeRoot, VisitContext visitContext, ChartNodeService nodeService) {
         if (!visitCondition.apply(visitContext.oneLower())) return;
         visitParentChildLink(parent, internalTreeRoot, visitContext, nodeService, ChartNodeCondition.ALWAYS_SHOW);
@@ -91,6 +84,23 @@ public class ChartNodeGraphvizVisitor implements ChartNodeVisitor {
     @Override
     public ChartNodeVisitor newScope(ChartNode enclosingScope) {
         return this;
+    }
+
+    @Override
+    public void group(ChartNode root, ChartNode headConnection, ChartNode tailConnection) {
+        ChartNodeCollectorVisitor collector = new ChartNodeCollectorVisitor(overlay);
+        root.accept(collector, -1);
+        List<ChartNode> chartNodes = collector.getChartNodes();
+        MutableGraph outliningCluster = mutGraph("clusterLabel").setCluster(true).graphAttrs().add("bgcolor", Color.LIGHTGREY.value);
+        chartNodes.forEach(n -> {
+//            ChartNode overlaidBlock = overlay.block(n.passthrough());
+            outliningCluster.add(mutNode(n.id()));
+        });
+        g.add(outliningCluster);
+//        MutableNode overlayHead = mutNode(overlay.block(headConnection.passthrough()).id());
+//        MutableNode overlayTail = mutNode(overlay.block(tailConnection.passthrough()).id());
+//        g.add(overlayHead.addLink(outliningCluster));
+//        g.add(overlayTail.addLink(outliningCluster));
     }
 
     private MutableNode styled(ChartNode chartNode, MutableNode node) {

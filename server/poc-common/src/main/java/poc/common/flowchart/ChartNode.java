@@ -24,7 +24,8 @@ public interface ChartNode {
 
     List<? extends ParseTree> getChildren();
 
-    ChartNode find(ChartNodeCondition nodeCondition, ChartNode startingNode);
+    ChartNode findUpwards(ChartNodeCondition nodeCondition, ChartNode startingNode);
+    ChartNode tail();
 
     DomainDocument getNotes();
     void reset();

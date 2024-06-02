@@ -18,8 +18,10 @@ public class CobolChartNodeFactory {
         else if (SyntaxIdentity.isStatementOfType(parseTree, CobolParser.NextSentenceContext.class) ||
                 SyntaxIdentity.isOfType(parseTree, CobolParser.NextSentenceWrapperStatementContext.class))
             return new NextSentenceChartNode(parseTree, scope, nodeService);
-        else if (SyntaxIdentity.isStatementOfType(parseTree, CobolParser.PerformStatementContext.class))
-            return new PerformChartNode(parseTree, scope, nodeService);
+        else if (SyntaxIdentity.satisfies(parseTree, SyntaxIdentity::PERFORM_PROCEDURE))
+            return new PerformProcedureChartNode(parseTree, scope, nodeService);
+        else if (SyntaxIdentity.satisfies(parseTree, SyntaxIdentity::PERFORM_INLINE))
+            return new PerformInlineChartNode(parseTree, scope, nodeService);
         else if (SyntaxIdentity.isStatementOfType(parseTree, CobolParser.SearchStatementContext.class))
             return new SearchChartNode(parseTree, scope, nodeService);
         else if (SyntaxIdentity.isStatementOfType(parseTree, CobolParser.GenericOnClauseStatementContext.class))

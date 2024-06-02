@@ -86,6 +86,6 @@ public class PocCliStartup {
         // This one is root
 //        ParseTree procedure = navigator.root();
 
-        flowcharter.generateFlowchart(procedure, dotFilePath, imageOutputPath, "line");
+        flowcharter.generateFlowchart(procedure, dotFilePath, imageOutputPath, "ortho");
     }
 }
