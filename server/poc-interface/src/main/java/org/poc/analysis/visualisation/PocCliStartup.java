@@ -77,6 +77,6 @@ public class PocCliStartup {
         flowcharter.buildOverlay();
         flowcharter.buildGraphic();
         flowcharter.write(dotFilePath);
-        new GraphGenerator("ortho").generateImage(dotFilePath, imageOutputPath);
+        new GraphGenerator("line").generateImage(dotFilePath, imageOutputPath);
     }
 }
