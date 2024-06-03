@@ -52,8 +52,9 @@ public class PocCliStartup {
         String cobolParseTreeOutputPath = "/Users/asgupta/Downloads/mbrdi-poc/test-cobol.json";
         String idmsParseTreeOutputPath = "/Users/asgupta/Downloads/mbrdi-poc/test-idms.json";
         File[] copyBookPaths = {new File("/Users/asgupta/Downloads/mbrdi-poc")};
-//        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V75234");
-        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V7588049");
+        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V75234");
+        String dialectJarPath = "/Users/asgupta/code/mbrdi-proleap/che4z/che-che4z-lsp-for-cobol-2.1.2/server/dialect-idms/target/dialect-idms.jar";
+//        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V7588049");
 //        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V751C931");
 
         PocOpsImpl ops = new PocOpsImpl(new CobolTreeVisualiserImpl(),
@@ -62,7 +63,7 @@ public class PocCliStartup {
                 copyBookPaths,
                 cobolParseTreeOutputPath,
                 idmsParseTreeOutputPath,
-                ops);
+                ops, dialectJarPath);
 
         CobolEntityNavigator navigator = pipeline.parse();
         FlowchartBuilder flowcharter = pipeline.flowcharter();
@@ -91,6 +92,6 @@ public class PocCliStartup {
         // This one is root
         ParseTree procedure = navigator.root();
 
-        flowcharter.generateFlowchart(procedure, dotFilePath, imageOutputPath, "ortho");
+        flowcharter.generateFlowchart(procedure, dotFilePath, imageOutputPath, "line");
     }
 }

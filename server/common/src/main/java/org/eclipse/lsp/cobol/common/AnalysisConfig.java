@@ -51,7 +51,16 @@ public class AnalysisConfig {
             mode,
         ImmutableList.of("IDMS"),
         true,
-        ImmutableList.of(new DialectRegistryItem("IDMS", URI.create("file:///Users/asgupta/code/mbrdi-proleap/che4z/che-che4z-lsp-for-cobol-2.1.2/server/dialect-idms/target/dialect-idms.jar"), "Some Description", "Some ID")),
+        ImmutableList.of(),
+        ImmutableMap.of("target-sql-backend", new Gson().toJsonTree(SQLBackend.DB2_SERVER)));
+  }
+
+  public static AnalysisConfig idmsConfig(String dialectJarPath, CopybookProcessingMode mode) {
+    return new AnalysisConfig(
+            mode,
+        ImmutableList.of("IDMS"),
+        true,
+        ImmutableList.of(new DialectRegistryItem("IDMS", URI.create(String.format("file://%s", dialectJarPath)), "Some Description", "Some ID")),
         ImmutableMap.of("target-sql-backend", new Gson().toJsonTree(SQLBackend.DB2_SERVER)));
   }
 }

@@ -6,7 +6,6 @@ import org.poc.analysis.visualisation.CobolTreeVisualiserImpl;
 import org.poc.analysis.visualisation.PocOpsImpl;
 import org.poc.common.navigation.CobolEntityNavigator;
 import org.poc.flowchart.FlowchartBuilderImpl;
-import poc.common.flowchart.CobolContextAugmentedTreeNode;
 import poc.common.flowchart.FlowchartBuilder;
 import poc.common.flowchart.NodeText;
 import vm.CobolEntityNavigatorBuilderImpl;
@@ -29,11 +28,12 @@ public class OpenAiTest {
 
         PocOpsImpl ops = new PocOpsImpl(new CobolTreeVisualiserImpl(),
                 FlowchartBuilderImpl::build, new CobolEntityNavigatorBuilderImpl());
+        String dialectJarPath = "/Users/asgupta/code/mbrdi-proleap/che4z/che-che4z-lsp-for-cobol-2.1.2/server/dialect-idms/target/dialect-idms.jar";
         ParsePipeline pipeline = new ParsePipeline(source,
                 copyBookPaths,
                 cobolParseTreeOutputPath,
                 idmsParseTreeOutputPath,
-                ops);
+                ops, dialectJarPath);
 
         CobolEntityNavigator navigator = pipeline.parse();
         FlowchartBuilder flowcharter = pipeline.flowcharter();

@@ -56,15 +56,17 @@ public class ParsePipeline {
     private final PocOps ops;
     @Getter
     private CobolEntityNavigator navigator;
+    private String dialectJarPath;
 
 
-    public ParsePipeline(File src, File[] cpyPaths, String cobolParseTreeOutputPath, String idmsParseTreeOutputPath, PocOps ops) {
+    public ParsePipeline(File src, File[] cpyPaths, String cobolParseTreeOutputPath, String idmsParseTreeOutputPath, PocOps ops, String dialectJarPath) {
         this.src = src;
         this.cpyPaths = cpyPaths;
         this.idmsParseTreeOutputPath = idmsParseTreeOutputPath;
         this.cobolParseTreeOutputPath = cobolParseTreeOutputPath;
         this.ops = ops;
         cpyExt = new String[]{"", ".cpy"};
+        this.dialectJarPath = dialectJarPath;
     }
 
     public CobolEntityNavigator parse() throws IOException {
@@ -103,7 +105,7 @@ public class ParsePipeline {
         AnalysisContext ctx =
                 new AnalysisContext(
                         new ExtendedDocument(resultWithErrors.getResult(), text),
-                        createAnalysisConfiguration(),
+                        createAnalysisConfiguration(dialectJarPath),
                         benchmarkService.startSession(),
                         cobolParseTreeOutputPath, idmsParseTreeOutputPath);
         ctx.getAccumulatedErrors().addAll(resultWithErrors.getErrors());
@@ -199,8 +201,8 @@ public class ParsePipeline {
                 .ifPresent(totalTime -> tObj.add("total", new JsonPrimitive(totalTime / 1_000_000_000.0)));
     }
 
-    private static AnalysisConfig createAnalysisConfiguration() {
-        return AnalysisConfig.defaultConfig(CopybookProcessingMode.ENABLED);
+    private static AnalysisConfig createAnalysisConfiguration(String dialectConfigJarPath) {
+        return AnalysisConfig.idmsConfig(dialectConfigJarPath, CopybookProcessingMode.ENABLED);
     }
 
     private JsonObject toJson(SyntaxError syntaxError, Gson gson) {
