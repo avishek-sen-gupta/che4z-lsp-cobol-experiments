@@ -21,6 +21,7 @@ public class CompositeCobolNode extends CobolChartNode {
         System.out.println("Building internal flow for " + name());
         List<? extends ParseTree> children = getChildren();
         if (children == null) return;
+        System.out.println("Looking at " + name());
         internalTreeRoot = nodeService.node(children.getFirst(), this);
         ChartNode current = internalTreeRoot;
         for (int i = 0; i <= children.size() - 2; i++) {

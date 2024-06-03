@@ -1999,7 +1999,7 @@ notOnExceptionClause
    ;
 
 genericOnClauseStatement
-    : ON generalIdentifier statement+
+    : ON generalIdentifier (statement | dialectNodeFiller)+
     ;
 
 // condition ----------------------------------

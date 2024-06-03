@@ -34,7 +34,7 @@ public class GenericOnClauseChartNode extends CompositeCobolNode {
 
     @Override
     public String label() {
-        return NodeText.originalText(condition.getExecutionContext(), NodeText::PASSTHROUGH);
+        return "ON\n" + NodeText.originalText(condition.getExecutionContext(), NodeText::PASSTHROUGH);
     }
 
     @Override

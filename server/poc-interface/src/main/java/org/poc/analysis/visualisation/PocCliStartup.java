@@ -52,7 +52,9 @@ public class PocCliStartup {
         String cobolParseTreeOutputPath = "/Users/asgupta/Downloads/mbrdi-poc/test-cobol.json";
         String idmsParseTreeOutputPath = "/Users/asgupta/Downloads/mbrdi-poc/test-idms.json";
         File[] copyBookPaths = {new File("/Users/asgupta/Downloads/mbrdi-poc")};
-        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V75234");
+//        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V75234");
+        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V7588049");
+//        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V751C931");
 
         PocOpsImpl ops = new PocOpsImpl(new CobolTreeVisualiserImpl(),
                 FlowchartBuilderImpl::build, new CobolEntityNavigatorBuilderImpl());
@@ -68,13 +70,16 @@ public class PocCliStartup {
         // This one demonstrates a moderately complex section
 //        ParseTree procedure = navigator.target("U204-CALL-COST-PRICE");
 
-        // This one demonstrates SEARCH...WHEN with multiple Search...When conditions
+        // This one demonstrates SEARCH...WHEN with NEXT SENTENCE
 //        ParseTree procedure = navigator.target("B2");
+
+        // This one demonstrates SEARCH statements with multiple SEARCH...WHEN clauses
+//        ParseTree procedure = navigator.target("M2");
 
         // This one demonstrates ON clauses and SEARCH...WHEN with one Search...When condition
 //        ParseTree procedure = navigator.target("A0");
 
-        // This one demonstrates PERFORM THRU
+        // This one demonstrates PERFORM X THRU Y
 //        ParseTree procedure = navigator.target("S0");
 
         // This one demonstrates PERFORM VARYING for a procedure
@@ -86,6 +91,6 @@ public class PocCliStartup {
         // This one is root
         ParseTree procedure = navigator.root();
 
-        flowcharter.generateFlowchart(procedure, dotFilePath, imageOutputPath, "line");
+        flowcharter.generateFlowchart(procedure, dotFilePath, imageOutputPath, "ortho");
     }
 }
