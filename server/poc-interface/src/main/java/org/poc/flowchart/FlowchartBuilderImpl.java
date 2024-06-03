@@ -127,7 +127,6 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
         .buildDotStructure()
         .write(dotFilePath);
         new GraphGenerator(splineStyle).generateImage(dotFilePath, imageOutputPath);
-
     }
 
     private String formatted(String s, int lineLength) {

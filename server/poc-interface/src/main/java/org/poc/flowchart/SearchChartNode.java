@@ -17,12 +17,19 @@ public class SearchChartNode extends CobolChartNode {
     @Override
     public void buildInternalFlow() {
         CobolParser.SearchStatementContext searchStatementContext = new SyntaxIdentity<CobolParser.SearchStatementContext>(executionContext).get();
-        atEndBlock = nodeService.node(searchStatementContext.atEndPhrase(), this);
+        if (endPhraseExists()) {
+            atEndBlock = nodeService.node(searchStatementContext.atEndPhrase(), this);
+            atEndBlock.buildFlow();
+        }
         List<CobolParser.SearchWhenContext> searchWhenContexts = searchStatementContext.searchWhen();
         whenPhrases = searchWhenContexts.stream().map(when -> nodeService.node(when, this)).toList();
 
-        atEndBlock.buildFlow();
         whenPhrases.forEach(ChartNode::buildFlow);
+    }
+
+    private boolean endPhraseExists() {
+        CobolParser.SearchStatementContext searchStatementContext = new SyntaxIdentity<CobolParser.SearchStatementContext>(executionContext).get();
+        return searchStatementContext.atEndPhrase() != null;
     }
 
     @Override
@@ -33,7 +40,7 @@ public class SearchChartNode extends CobolChartNode {
 
     @Override
     public void buildControlFlow() {
-        atEndBlock.buildControlFlow();
+        if (endPhraseExists()) atEndBlock.buildControlFlow();
         whenPhrases.forEach(ChartNode::buildControlFlow);
     }
 
@@ -43,8 +50,10 @@ public class SearchChartNode extends CobolChartNode {
         whenPhrases.forEach(w -> w.acceptUnvisited(visitor, level));
         whenPhrases.forEach(w -> visitor.visitParentChildLink(this, w, new VisitContext(level), nodeService));
 
-        atEndBlock.accept(visitor, level);
-        visitor.visitParentChildLink(this, atEndBlock, new VisitContext(level), nodeService);
+        if (endPhraseExists()) {
+            atEndBlock.accept(visitor, level);
+            visitor.visitParentChildLink(this, atEndBlock, new VisitContext(level), nodeService);
+        }
     }
 
     @Override
@@ -62,7 +71,7 @@ public class SearchChartNode extends CobolChartNode {
     @Override
     public void reset() {
         super.reset();
-        atEndBlock.reset();
+        if (endPhraseExists()) atEndBlock.reset();
         whenPhrases.forEach(ChartNode::reset);
     }
 }
