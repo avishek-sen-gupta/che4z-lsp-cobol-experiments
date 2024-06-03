@@ -139,7 +139,7 @@ public class ParsePipeline {
         EntityNavigatorBuilder navigatorBuilder = ops.getCobolEntityNavigatorBuilder();
         CobolParser.ProcedureDivisionBodyContext procedureDivisionBody = navigatorBuilder.procedureDivisionBody(tree);
         navigator = navigatorBuilder.procedureDivisionEntityNavigator(procedureDivisionBody, tree);
-        ops.getVisualiser().visualiseCobolAST(tree, cobolParseTreeOutputPath, false, navigator);
+        ops.getVisualiser().writeCobolAST(tree, cobolParseTreeOutputPath, false, navigator);
         //        new DynamicFlowAnalyser(tree).run();
 
         JsonArray diagnostics = new JsonArray();

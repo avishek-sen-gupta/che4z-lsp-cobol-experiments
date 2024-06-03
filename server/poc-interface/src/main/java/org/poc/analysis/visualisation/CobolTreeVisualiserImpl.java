@@ -31,8 +31,8 @@ import java.io.PrintWriter;
  */
 public class CobolTreeVisualiserImpl implements CobolTreeVisualiser {
     @Override
-    public void visualiseCobolAST(ParserRuleContext tree, String cobolParseTreeOutputPath, CobolEntityNavigator navigator) {
-        visualiseCobolAST(tree, cobolParseTreeOutputPath, true, navigator);
+    public void writeCobolAST(ParserRuleContext tree, String cobolParseTreeOutputPath, CobolEntityNavigator navigator) {
+        writeCobolAST(tree, cobolParseTreeOutputPath, true, navigator);
     }
 
     /**
@@ -42,7 +42,7 @@ public class CobolTreeVisualiserImpl implements CobolTreeVisualiser {
      * @param cobolParseTreeOutputPath
      */
     @Override
-    public void visualiseCobolAST(ParseTree tree, String cobolParseTreeOutputPath, boolean outputTree, CobolEntityNavigator navigator) {
+    public void writeCobolAST(ParseTree tree, String cobolParseTreeOutputPath, boolean outputTree, CobolEntityNavigator navigator) {
         navigator.buildDialectNodeRepository();
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
         CobolContextAugmentedTreeNode graphRoot = new CobolContextAugmentedTreeNode(tree, navigator);

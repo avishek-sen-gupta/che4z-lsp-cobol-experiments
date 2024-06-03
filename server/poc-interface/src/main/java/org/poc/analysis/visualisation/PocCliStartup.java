@@ -30,14 +30,8 @@ public class PocCliStartup {
     public static boolean cliMode = false;
     private static final Integer LSP_PORT = 1044;
     private static final String PIPE_ARG = "pipeEnabled";
-    // It's need to be static, so it will be initialized after cliMode mode calculated (it is used in logger setup)
     private final Logger logger = LoggerFactory.getLogger(PocCliStartup.class);
 
-    /**
-     * The entry point for the application.
-     *
-     * @param args command line arguments
-     */
     public static void main(String[] args) throws IOException, InterruptedException {
         String dotFilePath = "/Users/asgupta/Downloads/mbrdi-poc/flowchart.dot";
         String imageOutputPath = "/Users/asgupta/Downloads/mbrdi-poc/flowchart.png";
