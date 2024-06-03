@@ -59,7 +59,7 @@ public class ParsePipeline {
     private String dialectJarPath;
 
 
-    public ParsePipeline(File src, File[] cpyPaths, String cobolParseTreeOutputPath, String idmsParseTreeOutputPath, PocOps ops, String dialectJarPath) {
+    public ParsePipeline(File src, File[] cpyPaths, String dialectJarPath, String cobolParseTreeOutputPath, String idmsParseTreeOutputPath, PocOps ops) {
         this.src = src;
         this.cpyPaths = cpyPaths;
         this.idmsParseTreeOutputPath = idmsParseTreeOutputPath;

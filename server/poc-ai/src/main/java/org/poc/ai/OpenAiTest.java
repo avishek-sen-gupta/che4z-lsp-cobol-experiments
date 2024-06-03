@@ -31,9 +31,9 @@ public class OpenAiTest {
         String dialectJarPath = "/Users/asgupta/code/mbrdi-proleap/che4z/che-che4z-lsp-for-cobol-2.1.2/server/dialect-idms/target/dialect-idms.jar";
         ParsePipeline pipeline = new ParsePipeline(source,
                 copyBookPaths,
-                cobolParseTreeOutputPath,
+                dialectJarPath, cobolParseTreeOutputPath,
                 idmsParseTreeOutputPath,
-                ops, dialectJarPath);
+                ops);
 
         CobolEntityNavigator navigator = pipeline.parse();
         FlowchartBuilder flowcharter = pipeline.flowcharter();

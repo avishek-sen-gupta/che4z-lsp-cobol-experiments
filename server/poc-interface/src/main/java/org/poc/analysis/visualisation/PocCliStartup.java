@@ -26,14 +26,6 @@ import vm.CobolEntityNavigatorBuilderImpl;
 import java.io.File;
 import java.io.IOException;
 
-/**
- * This class is an entry point for the application. It initializes the DI context and runs the
- * server to accept the connections using either socket on LSP_PORT or pipes using STDIO. After the
- * establishing of the connection the main thread suspends until it is stopped forcibly.
- *
- * <p>To run the extension using path, you may specify "pipeEnabled" as a program argument. In other
- * case the server will start using socket.
- */
 public class PocCliStartup {
     public static boolean cliMode = false;
     private static final Integer LSP_PORT = 1044;
@@ -61,9 +53,10 @@ public class PocCliStartup {
                 FlowchartBuilderImpl::build, new CobolEntityNavigatorBuilderImpl());
         ParsePipeline pipeline = new ParsePipeline(source,
                 copyBookPaths,
+                dialectJarPath,
                 cobolParseTreeOutputPath,
                 idmsParseTreeOutputPath,
-                ops, dialectJarPath);
+                ops);
 
         CobolEntityNavigator navigator = pipeline.parse();
         FlowchartBuilder flowcharter = pipeline.flowcharter();
