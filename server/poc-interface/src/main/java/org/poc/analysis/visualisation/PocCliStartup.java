@@ -75,7 +75,7 @@ public class PocCliStartup {
 //        ParseTree procedure = navigator.target("B2");
 
         // This one demonstrates SEARCH statements with multiple SEARCH...WHEN clauses
-//        ParseTree procedure = navigator.target("M2");
+        ParseTree procedure = navigator.target("M2");
 
         // This one demonstrates ON clauses and SEARCH...WHEN with one Search...When condition
 //        ParseTree procedure = navigator.target("A0");
@@ -90,8 +90,8 @@ public class PocCliStartup {
 //        ParseTree procedure = navigator.target("U2030-TASI-2603");
 
         // This one is root
-        ParseTree procedure = navigator.root();
+//        ParseTree procedure = navigator.root();
 
-        flowcharter.generateFlowchart(procedure, dotFilePath, imageOutputPath, "line");
+        flowcharter.generateFlowchart(procedure, dotFilePath, imageOutputPath, "ortho");
     }
 }
