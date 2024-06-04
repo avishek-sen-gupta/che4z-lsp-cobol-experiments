@@ -91,6 +91,11 @@ public class PerformProcedureChartNode extends CobolChartNode {
     }
 
     @Override
+    public CobolVmSignal acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService, FlowControl flowControl) {
+        return interpreter.scope(this).executePerformProcedure(procedures, nodeService);
+    }
+
+    @Override
     public String label() {
         return truncated(originalText(), 30);
     }

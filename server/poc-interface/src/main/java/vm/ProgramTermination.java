@@ -7,7 +7,7 @@ public class ProgramTermination implements CobolVmInstruction {
     }
 
     @Override
-    public boolean apply(FlowControl flow) {
+    public boolean apply(OldFlowControl flow) {
         flow.continueExecution = false;
         return false;
     }

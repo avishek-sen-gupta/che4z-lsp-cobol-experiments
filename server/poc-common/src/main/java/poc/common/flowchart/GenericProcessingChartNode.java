@@ -154,7 +154,7 @@ public class GenericProcessingChartNode implements ChartNode {
     }
 
     @Override
-    public CobolVmSignal acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService) {
+    public CobolVmSignal acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService, FlowControl flowControl) {
         return CobolVmSignal.CONTINUE;
     }
 

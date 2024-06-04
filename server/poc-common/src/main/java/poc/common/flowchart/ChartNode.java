@@ -44,5 +44,5 @@ public interface ChartNode {
     ChartNode passthrough();
     boolean isPassthrough();
 
-    CobolVmSignal acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService);
+    CobolVmSignal acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService, FlowControl flowControl);
 }

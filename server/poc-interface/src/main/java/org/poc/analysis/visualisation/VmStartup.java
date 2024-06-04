@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import poc.common.flowchart.ChartNode;
 import poc.common.flowchart.ChartNodeService;
 import org.poc.flowchart.SmolCobolInterpreter;
+import poc.common.flowchart.FlowControl;
 import poc.common.flowchart.FlowchartBuilder;
 import vm.CobolEntityNavigatorBuilderImpl;
 
@@ -87,11 +88,11 @@ public class VmStartup {
         // This one is root
         ParseTree procedure = navigator.root();
 
-        flowcharter.buildChartAST(procedure);
+        flowcharter.buildChartAST(procedure).buildControlFlow();
         ChartNode root = flowcharter.getRoot();
         ChartNodeService nodeService = flowcharter.getChartNodeService();
 
         System.out.println("INTERPRETING\n--------------------------------\n");
-        root.acceptInterpreter(new SmolCobolInterpreter(), nodeService);
+        root.acceptInterpreter(new SmolCobolInterpreter(), nodeService, FlowControl::CONTINUE);
     }
 }

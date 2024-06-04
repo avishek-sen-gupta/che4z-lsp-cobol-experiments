@@ -10,11 +10,11 @@ public interface CobolVmInstruction {
         }
 
         @Override
-        public boolean apply(FlowControl flow) {
+        public boolean apply(OldFlowControl flow) {
             return true;
         }
     };
 
-    boolean apply(FlowControl flow);
+    boolean apply(OldFlowControl flow);
 }
 

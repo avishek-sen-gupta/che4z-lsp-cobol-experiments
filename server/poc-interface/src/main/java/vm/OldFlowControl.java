@@ -3,11 +3,11 @@ package vm;
 import lombok.Data;
 
 @Data
-public class FlowControl {
+public class OldFlowControl {
     boolean continueExecution = true;
     private CobolFrame frame;
 
-    public FlowControl(CobolFrame frame) {
+    public OldFlowControl(CobolFrame frame) {
         this.frame = frame;
     }
 }

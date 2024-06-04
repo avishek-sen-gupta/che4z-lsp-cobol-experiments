@@ -9,7 +9,7 @@ public class ExitScope implements CobolVmInstruction {
     }
 
     @Override
-    public boolean apply(FlowControl flow) {
+    public boolean apply(OldFlowControl flow) {
         ProgramScope scope = flow.getFrame().getScope().scope();
         if (scope == ProgramScope.PARAGRAPH || scope != ProgramScope.SECTION && !hasExited) {
             flow.setContinueExecution(false);

@@ -13,7 +13,7 @@ public class CobolVirtualMachine {
     }
 
     public CobolVmInstruction run() {
-        FlowControl flow = new FlowControl(frame);
+        OldFlowControl flow = new OldFlowControl(frame);
         FlowUnit unit = null;
         CobolVmInstruction instruction = new PassThrough();
         while (flow.continueExecution && unit != TERMINAL) {

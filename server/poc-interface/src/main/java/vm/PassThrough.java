@@ -7,7 +7,7 @@ public class PassThrough implements CobolVmInstruction {
     }
 
     @Override
-    public boolean apply(FlowControl flow) {
+    public boolean apply(OldFlowControl flow) {
         return true;
     }
 }

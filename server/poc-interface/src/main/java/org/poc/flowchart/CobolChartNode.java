@@ -197,9 +197,9 @@ public class CobolChartNode implements ChartNode {
     }
 
     @Override
-    public CobolVmSignal acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService) {
+    public CobolVmSignal acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService, FlowControl flowControl) {
         CobolVmSignal signal = interpreter.scope(this).execute(this);
-        return continueOrAbort(signal, interpreter, nodeService);
+        return flowControl.apply((Void) -> continueOrAbort(signal, interpreter, nodeService), signal);
     }
 
     protected CobolVmSignal continueOrAbort(CobolVmSignal signal, CobolInterpreter interpreter, ChartNodeService nodeService) {
@@ -208,7 +208,7 @@ public class CobolChartNode implements ChartNode {
             System.out.println("WARNING: ROGUE NODE " + this.label());
         }
         if (outgoingNodes.isEmpty()) return signal;
-        return outgoingNodes.getFirst().acceptInterpreter(interpreter, nodeService);
+        return outgoingNodes.getFirst().acceptInterpreter(interpreter, nodeService, FlowControl::CONTINUE);
     }
 
     @Override

@@ -2,6 +2,8 @@ package org.poc.flowchart;
 
 import poc.common.flowchart.*;
 
+import java.util.List;
+
 public class SmolCobolInterpreter implements CobolInterpreter {
     @Override
     public CobolInterpreter scope(ChartNode scope) {
@@ -29,6 +31,11 @@ public class SmolCobolInterpreter implements CobolInterpreter {
         System.out.println("Executing an IF condition");
         IfChartNode ifNode = (IfChartNode) node;
         ChartNode ifThenBlock = ifNode.getIfThenBlock();
-        return ifThenBlock.acceptInterpreter(this.scope(ifThenBlock), nodeService);
+        return ifThenBlock.acceptInterpreter(this, nodeService, FlowControl::CONTINUE);
+    }
+
+    @Override
+    public CobolVmSignal executePerformProcedure(List<ChartNode> procedures, ChartNodeService nodeService) {
+        return procedures.getFirst().acceptInterpreter(this, nodeService, FlowControl::STOP);
     }
 }

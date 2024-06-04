@@ -1,5 +1,7 @@
 package poc.common.flowchart;
 
+import java.util.List;
+
 public interface CobolInterpreter {
     CobolInterpreter scope(ChartNode scope);
 
@@ -10,4 +12,6 @@ public interface CobolInterpreter {
     void exit(ChartNode node);
 
     CobolVmSignal executeIf(ChartNode node, ChartNodeService nodeService);
+
+    CobolVmSignal executePerformProcedure(List<ChartNode> procedures, ChartNodeService nodeService);
 }
