@@ -1,10 +1,7 @@
 package org.poc.flowchart;
 
 import org.antlr.v4.runtime.tree.ParseTree;
-import poc.common.flowchart.ChartNode;
-import poc.common.flowchart.ChartNodeCondition;
-import poc.common.flowchart.ChartNodeService;
-import poc.common.flowchart.ChartNodeType;
+import poc.common.flowchart.*;
 
 public class ProcedureDivisionBodyChartNode extends CompositeCobolNode {
     @Override
@@ -12,12 +9,12 @@ public class ProcedureDivisionBodyChartNode extends CompositeCobolNode {
         return ChartNodeType.SECTION;
     }
 
-    public ProcedureDivisionBodyChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {
-        super(parseTree, scope, nodeService);
+    public ProcedureDivisionBodyChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService, StackFrames stackFrames) {
+        super(parseTree, scope, nodeService, new StackFrames());
     }
 
     @Override
     public ChartNode next(ChartNodeCondition nodeCondition, ChartNode startingNode, boolean isComplete) {
-        return new DummyChartNode(nodeService);
+        return new DummyChartNode(nodeService, staticFrameContext);
     }
 }

@@ -6,7 +6,7 @@ import org.poc.common.navigation.CobolEntityNavigator;
 public interface ChartNodeService {
     ChartNode register(ChartNode chartNode);
 
-    ChartNode node(ParseTree parseTree, ChartNode scope);
+    ChartNode node(ParseTree parseTree, ChartNode scope, StackFrames stackFrames);
 
     ChartNode sectionOrParaWithName(String name);
 

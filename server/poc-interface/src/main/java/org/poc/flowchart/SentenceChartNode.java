@@ -14,8 +14,8 @@ public class SentenceChartNode extends CompositeCobolNode {
         return outgoingNodes.getFirst().next(nodeCondition, startingNode, false);
     }
 
-    public SentenceChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {
-        super(parseTree, scope, nodeService);
+    public SentenceChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService, StackFrames stackFrames) {
+        super(parseTree, scope, nodeService, stackFrames);
     }
 
     @Override

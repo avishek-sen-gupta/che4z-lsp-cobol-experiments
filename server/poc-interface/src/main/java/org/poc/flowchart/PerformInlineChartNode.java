@@ -1,7 +1,5 @@
 package org.poc.flowchart;
 
-import guru.nidi.graphviz.attribute.Color;
-import guru.nidi.graphviz.model.MutableGraph;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;
 import poc.common.flowchart.*;
@@ -14,8 +12,8 @@ import static guru.nidi.graphviz.model.Factory.mutNode;
 public class PerformInlineChartNode extends CompositeCobolNode {
     private ChartNode condition;
 
-    public PerformInlineChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {
-        super(parseTree, scope, nodeService);
+    public PerformInlineChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService, StackFrames stackFrames) {
+        super(parseTree, scope, nodeService, stackFrames);
     }
 
     @Override
@@ -23,7 +21,7 @@ public class PerformInlineChartNode extends CompositeCobolNode {
         CobolParser.PerformStatementContext performStatement = new SyntaxIdentity<CobolParser.PerformStatementContext>(getExecutionContext()).get();
         CobolParser.PerformInlineStatementContext x = performStatement.performInlineStatement();
         if (isVarying(x)) {
-            condition = nodeService.node(x.performType(), this);
+            condition = nodeService.node(x.performType(), this, new StackFrames());
         }
         super.buildInternalFlow();
     }

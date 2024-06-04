@@ -1,7 +1,6 @@
 package org.poc.flowchart;
 
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.poc.common.navigation.CobolEntityNavigator;
 import poc.common.flowchart.*;
 
 public class ParagraphChartNode extends CompositeCobolNode {
@@ -10,7 +9,7 @@ public class ParagraphChartNode extends CompositeCobolNode {
         return ChartNodeType.PARAGRAPH;
     }
 
-    public ParagraphChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {
-        super(parseTree, scope, nodeService);
+    public ParagraphChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService, StackFrames stackFrames) {
+        super(parseTree, scope, nodeService, stackFrames);
     }
 }

@@ -13,8 +13,8 @@ public class GoToChartNode extends CobolChartNode {
 
     private List<ChartNode> destinationNodes;
 
-    public GoToChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {
-        super(parseTree, scope, nodeService);
+    public GoToChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService, StackFrames stackFrames) {
+        super(parseTree, scope, nodeService, stackFrames);
     }
 
     @Override

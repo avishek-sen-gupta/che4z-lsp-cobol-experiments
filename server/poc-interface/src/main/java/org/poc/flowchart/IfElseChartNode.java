@@ -9,8 +9,8 @@ public class IfElseChartNode extends CompositeCobolNode {
         return "No";
     }
 
-    public IfElseChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {
-        super(parseTree, scope, nodeService);
+    public IfElseChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService, StackFrames stackFrames) {
+        super(parseTree, scope, nodeService, stackFrames);
     }
 
     @Override

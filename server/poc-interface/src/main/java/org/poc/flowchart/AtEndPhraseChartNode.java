@@ -5,15 +5,15 @@ import org.eclipse.lsp.cobol.core.CobolParser;
 import poc.common.flowchart.ChartNode;
 import poc.common.flowchart.ChartNodeService;
 import poc.common.flowchart.ChartNodeType;
-import poc.common.flowchart.ChartNodeVisitor;
+import poc.common.flowchart.StackFrames;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AtEndPhraseChartNode extends CompositeCobolNode {
     private List<ChartNode> conditionalStatements = new ArrayList<>();
-    public AtEndPhraseChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {
-        super(parseTree, scope, nodeService);
+    public AtEndPhraseChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService, StackFrames stackFrames) {
+        super(parseTree, scope, nodeService, stackFrames);
     }
 
     @Override

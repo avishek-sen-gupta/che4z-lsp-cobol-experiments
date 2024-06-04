@@ -10,14 +10,14 @@ public class GenericOnClauseChartNode extends CompositeCobolNode {
 
     private ChartNode condition;
 
-    public GenericOnClauseChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {
-        super(parseTree, scope, nodeService);
+    public GenericOnClauseChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService, StackFrames stackFrames) {
+        super(parseTree, scope, nodeService, stackFrames);
     }
 
     @Override
     public void buildInternalFlow() {
         CobolParser.GenericOnClauseStatementContext onClause = new SyntaxIdentity<CobolParser.GenericOnClauseStatementContext>(executionContext).get();
-        condition = nodeService.node(onClause.generalIdentifier(), this);
+        condition = nodeService.node(onClause.generalIdentifier(), this, new StackFrames());
         super.buildInternalFlow();
     }
 

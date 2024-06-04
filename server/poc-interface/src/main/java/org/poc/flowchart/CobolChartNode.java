@@ -23,12 +23,14 @@ public class CobolChartNode implements ChartNode {
     protected boolean visited = false;
     private boolean databaseAccess;
     protected ChartNode scope;
+    protected final StackFrames staticFrameContext;
 
-    public CobolChartNode(ParseTree executionContext, ChartNode scope, ChartNodeService nodeService) {
+    public CobolChartNode(ParseTree executionContext, ChartNode scope, ChartNodeService nodeService, StackFrames stackFrames) {
         this.uuid = String.valueOf(nodeService.counter());
         this.nodeService = nodeService;
         this.executionContext = executionContext;
         this.scope = scope;
+        this.staticFrameContext = stackFrames;
     }
 
     @Override

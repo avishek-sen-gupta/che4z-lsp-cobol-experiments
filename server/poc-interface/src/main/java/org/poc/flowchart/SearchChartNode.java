@@ -10,19 +10,19 @@ public class SearchChartNode extends CobolChartNode {
     private ChartNode atEndBlock;
     private List<ChartNode> whenPhrases;
 
-    public SearchChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {
-        super(parseTree, scope, nodeService);
+    public SearchChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService, StackFrames stackFrames) {
+        super(parseTree, scope, nodeService, stackFrames);
     }
 
     @Override
     public void buildInternalFlow() {
         CobolParser.SearchStatementContext searchStatementContext = new SyntaxIdentity<CobolParser.SearchStatementContext>(executionContext).get();
         if (endPhraseExists()) {
-            atEndBlock = nodeService.node(searchStatementContext.atEndPhrase(), this);
+            atEndBlock = nodeService.node(searchStatementContext.atEndPhrase(), this, new StackFrames());
             atEndBlock.buildFlow();
         }
         List<CobolParser.SearchWhenContext> searchWhenContexts = searchStatementContext.searchWhen();
-        whenPhrases = searchWhenContexts.stream().map(when -> nodeService.node(when, this)).toList();
+        whenPhrases = searchWhenContexts.stream().map(when -> nodeService.node(when, this, new StackFrames())).toList();
 
         whenPhrases.forEach(ChartNode::buildFlow);
     }

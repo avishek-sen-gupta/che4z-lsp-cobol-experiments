@@ -10,14 +10,14 @@ import java.util.List;
 public class SearchWhenChartNode extends CompositeCobolNode {
     private ChartNode condition;
 
-    public SearchWhenChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {
-        super(parseTree, scope, nodeService);
+    public SearchWhenChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService, StackFrames stackFrames) {
+        super(parseTree, scope, nodeService, stackFrames);
     }
 
     @Override
     public void buildInternalFlow() {
         CobolParser.SearchWhenContext searchWhenStatementContext = (CobolParser.SearchWhenContext) executionContext;
-        condition = nodeService.node(searchWhenStatementContext.condition(), this);
+        condition = nodeService.node(searchWhenStatementContext.condition(), this, new StackFrames());
         condition.buildFlow();
         super.buildInternalFlow();
     }

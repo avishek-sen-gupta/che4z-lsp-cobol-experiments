@@ -4,8 +4,8 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import poc.common.flowchart.*;
 
 public class ConditionalStatementChartNode extends CompositeCobolNode {
-    public ConditionalStatementChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {
-        super(parseTree, scope, nodeService);
+    public ConditionalStatementChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService, StackFrames stackFrames) {
+        super(parseTree, scope, nodeService, stackFrames);
     }
 
     @Override

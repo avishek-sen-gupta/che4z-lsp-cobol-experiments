@@ -8,19 +8,19 @@ public class IfChartNode extends CobolChartNode {
     private ChartNode ifThenBlock;
     private ChartNode ifElseBlock;
 
-    public IfChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {
-        super(parseTree, scope, nodeService);
+    public IfChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService, StackFrames stackFrames) {
+        super(parseTree, scope, nodeService, stackFrames);
     }
 
     @Override
     public void buildInternalFlow() {
         CobolParser.IfStatementContext ifStatement = new SyntaxIdentity<CobolParser.IfStatementContext>(getExecutionContext()).get();
-        ChartNode ifThenBlock = nodeService.node(ifStatement.ifThen(), this);
+        ChartNode ifThenBlock = nodeService.node(ifStatement.ifThen(), this, new StackFrames());
         ifThenBlock.buildFlow();
         this.ifThenBlock = ifThenBlock;
         CobolParser.IfElseContext ifElseCtx = ifStatement.ifElse();
         if (ifElseCtx == null) return;
-        ChartNode ifElseBlock = nodeService.node(ifElseCtx, this);
+        ChartNode ifElseBlock = nodeService.node(ifElseCtx, this, new StackFrames());
         ifElseBlock.buildFlow();
         this.ifElseBlock = ifElseBlock;
     }

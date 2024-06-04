@@ -6,8 +6,8 @@ import poc.common.flowchart.*;
 public class NextSentenceChartNode extends CobolChartNode {
     private ChartNode destinationSentenceNode;
 
-    public NextSentenceChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {
-        super(parseTree, scope, nodeService);
+    public NextSentenceChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService, StackFrames stackFrames) {
+        super(parseTree, scope, nodeService, stackFrames);
     }
 
     @Override

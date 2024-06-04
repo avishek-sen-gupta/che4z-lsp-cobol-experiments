@@ -12,8 +12,8 @@ public class CompositeCobolNode extends CobolChartNode {
     public static ChartNodeCondition CHILD_IS_CONDITIONAL_STATEMENT = node -> SyntaxIdentity.isOfType(node.getExecutionContext(), CobolParser.ConditionalStatementCallContext.class);
     protected ChartNode internalTreeRoot;
 
-    public CompositeCobolNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {
-        super(parseTree, scope, nodeService);
+    public CompositeCobolNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService, StackFrames stackFrames) {
+        super(parseTree, scope, nodeService, stackFrames);
     }
 
     @Override
@@ -22,10 +22,10 @@ public class CompositeCobolNode extends CobolChartNode {
         List<? extends ParseTree> children = getChildren();
         if (children == null) return;
         System.out.println("Looking at " + name());
-        internalTreeRoot = nodeService.node(children.getFirst(), this);
+        internalTreeRoot = nodeService.node(children.getFirst(), this, new StackFrames());
         ChartNode current = internalTreeRoot;
         for (int i = 0; i <= children.size() - 2; i++) {
-            ChartNode nextNode = nodeService.node(children.get(i + 1), this);
+            ChartNode nextNode = nodeService.node(children.get(i + 1), this, new StackFrames());
             if (".".equals(nextNode.getExecutionContext().getText())) continue;
             ChartNode successor = nextNode;
             current.goesTo(successor);
@@ -63,7 +63,7 @@ public class CompositeCobolNode extends CobolChartNode {
 
         ChartNode chainSearch = new ChartNodes(outgoingNodes, nodeService).first().next(nodeCondition, startingNode, false);
         if (chainSearch != null) return chainSearch;
-        return scope != null ? scope.next(nodeCondition, startingNode, true) : new DummyChartNode(nodeService);
+        return scope != null ? scope.next(nodeCondition, startingNode, true) : new DummyChartNode(nodeService, staticFrameContext);
     }
 
     @Override

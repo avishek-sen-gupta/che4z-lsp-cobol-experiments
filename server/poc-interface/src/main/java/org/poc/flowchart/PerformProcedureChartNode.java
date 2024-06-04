@@ -15,8 +15,8 @@ public class PerformProcedureChartNode extends CobolChartNode {
     private List<ChartNode> procedures = new ArrayList<>();
     private ChartNode condition;
 
-    public PerformProcedureChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {
-        super(parseTree, scope, nodeService);
+    public PerformProcedureChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService, StackFrames stackFrames) {
+        super(parseTree, scope, nodeService, stackFrames);
     }
 
     @Override
@@ -24,11 +24,11 @@ public class PerformProcedureChartNode extends CobolChartNode {
         CobolParser.PerformStatementContext performStatement = new SyntaxIdentity<CobolParser.PerformStatementContext>(getExecutionContext()).get();
         CobolParser.PerformProcedureStatementContext performProcedureStatementContext = performStatement.performProcedureStatement();
         if (isVarying()) {
-            condition = nodeService.node(performProcedureStatementContext.performType(), this);
+            condition = nodeService.node(performProcedureStatementContext.performType(), this, new StackFrames());
         }
 
         if (performProcedureStatementContext != null) return;
-        inlineStatementContext = nodeService.node(performStatement.performInlineStatement(), this);
+        inlineStatementContext = nodeService.node(performStatement.performInlineStatement(), this, new StackFrames());
         inlineStatementContext.buildFlow();
     }
 

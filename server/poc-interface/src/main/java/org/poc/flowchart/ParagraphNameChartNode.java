@@ -4,8 +4,8 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import poc.common.flowchart.*;
 
 public class ParagraphNameChartNode extends CobolChartNode {
-    public ParagraphNameChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService) {
-        super(parseTree, scope, nodeService);
+    public ParagraphNameChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService, StackFrames stackFrames) {
+        super(parseTree, scope, nodeService, stackFrames);
     }
 
     @Override
