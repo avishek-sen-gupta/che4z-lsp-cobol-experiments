@@ -154,6 +154,11 @@ public class GenericProcessingChartNode implements ChartNode {
     }
 
     @Override
+    public void acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService) {
+
+    }
+
+    @Override
     public String id() {
         return name() + "/" + uuid;
     }

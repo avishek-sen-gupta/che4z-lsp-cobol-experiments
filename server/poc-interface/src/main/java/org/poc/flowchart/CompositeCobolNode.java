@@ -87,6 +87,16 @@ public class CompositeCobolNode extends CobolChartNode {
     }
 
     @Override
+    public void acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService) {
+        interpreter.enter(this);
+        if (internalTreeRoot != null) {
+            internalTreeRoot.acceptInterpreter(interpreter.scope(this), nodeService);
+        }
+        interpreter.exit(this);
+        outgoingNodes.forEach(n -> n.acceptInterpreter(interpreter, nodeService));
+    }
+
+    @Override
     public boolean contains(ChartNode node) {
         throw new UnsupportedOperationException("Not supported yet.");
     }

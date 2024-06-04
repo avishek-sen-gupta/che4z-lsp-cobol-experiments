@@ -197,6 +197,12 @@ public class CobolChartNode implements ChartNode {
     }
 
     @Override
+    public void acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService) {
+        interpreter.scope(this).execute(this);
+        outgoingNodes.forEach(n -> n.acceptInterpreter(interpreter, nodeService));
+    }
+
+    @Override
     public String id() {
         return name() + "." + uuid;
     }

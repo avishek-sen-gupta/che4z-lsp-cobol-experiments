@@ -143,6 +143,11 @@ public class NullChartNode implements ChartNode {
     }
 
     @Override
+    public void acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService) {
+
+    }
+
+    @Override
     public String id() {
         return "NULL/" + uuid;
     }

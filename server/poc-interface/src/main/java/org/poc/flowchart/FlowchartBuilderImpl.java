@@ -129,6 +129,16 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
         new GraphGenerator(splineStyle).generateImage(dotFilePath, imageOutputPath);
     }
 
+    @Override
+    public ChartNode getRoot() {
+        return graphRoot;
+    }
+
+    @Override
+    public ChartNodeService getChartNodeService() {
+        return chartNodeService;
+    }
+
     private String formatted(String s, int lineLength) {
         StringBuilder builder = new StringBuilder(s);
         int length = s.length();
