@@ -197,9 +197,18 @@ public class CobolChartNode implements ChartNode {
     }
 
     @Override
-    public void acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService) {
-        interpreter.scope(this).execute(this);
-        outgoingNodes.forEach(n -> n.acceptInterpreter(interpreter, nodeService));
+    public CobolVmSignal acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService) {
+        CobolVmSignal signal = interpreter.scope(this).execute(this);
+        return continueOrAbort(signal, interpreter, nodeService);
+    }
+
+    protected CobolVmSignal continueOrAbort(CobolVmSignal signal, CobolInterpreter interpreter, ChartNodeService nodeService) {
+        if (signal == CobolVmSignal.TERMINATE) return signal;
+        if (outgoingNodes.size() > 1) {
+            System.out.println("WARNING: ROGUE NODE " + this.label());
+        }
+        if (outgoingNodes.isEmpty()) return signal;
+        return outgoingNodes.getFirst().acceptInterpreter(interpreter, nodeService);
     }
 
     @Override

@@ -1,19 +1,13 @@
 package poc.common.flowchart;
 
-public class CobolInterpreter {
-    public CobolInterpreter scope(ChartNode scope) {
-        return this;
-    }
+public interface CobolInterpreter {
+    CobolInterpreter scope(ChartNode scope);
 
-    public void execute(ChartNode node) {
-        System.out.println("Executing " + node.getClass().getSimpleName() + node.label());
-    }
+    CobolVmSignal execute(ChartNode node);
 
-    public void enter(ChartNode node) {
-        System.out.println("Entering " + node.getClass().getSimpleName() + node.label());
-    }
+    void enter(ChartNode node);
 
-    public void exit(ChartNode node) {
-        System.out.println("Exiting " + node.getClass().getSimpleName() + node.label());
-    }
+    void exit(ChartNode node);
+
+    CobolVmSignal executeIf(ChartNode node, ChartNodeService nodeService);
 }

@@ -1,12 +1,14 @@
 package org.poc.flowchart;
 
+import lombok.Getter;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;
 import poc.common.flowchart.*;
 
 public class IfChartNode extends CobolChartNode {
-    private ChartNode ifThenBlock;
-    private ChartNode ifElseBlock;
+    @Getter private ChartNode ifThenBlock;
+    @Getter private ChartNode ifElseBlock;
+    @Getter private CobolParser.ConditionContext condition;
 
     public IfChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService, StackFrames stackFrames) {
         super(parseTree, scope, nodeService, stackFrames);
@@ -15,6 +17,7 @@ public class IfChartNode extends CobolChartNode {
     @Override
     public void buildInternalFlow() {
         CobolParser.IfStatementContext ifStatement = new SyntaxIdentity<CobolParser.IfStatementContext>(getExecutionContext()).get();
+        condition = (CobolParser.ConditionContext) ifStatement.getChild(1);
         ChartNode ifThenBlock = nodeService.node(ifStatement.ifThen(), this, staticFrameContext.add(this));
         ifThenBlock.buildFlow();
         this.ifThenBlock = ifThenBlock;
@@ -38,6 +41,11 @@ public class IfChartNode extends CobolChartNode {
     @Override
     public ChartNodeType type() {
         return ChartNodeType.IF_BRANCH;
+    }
+
+    @Override
+    public CobolVmSignal acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService) {
+        return interpreter.scope(this).executeIf(this, nodeService);
     }
 
     @Override

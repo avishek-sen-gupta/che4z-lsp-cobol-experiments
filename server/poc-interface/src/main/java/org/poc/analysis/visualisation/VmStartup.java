@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import poc.common.flowchart.ChartNode;
 import poc.common.flowchart.ChartNodeService;
-import poc.common.flowchart.CobolInterpreter;
+import org.poc.flowchart.SmolCobolInterpreter;
 import poc.common.flowchart.FlowchartBuilder;
 import vm.CobolEntityNavigatorBuilderImpl;
 
@@ -45,7 +45,8 @@ public class VmStartup {
 
 //        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V75234");
 //        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V7588049");
-        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V751C931");
+//        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V751C931");
+        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/test.cbl");
 
         PocOpsImpl ops = new PocOpsImpl(new CobolTreeVisualiserImpl(),
                 FlowchartBuilderImpl::build, new CobolEntityNavigatorBuilderImpl());
@@ -91,6 +92,6 @@ public class VmStartup {
         ChartNodeService nodeService = flowcharter.getChartNodeService();
 
         System.out.println("INTERPRETING\n--------------------------------\n");
-        root.acceptInterpreter(new CobolInterpreter(), nodeService);
+        root.acceptInterpreter(new SmolCobolInterpreter(), nodeService);
     }
 }
