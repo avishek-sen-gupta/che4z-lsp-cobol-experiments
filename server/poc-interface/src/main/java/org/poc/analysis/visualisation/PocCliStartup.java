@@ -41,8 +41,8 @@ public class PocCliStartup {
         String dialectJarPath = "/Users/asgupta/code/mbrdi-proleap/che4z/che-che4z-lsp-for-cobol-2.1.2/server/dialect-idms/target/dialect-idms.jar";
 
 //        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V75234");
-        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V7588049");
-//        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V751C931");
+//        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V7588049");
+        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V751C931");
 
         PocOpsImpl ops = new PocOpsImpl(new CobolTreeVisualiserImpl(),
                 FlowchartBuilderImpl::build, new CobolEntityNavigatorBuilderImpl());
@@ -65,8 +65,8 @@ public class PocCliStartup {
         // This one demonstrates SEARCH statements with multiple SEARCH...WHEN clauses
 //        ParseTree procedure = navigator.target("M2");
 
-        // This one demonstrates SEARCH statements with multiple SEARCH...WHEN clauses
-        ParseTree procedure = navigator.target("FORMAL-CHECK-CALC");
+        // This one demonstrates SEARCH statements with multiple SEARCH...WHEN clauses (this is in V7588049)
+//        ParseTree procedure = navigator.target("FORMAL-CHECK-CALC");
 
         // This one demonstrates ON clauses and SEARCH...WHEN with one Search...When condition
 //        ParseTree procedure = navigator.target("A0");
@@ -81,7 +81,7 @@ public class PocCliStartup {
 //        ParseTree procedure = navigator.target("U2030-TASI-2603");
 
         // This one is root
-//        ParseTree procedure = navigator.root();
+        ParseTree procedure = navigator.root();
 
         flowcharter.generateFlowchart(procedure, dotFilePath, imageOutputPath, "ortho");
     }
