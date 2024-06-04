@@ -38,4 +38,20 @@ public class SmolCobolInterpreter implements CobolInterpreter {
     public CobolVmSignal executePerformProcedure(List<ChartNode> procedures, ChartNodeService nodeService) {
         return procedures.getFirst().acceptInterpreter(this, nodeService, FlowControl::STOP);
     }
+
+    @Override
+    public CobolVmSignal executeGoto(List<ChartNode> destinationNodes, ChartNodeService nodeService) {
+        ChartNode destination = destinationNodes.getFirst();
+        ChartNode continuationNode = actualDestination(destination, nodeService);
+        CobolVmSignal signal = continuationNode.acceptInterpreter(this, nodeService, FlowControl::CONTINUE);
+        System.out.println("Exiting program");
+        System.exit(0);
+        return signal;
+    }
+
+    private ChartNode actualDestination(ChartNode destination, ChartNodeService nodeService) {
+        if (destination.getClass() == SectionChartNode.class) return destination;
+        ParagraphChartNode paragraph = (ParagraphChartNode) destination;
+        return paragraph.parentOrSelf();
+    }
 }

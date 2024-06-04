@@ -2,6 +2,7 @@ package poc.common.flowchart;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class StackFrames {
     List<ChartNode> frames = new ArrayList<>();
@@ -18,5 +19,13 @@ public class StackFrames {
         List<ChartNode> shallowCopy = new ArrayList<>(frames);
         shallowCopy.add(frame);
         return new StackFrames(shallowCopy);
+    }
+
+    public ChartNode getLast() {
+        return frames.getLast();
+    }
+
+    public Optional<ChartNode> find(ChartNodeCondition c) {
+        return frames.stream().filter(c::apply).findFirst();
     }
 }

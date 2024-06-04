@@ -14,4 +14,6 @@ public interface CobolInterpreter {
     CobolVmSignal executeIf(ChartNode node, ChartNodeService nodeService);
 
     CobolVmSignal executePerformProcedure(List<ChartNode> procedures, ChartNodeService nodeService);
+
+    CobolVmSignal executeGoto(List<ChartNode> destinationNodes, ChartNodeService nodeService);
 }
