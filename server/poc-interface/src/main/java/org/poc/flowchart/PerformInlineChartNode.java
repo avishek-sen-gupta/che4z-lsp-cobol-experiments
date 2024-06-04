@@ -21,7 +21,7 @@ public class PerformInlineChartNode extends CompositeCobolNode {
         CobolParser.PerformStatementContext performStatement = new SyntaxIdentity<CobolParser.PerformStatementContext>(getExecutionContext()).get();
         CobolParser.PerformInlineStatementContext x = performStatement.performInlineStatement();
         if (isVarying(x)) {
-            condition = nodeService.node(x.performType(), this, new StackFrames());
+            condition = nodeService.node(x.performType(), this, staticFrameContext);
         }
         super.buildInternalFlow();
     }

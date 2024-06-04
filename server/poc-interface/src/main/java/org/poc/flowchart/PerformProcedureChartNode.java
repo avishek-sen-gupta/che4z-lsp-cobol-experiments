@@ -24,11 +24,11 @@ public class PerformProcedureChartNode extends CobolChartNode {
         CobolParser.PerformStatementContext performStatement = new SyntaxIdentity<CobolParser.PerformStatementContext>(getExecutionContext()).get();
         CobolParser.PerformProcedureStatementContext performProcedureStatementContext = performStatement.performProcedureStatement();
         if (isVarying()) {
-            condition = nodeService.node(performProcedureStatementContext.performType(), this, new StackFrames());
+            condition = nodeService.node(performProcedureStatementContext.performType(), this, staticFrameContext);
         }
 
         if (performProcedureStatementContext != null) return;
-        inlineStatementContext = nodeService.node(performStatement.performInlineStatement(), this, new StackFrames());
+        inlineStatementContext = nodeService.node(performStatement.performInlineStatement(), this, staticFrameContext);
         inlineStatementContext.buildFlow();
     }
 

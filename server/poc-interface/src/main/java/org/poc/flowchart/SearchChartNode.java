@@ -18,11 +18,11 @@ public class SearchChartNode extends CobolChartNode {
     public void buildInternalFlow() {
         CobolParser.SearchStatementContext searchStatementContext = new SyntaxIdentity<CobolParser.SearchStatementContext>(executionContext).get();
         if (endPhraseExists()) {
-            atEndBlock = nodeService.node(searchStatementContext.atEndPhrase(), this, new StackFrames());
+            atEndBlock = nodeService.node(searchStatementContext.atEndPhrase(), this, staticFrameContext);
             atEndBlock.buildFlow();
         }
         List<CobolParser.SearchWhenContext> searchWhenContexts = searchStatementContext.searchWhen();
-        whenPhrases = searchWhenContexts.stream().map(when -> nodeService.node(when, this, new StackFrames())).toList();
+        whenPhrases = searchWhenContexts.stream().map(when -> nodeService.node(when, this, staticFrameContext)).toList();
 
         whenPhrases.forEach(ChartNode::buildFlow);
     }

@@ -57,7 +57,7 @@ public class DialectStatementChartNode extends CobolChartNode {
             // Treat everything as an IDMS statement for now
             idmsChildNode = nodeService.node(
                     navigator.findByCondition(executionContext,
-                            n -> n.getClass() == IdmsParser.IdmsStatementsContext.class), this, new StackFrames());
+                            n -> n.getClass() == IdmsParser.IdmsStatementsContext.class), this, staticFrameContext);
 //            idmsChildNode = idmsContainerChartNode(executionContext);
         }
         idmsChildNode.buildFlow();

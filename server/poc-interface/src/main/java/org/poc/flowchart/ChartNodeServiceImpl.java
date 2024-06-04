@@ -40,6 +40,7 @@ public class ChartNodeServiceImpl implements ChartNodeService {
         ChartNode existingGroup = existingNode(target);
 
         // Only place where it's acceptable to have null scope since this section/para is not part of the flowchart's AST, so it's a dummy placeholder
+        // Only place where we can initialise a new StackFrame because this is only going to be called during visualisation where stack frame info is not needed
         return existingGroup != null ? existingGroup : node(target, null, new StackFrames());
     }
 

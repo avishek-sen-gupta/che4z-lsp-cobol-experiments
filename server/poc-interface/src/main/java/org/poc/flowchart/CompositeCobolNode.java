@@ -22,10 +22,10 @@ public class CompositeCobolNode extends CobolChartNode {
         List<? extends ParseTree> children = getChildren();
         if (children == null) return;
         System.out.println("Looking at " + name());
-        internalTreeRoot = nodeService.node(children.getFirst(), this, new StackFrames());
+        internalTreeRoot = nodeService.node(children.getFirst(), this, staticFrameContext);
         ChartNode current = internalTreeRoot;
         for (int i = 0; i <= children.size() - 2; i++) {
-            ChartNode nextNode = nodeService.node(children.get(i + 1), this, new StackFrames());
+            ChartNode nextNode = nodeService.node(children.get(i + 1), this, staticFrameContext);
             if (".".equals(nextNode.getExecutionContext().getText())) continue;
             ChartNode successor = nextNode;
             current.goesTo(successor);

@@ -17,7 +17,7 @@ public class GenericOnClauseChartNode extends CompositeCobolNode {
     @Override
     public void buildInternalFlow() {
         CobolParser.GenericOnClauseStatementContext onClause = new SyntaxIdentity<CobolParser.GenericOnClauseStatementContext>(executionContext).get();
-        condition = nodeService.node(onClause.generalIdentifier(), this, new StackFrames());
+        condition = nodeService.node(onClause.generalIdentifier(), this, staticFrameContext);
         super.buildInternalFlow();
     }
 

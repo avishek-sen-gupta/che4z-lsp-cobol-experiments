@@ -10,7 +10,7 @@ public class ProcedureDivisionBodyChartNode extends CompositeCobolNode {
     }
 
     public ProcedureDivisionBodyChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService, StackFrames stackFrames) {
-        super(parseTree, scope, nodeService, new StackFrames());
+        super(parseTree, scope, nodeService, stackFrames);
     }
 
     @Override

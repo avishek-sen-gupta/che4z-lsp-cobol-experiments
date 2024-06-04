@@ -17,7 +17,7 @@ public class SearchWhenChartNode extends CompositeCobolNode {
     @Override
     public void buildInternalFlow() {
         CobolParser.SearchWhenContext searchWhenStatementContext = (CobolParser.SearchWhenContext) executionContext;
-        condition = nodeService.node(searchWhenStatementContext.condition(), this, new StackFrames());
+        condition = nodeService.node(searchWhenStatementContext.condition(), this, staticFrameContext);
         condition.buildFlow();
         super.buildInternalFlow();
     }
