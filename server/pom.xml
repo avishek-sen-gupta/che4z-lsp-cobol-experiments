@@ -11,7 +11,7 @@
 
     <modules>
         <module>poc-ai</module>
-        <module>poc-interface</module>
+        <module>poc-flow</module>
         <module>poc-common</module>
         <module>idms-copybook-builder</module>
         <module>engine</module>

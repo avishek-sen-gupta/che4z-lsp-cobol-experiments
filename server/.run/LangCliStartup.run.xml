@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="LangCliStartup" type="Application" factoryName="Application" nameIsGenerated="true">
     <option name="MAIN_CLASS_NAME" value="org.poc.analysis.visualisation.PocCliStartup" />
-    <module name="poc-interface" />
+    <module name="poc-flow" />
     <option name="PROGRAM_PARAMETERS" value="-s $USER_HOME$/Downloads/mbrdi-poc/V75234 analysis -cf $USER_HOME$/Downloads/mbrdi-poc -ocobol $USER_HOME$/Downloads/mbrdi-poc/test-cobol.json -oidms $USER_HOME$/Downloads/mbrdi-poc/test-idms.json" />
     <extension name="coverage">
       <pattern>

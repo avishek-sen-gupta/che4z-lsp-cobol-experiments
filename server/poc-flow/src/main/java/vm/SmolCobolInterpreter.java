@@ -1,5 +1,9 @@
-package org.poc.flowchart;
+package vm;
 
+import org.poc.flowchart.CobolStackFrames;
+import org.poc.flowchart.IfChartNode;
+import org.poc.flowchart.ParagraphChartNode;
+import org.poc.flowchart.SectionChartNode;
 import poc.common.flowchart.*;
 
 import java.util.List;

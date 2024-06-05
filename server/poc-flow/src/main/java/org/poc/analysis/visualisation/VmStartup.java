@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import poc.common.flowchart.ChartNode;
 import poc.common.flowchart.ChartNodeService;
-import org.poc.flowchart.SmolCobolInterpreter;
+import vm.SmolCobolInterpreter;
 import poc.common.flowchart.FlowControl;
 import poc.common.flowchart.FlowchartBuilder;
 import vm.CobolEntityNavigatorBuilderImpl;

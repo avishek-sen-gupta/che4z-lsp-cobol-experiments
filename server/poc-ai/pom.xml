@@ -98,7 +98,7 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.lsp.cobol</groupId>
-            <artifactId>poc-interface</artifactId>
+            <artifactId>poc-flow</artifactId>
             <version>SNAPSHOT-1.0</version>
         </dependency>
         <dependency>

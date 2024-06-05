@@ -1,5 +1,0 @@
-package vm;
-
-public enum ProgramScope {
-    SENTENCE, ATOMIC_STATEMENT, PARAGRAPH, SECTION, PERFORM, IF, GOTO, UNKNOWN
-}
