@@ -89,7 +89,7 @@ public class CompositeCobolNode extends CobolChartNode {
     @Override
     public CobolVmSignal acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService, FlowControl flowControl) {
         interpreter.enter(this);
-        CobolVmSignal signal = internalTreeRoot != null ? interpreter.entryPoint(internalTreeRoot, this, nodeService).acceptInterpreter(interpreter.scope(this), nodeService, FlowControl::CONTINUE) : CobolVmSignal.CONTINUE;
+        CobolVmSignal signal = internalTreeRoot != null ? internalTreeRoot.acceptInterpreter(interpreter.scope(this), nodeService, FlowControl::CONTINUE) : CobolVmSignal.CONTINUE;
 
 //        if (internalTreeRoot != null) {
 //            signal = internalTreeRoot.acceptInterpreter(interpreter.scope(this), nodeService, FlowControl::CONTINUE);

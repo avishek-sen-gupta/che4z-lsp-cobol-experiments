@@ -1,37 +1,42 @@
 package org.poc.flowchart;
 
-import org.antlr.v4.runtime.tree.ParseTree;
 import poc.common.flowchart.*;
 
 import java.util.List;
 
 public class SmolCobolInterpreter implements CobolInterpreter {
-    private final ChartNode entryPoint;
-    private boolean isInterpreting;
+    private StackFrames runtimeStackFrames;
+    private ExecuteCondition flip;
 
-    public SmolCobolInterpreter(ChartNode entryPoint) {
-        this.entryPoint = entryPoint;
-        isInterpreting = entryPoint == null;
+    public SmolCobolInterpreter(ExecuteCondition flip, StackFrames runtimeStackFrames) {
+        this.flip = flip;
+        this.runtimeStackFrames = runtimeStackFrames;
     }
 
     public SmolCobolInterpreter() {
-        this(null);
+        this(new StackFrames());
+    }
+
+    public SmolCobolInterpreter(StackFrames dynamicStackFrames) {
+        this(ExecuteCondition.ALWAYS_EXECUTE, dynamicStackFrames);
     }
 
     @Override
     public CobolInterpreter scope(ChartNode scope) {
-        return this;
+//        if (!isInterpreting) return this;
+        return new SmolCobolInterpreter(flip, runtimeStackFrames.add(scope));
     }
 
     @Override
     public CobolVmSignal execute(ChartNode node) {
+        if (!flip.shouldExecute()) return CobolVmSignal.CONTINUE;
         System.out.println("Executing " + node.getClass().getSimpleName() + node.label());
         return CobolVmSignal.CONTINUE;
     }
 
     @Override
     public void enter(ChartNode node) {
-        if (node == entryPoint && !isInterpreting) isInterpreting = true;
+        flip.evaluate(node);
         System.out.println("Entering " + node.getClass().getSimpleName() + node.label());
     }
 
@@ -42,7 +47,7 @@ public class SmolCobolInterpreter implements CobolInterpreter {
 
     @Override
     public CobolVmSignal executeIf(ChartNode node, ChartNodeService nodeService) {
-        if (!isInterpreting) return CobolVmSignal.CONTINUE;
+        if (!flip.shouldExecute()) return CobolVmSignal.CONTINUE;
         System.out.println("Executing an IF condition");
         IfChartNode ifNode = (IfChartNode) node;
         ChartNode ifThenBlock = ifNode.getIfThenBlock();
@@ -51,7 +56,7 @@ public class SmolCobolInterpreter implements CobolInterpreter {
 
     @Override
     public CobolVmSignal executePerformProcedure(List<ChartNode> procedures, ChartNodeService nodeService) {
-        if (!isInterpreting) return CobolVmSignal.CONTINUE;
+        if (!flip.shouldExecute()) return CobolVmSignal.CONTINUE;
         CobolVmSignal signal = procedures.getFirst().acceptInterpreter(this, nodeService, FlowControl::STOP);
         // If a PERFORM has returned (early or normal termination), do not propagate termination any higher
         return CobolVmSignal.CONTINUE;
@@ -59,7 +64,7 @@ public class SmolCobolInterpreter implements CobolInterpreter {
 
     @Override
     public CobolVmSignal executeGoto(List<ChartNode> destinationNodes, ChartNodeService nodeService) {
-        if (!isInterpreting) return CobolVmSignal.CONTINUE;
+        if (!flip.shouldExecute()) return CobolVmSignal.CONTINUE;
         ChartNode destination = destinationNodes.getFirst();
         ChartNode continuationNode = actualDestination(destination, nodeService);
         CobolVmSignal signal = continuationNode.acceptInterpreter(locator(destination, continuationNode), nodeService, FlowControl::CONTINUE);
@@ -69,25 +74,14 @@ public class SmolCobolInterpreter implements CobolInterpreter {
     }
 
     @Override
-    public ChartNode entryPoint(ChartNode internalTreeRoot, ChartNode parent, ChartNodeService nodeService) {
-        if (isInterpreting) return internalTreeRoot;
-        if (entryPoint == null) return internalTreeRoot;
-
-        // Replace this with recursive searh on ChartNode itself
-        ParseTree destinationExists = nodeService.getNavigator().findByCondition(parent.getExecutionContext(), n -> n == entryPoint.getExecutionContext());
-        if (destinationExists == null) throw new RuntimeException(String.format("No valid entry point %s found", entryPoint));
-        ChartNode current = internalTreeRoot;
-        while(current != entryPoint && !current.getOutgoingNodes().isEmpty()) {
-            current = current.getOutgoingNodes().getFirst();
-        }
-//        if (current != entryPoint) throw new RuntimeException(String.format("No valid entry point %s found", entryPoint));
-        if (current != entryPoint) return internalTreeRoot;
-        return current;
+    public CobolVmSignal executeExit(ChartNodeService nodeService) {
+        System.out.println("Processing EXIT");
+        return CobolVmSignal.CONTINUE;
     }
 
     private CobolInterpreter locator(ChartNode specificLocation, ChartNode continuationNode) {
-        if (specificLocation == continuationNode) return this;
-        return new SmolCobolInterpreter(specificLocation);
+//        if (specificLocation == continuationNode) return this;
+        return new SmolCobolInterpreter(new ExecuteAtTargetFlipCondition(specificLocation), runtimeStackFrames);
     }
 
     private ChartNode actualDestination(ChartNode destination, ChartNodeService nodeService) {
