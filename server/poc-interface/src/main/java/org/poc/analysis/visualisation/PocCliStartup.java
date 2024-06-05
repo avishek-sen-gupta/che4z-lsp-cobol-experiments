@@ -42,7 +42,8 @@ public class PocCliStartup {
 
 //        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V75234");
 //        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V7588049");
-        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V751C931");
+//        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V751C931");
+        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/test.cbl");
 
         PocOpsImpl ops = new PocOpsImpl(new CobolTreeVisualiserImpl(),
                 FlowchartBuilderImpl::build, new CobolEntityNavigatorBuilderImpl());

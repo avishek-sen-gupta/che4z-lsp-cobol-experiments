@@ -19,4 +19,5 @@ public interface CobolInterpreter {
 
     CobolVmSignal executeExit(ChartNodeService nodeService);
 
+    CobolVmSignal executeNextSentence(ChartNodeService nodeService);
 }

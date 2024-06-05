@@ -51,4 +51,13 @@ public class SentenceChartNode extends CompositeCobolNode {
         }
         return true;
     }
+
+    @Override
+    protected CobolVmSignal continueOrAbort(CobolVmSignal defaultSignal, CobolInterpreter interpreter, ChartNodeService nodeService) {
+        if (defaultSignal == CobolVmSignal.TERMINATE ||
+                defaultSignal == CobolVmSignal.EXIT_PERFORM ||
+                defaultSignal == CobolVmSignal.EXIT_SCOPE) return defaultSignal;
+        if (defaultSignal == CobolVmSignal.NEXT_SENTENCE) return next(CobolVmSignal.CONTINUE, interpreter, nodeService);
+        return next(defaultSignal, interpreter, nodeService);
+    }
 }

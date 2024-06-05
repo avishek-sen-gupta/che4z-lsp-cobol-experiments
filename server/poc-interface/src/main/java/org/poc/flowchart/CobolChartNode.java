@@ -202,10 +202,15 @@ public class CobolChartNode implements ChartNode {
         return flowControl.apply((Void) -> continueOrAbort(signal, interpreter, nodeService), signal);
     }
 
-    protected CobolVmSignal continueOrAbort(CobolVmSignal signal, CobolInterpreter interpreter, ChartNodeService nodeService) {
-        if (signal == CobolVmSignal.TERMINATE ||
-                signal == CobolVmSignal.EXIT_PERFORM ||
-                signal == CobolVmSignal.EXIT_SCOPE) return signal;
+    protected CobolVmSignal continueOrAbort(CobolVmSignal defaultSignal, CobolInterpreter interpreter, ChartNodeService nodeService) {
+        if (defaultSignal == CobolVmSignal.TERMINATE ||
+                defaultSignal == CobolVmSignal.EXIT_PERFORM ||
+                defaultSignal == CobolVmSignal.EXIT_SCOPE ||
+                defaultSignal == CobolVmSignal.NEXT_SENTENCE) return defaultSignal;
+        return next(defaultSignal, interpreter, nodeService);
+    }
+
+    protected CobolVmSignal next(CobolVmSignal signal, CobolInterpreter interpreter, ChartNodeService nodeService) {
         if (outgoingNodes.size() > 1) {
             System.out.println("WARNING: ROGUE NODE " + this.label());
         }

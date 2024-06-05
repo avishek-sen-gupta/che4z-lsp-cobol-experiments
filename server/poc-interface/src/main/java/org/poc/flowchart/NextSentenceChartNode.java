@@ -21,7 +21,8 @@ public class NextSentenceChartNode extends CobolChartNode {
 
     @Override
     public void buildOutgoingFlow() {
-        // Don't call super here, because flow never returns here
+        super.buildOutgoingFlow();
+        // TODO: For the flowchart, this might create an unwanted line to the next node, but this is needed to build all flows.
     }
 
     @Override
@@ -38,5 +39,10 @@ public class NextSentenceChartNode extends CobolChartNode {
     @Override
     public String label() {
         return "Next Sentence";
+    }
+
+    @Override
+    public CobolVmSignal acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService, FlowControl flowControl) {
+        return interpreter.scope(this).executeNextSentence(nodeService);
     }
 }

@@ -21,7 +21,6 @@ public class ExecuteAtTargetFlipCondition implements ExecuteCondition {
 
     @Override
     public boolean shouldExecute() {
-        System.out.printf("Is interpreting: %b\n", isInterpreting);
         return isInterpreting;
     }
 }

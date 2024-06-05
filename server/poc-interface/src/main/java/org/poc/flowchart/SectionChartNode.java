@@ -13,23 +13,16 @@ public class SectionChartNode extends CompositeCobolNode {
         super(parseTree, scope, nodeService, stackFrames);
     }
 
-    public CobolVmSignal acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService, FlowControl flowControl) {
-        interpreter.enter(this);
-        CobolVmSignal signal = internalTreeRoot != null ? internalTreeRoot.acceptInterpreter(interpreter.scope(this), nodeService, FlowControl::CONTINUE) : CobolVmSignal.CONTINUE;
-        interpreter.exit(this);
-        if (signal == CobolVmSignal.EXIT_PERFORM) return CobolVmSignal.EXIT_PERFORM;
+    public CobolVmSignal acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService, FlowControl forwardFlowControl) {
+        CobolVmSignal signal = executeInternalRoot(interpreter, nodeService);
         if (signal == CobolVmSignal.EXIT_SCOPE)
-            return flowControl.apply((Void) -> continueOrAbort(signal, interpreter, nodeService), CobolVmSignal.CONTINUE);
-        return flowControl.apply((Void) -> continueOrAbort(signal, interpreter, nodeService), signal);
+            return forwardFlowControl.apply((Void) -> continueOrAbort(signal, interpreter, nodeService), CobolVmSignal.CONTINUE);
+        return forwardFlowControl.apply((Void) -> continueOrAbort(signal, interpreter, nodeService), signal);
     }
 
     @Override
-    protected CobolVmSignal continueOrAbort(CobolVmSignal signal, CobolInterpreter interpreter, ChartNodeService nodeService) {
-        if (signal == CobolVmSignal.TERMINATE || signal == CobolVmSignal.EXIT_PERFORM) return signal;
-        if (outgoingNodes.size() > 1) {
-            System.out.println("WARNING: ROGUE NODE " + this.label());
-        }
-        if (outgoingNodes.isEmpty()) return signal;
-        return outgoingNodes.getFirst().acceptInterpreter(interpreter, nodeService, FlowControl::CONTINUE);
+    protected CobolVmSignal continueOrAbort(CobolVmSignal defaultSignal, CobolInterpreter interpreter, ChartNodeService nodeService) {
+        if (defaultSignal == CobolVmSignal.TERMINATE || defaultSignal == CobolVmSignal.EXIT_PERFORM) return defaultSignal;
+        return next(defaultSignal, interpreter, nodeService);
     }
 }

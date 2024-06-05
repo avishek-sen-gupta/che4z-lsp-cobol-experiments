@@ -82,6 +82,12 @@ public class SmolCobolInterpreter implements CobolInterpreter {
         return signal;
     }
 
+    @Override
+    public CobolVmSignal executeNextSentence(ChartNodeService nodeService) {
+        System.out.println("Processing NEXT SENTENCE");
+        return CobolVmSignal.NEXT_SENTENCE;
+    }
+
     private CobolInterpreter locator(ChartNode specificLocation, ChartNode continuationNode) {
 //        if (specificLocation == continuationNode) return this;
         return new SmolCobolInterpreter(new ExecuteAtTargetFlipCondition(specificLocation), runtimeStackFrames);

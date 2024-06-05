@@ -88,20 +88,15 @@ public class CompositeCobolNode extends CobolChartNode {
 
     @Override
     public CobolVmSignal acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService, FlowControl flowControl) {
+        CobolVmSignal signal = executeInternalRoot(interpreter, nodeService);
+        return flowControl.apply((Void) -> continueOrAbort(signal, interpreter, nodeService), signal);
+    }
+
+    protected CobolVmSignal executeInternalRoot(CobolInterpreter interpreter, ChartNodeService nodeService) {
         interpreter.enter(this);
         CobolVmSignal signal = internalTreeRoot != null ? internalTreeRoot.acceptInterpreter(interpreter.scope(this), nodeService, FlowControl::CONTINUE) : CobolVmSignal.CONTINUE;
-
-//        if (internalTreeRoot != null) {
-//            signal = internalTreeRoot.acceptInterpreter(interpreter.scope(this), nodeService, FlowControl::CONTINUE);
-//        }
         interpreter.exit(this);
-        return flowControl.apply((Void) -> continueOrAbort(signal, interpreter, nodeService), signal);
-//        if (signal == CobolVmSignal.TERMINATE) return signal;
-//        if (outgoingNodes.size() > 1) {
-//            System.out.println("WARNING: ROGUE NODE " + this.label());
-//        }
-//        if (outgoingNodes.isEmpty()) return signal;
-//        return outgoingNodes.getFirst().acceptInterpreter(interpreter, nodeService);
+        return signal;
     }
 
     @Override
