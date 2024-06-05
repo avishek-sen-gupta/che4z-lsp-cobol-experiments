@@ -28,4 +28,10 @@ public class StackFrames {
     public Optional<ChartNode> find(ChartNodeCondition c) {
         return frames.stream().filter(c::apply).findFirst();
     }
+
+    public String stackTrace() {
+        StringBuilder builder = new StringBuilder();
+        frames.forEach(f -> builder.append(f.getClass().getSimpleName()).append("/").append(f).append("\n"));
+        return builder.toString();
+    }
 }

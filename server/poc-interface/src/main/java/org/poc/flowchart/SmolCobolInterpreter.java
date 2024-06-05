@@ -75,6 +75,7 @@ public class SmolCobolInterpreter implements CobolInterpreter {
     @Override
     public CobolVmSignal executeExit(ChartNodeService nodeService) {
         System.out.println("Processing EXIT");
+        System.out.println(runtimeStackFrames.stackTrace());
         return CobolVmSignal.CONTINUE;
     }
 
