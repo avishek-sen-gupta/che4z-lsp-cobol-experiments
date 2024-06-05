@@ -23,7 +23,6 @@ public class SmolCobolInterpreter implements CobolInterpreter {
 
     @Override
     public CobolInterpreter scope(ChartNode scope) {
-//        if (!isInterpreting) return this;
         return new SmolCobolInterpreter(flip, runtimeStackFrames.add(scope));
     }
 

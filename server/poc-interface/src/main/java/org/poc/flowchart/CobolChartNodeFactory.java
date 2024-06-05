@@ -16,6 +16,8 @@ public class CobolChartNodeFactory {
             return new IfChartNode(parseTree, scope, nodeService, stackFrames);
         else if (SyntaxIdentity.isStatementOfType(parseTree, CobolParser.GoToStatementContext.class))
             return new GoToChartNode(parseTree, scope, nodeService, stackFrames);
+        else if (SyntaxIdentity.isStatementOfType(parseTree, CobolParser.ExitStatementContext.class))
+            return new ExitChartNode(parseTree, scope, nodeService, stackFrames);
         else if (SyntaxIdentity.isStatementOfType(parseTree, CobolParser.NextSentenceContext.class) ||
                 SyntaxIdentity.isOfType(parseTree, CobolParser.NextSentenceWrapperStatementContext.class))
             return new NextSentenceChartNode(parseTree, scope, nodeService, stackFrames);
