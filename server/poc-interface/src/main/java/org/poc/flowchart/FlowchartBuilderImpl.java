@@ -43,7 +43,7 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
 
     @Override
     public FlowchartBuilder buildChartAST(ParseTree node) {
-        ChartNode rootChartNode = chartNodeService.node(node, null, new StackFrames());
+        ChartNode rootChartNode = chartNodeService.node(node, null, new CobolStackFrames());
         rootChartNode.buildFlow();
         graphRoot = rootChartNode;
         return this;

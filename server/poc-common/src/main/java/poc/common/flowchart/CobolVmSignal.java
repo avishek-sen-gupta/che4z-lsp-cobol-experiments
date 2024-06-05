@@ -1,5 +1,5 @@
 package poc.common.flowchart;
 
 public enum CobolVmSignal {
-    TERMINATE, CONTINUE
+    TERMINATE, EXIT_PERFORM, EXIT_SCOPE, CONTINUE
 }

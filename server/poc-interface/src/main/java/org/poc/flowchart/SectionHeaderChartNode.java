@@ -1,10 +1,7 @@
 package org.poc.flowchart;
 
 import org.antlr.v4.runtime.tree.ParseTree;
-import poc.common.flowchart.ChartNode;
-import poc.common.flowchart.ChartNodeService;
-import poc.common.flowchart.ChartNodeType;
-import poc.common.flowchart.StackFrames;
+import poc.common.flowchart.*;
 
 public class SectionHeaderChartNode extends CobolChartNode {
     public SectionHeaderChartNode(ParseTree parseTree, ChartNode scope, ChartNodeService nodeService, StackFrames stackFrames) {

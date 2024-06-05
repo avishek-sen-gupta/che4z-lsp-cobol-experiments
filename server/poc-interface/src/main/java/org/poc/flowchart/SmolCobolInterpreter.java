@@ -14,7 +14,7 @@ public class SmolCobolInterpreter implements CobolInterpreter {
     }
 
     public SmolCobolInterpreter() {
-        this(new StackFrames());
+        this(new CobolStackFrames());
     }
 
     public SmolCobolInterpreter(StackFrames dynamicStackFrames) {
@@ -75,8 +75,11 @@ public class SmolCobolInterpreter implements CobolInterpreter {
     @Override
     public CobolVmSignal executeExit(ChartNodeService nodeService) {
         System.out.println("Processing EXIT");
-        System.out.println(runtimeStackFrames.stackTrace());
-        return CobolVmSignal.CONTINUE;
+//        System.out.println(runtimeStackFrames.stackTrace());
+
+        CobolVmSignal signal = runtimeStackFrames.callSite();
+        System.out.println("EXIT instruction is " + signal);
+        return signal;
     }
 
     private CobolInterpreter locator(ChartNode specificLocation, ChartNode continuationNode) {

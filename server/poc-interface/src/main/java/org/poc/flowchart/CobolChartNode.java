@@ -203,7 +203,9 @@ public class CobolChartNode implements ChartNode {
     }
 
     protected CobolVmSignal continueOrAbort(CobolVmSignal signal, CobolInterpreter interpreter, ChartNodeService nodeService) {
-        if (signal == CobolVmSignal.TERMINATE) return signal;
+        if (signal == CobolVmSignal.TERMINATE ||
+                signal == CobolVmSignal.EXIT_PERFORM ||
+                signal == CobolVmSignal.EXIT_SCOPE) return signal;
         if (outgoingNodes.size() > 1) {
             System.out.println("WARNING: ROGUE NODE " + this.label());
         }

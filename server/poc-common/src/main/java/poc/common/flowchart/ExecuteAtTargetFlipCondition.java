@@ -12,12 +12,16 @@ public class ExecuteAtTargetFlipCondition implements ExecuteCondition {
 
     @Override
     public boolean evaluate(ChartNode chartNode) {
-        isInterpreting = chartNode == specificLocation;
+        if (chartNode == specificLocation && !isInterpreting) {
+            isInterpreting = true;
+            System.out.println("FLIPPED TO TRUE");
+        }
         return isInterpreting;
     }
 
     @Override
     public boolean shouldExecute() {
+        System.out.printf("Is interpreting: %b\n", isInterpreting);
         return isInterpreting;
     }
 }

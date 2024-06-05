@@ -1,9 +1,6 @@
 package org.poc.flowchart;
 
-import poc.common.flowchart.ChartNodeService;
-import poc.common.flowchart.ChartNodeType;
-import poc.common.flowchart.ChartNodeVisitor;
-import poc.common.flowchart.StackFrames;
+import poc.common.flowchart.*;
 
 public class DummyChartNode extends CobolChartNode {
     public DummyChartNode(ChartNodeService nodeService, StackFrames stackFrames) {
