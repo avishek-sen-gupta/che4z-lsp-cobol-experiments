@@ -28,7 +28,7 @@ public interface ChartNode {
     ChartNode tail();
 
     DomainDocument getNotes();
-    void reset();
+    @Deprecated void reset();
 
     boolean accessesDatabase();
     boolean isMergeable();
@@ -42,6 +42,8 @@ public interface ChartNode {
     ChartNodeType type();
 
     ChartNode passthrough();
+
+    // TODO: Might just be data instead of inheritance
     boolean isPassthrough();
 
     CobolVmSignal acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService, FlowControl flowControl);
