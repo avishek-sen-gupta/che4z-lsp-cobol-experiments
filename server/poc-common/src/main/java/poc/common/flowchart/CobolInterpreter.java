@@ -16,4 +16,6 @@ public interface CobolInterpreter {
     CobolVmSignal executePerformProcedure(List<ChartNode> procedures, ChartNodeService nodeService);
 
     CobolVmSignal executeGoto(List<ChartNode> destinationNodes, ChartNodeService nodeService);
+
+    ChartNode entryPoint(ChartNode internalTreeRoot, ChartNode parent, ChartNodeService nodeService);
 }
