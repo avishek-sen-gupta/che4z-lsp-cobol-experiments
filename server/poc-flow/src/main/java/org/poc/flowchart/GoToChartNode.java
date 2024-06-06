@@ -20,7 +20,7 @@ public class GoToChartNode extends CobolChartNode {
 
     @Override
     public void buildOutgoingFlow() {
-        // Don't call super here, because flow never returns here
+        super.buildOutgoingFlow();
     }
 
     @Override
