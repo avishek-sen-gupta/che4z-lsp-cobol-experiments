@@ -12,10 +12,15 @@ import vm.CobolEntityNavigatorBuilderImpl;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
 public class FlowchartTasks {
+    private static final String AST_DIR = "ast";
+    private static final String IMAGES_DIR = "images";
+    private static final String DOTFILES_DIR = "dotfiles";
+
     public static void singleFlowchartDemo() throws IOException, InterruptedException {
         String dotFilePath = "/Users/asgupta/Downloads/mbrdi-poc/flowchart.dot";
         String imageOutputPath = "/Users/asgupta/Downloads/mbrdi-poc/flowchart.png";
@@ -79,6 +84,7 @@ public class FlowchartTasks {
         String dotFileRootDir = "/Users/asgupta/Downloads/mbrdi-poc/report/dotfiles";
         String imageOutputRootDir = "/Users/asgupta/Downloads/mbrdi-poc/report/images";
         String astOutputDir = "/Users/asgupta/Downloads/mbrdi-poc/report/ast";
+        String reportRootDir = "/Users/asgupta/Downloads/mbrdi-poc/report";
 
 //        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V75234");
 //        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V7588049");
@@ -86,18 +92,21 @@ public class FlowchartTasks {
 //        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/test.cbl");
         List<String> programNames = ImmutableList.of("V751C931", "V7588049", "V75234");
         for (String programName : programNames) {
-            allSectionsGivenProgram(sourceDir, dotFileRootDir, imageOutputRootDir, copyBookPaths, dialectJarPath, programName, astOutputDir);
+            allSectionsGivenProgram(sourceDir, dotFileRootDir, imageOutputRootDir, copyBookPaths, dialectJarPath, programName, astOutputDir, reportRootDir);
         }
     }
 
-    private static void allSectionsGivenProgram(String sourceDir, String dotFileRootDir, String imageOutputRootDir, File[] copyBookPaths, String dialectJarPath, String programName, String astOutputDirRoot) throws IOException, InterruptedException {
+    private static void allSectionsGivenProgram(String sourceDir, String dotFileRootDir, String imageOutputRootDir, File[] copyBookPaths, String dialectJarPath, String programName, String astOutputDirRoot, String reportRootDir) throws IOException, InterruptedException {
         File source = Paths.get(sourceDir, programName).toFile();
-        String cobolParseTreeOutputPath = Paths.get(astOutputDirRoot, programName, String.format("cobol-%s.json", programName)).toString();
-        String idmsParseTreeOutputPath = Paths.get(astOutputDirRoot, programName, String.format("idms-%s.json", programName)).toString();
+        Path astOutputDir = Paths.get(reportRootDir, programName, AST_DIR);
+        Path imageOutputDir = Paths.get(reportRootDir, programName, IMAGES_DIR);
+        Path dotFileOutputDir = Paths.get(reportRootDir, programName, DOTFILES_DIR);
+        String cobolParseTreeOutputPath = astOutputDir.resolve(String.format("cobol-%s.json", programName)).toString();
+        String idmsParseTreeOutputPath = astOutputDir.resolve(String.format("idms-%s.json", programName)).toString();
 
-        Files.createDirectories(Paths.get(astOutputDirRoot, programName));
-        Files.createDirectories(Paths.get(dotFileRootDir, programName));
-        Files.createDirectories(Paths.get(imageOutputRootDir, programName));
+        Files.createDirectories(astOutputDir);
+        Files.createDirectories(dotFileOutputDir);
+        Files.createDirectories(imageOutputDir);
 
         PocOpsImpl ops = new PocOpsImpl(new CobolTreeVisualiserImpl(),
                 FlowchartBuilderImpl::build, new CobolEntityNavigatorBuilderImpl());
@@ -113,14 +122,14 @@ public class FlowchartTasks {
         List<ParseTree> allSections = navigator.findAllByCondition(n -> n.getClass() == CobolParser.ProcedureSectionContext.class, root);
         for (ParseTree section : allSections) {
             pipeline.flowcharter().generateFlowchart(section,
-                    outputPath(section, dotFileRootDir, programName, "dot"),
-                    outputPath(section, imageOutputRootDir, programName, "png"), "ortho");
+                    outputPath(section, dotFileOutputDir, "dot"),
+                    outputPath(section, imageOutputDir, "png"), "ortho");
         }
     }
 
-    private static String outputPath(ParseTree section, String outputRootDir, String programName, Object extension) {
+    private static String outputPath(ParseTree section, Path outputDir, String extension) {
         CobolParser.ProcedureSectionContext s = (CobolParser.ProcedureSectionContext) section;
         String sectionName = s.procedureSectionHeader().getText();
-        return Paths.get(outputRootDir, programName, String.format("%s.%s", sectionName, extension)).toString();
+        return outputDir.resolve(String.format("%s.%s", sectionName, extension)).toString();
     }
 }
