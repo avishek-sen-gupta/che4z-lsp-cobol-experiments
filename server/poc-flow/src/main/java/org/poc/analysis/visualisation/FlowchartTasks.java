@@ -78,8 +78,7 @@ public class FlowchartTasks {
 
         String dotFileRootDir = "/Users/asgupta/Downloads/mbrdi-poc/report/dotfiles";
         String imageOutputRootDir = "/Users/asgupta/Downloads/mbrdi-poc/report/images";
-        String cobolParseTreeOutputPath = "/Users/asgupta/Downloads/mbrdi-poc/report/test-cobol.json";
-        String idmsParseTreeOutputPath = "/Users/asgupta/Downloads/mbrdi-poc/report/test-idms.json";
+        String astOutputDir = "/Users/asgupta/Downloads/mbrdi-poc/report/ast";
 
 //        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V75234");
 //        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V7588049");
@@ -87,13 +86,16 @@ public class FlowchartTasks {
 //        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/test.cbl");
         List<String> programNames = ImmutableList.of("V751C931", "V7588049", "V75234");
         for (String programName : programNames) {
-            allSectionsGivenProgram(sourceDir, dotFileRootDir, imageOutputRootDir, copyBookPaths, dialectJarPath, cobolParseTreeOutputPath, idmsParseTreeOutputPath, programName);
+            allSectionsGivenProgram(sourceDir, dotFileRootDir, imageOutputRootDir, copyBookPaths, dialectJarPath, programName, astOutputDir);
         }
     }
 
-    private static void allSectionsGivenProgram(String sourceDir, String dotFileRootDir, String imageOutputRootDir, File[] copyBookPaths, String dialectJarPath, String cobolParseTreeOutputPath, String idmsParseTreeOutputPath, String programName) throws IOException, InterruptedException {
+    private static void allSectionsGivenProgram(String sourceDir, String dotFileRootDir, String imageOutputRootDir, File[] copyBookPaths, String dialectJarPath, String programName, String astOutputDirRoot) throws IOException, InterruptedException {
         File source = Paths.get(sourceDir, programName).toFile();
+        String cobolParseTreeOutputPath = Paths.get(astOutputDirRoot, programName, String.format("cobol-%s.json", programName)).toString();
+        String idmsParseTreeOutputPath = Paths.get(astOutputDirRoot, programName, String.format("idms-%s.json", programName)).toString();
 
+        Files.createDirectories(Paths.get(astOutputDirRoot, programName));
         Files.createDirectories(Paths.get(dotFileRootDir, programName));
         Files.createDirectories(Paths.get(imageOutputRootDir, programName));
 
