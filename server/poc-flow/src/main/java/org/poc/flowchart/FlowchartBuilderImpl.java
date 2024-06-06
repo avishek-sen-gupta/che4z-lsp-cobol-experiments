@@ -121,11 +121,11 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
     @Override
     public void generateFlowchart(ParseTree procedure, String dotFilePath, String imageOutputPath, String splineStyle) throws IOException, InterruptedException {
         buildChartAST(procedure)
-        .buildControlFlow()
-        .buildOverlay()
+                .buildControlFlow()
+                .buildOverlay()
 //        .buildDotStructure(VisitContext.VISIT_UPTO_LEVEL(4)) // Level 4 for only sections and paragraphs
-        .buildDotStructure()
-        .write(dotFilePath);
+                .buildDotStructure()
+                .write(dotFilePath);
         new GraphGenerator(splineStyle).generateImage(dotFilePath, imageOutputPath);
     }
 
