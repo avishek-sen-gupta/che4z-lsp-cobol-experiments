@@ -8,6 +8,7 @@ import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.eclipse.lsp.cobol.dialects.idms.IdmsParser;
 import poc.common.flowchart.*;
 import org.eclipse.lsp.cobol.core.CobolParser;
+import vm.CobolInterpreterProxy;
 
 import java.util.*;
 
@@ -198,6 +199,7 @@ public class CobolChartNode implements ChartNode {
 
     @Override
     public CobolVmSignal acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService, FlowControl flowControl) {
+        assert interpreter.getClass() == CobolInterpreterProxy.class;
         CobolVmSignal signal = interpreter.scope(this).execute(this);
         return flowControl.apply((Void) -> continueOrAbort(signal, interpreter, nodeService), signal);
     }

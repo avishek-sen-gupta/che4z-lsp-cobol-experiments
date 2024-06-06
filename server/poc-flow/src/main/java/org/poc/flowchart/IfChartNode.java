@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;
 import poc.common.flowchart.*;
+import vm.CobolInterpreterProxy;
 
 public class IfChartNode extends CobolChartNode {
     @Getter private ChartNode ifThenBlock;
@@ -45,6 +46,7 @@ public class IfChartNode extends CobolChartNode {
 
     @Override
     public CobolVmSignal acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService, FlowControl flowControl) {
+        assert interpreter.getClass() == CobolInterpreterProxy.class;
         CobolVmSignal signal = interpreter.scope(this).executeIf(this, nodeService);
         return flowControl.apply((Void) -> continueOrAbort(signal, interpreter, nodeService), signal);
     }

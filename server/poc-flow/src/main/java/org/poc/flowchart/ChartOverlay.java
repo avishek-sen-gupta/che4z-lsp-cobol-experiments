@@ -1,10 +1,8 @@
 package org.poc.flowchart;
 
 import poc.common.flowchart.ChartNode;
-import poc.common.flowchart.GenericProcessingChartNode;
 
 import java.util.List;
-import java.util.Optional;
 
 public class ChartOverlay {
     private final List<GenericProcessingChartNode> groups;

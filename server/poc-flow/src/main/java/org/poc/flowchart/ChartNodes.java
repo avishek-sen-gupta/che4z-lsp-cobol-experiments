@@ -1,4 +1,7 @@
-package poc.common.flowchart;
+package org.poc.flowchart;
+
+import poc.common.flowchart.ChartNode;
+import poc.common.flowchart.ChartNodeService;
 
 import java.util.List;
 

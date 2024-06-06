@@ -5,6 +5,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;
 import org.poc.common.navigation.CobolEntityNavigator;
 import poc.common.flowchart.*;
+import vm.CobolInterpreterProxy;
 
 import java.util.List;
 
@@ -88,6 +89,7 @@ public class CompositeCobolNode extends CobolChartNode {
 
     @Override
     public CobolVmSignal acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService, FlowControl flowControl) {
+        assert interpreter.getClass() == CobolInterpreterProxy.class;
         CobolVmSignal signal = executeInternalRoot(interpreter, nodeService);
         return flowControl.apply((Void) -> continueOrAbort(signal, interpreter, nodeService), signal);
     }

@@ -3,6 +3,7 @@ package org.poc.flowchart;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;
 import poc.common.flowchart.*;
+import vm.CobolInterpreterProxy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +93,7 @@ public class PerformProcedureChartNode extends CobolChartNode {
 
     @Override
     public CobolVmSignal acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService, FlowControl flowControl) {
+        assert interpreter.getClass() == CobolInterpreterProxy.class;
         CobolVmSignal signal = interpreter.scope(this).executePerformProcedure(procedures, nodeService);
         return flowControl.apply((Void) -> continueOrAbort(signal, interpreter, nodeService), signal);
     }

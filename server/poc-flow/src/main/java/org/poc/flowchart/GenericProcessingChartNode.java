@@ -1,8 +1,10 @@
-package poc.common.flowchart;
+package org.poc.flowchart;
 
 import lombok.Getter;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolDataDivisionParser;
+import poc.common.flowchart.*;
+import vm.CobolInterpreterProxy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -155,6 +157,7 @@ public class GenericProcessingChartNode implements ChartNode {
 
     @Override
     public CobolVmSignal acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService, FlowControl flowControl) {
+        assert interpreter.getClass() == CobolInterpreterProxy.class;
         return CobolVmSignal.CONTINUE;
     }
 

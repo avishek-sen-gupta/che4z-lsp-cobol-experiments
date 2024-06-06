@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import poc.common.flowchart.ChartNode;
 import poc.common.flowchart.ChartNodeService;
+import vm.CobolInterpreterFactory;
 import vm.SmolCobolInterpreter;
 import poc.common.flowchart.FlowControl;
 import poc.common.flowchart.FlowchartBuilder;
@@ -93,6 +94,7 @@ public class VmStartup {
         ChartNodeService nodeService = flowcharter.getChartNodeService();
 
         System.out.println("INTERPRETING\n--------------------------------\n");
-        root.acceptInterpreter(new SmolCobolInterpreter(), nodeService, FlowControl::CONTINUE);
+//        root.acceptInterpreter(new SmolCobolInterpreter(), nodeService, FlowControl::CONTINUE);
+        root.acceptInterpreter(CobolInterpreterFactory.interpreter(), nodeService, FlowControl::CONTINUE);
     }
 }

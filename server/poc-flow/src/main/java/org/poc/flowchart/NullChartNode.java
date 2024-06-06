@@ -1,6 +1,8 @@
-package poc.common.flowchart;
+package org.poc.flowchart;
 
 import org.antlr.v4.runtime.tree.ParseTree;
+import poc.common.flowchart.*;
+import vm.CobolInterpreterProxy;
 
 import java.util.List;
 
@@ -144,6 +146,7 @@ public class NullChartNode implements ChartNode {
 
     @Override
     public CobolVmSignal acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService, FlowControl flowControl) {
+        assert interpreter.getClass() == CobolInterpreterProxy.class;
         return CobolVmSignal.CONTINUE;
     }
 

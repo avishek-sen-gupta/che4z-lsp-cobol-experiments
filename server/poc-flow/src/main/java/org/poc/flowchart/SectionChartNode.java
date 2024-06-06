@@ -2,6 +2,7 @@ package org.poc.flowchart;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import poc.common.flowchart.*;
+import vm.CobolInterpreterProxy;
 
 public class SectionChartNode extends CompositeCobolNode {
     @Override
@@ -14,6 +15,7 @@ public class SectionChartNode extends CompositeCobolNode {
     }
 
     public CobolVmSignal acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService, FlowControl forwardFlowControl) {
+        assert interpreter.getClass() == CobolInterpreterProxy.class;
         CobolVmSignal signal = executeInternalRoot(interpreter, nodeService);
         if (signal == CobolVmSignal.EXIT_SCOPE)
             return forwardFlowControl.apply((Void) -> continueOrAbort(signal, interpreter, nodeService), CobolVmSignal.CONTINUE);
