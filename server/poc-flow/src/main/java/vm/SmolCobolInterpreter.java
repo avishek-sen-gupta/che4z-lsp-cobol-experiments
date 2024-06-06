@@ -10,6 +10,7 @@ import java.util.List;
 
 public class SmolCobolInterpreter implements CobolInterpreter {
     private StackFrames runtimeStackFrames;
+    private CobolInterpreter parent;
 
     public SmolCobolInterpreter(StackFrames runtimeStackFrames) {
         this.runtimeStackFrames = runtimeStackFrames;
@@ -46,12 +47,12 @@ public class SmolCobolInterpreter implements CobolInterpreter {
         System.out.println("Executing an IF condition");
         IfChartNode ifNode = (IfChartNode) node;
         ChartNode ifThenBlock = ifNode.getIfThenBlock();
-        return ifThenBlock.acceptInterpreter(this, nodeService, FlowControl::CONTINUE);
+        return ifThenBlock.acceptInterpreter(parent, nodeService, FlowControl::CONTINUE);
     }
 
     @Override
     public CobolVmSignal executePerformProcedure(List<ChartNode> procedures, ChartNodeService nodeService) {
-        CobolVmSignal signal = procedures.getFirst().acceptInterpreter(this, nodeService, FlowControl::STOP);
+        CobolVmSignal signal = procedures.getFirst().acceptInterpreter(parent, nodeService, FlowControl::STOP);
         // If a PERFORM has returned (early or normal termination), do not propagate termination any higher
         return CobolVmSignal.CONTINUE;
     }
@@ -81,6 +82,11 @@ public class SmolCobolInterpreter implements CobolInterpreter {
     public CobolVmSignal executeNextSentence(ChartNodeService nodeService) {
         System.out.println("Processing NEXT SENTENCE");
         return CobolVmSignal.NEXT_SENTENCE;
+    }
+
+    @Override
+    public void setParent(CobolInterpreter interpreter) {
+        parent = interpreter;
     }
 
     private CobolInterpreter locator(ChartNode specificLocation) {

@@ -15,6 +15,7 @@ public class CobolInterpreterProxy implements CobolInterpreter {
     public CobolInterpreterProxy(ExecuteCondition condition, CobolInterpreter interpreter) {
         this.condition = condition;
         this.interpreter = interpreter;
+        this.interpreter.setParent(this);
     }
 
     @Override
@@ -70,5 +71,10 @@ public class CobolInterpreterProxy implements CobolInterpreter {
     public CobolVmSignal executeNextSentence(ChartNodeService nodeService) {
         if (!condition.shouldExecute()) return CobolVmSignal.CONTINUE;
         return interpreter.executeNextSentence(nodeService);
+    }
+
+    @Override
+    public void setParent(CobolInterpreter interpreter) {
+        throw new UnsupportedOperationException("CANNOT");
     }
 }

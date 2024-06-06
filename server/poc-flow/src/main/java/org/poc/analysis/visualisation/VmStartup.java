@@ -94,7 +94,6 @@ public class VmStartup {
         ChartNodeService nodeService = flowcharter.getChartNodeService();
 
         System.out.println("INTERPRETING\n--------------------------------\n");
-//        root.acceptInterpreter(new SmolCobolInterpreter(), nodeService, FlowControl::CONTINUE);
         root.acceptInterpreter(CobolInterpreterFactory.interpreter(), nodeService, FlowControl::CONTINUE);
     }
 }
