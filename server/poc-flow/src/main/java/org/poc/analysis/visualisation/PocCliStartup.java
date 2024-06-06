@@ -14,19 +14,23 @@
  */
 package org.poc.analysis.visualisation;
 
+import com.google.common.collect.ImmutableList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 
 public class PocCliStartup {
-    public static boolean cliMode = false;
-    private static final Integer LSP_PORT = 1044;
-    private static final String PIPE_ARG = "pipeEnabled";
     private final Logger logger = LoggerFactory.getLogger(PocCliStartup.class);
 
     public static void main(String[] args) throws IOException, InterruptedException {
 //        FlowchartTasks.singleFlowchartDemo();
-        FlowchartTasks.allSectionsSingleProgramFlowchartDemo();
+        String sourceDir = "/Users/asgupta/Downloads/mbrdi-poc";
+        File[] copyBookPaths = new File[]{new File("/Users/asgupta/Downloads/mbrdi-poc")};
+        String dialectJarPath = "/Users/asgupta/code/mbrdi-proleap/che4z/che-che4z-lsp-for-cobol-2.1.2/server/dialect-idms/target/dialect-idms.jar";
+        String reportRootDir = "/Users/asgupta/Downloads/mbrdi-poc/report";
+
+        new FlowchartTasks(sourceDir, reportRootDir, copyBookPaths, dialectJarPath).generateForPrograms(ImmutableList.of("V751C931", "V7588049", "V75234"));
     }
 }

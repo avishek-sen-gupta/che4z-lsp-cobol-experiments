@@ -1,6 +1,5 @@
 package org.poc.analysis.visualisation;
 
-import com.google.common.collect.ImmutableList;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.cli.ParsePipeline;
 import org.eclipse.lsp.cobol.core.CobolParser;
@@ -20,8 +19,19 @@ public class FlowchartTasks {
     private static final String AST_DIR = "ast";
     private static final String IMAGES_DIR = "images";
     private static final String DOTFILES_DIR = "dotfiles";
+    private final String sourceDir;
+    private final File[] copyBookPaths;
+    private final String dialectJarPath;
+    private final String reportRootDir;
 
-    public static void singleFlowchartDemo() throws IOException, InterruptedException {
+    public FlowchartTasks(String sourceDir, String reportRootDir, File[] copyBookPaths, String dialectJarPath) {
+        this.sourceDir = sourceDir;
+        this.copyBookPaths = copyBookPaths;
+        this.dialectJarPath = dialectJarPath;
+        this.reportRootDir = reportRootDir;
+    }
+
+    public void singleFlowchartDemo() throws IOException, InterruptedException {
         String dotFilePath = "/Users/asgupta/Downloads/mbrdi-poc/flowchart.dot";
         String imageOutputPath = "/Users/asgupta/Downloads/mbrdi-poc/flowchart.png";
         String cobolParseTreeOutputPath = "/Users/asgupta/Downloads/mbrdi-poc/test-cobol.json";
@@ -76,27 +86,13 @@ public class FlowchartTasks {
         flowcharter.generateFlowchart(procedure, dotFilePath, imageOutputPath, "ortho");
     }
 
-    public static void allSectionsSingleProgramFlowchartDemo() throws IOException, InterruptedException {
-        String sourceDir = "/Users/asgupta/Downloads/mbrdi-poc";
-        File[] copyBookPaths = {new File("/Users/asgupta/Downloads/mbrdi-poc")};
-        String dialectJarPath = "/Users/asgupta/code/mbrdi-proleap/che4z/che-che4z-lsp-for-cobol-2.1.2/server/dialect-idms/target/dialect-idms.jar";
-
-        String dotFileRootDir = "/Users/asgupta/Downloads/mbrdi-poc/report/dotfiles";
-        String imageOutputRootDir = "/Users/asgupta/Downloads/mbrdi-poc/report/images";
-        String astOutputDir = "/Users/asgupta/Downloads/mbrdi-poc/report/ast";
-        String reportRootDir = "/Users/asgupta/Downloads/mbrdi-poc/report";
-
-//        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V75234");
-//        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V7588049");
-//        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V751C931");
-//        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/test.cbl");
-        List<String> programNames = ImmutableList.of("V751C931", "V7588049", "V75234");
+    public void generateForPrograms(List<String> programNames) throws IOException, InterruptedException {
         for (String programName : programNames) {
-            allSectionsGivenProgram(sourceDir, dotFileRootDir, imageOutputRootDir, copyBookPaths, dialectJarPath, programName, astOutputDir, reportRootDir);
+            allSectionsGivenProgram(programName, sourceDir, reportRootDir, copyBookPaths, dialectJarPath);
         }
     }
 
-    private static void allSectionsGivenProgram(String sourceDir, String dotFileRootDir, String imageOutputRootDir, File[] copyBookPaths, String dialectJarPath, String programName, String astOutputDirRoot, String reportRootDir) throws IOException, InterruptedException {
+    private void allSectionsGivenProgram(String programName, String sourceDir, String reportRootDir, File[] copyBookPaths, String dialectJarPath) throws IOException, InterruptedException {
         File source = Paths.get(sourceDir, programName).toFile();
         Path astOutputDir = Paths.get(reportRootDir, programName, AST_DIR);
         Path imageOutputDir = Paths.get(reportRootDir, programName, IMAGES_DIR);
@@ -129,7 +125,7 @@ public class FlowchartTasks {
 
     private static String outputPath(ParseTree section, Path outputDir, String extension) {
         CobolParser.ProcedureSectionContext s = (CobolParser.ProcedureSectionContext) section;
-        String sectionName = s.procedureSectionHeader().getText();
+        String sectionName = s.procedureSectionHeader().sectionName().getText();
         return outputDir.resolve(String.format("%s.%s", sectionName, extension)).toString();
     }
 }
