@@ -11,10 +11,10 @@ import java.util.List;
 public class CobolInterpreterFactory {
 
     public static CobolInterpreter interpreter() {
-        return new CobolInterpreterProxy(ExecuteCondition.ALWAYS_EXECUTE, new SmolCobolInterpreter());
+        return new SmolCobolInterpreter(new CobolStackFrames(), ExecuteCondition.ALWAYS_EXECUTE);
     }
 
     public static CobolInterpreter interpreter(ExecuteCondition condition, StackFrames runtimeStackFrames) {
-        return new CobolInterpreterProxy(condition, new SmolCobolInterpreter(runtimeStackFrames));
+        return new SmolCobolInterpreter(runtimeStackFrames, condition);
     }
 }

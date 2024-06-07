@@ -2,7 +2,6 @@ package org.poc.flowchart;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import poc.common.flowchart.*;
-import vm.CobolInterpreterProxy;
 
 public class NextSentenceChartNode extends CobolChartNode {
     private ChartNode destinationSentenceNode;
@@ -44,7 +43,7 @@ public class NextSentenceChartNode extends CobolChartNode {
 
     @Override
     public CobolVmSignal acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService, FlowControl flowControl) {
-        assert interpreter.getClass() == CobolInterpreterProxy.class;
+
         return interpreter.scope(this).executeNextSentence(nodeService);
     }
 }

@@ -23,4 +23,10 @@ public class ExecuteAtTargetFlipCondition implements ExecuteCondition {
     public boolean shouldExecute() {
         return isInterpreting;
     }
+
+    @Override
+    public CobolVmSignal run(Function<Void, CobolVmSignal> callback) {
+        if (!isInterpreting) return CobolVmSignal.CONTINUE;
+        return callback.apply(null);
+    }
 }

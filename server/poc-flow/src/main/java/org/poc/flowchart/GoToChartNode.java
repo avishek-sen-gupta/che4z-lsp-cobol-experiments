@@ -3,7 +3,6 @@ package org.poc.flowchart;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;
 import poc.common.flowchart.*;
-import vm.CobolInterpreterProxy;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,7 +33,6 @@ public class GoToChartNode extends CobolChartNode {
         List<CobolParser.ProcedureNameContext> procedureNames = goToStatement.procedureName();
         System.out.println("Found a GO TO, routing to " + procedureNames);
         destinationNodes = procedureNames.stream().map(p -> nodeService.sectionOrParaWithName(p.paragraphName().getText())).collect(Collectors.toList());
-//        outgoingNodes.addAll(destinationNodes);
     }
 
     @Override
@@ -46,7 +44,6 @@ public class GoToChartNode extends CobolChartNode {
 
     @Override
     public CobolVmSignal acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService, FlowControl flowControl) {
-        assert interpreter.getClass() == CobolInterpreterProxy.class;
         return interpreter.scope(this).executeGoto(destinationNodes, nodeService);
     }
 
