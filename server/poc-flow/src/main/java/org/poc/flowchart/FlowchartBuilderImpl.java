@@ -51,7 +51,6 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
 
     private FlowchartBuilder buildChartGraphic(Function<VisitContext, Boolean> stopCondition) {
         ChartNode rootChartNode = graphRoot;
-        rootChartNode.reset();
         ChartNodeVisitor chartVisitor = new ChartNodeGraphvizVisitor(graph, overlay, stopCondition);
         rootChartNode.accept(chartVisitor, 1);
         return this;
@@ -98,14 +97,10 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
 
     @Override
     public FlowchartBuilder buildOverlay() {
-//        ChartNode rootChartNode = chartNodeService.existingNode(node);
         ChartNode rootChartNode = graphRoot;
-        rootChartNode.reset();
-//        ChartNodeRuleVisitor compressionVisitor = new ChartNodeRuleVisitor(rootChartNode, rules);
         ChartNodeOverlayVisitor compressionVisitor = new ChartNodeOverlayVisitor(rootChartNode);
         rootChartNode.accept(compressionVisitor, 1);
         compressionVisitor.report();
-//        compressionVisitor.applyRules();
         overlay = compressionVisitor.overlay();
         return this;
     }
@@ -113,7 +108,6 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
     @Override
     public FlowchartBuilder buildControlFlow() {
         ChartNode rootChartNode = graphRoot;
-        rootChartNode.reset();
         rootChartNode.accept(new ChartNodeControlFlowVisitor(), 1);
         return this;
     }

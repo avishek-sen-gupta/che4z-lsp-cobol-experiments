@@ -28,7 +28,6 @@ public interface ChartNode {
     ChartNode tail();
 
     DomainDocument getNotes();
-    @Deprecated void reset();
 
     boolean accessesDatabase();
     boolean isMergeable();

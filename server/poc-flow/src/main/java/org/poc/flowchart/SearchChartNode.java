@@ -68,10 +68,4 @@ public class SearchChartNode extends CobolChartNode {
 //        return CobolContextAugmentedTreeNode.originalText(executionContext, CobolEntityNavigator::PASSTHROUGH);
     }
 
-    @Override
-    public void reset() {
-        super.reset();
-        if (endPhraseExists()) atEndBlock.reset();
-        whenPhrases.forEach(ChartNode::reset);
-    }
 }

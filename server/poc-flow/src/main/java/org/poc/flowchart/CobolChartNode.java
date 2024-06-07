@@ -19,8 +19,6 @@ public class CobolChartNode implements ChartNode {
     protected final ParseTree executionContext;
     protected ChartNodeService nodeService;
     private DomainDocument document = new DomainDocument();
-    protected boolean initialised = false;
-    protected boolean visited = false;
     private boolean databaseAccess;
     protected ChartNode scope;
     protected final StackFrames staticFrameContext;
@@ -35,8 +33,6 @@ public class CobolChartNode implements ChartNode {
 
     @Override
     public void buildFlow() {
-//        if (initialised) return;
-//        initialised = true;
         System.out.println("Building flow for " + name());
         buildInternalFlow();
         buildOutgoingFlow();
@@ -132,8 +128,6 @@ public class CobolChartNode implements ChartNode {
 
     @Override
     public void accept(ChartNodeVisitor visitor, int level) {
-//        if (visited) return;
-//        visited = true;
         acceptUnvisited(visitor, level);
     }
 
@@ -151,14 +145,6 @@ public class CobolChartNode implements ChartNode {
     @Override
     public DomainDocument getNotes() {
         return document;
-    }
-
-    @Override
-    public void reset() {
-        // If visited is already false, it means I must have already set it to false and now I am looping back on myself
-//        if (!visited) return;
-//        visited = false;
-        outgoingNodes.forEach(ChartNode::reset);
     }
 
     @Override
@@ -204,6 +190,7 @@ public class CobolChartNode implements ChartNode {
 
     // Specifically to return if this node terminated further execution
     // Overrides of this might choose to continue based on specific signal
+    // TODO: This should move to some sort of a state machine implementation
     protected CobolVmSignal continueOrAbort(CobolVmSignal defaultSignal, CobolInterpreter interpreter, ChartNodeService nodeService) {
         if (defaultSignal == CobolVmSignal.TERMINATE ||
                 defaultSignal == CobolVmSignal.EXIT_PERFORM ||

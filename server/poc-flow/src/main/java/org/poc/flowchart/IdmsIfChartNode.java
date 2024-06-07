@@ -66,11 +66,4 @@ public class IdmsIfChartNode extends CobolChartNode {
         return ChartNodeType.IF_BRANCH;
     }
 
-    @Override
-    public void reset() {
-        super.reset();
-        condition.reset();
-        ifThenBlock.reset();
-        if (ifElseBlock != null) ifElseBlock.reset();
-    }
 }

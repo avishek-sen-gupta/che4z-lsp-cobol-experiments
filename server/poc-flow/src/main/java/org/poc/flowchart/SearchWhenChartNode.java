@@ -45,12 +45,6 @@ public class SearchWhenChartNode extends CompositeCobolNode {
     }
 
     @Override
-    public void reset() {
-        super.reset();
-        condition.reset();
-    }
-
-    @Override
     public String name() {
         CobolParser.SearchWhenContext searchWhenStatementContext = (CobolParser.SearchWhenContext) executionContext;
         return "When\n" + NodeText.originalText(searchWhenStatementContext.condition(), NodeText::PASSTHROUGH);

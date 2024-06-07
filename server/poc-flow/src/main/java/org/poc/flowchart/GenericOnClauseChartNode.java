@@ -42,10 +42,4 @@ public class GenericOnClauseChartNode extends CompositeCobolNode {
         visitor.visitParentChildLink(this, internalTreeRoot, new VisitContext(level), nodeService, CHILD_IS_CONDITIONAL_STATEMENT);
     }
 
-    @Override
-    public void reset() {
-        super.reset();
-        condition.reset();
-    }
-
 }

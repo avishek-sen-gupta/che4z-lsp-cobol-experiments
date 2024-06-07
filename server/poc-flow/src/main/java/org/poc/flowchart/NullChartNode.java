@@ -94,11 +94,6 @@ public class NullChartNode implements ChartNode {
     }
 
     @Override
-    public void reset() {
-
-    }
-
-    @Override
     public boolean accessesDatabase() {
         return false;
     }

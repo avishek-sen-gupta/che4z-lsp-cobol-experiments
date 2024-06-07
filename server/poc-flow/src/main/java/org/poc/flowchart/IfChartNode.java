@@ -57,10 +57,4 @@ public class IfChartNode extends CobolChartNode {
         return "IS \n" + truncated(codeText, 40) + "?\n";
     }
 
-    @Override
-    public void reset() {
-        super.reset();
-        ifThenBlock.reset();
-        if (ifElseBlock != null) ifElseBlock.reset();
-    }
 }

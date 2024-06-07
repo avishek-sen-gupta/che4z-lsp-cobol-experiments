@@ -102,11 +102,6 @@ public class GenericProcessingChartNode implements ChartNode {
     }
 
     @Override
-    public void reset() {
-
-    }
-
-    @Override
     public boolean accessesDatabase() {
         return false;
     }

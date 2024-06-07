@@ -72,12 +72,6 @@ public class CompositeCobolNode extends CobolChartNode {
     }
 
     @Override
-    public void reset() {
-        if (internalTreeRoot != null) internalTreeRoot.reset();
-        super.reset();
-    }
-
-    @Override
     public ChartNodeType type() {
         if (executionContext.getClass() == CobolParser.ProcedureSectionContext.class) return ChartNodeType.SECTION;
         if (executionContext.getClass() == CobolParser.ParagraphContext.class) return ChartNodeType.PARAGRAPH;
