@@ -19,12 +19,14 @@ import java.util.regex.Pattern;
 public class CobolEntityNavigatorImpl implements CobolEntityNavigator {
     private CobolParser.ProcedureDivisionBodyContext procedureBodyRoot;
     private final ParserRuleContext fullProgramTree;
+    private final CobolParser.DataDivisionContext dataDivisionBody;
     private List<ParseTree> dialectNodes;
     private Map<String, String> symbolText;
 
-    public CobolEntityNavigatorImpl(CobolParser.ProcedureDivisionBodyContext procedureDivisionBody, ParserRuleContext fullProgramTree) {
+    public CobolEntityNavigatorImpl(CobolParser.ProcedureDivisionBodyContext procedureDivisionBody, CobolParser.DataDivisionContext dataDivisionBody, ParserRuleContext fullProgramTree) {
         this.procedureBodyRoot = procedureDivisionBody;
         this.fullProgramTree = fullProgramTree;
+        this.dataDivisionBody = dataDivisionBody;
     }
 
     @Override
@@ -33,8 +35,13 @@ public class CobolEntityNavigatorImpl implements CobolEntityNavigator {
     }
 
     @Override
-    public ParseTree root() {
+    public ParseTree procedureBodyRoot() {
         return procedureBodyRoot;
+    }
+
+    @Override
+    public ParseTree dataDivisionBodyRoot() {
+        return dataDivisionBody;
     }
 
     @Override

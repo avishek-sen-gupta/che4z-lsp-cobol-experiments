@@ -20,12 +20,9 @@ import org.poc.common.navigation.CobolEntityNavigator;
 import org.poc.flowchart.FlowchartBuilderImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import poc.common.flowchart.ChartNode;
-import poc.common.flowchart.ChartNodeService;
+import poc.common.flowchart.*;
 import vm.CobolInterpreterFactory;
-import vm.SmolCobolInterpreter;
-import poc.common.flowchart.FlowControl;
-import poc.common.flowchart.FlowchartBuilder;
+import vm.DataStructureBuilder;
 import vm.CobolEntityNavigatorBuilderImpl;
 
 import java.io.File;
@@ -87,12 +84,13 @@ public class VmStartup {
 //        ParseTree procedure = navigator.target("U2030-TASI-2603");
 
         // This one is root
-        ParseTree procedure = navigator.root();
+        ParseTree procedure = navigator.procedureBodyRoot();
 
         flowcharter.buildChartAST(procedure).buildControlFlow();
         ChartNode root = flowcharter.getRoot();
         ChartNodeService nodeService = flowcharter.getChartNodeService();
 
+        DataStructure structure = new DataStructureBuilder(navigator).build();
         System.out.println("INTERPRETING\n--------------------------------\n");
         root.acceptInterpreter(CobolInterpreterFactory.interpreter(), nodeService, FlowControl::CONTINUE);
     }

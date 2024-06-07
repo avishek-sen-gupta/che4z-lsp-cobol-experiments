@@ -81,7 +81,7 @@ public class FlowchartTasks {
 //        ParseTree procedure = navigator.target("U2030-TASI-2603");
 
         // This one is root
-        ParseTree procedure = navigator.root();
+        ParseTree procedure = navigator.procedureBodyRoot();
 
         flowcharter.generateFlowchart(procedure, dotFilePath, imageOutputPath, "line");
     }
@@ -114,7 +114,7 @@ public class FlowchartTasks {
                 ops);
 
         CobolEntityNavigator navigator = pipeline.parse();
-        ParseTree root = navigator.root();
+        ParseTree root = navigator.procedureBodyRoot();
         List<ParseTree> allSections = navigator.findAllByCondition(n -> n.getClass() == CobolParser.ProcedureSectionContext.class, root);
         for (ParseTree section : allSections) {
             pipeline.flowcharter().generateFlowchart(section,

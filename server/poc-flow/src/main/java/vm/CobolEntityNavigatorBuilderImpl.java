@@ -12,7 +12,7 @@ public class CobolEntityNavigatorBuilderImpl implements EntityNavigatorBuilder {
 
     @Override
     public CobolEntityNavigator procedureDivisionEntityNavigator(CobolParser.ProcedureDivisionBodyContext procedureDivisionBody, CobolParser.DataDivisionContext dataDivisionBody, ParserRuleContext fullProgramTree) {
-        return new CobolEntityNavigatorImpl(procedureDivisionBody, fullProgramTree);
+        return new CobolEntityNavigatorImpl(procedureDivisionBody, dataDivisionBody, fullProgramTree);
     }
 
     @Override

@@ -7,7 +7,9 @@ import java.util.List;
 public interface CobolEntityNavigator {
     ParseTree target(String procedureName);
 
-    ParseTree root();
+    ParseTree procedureBodyRoot();
+
+    ParseTree dataDivisionBodyRoot();
 
     ParseTree findByCondition(ParseTree searchRoot, ParseTreeSearchCondition c, int maxLevel);
 
