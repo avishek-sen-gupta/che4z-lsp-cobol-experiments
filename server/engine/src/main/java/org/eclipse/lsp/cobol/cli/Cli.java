@@ -208,7 +208,8 @@ public class Cli implements Callable<Integer> {
 
             EntityNavigatorBuilder navigatorBuilder = ops.getCobolEntityNavigatorBuilder();
             CobolParser.ProcedureDivisionBodyContext procedureDivisionBody = navigatorBuilder.procedureDivisionBody(tree);
-            CobolEntityNavigator navigator = navigatorBuilder.procedureDivisionEntityNavigator(procedureDivisionBody, tree);
+            CobolParser.DataDivisionContext dataDivisionBody = navigatorBuilder.dataDivisionBody(tree);
+            CobolEntityNavigator navigator = navigatorBuilder.procedureDivisionEntityNavigator(procedureDivisionBody, dataDivisionBody, tree);
 
             ops.getVisualiser().writeCobolAST(tree, cobolParseTreeOutputPath,false, navigator);
             System.out.println("Built tree");

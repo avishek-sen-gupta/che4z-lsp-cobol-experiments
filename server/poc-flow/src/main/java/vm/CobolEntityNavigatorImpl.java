@@ -17,24 +17,24 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 
 public class CobolEntityNavigatorImpl implements CobolEntityNavigator {
-    private CobolParser.ProcedureDivisionBodyContext root;
+    private CobolParser.ProcedureDivisionBodyContext procedureBodyRoot;
     private final ParserRuleContext fullProgramTree;
     private List<ParseTree> dialectNodes;
     private Map<String, String> symbolText;
 
     public CobolEntityNavigatorImpl(CobolParser.ProcedureDivisionBodyContext procedureDivisionBody, ParserRuleContext fullProgramTree) {
-        this.root = procedureDivisionBody;
+        this.procedureBodyRoot = procedureDivisionBody;
         this.fullProgramTree = fullProgramTree;
     }
 
     @Override
     public ParseTree target(String procedureName) {
-        return findTargetRecursive(procedureName, root);
+        return findTargetRecursive(procedureName, procedureBodyRoot);
     }
 
     @Override
     public ParseTree root() {
-        return root;
+        return procedureBodyRoot;
     }
 
     @Override
@@ -91,9 +91,7 @@ public class CobolEntityNavigatorImpl implements CobolEntityNavigator {
     }
 
     private ParseTree findByConditionRecursive(ParseTree currentNode, ParseTreeSearchCondition c, int level, int maxLevel) {
-        if (c.apply(currentNode)) {
-            if (c.apply(currentNode)) return currentNode;
-        }
+        if (c.apply(currentNode)) return currentNode;
         if (maxLevel != -1 && level > maxLevel) return null;
         for (int i = 0; i <= currentNode.getChildCount() - 1; i++) {
             ParseTree searchResult = findByConditionRecursive(currentNode.getChild(i), c, level + 1, maxLevel);
