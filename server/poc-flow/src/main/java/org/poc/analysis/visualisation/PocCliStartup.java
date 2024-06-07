@@ -20,17 +20,19 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class PocCliStartup {
     private final Logger logger = LoggerFactory.getLogger(PocCliStartup.class);
 
     public static void main(String[] args) throws IOException, InterruptedException {
-//        FlowchartTasks.singleFlowchartDemo();
         String sourceDir = "/Users/asgupta/Downloads/mbrdi-poc";
         File[] copyBookPaths = new File[]{new File("/Users/asgupta/Downloads/mbrdi-poc")};
         String dialectJarPath = "/Users/asgupta/code/mbrdi-proleap/che4z/che-che4z-lsp-for-cobol-2.1.2/server/dialect-idms/target/dialect-idms.jar";
         String reportRootDir = "/Users/asgupta/Downloads/mbrdi-poc/report";
 
-        new FlowchartTasks(sourceDir, reportRootDir, copyBookPaths, dialectJarPath).generateForPrograms(ImmutableList.of("V751C931", "V7588049", "V75234"));
+        List<String> programNames = ImmutableList.of("V751C931", "V7588049", "V75234");
+        new FlowchartTasks(sourceDir, reportRootDir, copyBookPaths, dialectJarPath).generateForPrograms(programNames);
+//        new FlowchartTasks(sourceDir, reportRootDir, copyBookPaths, dialectJarPath).singleFlowchartDemo();
     }
 }

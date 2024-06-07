@@ -41,7 +41,7 @@ public class FlowchartTasks {
 
 //        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V75234");
 //        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V7588049");
-        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V751C931");
+        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V75234");
 //        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/test.cbl");
 
         PocOpsImpl ops = new PocOpsImpl(new CobolTreeVisualiserImpl(),
@@ -83,7 +83,7 @@ public class FlowchartTasks {
         // This one is root
         ParseTree procedure = navigator.root();
 
-        flowcharter.generateFlowchart(procedure, dotFilePath, imageOutputPath, "ortho");
+        flowcharter.generateFlowchart(procedure, dotFilePath, imageOutputPath, "line");
     }
 
     public void generateForPrograms(List<String> programNames) throws IOException, InterruptedException {
