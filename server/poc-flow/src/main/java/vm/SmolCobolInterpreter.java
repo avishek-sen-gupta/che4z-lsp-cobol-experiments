@@ -105,9 +105,16 @@ public class SmolCobolInterpreter implements CobolInterpreter {
     public CobolVmSignal executeMove(ChartNode moveChartNode, ChartNodeService nodeService) {
         return condition.run((Void) -> {
             MoveChartNode move = (MoveChartNode) moveChartNode;
-            move.getTos().forEach(to -> System.out.println(String.format("%s was affected by %s", to.getText(), move.getFrom().getText())));
+            move.getTos().forEach(to -> System.out.println(String.format("%s was affected by %s", dataDescription(to, nodeService.getDataStructures()), move.getFrom().getText())));
+
             return CobolVmSignal.CONTINUE;
         });
+    }
+
+    private String dataDescription(CobolParser.GeneralIdentifierContext identifier, DataStructure dataStructures) {
+        List<DataStructure> path = dataStructures.rootRecord(identifier);
+        if (path.isEmpty()) return "[NOT FOUND] " + identifier.getText();
+        return String.join(" > ", path.stream().map(DataStructure::toString).toList());
     }
 
     private CobolInterpreter locator(ChartNode specificLocation) {

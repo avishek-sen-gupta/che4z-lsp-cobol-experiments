@@ -159,7 +159,7 @@ public class ParsePipeline {
     }
 
     public FlowchartBuilder flowcharter() {
-        return ops.getFlowchartBuilderFactory().apply(navigator);
+        return ops.getFlowchartBuilderFactory().apply(navigator, dataStructures);
     }
 
     private static Pipeline setupPipeline(Injector diCtx) {

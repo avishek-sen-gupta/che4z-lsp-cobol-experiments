@@ -1,5 +1,6 @@
 package poc.common.flowchart;
 
+import com.google.common.collect.ImmutableList;
 import hu.webarticum.treeprinter.SimpleTreeNode;
 import hu.webarticum.treeprinter.TreeNode;
 import hu.webarticum.treeprinter.printer.listing.ListingTreePrinter;
@@ -74,5 +75,28 @@ public class DataStructure extends SimpleTreeNode {
 
     public void report() {
         new ListingTreePrinter().print(this);
+    }
+
+    @Override
+    public String toString() {
+        return dataDescription != null ? dataDescription.entryName().getText() : "<ROOT>";
+    }
+
+    public List<DataStructure> rootRecord(CobolParser.GeneralIdentifierContext subRecord) {
+        return searchRecursively(subRecord, this);
+    }
+
+    public List<DataStructure> searchRecursively(CobolParser.GeneralIdentifierContext subRecord, DataStructure currentStructure) {
+        if (currentStructure.dataDescription != null && currentStructure.dataDescription.entryName().getText().equals(subRecord.getText())) return ImmutableList.of(currentStructure);
+//        currentStructure.structures.stream().map(s -> searchRecursively(subRecord, s, path))
+        for (DataStructure structure : currentStructure.structures) {
+            List<DataStructure> results = searchRecursively(subRecord, structure);
+            if (results.isEmpty()) continue;
+            List<DataStructure> path = new ArrayList<>(ImmutableList.of(currentStructure));
+            path.addAll(results);
+            return path;
+        }
+
+        return ImmutableList.of();
     }
 }

@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import poc.common.flowchart.ChartNode;
 import poc.common.flowchart.ChartNodeService;
 import org.poc.common.navigation.CobolEntityNavigator;
+import poc.common.flowchart.DataStructure;
 import poc.common.flowchart.StackFrames;
 
 import java.util.ArrayList;
@@ -13,9 +14,11 @@ public class ChartNodeServiceImpl implements ChartNodeService {
     int counter = 0;
     private List<ChartNode> nodes = new ArrayList<>();
     private CobolEntityNavigator navigator;
+    private final DataStructure dataStructures;
 
-    public ChartNodeServiceImpl(CobolEntityNavigator navigator) {
+    public ChartNodeServiceImpl(CobolEntityNavigator navigator, DataStructure dataStructures) {
         this.navigator = navigator;
+        this.dataStructures = dataStructures;
     }
 
     public ChartNode register(ChartNode chartNode) {
@@ -47,6 +50,10 @@ public class ChartNodeServiceImpl implements ChartNodeService {
     @Override
     public CobolEntityNavigator getNavigator() {
         return navigator;
+    }
+    @Override
+    public DataStructure getDataStructures() {
+        return dataStructures;
     }
 
     @Override

@@ -22,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import poc.common.flowchart.*;
 import vm.CobolInterpreterFactory;
-import vm.DataStructureBuilder;
 import vm.CobolEntityNavigatorBuilderImpl;
 
 import java.io.File;
@@ -67,7 +66,6 @@ public class VmStartup {
         ChartNode root = flowcharter.getRoot();
         ChartNodeService nodeService = flowcharter.getChartNodeService();
 
-//        DataStructure structure = new DataStructureBuilder(navigator).build();
         dataStructures.report();
         System.out.println("INTERPRETING\n--------------------------------\n");
         root.acceptInterpreter(CobolInterpreterFactory.interpreter(), nodeService, FlowControl::CONTINUE);

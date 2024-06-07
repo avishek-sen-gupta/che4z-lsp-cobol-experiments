@@ -54,6 +54,7 @@ import org.eclipse.lsp.cobol.core.semantics.CopybooksRepository;
 import org.eclipse.lsp.cobol.service.settings.CachingConfigurationService;
 import org.eclipse.lsp.cobol.service.settings.layout.CodeLayoutStore;
 import org.eclipse.lsp4j.Location;
+import poc.common.flowchart.DataStructure;
 import poc.common.flowchart.FlowchartBuilder;
 import poc.common.flowchart.PocOps;
 import org.poc.common.navigation.CobolEntityNavigator;
@@ -216,7 +217,8 @@ public class Cli implements Callable<Integer> {
 //        new DynamicFlowAnalyser(tree).run();
 //            CobolEntityNavigator navigator = CobolEntityNavigatorFactory.procedureDivisionEntityNavigator(CobolEntityNavigatorFactory.procedureDivisionBody(tree));
             ParseTree e0 = navigator.target("E0");
-            FlowchartBuilder flowchartBuilder = ops.getFlowchartBuilderFactory().apply(navigator);
+            DataStructure dataStructures = ops.getDataStructureBuilder(navigator).build();
+            FlowchartBuilder flowchartBuilder = ops.getFlowchartBuilderFactory().apply(navigator, dataStructures);
             flowchartBuilder.buildDotStructure(VisitContext.VISIT_UPTO_LEVEL(-1)).write("/Users/asgupta/Downloads/mbrdi-poc/flowchart.dot");
 
             JsonArray diagnostics = new JsonArray();

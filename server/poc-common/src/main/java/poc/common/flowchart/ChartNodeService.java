@@ -12,6 +12,8 @@ public interface ChartNodeService {
 
     CobolEntityNavigator getNavigator();
 
+    DataStructure getDataStructures();
+
     ChartNode existingNode(ParseTree parseTree);
 
     int counter();

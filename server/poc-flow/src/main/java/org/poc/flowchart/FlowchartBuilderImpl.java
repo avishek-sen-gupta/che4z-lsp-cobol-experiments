@@ -19,14 +19,16 @@ import static guru.nidi.graphviz.model.Factory.mutNode;
 
 public class FlowchartBuilderImpl implements FlowchartBuilder {
     private final ChartNodeService chartNodeService;
+    private final DataStructure dataStructures;
     private ChartNode graphRoot;
     private CobolEntityNavigator cobolEntityNavigator;
     private MutableGraph graph;
     private ChartOverlay overlay;
 
-    public FlowchartBuilderImpl(CobolEntityNavigator cobolEntityNavigator) {
+    public FlowchartBuilderImpl(CobolEntityNavigator cobolEntityNavigator, DataStructure dataStructures) {
         this.cobolEntityNavigator = cobolEntityNavigator;
-        chartNodeService = new ChartNodeServiceImpl(cobolEntityNavigator);
+        chartNodeService = new ChartNodeServiceImpl(cobolEntityNavigator, dataStructures);
+        this.dataStructures = dataStructures;
         graph = Factory.mutGraph("example1").setDirected(true).setCluster(true);
         Graphviz.useEngine(new GraphvizCmdLineEngine().timeout(5, java.util.concurrent.TimeUnit.HOURS));
     }
@@ -149,7 +151,7 @@ public class FlowchartBuilderImpl implements FlowchartBuilder {
                 .add("fillcolor", Color.YELLOW.value);
     }
 
-    public static FlowchartBuilder build(CobolEntityNavigator navigator) {
-        return new FlowchartBuilderImpl(navigator);
+    public static FlowchartBuilder build(CobolEntityNavigator navigator, DataStructure dataStructures) {
+        return new FlowchartBuilderImpl(navigator, dataStructures);
     }
 }

@@ -45,7 +45,7 @@ public class FlowchartTasks {
 //        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/test.cbl");
 
         PocOpsImpl ops = new PocOpsImpl(new CobolTreeVisualiserImpl(),
-                FlowchartBuilderImpl::build, new CobolEntityNavigatorBuilderImpl());
+                (navigator1, dataStructures) -> FlowchartBuilderImpl.build(navigator1, dataStructures), new CobolEntityNavigatorBuilderImpl());
         ParsePipeline pipeline = new ParsePipeline(source,
                 copyBookPaths,
                 dialectJarPath,
