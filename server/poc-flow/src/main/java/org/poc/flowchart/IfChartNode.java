@@ -45,7 +45,6 @@ public class IfChartNode extends CobolChartNode {
 
     @Override
     public CobolVmSignal acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService, FlowControl flowControl) {
-
         CobolVmSignal signal = interpreter.scope(this).executeIf(this, nodeService);
         return flowControl.apply((Void) -> continueOrAbort(signal, interpreter, nodeService), signal);
     }
