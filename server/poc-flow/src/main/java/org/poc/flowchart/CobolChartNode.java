@@ -202,6 +202,8 @@ public class CobolChartNode implements ChartNode {
         return flowControl.apply((Void) -> continueOrAbort(signal, interpreter, nodeService), signal);
     }
 
+    // Specifically to return if this node terminated further execution
+    // Overrides of this might choose to continue based on specific signal
     protected CobolVmSignal continueOrAbort(CobolVmSignal defaultSignal, CobolInterpreter interpreter, ChartNodeService nodeService) {
         if (defaultSignal == CobolVmSignal.TERMINATE ||
                 defaultSignal == CobolVmSignal.EXIT_PERFORM ||
