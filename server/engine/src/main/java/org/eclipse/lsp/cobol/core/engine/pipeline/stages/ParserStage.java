@@ -62,6 +62,7 @@ public class ParserStage implements Stage<ParserStageResult, DialectOutcome> {
             CobolParser.StartRuleContext tree = parser.runParser();
             context.getAccumulatedErrors().addAll(listener.getErrors());
             context.getAccumulatedErrors().addAll(getParsingError(context, parser));
+            if (!context.getAccumulatedErrors().isEmpty()) throw new RuntimeException("There were parsing errors. Debug and see why.");
             return new StageResult<>(new ParserStageResult(parser.getTokens(), tree));
         });
     }
