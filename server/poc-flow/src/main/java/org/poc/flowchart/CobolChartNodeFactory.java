@@ -26,6 +26,8 @@ public class CobolChartNodeFactory {
             return new SearchChartNode(parseTree, scope, nodeService, stackFrames);
         else if (SyntaxIdentity.isStatementOfType(parseTree, CobolParser.GenericOnClauseStatementContext.class))
             return new GenericOnClauseChartNode(parseTree, scope, nodeService, stackFrames);
+        else if (SyntaxIdentity.isStatementOfType(parseTree, CobolParser.DisplayStatementContext.class))
+            return new DisplayChartNode(parseTree, scope, nodeService, stackFrames);
         else if (SyntaxIdentity.isOfType(parseTree, CobolParser.DialectStatementContext.class))
             return new DialectStatementChartNode(parseTree, scope, nodeService, stackFrames);
         else if (SyntaxIdentity.isOfType(parseTree, CobolParser.ConditionalStatementCallContext.class))

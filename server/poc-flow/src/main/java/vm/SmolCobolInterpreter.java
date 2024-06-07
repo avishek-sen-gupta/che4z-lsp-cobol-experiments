@@ -1,5 +1,6 @@
 package vm;
 
+import org.eclipse.lsp.cobol.core.CobolParser;
 import org.poc.flowchart.IfChartNode;
 import org.poc.flowchart.ParagraphChartNode;
 import org.poc.flowchart.SectionChartNode;
@@ -89,6 +90,12 @@ public class SmolCobolInterpreter implements CobolInterpreter {
             System.out.println("Processing NEXT SENTENCE");
             return CobolVmSignal.NEXT_SENTENCE;
         });
+    }
+
+    @Override
+    public CobolVmSignal executeDisplay(List<CobolParser.DisplayOperandContext> messages, ChartNodeService nodeService) {
+        messages.forEach(m -> System.out.println("CONSOLE >> " + m.getText()));
+        return CobolVmSignal.CONTINUE;
     }
 
     private CobolInterpreter locator(ChartNode specificLocation) {

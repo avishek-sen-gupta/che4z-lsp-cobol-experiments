@@ -1,5 +1,7 @@
 package poc.common.flowchart;
 
+import org.eclipse.lsp.cobol.core.CobolParser;
+
 import java.util.List;
 
 public interface CobolInterpreter {
@@ -20,4 +22,6 @@ public interface CobolInterpreter {
     CobolVmSignal executeExit(ChartNodeService nodeService);
 
     CobolVmSignal executeNextSentence(ChartNodeService nodeService);
+
+    CobolVmSignal executeDisplay(List<CobolParser.DisplayOperandContext> messages, ChartNodeService nodeService);
 }
