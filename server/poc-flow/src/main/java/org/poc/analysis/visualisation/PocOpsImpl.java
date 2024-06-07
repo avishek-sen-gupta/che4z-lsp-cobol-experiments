@@ -1,10 +1,13 @@
 package org.poc.analysis.visualisation;
 
+import org.poc.common.navigation.CobolEntityNavigator;
 import poc.common.flowchart.CobolTreeVisualiser;
 import poc.common.flowchart.FlowchartBuilderFactoryMethod;
+import poc.common.flowchart.IDataStructureBuilder;
 import poc.common.flowchart.PocOps;
 import vm.CobolEntityNavigatorBuilderImpl;
 import org.poc.common.navigation.EntityNavigatorBuilder;
+import vm.DataStructureBuilder;
 
 public class PocOpsImpl implements PocOps {
     private final CobolTreeVisualiser visualiser;
@@ -30,5 +33,10 @@ public class PocOpsImpl implements PocOps {
     @Override
     public EntityNavigatorBuilder getCobolEntityNavigatorBuilder() {
         return cobolEntityNavigatorBuilder;
+    }
+
+    @Override
+    public IDataStructureBuilder getDataStructureBuilder(CobolEntityNavigator navigator) {
+        return new DataStructureBuilder(navigator);
     }
 }

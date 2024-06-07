@@ -5,11 +5,12 @@ import org.eclipse.lsp.cobol.core.CobolParser;
 import org.poc.common.navigation.CobolEntityNavigator;
 import poc.common.flowchart.ConditionalDataStructure;
 import poc.common.flowchart.DataStructure;
+import poc.common.flowchart.IDataStructureBuilder;
 
 import java.util.List;
 import java.util.Optional;
 
-public class DataStructureBuilder {
+public class DataStructureBuilder implements IDataStructureBuilder {
     private final CobolEntityNavigator navigator;
     private DataStructure zerothStructure;
 
@@ -17,6 +18,7 @@ public class DataStructureBuilder {
         this.navigator = navigator;
     }
 
+    @Override
     public DataStructure build() {
         ParseTree dataDivision = navigator.dataDivisionBodyRoot();
         CobolParser.DataDivisionContext dataDivisionBody = (CobolParser.DataDivisionContext) dataDivision;

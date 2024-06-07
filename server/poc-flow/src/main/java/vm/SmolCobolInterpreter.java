@@ -2,6 +2,7 @@ package vm;
 
 import org.eclipse.lsp.cobol.core.CobolParser;
 import org.poc.flowchart.IfChartNode;
+import org.poc.flowchart.MoveChartNode;
 import org.poc.flowchart.ParagraphChartNode;
 import org.poc.flowchart.SectionChartNode;
 import poc.common.flowchart.*;
@@ -94,8 +95,19 @@ public class SmolCobolInterpreter implements CobolInterpreter {
 
     @Override
     public CobolVmSignal executeDisplay(List<CobolParser.DisplayOperandContext> messages, ChartNodeService nodeService) {
-        messages.forEach(m -> System.out.println("CONSOLE >> " + m.getText()));
-        return CobolVmSignal.CONTINUE;
+        return condition.run((Void) -> {
+            messages.forEach(m -> System.out.println("CONSOLE >> " + m.getText()));
+            return CobolVmSignal.CONTINUE;
+        });
+    }
+
+    @Override
+    public CobolVmSignal executeMove(ChartNode moveChartNode, ChartNodeService nodeService) {
+        return condition.run((Void) -> {
+            MoveChartNode move = (MoveChartNode) moveChartNode;
+            move.getTos().forEach(to -> System.out.println(String.format("%s was affected by %s", to.getText(), move.getFrom().getText())));
+            return CobolVmSignal.CONTINUE;
+        });
     }
 
     private CobolInterpreter locator(ChartNode specificLocation) {

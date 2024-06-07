@@ -35,6 +35,7 @@ import org.eclipse.lsp.cobol.core.preprocessor.TextPreprocessor;
 import org.eclipse.lsp.cobol.core.preprocessor.delegates.GrammarPreprocessor;
 import org.eclipse.lsp.cobol.service.settings.CachingConfigurationService;
 import org.eclipse.lsp.cobol.service.settings.layout.CodeLayoutStore;
+import poc.common.flowchart.DataStructure;
 import poc.common.flowchart.FlowchartBuilder;
 import poc.common.flowchart.PocOps;
 import org.poc.common.navigation.CobolEntityNavigator;
@@ -54,9 +55,9 @@ public class ParsePipeline {
     private String idmsParseTreeOutputPath;
     private String cobolParseTreeOutputPath;
     private final PocOps ops;
-    @Getter
-    private CobolEntityNavigator navigator;
+    @Getter private CobolEntityNavigator navigator;
     private String dialectJarPath;
+    @Getter private DataStructure dataStructures;
 
 
     public ParsePipeline(File src, File[] cpyPaths, String dialectJarPath, String cobolParseTreeOutputPath, String idmsParseTreeOutputPath, PocOps ops) {
@@ -140,8 +141,9 @@ public class ParsePipeline {
         CobolParser.ProcedureDivisionBodyContext procedureDivisionBody = navigatorBuilder.procedureDivisionBody(tree);
         CobolParser.DataDivisionContext dataDivisionBody = navigatorBuilder.dataDivisionBody(tree);
         navigator = navigatorBuilder.procedureDivisionEntityNavigator(procedureDivisionBody, dataDivisionBody, tree);
+        dataStructures = ops.getDataStructureBuilder(navigator).build();
+
         ops.getVisualiser().writeCobolAST(tree, cobolParseTreeOutputPath, false, navigator);
-        //        new DynamicFlowAnalyser(tree).run();
 
         JsonArray diagnostics = new JsonArray();
         ctx.getAccumulatedErrors()

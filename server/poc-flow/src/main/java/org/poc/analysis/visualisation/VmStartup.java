@@ -44,8 +44,8 @@ public class VmStartup {
 
 //        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V75234");
 //        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V7588049");
-//        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V751C931");
-        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/test.cbl");
+        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/V751C931");
+//        File source = new File("/Users/asgupta/Downloads/mbrdi-poc/test.cbl");
 
         PocOpsImpl ops = new PocOpsImpl(new CobolTreeVisualiserImpl(),
                 FlowchartBuilderImpl::build, new CobolEntityNavigatorBuilderImpl());
@@ -58,30 +58,7 @@ public class VmStartup {
 
         CobolEntityNavigator navigator = pipeline.parse();
         FlowchartBuilder flowcharter = pipeline.flowcharter();
-
-        // This one demonstrates a moderately complex section
-//        ParseTree procedure = navigator.target("U204-CALL-COST-PRICE");
-
-        // This one demonstrates SEARCH...WHEN with NEXT SENTENCE
-//        ParseTree procedure = navigator.target("B2");
-
-        // This one demonstrates SEARCH statements with multiple SEARCH...WHEN clauses
-//        ParseTree procedure = navigator.target("M2");
-
-        // This one demonstrates SEARCH statements with multiple SEARCH...WHEN clauses (this is in V7588049)
-//        ParseTree procedure = navigator.target("FORMAL-CHECK-CALC");
-
-        // This one demonstrates ON clauses and SEARCH...WHEN with one Search...When condition
-//        ParseTree procedure = navigator.target("A0");
-
-        // This one demonstrates PERFORM X THRU Y
-//        ParseTree procedure = navigator.target("S0");
-
-        // This one demonstrates PERFORM VARYING for a procedure
-//        ParseTree procedure = navigator.target("E0");
-
-        // This one demonstrates PERFORM INLINE VARYING
-//        ParseTree procedure = navigator.target("U2030-TASI-2603");
+        DataStructure dataStructures = pipeline.getDataStructures();
 
         // This one is root
         ParseTree procedure = navigator.procedureBodyRoot();
@@ -90,7 +67,8 @@ public class VmStartup {
         ChartNode root = flowcharter.getRoot();
         ChartNodeService nodeService = flowcharter.getChartNodeService();
 
-        DataStructure structure = new DataStructureBuilder(navigator).build();
+//        DataStructure structure = new DataStructureBuilder(navigator).build();
+        dataStructures.report();
         System.out.println("INTERPRETING\n--------------------------------\n");
         root.acceptInterpreter(CobolInterpreterFactory.interpreter(), nodeService, FlowControl::CONTINUE);
     }
