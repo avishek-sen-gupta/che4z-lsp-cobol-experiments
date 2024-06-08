@@ -55,6 +55,7 @@ public class SmolCobolInterpreter implements CobolInterpreter {
     @Override
     public CobolVmSignal executePerformProcedure(List<ChartNode> procedures, ChartNodeService nodeService) {
         return condition.run((Void) -> {
+            System.out.println("Executing a PERFORM statement: " + procedures.getFirst());
             CobolVmSignal signal = procedures.getFirst().acceptInterpreter(this, nodeService, FlowControl::STOP);
             // If a PERFORM has returned (early or normal termination), do not propagate termination any higher
             return CobolVmSignal.CONTINUE;
@@ -64,7 +65,7 @@ public class SmolCobolInterpreter implements CobolInterpreter {
     @Override
     public CobolVmSignal executeGoto(List<ChartNode> destinationNodes, ChartNodeService nodeService) {
         return condition.run((Void) -> {
-            System.out.println("Executing a GOTO statement; " + destinationNodes.getFirst());
+            System.out.println("Executing a GOTO statement: " + destinationNodes.getFirst());
             ChartNode destination = destinationNodes.getFirst();
             ChartNode continuationNode = actualDestination(destination, nodeService);
             CobolVmSignal signal = continuationNode.acceptInterpreter(locator(destination), nodeService, FlowControl::CONTINUE);
