@@ -32,7 +32,7 @@ public class DataStructureBuilder implements IDataStructureBuilder {
             CobolParser.DataDescriptionEntryContext dataDescription = dataDescriptionEntry.dataDescriptionEntryForWorkingStorageAndLinkageSection().dataDescriptionEntry();
             if (dataDescription.dataDescriptionEntryFormat1() != null) {
                 CobolParser.DataDescriptionEntryFormat1Context format1 = dataDescription.dataDescriptionEntryFormat1();
-                int entryLevel = Integer.valueOf(format1.levelNumber().LEVEL_NUMBER().getSymbol().getText()).intValue();
+                int entryLevel = Integer.valueOf(format1.levelNumber().LEVEL_NUMBER().getSymbol().getText());
                 if (currentLevel == 0) {
                     if (entryLevel != 1) throw new RuntimeException("Top Level entry must be 01");
                     dataStructure = zerothStructure.addChild(new DataStructure(format1));
