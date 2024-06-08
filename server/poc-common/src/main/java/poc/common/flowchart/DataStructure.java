@@ -18,7 +18,7 @@ public class DataStructure extends SimpleTreeNode {
 
     @Override
     public String content() {
-        return dataDescription != null ? dataDescription.getText() : "<ROOT>";
+        return dataDescription != null ? dataDescription.getText() : "[ROOT]";
     }
 
     @Override
@@ -33,7 +33,7 @@ public class DataStructure extends SimpleTreeNode {
     }
 
     public DataStructure(int levelNumber) {
-        super("<ROOT>");
+        super("[ROOT]");
         this.levelNumber = levelNumber;
     }
 
@@ -79,7 +79,7 @@ public class DataStructure extends SimpleTreeNode {
 
     @Override
     public String toString() {
-        return dataDescription != null ? dataDescription.entryName().getText() : "<ROOT>";
+        return dataDescription != null ? dataDescription.entryName().getText() : "[ROOT]";
     }
 
     public List<DataStructure> rootRecord(CobolParser.GeneralIdentifierContext subRecord) {

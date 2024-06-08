@@ -30,6 +30,8 @@ public class CobolChartNodeFactory {
             return new DisplayChartNode(parseTree, scope, nodeService, stackFrames);
         else if (SyntaxIdentity.isStatementOfType(parseTree, CobolParser.MoveStatementContext.class))
             return new MoveChartNode(parseTree, scope, nodeService, stackFrames);
+        else if (SyntaxIdentity.isStatementOfType(parseTree, CobolParser.AddStatementContext.class))
+            return new AddChartNode(parseTree, scope, nodeService, stackFrames);
 
         else if (SyntaxIdentity.isOfType(parseTree, CobolParser.DialectStatementContext.class))
             return new DialectStatementChartNode(parseTree, scope, nodeService, stackFrames);

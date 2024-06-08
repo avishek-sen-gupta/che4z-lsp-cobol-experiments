@@ -26,4 +26,6 @@ public interface CobolInterpreter {
     CobolVmSignal executeDisplay(List<CobolParser.DisplayOperandContext> messages, ChartNodeService nodeService);
 
     CobolVmSignal executeMove(ChartNode moveChartNode, ChartNodeService nodeService);
+
+    CobolVmSignal executeAdd(ChartNode addChartNode, ChartNodeService nodeService);
 }

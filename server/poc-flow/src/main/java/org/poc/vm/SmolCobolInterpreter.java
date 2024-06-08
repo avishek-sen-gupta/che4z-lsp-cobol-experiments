@@ -1,10 +1,8 @@
 package org.poc.vm;
 
+import org.antlr.v4.runtime.RuleContext;
 import org.eclipse.lsp.cobol.core.CobolParser;
-import org.poc.flowchart.IfChartNode;
-import org.poc.flowchart.MoveChartNode;
-import org.poc.flowchart.ParagraphChartNode;
-import org.poc.flowchart.SectionChartNode;
+import org.poc.flowchart.*;
 import poc.common.flowchart.*;
 
 import java.util.List;
@@ -125,6 +123,19 @@ public class SmolCobolInterpreter implements CobolInterpreter {
 
             return CobolVmSignal.CONTINUE;
         });
+    }
+
+    @Override
+    public CobolVmSignal executeAdd(ChartNode addChartNode, ChartNodeService nodeService) {
+        return condition.run((Void) -> {
+            AddChartNode add = (AddChartNode) addChartNode;
+            add.getTos().forEach(to -> System.out.println(coloured(String.format("%s was affected by %s", dataDescription(to.generalIdentifier(), nodeService.getDataStructures()), datas(add.getFrom())), 227)));
+            return CobolVmSignal.CONTINUE;
+        });
+    }
+
+    private String datas(List<CobolParser.AddFromContext> from) {
+        return String.join(" , ", from.stream().map(RuleContext::getText).toList());
     }
 
     private String dataDescription(CobolParser.GeneralIdentifierContext identifier, DataStructure dataStructures) {
