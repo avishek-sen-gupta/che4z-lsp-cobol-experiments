@@ -1,6 +1,7 @@
 package poc.common.flowchart;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public interface ExecuteCondition {
     public static ExecuteCondition ALWAYS_EXECUTE = new ExecuteCondition() {
@@ -15,8 +16,8 @@ public interface ExecuteCondition {
         }
 
         @Override
-        public CobolVmSignal run(Function<Void, CobolVmSignal> callback) {
-            return callback.apply(null);
+        public CobolVmSignal run(Supplier<CobolVmSignal> callback) {
+            return callback.get();
         }
 
     };
@@ -25,5 +26,5 @@ public interface ExecuteCondition {
 
     boolean shouldExecute();
 
-    CobolVmSignal run(Function<Void, CobolVmSignal> callback);
+    CobolVmSignal run(Supplier<CobolVmSignal> callback);
 }

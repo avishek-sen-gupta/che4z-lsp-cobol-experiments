@@ -43,6 +43,6 @@ public class NextSentenceChartNode extends CobolChartNode {
 
     @Override
     public CobolVmSignal acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService, FlowControl flowControl) {
-        return interpreter.scope(this).executeNextSentence(nodeService);
+        return interpreter.scope(this).executeNextSentence(nodeService, this);
     }
 }

@@ -10,7 +10,7 @@ public class ExitChartNode extends CobolChartNode {
 
     @Override
     public CobolVmSignal acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService, FlowControl flowControl) {
-        return interpreter.scope(this).executeExit(nodeService);
+        return interpreter.scope(this).executeExit(nodeService, this);
     }
 
     @Override

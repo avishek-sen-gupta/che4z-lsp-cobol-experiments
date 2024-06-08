@@ -44,7 +44,7 @@ public class GoToChartNode extends CobolChartNode {
 
     @Override
     public CobolVmSignal acceptInterpreter(CobolInterpreter interpreter, ChartNodeService nodeService, FlowControl flowControl) {
-        return interpreter.scope(this).executeGoto(destinationNodes, nodeService);
+        return interpreter.scope(this).executeGoto(destinationNodes, nodeService, this);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package poc.common.flowchart;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class ExecuteAtTargetFlipCondition implements ExecuteCondition {
     private final ChartNode specificLocation;
@@ -25,8 +26,8 @@ public class ExecuteAtTargetFlipCondition implements ExecuteCondition {
     }
 
     @Override
-    public CobolVmSignal run(Function<Void, CobolVmSignal> callback) {
+    public CobolVmSignal run(Supplier<CobolVmSignal> callback) {
         if (!isInterpreting) return CobolVmSignal.CONTINUE;
-        return callback.apply(null);
+        return callback.get();
     }
 }

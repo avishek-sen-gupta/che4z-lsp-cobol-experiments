@@ -19,7 +19,9 @@ import org.eclipse.lsp.cobol.cli.ParsePipeline;
 import org.poc.analysis.visualisation.CobolTreeVisualiserImpl;
 import org.poc.analysis.visualisation.PocOpsImpl;
 import org.poc.common.navigation.CobolEntityNavigator;
+import org.poc.flowchart.DisplayChartNode;
 import org.poc.flowchart.FlowchartBuilderImpl;
+import org.poc.flowchart.IfChartNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import poc.common.flowchart.*;
@@ -68,6 +70,8 @@ public class VmStartup {
 
         dataStructures.report();
         System.out.println("INTERPRETING\n--------------------------------\n");
-        root.acceptInterpreter(CobolInterpreterFactory.interpreter(ConditionResolver.ALWAYS_TRUE), nodeService, FlowControl::CONTINUE);
+        CobolBreakPointer bp = new CobolBreakPointer();
+        bp.addBreakpoint(n -> n.getClass() == DisplayChartNode.class && n.originalText().contains("WEUR-INCUR"));
+        root.acceptInterpreter(CobolInterpreterFactory.interpreter(ConditionResolver.ALWAYS_TRUE, bp), nodeService, FlowControl::CONTINUE);
     }
 }

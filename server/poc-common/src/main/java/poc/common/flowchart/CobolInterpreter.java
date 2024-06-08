@@ -15,15 +15,15 @@ public interface CobolInterpreter {
 
     CobolVmSignal executeIf(ChartNode node, ChartNodeService nodeService);
 
-    CobolVmSignal executePerformProcedure(List<ChartNode> procedures, ChartNodeService nodeService);
+    CobolVmSignal executePerformProcedure(List<ChartNode> procedures, ChartNodeService nodeService, ChartNode node);
 
-    CobolVmSignal executeGoto(List<ChartNode> destinationNodes, ChartNodeService nodeService);
+    CobolVmSignal executeGoto(List<ChartNode> destinationNodes, ChartNodeService nodeService, ChartNode node);
 
-    CobolVmSignal executeExit(ChartNodeService nodeService);
+    CobolVmSignal executeExit(ChartNodeService nodeService, ChartNode node);
 
-    CobolVmSignal executeNextSentence(ChartNodeService nodeService);
+    CobolVmSignal executeNextSentence(ChartNodeService nodeService, ChartNode node);
 
-    CobolVmSignal executeDisplay(List<CobolParser.DisplayOperandContext> messages, ChartNodeService nodeService);
+    CobolVmSignal executeDisplay(List<CobolParser.DisplayOperandContext> messages, ChartNodeService nodeService, ChartNode node);
 
     CobolVmSignal executeMove(ChartNode moveChartNode, ChartNodeService nodeService);
 
