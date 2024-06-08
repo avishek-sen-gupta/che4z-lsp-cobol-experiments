@@ -6,12 +6,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public interface ConditionResolver {
-    ConditionResolver ALWAYS_TRUE = new ConditionResolver() {
-        @Override
-        public boolean resolve(ChartNode node) {
-            System.out.println(ConsoleColors.green("Resolved " + node.label().trim() + " condition to TRUE automatically..."));
-            return true;
-        }
+    ConditionResolver ALWAYS_TRUE = node -> {
+        System.out.println(ConsoleColors.green("Resolved " + node.label().trim() + " condition to TRUE automatically..."));
+        return true;
     };
     boolean resolve(ChartNode node);
 }
