@@ -57,7 +57,7 @@ public class DataStructure extends SimpleTreeNode {
 
     public DataStructure parent(int level) {
         DataStructure current = this;
-        while(current != null && current.level() > level) {
+        while(current != null && current.level() >= level) {
             current = current.parent();
         }
         if (current == null) throw new RuntimeException("Parent of level " + level + " does not exist!");

@@ -68,7 +68,7 @@ public class DataStructureBuilder implements IDataStructureBuilder {
                 } else if (entryLevel > currentLevel) {
                     dataStructure = dataStructure.addChild(new DataStructure(format1));
                 } else {
-                    dataStructure = dataStructure.parent(entryLevel - 1).addChild(new DataStructure(format1));
+                    dataStructure = dataStructure.parent(entryLevel).addChild(new DataStructure(format1));
                 }
             } else if (dataDescription.dataDescriptionEntryFormat3() != null) {
                 CobolParser.DataDescriptionEntryFormat3Context conditionalFormat = dataDescription.dataDescriptionEntryFormat3();
