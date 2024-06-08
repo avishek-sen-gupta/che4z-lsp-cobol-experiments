@@ -8,7 +8,7 @@ import org.poc.common.navigation.CobolEntityNavigator;
 import org.poc.flowchart.FlowchartBuilderImpl;
 import poc.common.flowchart.FlowchartBuilder;
 import poc.common.flowchart.NodeText;
-import vm.CobolEntityNavigatorBuilderImpl;
+import org.poc.vm.CobolEntityNavigatorBuilderImpl;
 
 import java.io.File;
 import java.io.IOException;

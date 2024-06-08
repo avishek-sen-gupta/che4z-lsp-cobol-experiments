@@ -1,4 +1,4 @@
-package vm;
+package org.poc.vm;
 
 import poc.common.flowchart.ChartNode;
 import poc.common.flowchart.ConditionResolver;

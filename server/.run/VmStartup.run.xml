@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="VmStartup" type="Application" factoryName="Application" nameIsGenerated="true">
-    <option name="MAIN_CLASS_NAME" value="org.poc.analysis.visualisation.VmStartup" />
+    <option name="MAIN_CLASS_NAME" value="org.poc.vm.VmStartup" />
     <module name="poc-flow" />
     <extension name="coverage">
       <pattern>

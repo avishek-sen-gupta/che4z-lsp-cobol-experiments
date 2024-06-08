@@ -1,4 +1,4 @@
-package vm;
+package org.poc.vm;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.core.CobolParser;

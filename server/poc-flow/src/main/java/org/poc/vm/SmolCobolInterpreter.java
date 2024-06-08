@@ -1,4 +1,4 @@
-package vm;
+package org.poc.vm;
 
 import org.eclipse.lsp.cobol.core.CobolParser;
 import org.poc.flowchart.IfChartNode;

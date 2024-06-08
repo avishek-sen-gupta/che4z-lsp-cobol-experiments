@@ -5,9 +5,9 @@ import poc.common.flowchart.CobolTreeVisualiser;
 import poc.common.flowchart.FlowchartBuilderFactoryMethod;
 import poc.common.flowchart.IDataStructureBuilder;
 import poc.common.flowchart.PocOps;
-import vm.CobolEntityNavigatorBuilderImpl;
+import org.poc.vm.CobolEntityNavigatorBuilderImpl;
 import org.poc.common.navigation.EntityNavigatorBuilder;
-import vm.DataStructureBuilder;
+import org.poc.vm.DataStructureBuilder;
 
 public class PocOpsImpl implements PocOps {
     private final CobolTreeVisualiser visualiser;

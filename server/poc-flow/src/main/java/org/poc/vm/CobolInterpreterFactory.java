@@ -1,4 +1,4 @@
-package vm;
+package org.poc.vm;
 
 import org.poc.flowchart.CobolStackFrames;
 import poc.common.flowchart.*;

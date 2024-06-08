@@ -12,17 +12,17 @@
  *    Broadcom, Inc. - initial API and implementation
  *
  */
-package org.poc.analysis.visualisation;
+package org.poc.vm;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp.cobol.cli.ParsePipeline;
+import org.poc.analysis.visualisation.CobolTreeVisualiserImpl;
+import org.poc.analysis.visualisation.PocOpsImpl;
 import org.poc.common.navigation.CobolEntityNavigator;
 import org.poc.flowchart.FlowchartBuilderImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import poc.common.flowchart.*;
-import vm.CobolInterpreterFactory;
-import vm.CobolEntityNavigatorBuilderImpl;
 
 import java.io.File;
 import java.io.IOException;
