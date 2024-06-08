@@ -8,19 +8,22 @@ import org.poc.flowchart.SectionChartNode;
 import poc.common.flowchart.*;
 
 import java.util.List;
+import java.util.Scanner;
 
 public class SmolCobolInterpreter implements CobolInterpreter {
     private StackFrames runtimeStackFrames;
     private final ExecuteCondition condition;
+    private final ConsoleInputResolver conditionResolver;
 
-    public SmolCobolInterpreter(StackFrames runtimeStackFrames, ExecuteCondition condition) {
+    public SmolCobolInterpreter(StackFrames runtimeStackFrames, ExecuteCondition condition, ConsoleInputResolver conditionResolver) {
         this.runtimeStackFrames = runtimeStackFrames;
         this.condition = condition;
+        this.conditionResolver = conditionResolver;
     }
 
     @Override
     public CobolInterpreter scope(ChartNode scope) {
-        return new SmolCobolInterpreter(runtimeStackFrames.add(scope), condition);
+        return new SmolCobolInterpreter(runtimeStackFrames.add(scope), condition, conditionResolver);
     }
 
     @Override
@@ -47,8 +50,18 @@ public class SmolCobolInterpreter implements CobolInterpreter {
         return condition.run((Void) -> {
             System.out.println("Executing an IF condition");
             IfChartNode ifNode = (IfChartNode) node;
-            ChartNode ifThenBlock = ifNode.getIfThenBlock();
-            return ifThenBlock.acceptInterpreter(this, nodeService, FlowControl::CONTINUE);
+            boolean trueOrFalse = conditionResolver.resolve(node);
+            if (trueOrFalse) {
+                System.out.println("ROUTING TO IF-THEN");
+                ChartNode ifThenBlock = ifNode.getIfThenBlock();
+                return ifThenBlock.acceptInterpreter(this, nodeService, FlowControl::CONTINUE);
+            } else if (ifNode.getIfElseBlock() != null){
+                System.out.println("ROUTING TO IF-ELSE");
+                ChartNode ifElseBlock = ifNode.getIfElseBlock();
+                return ifElseBlock.acceptInterpreter(this, nodeService, FlowControl::CONTINUE);
+            }
+            System.out.println("IF-ELSE BLOCK NOT PRESENT, TERMINATING IF STATEMENT...");
+            return CobolVmSignal.CONTINUE;
         });
     }
 
@@ -57,6 +70,7 @@ public class SmolCobolInterpreter implements CobolInterpreter {
         return condition.run((Void) -> {
             System.out.println("Executing a PERFORM statement: " + procedures.getFirst());
             CobolVmSignal signal = procedures.getFirst().acceptInterpreter(this, nodeService, FlowControl::STOP);
+            System.out.println("Returned from PERFORM statement: " + procedures.getFirst());
             // If a PERFORM has returned (early or normal termination), do not propagate termination any higher
             return CobolVmSignal.CONTINUE;
         });
