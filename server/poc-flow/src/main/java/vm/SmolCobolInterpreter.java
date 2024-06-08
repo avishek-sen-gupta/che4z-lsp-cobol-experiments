@@ -8,14 +8,15 @@ import org.poc.flowchart.SectionChartNode;
 import poc.common.flowchart.*;
 
 import java.util.List;
-import java.util.Scanner;
+
+import static poc.common.flowchart.ConsoleColors.*;
 
 public class SmolCobolInterpreter implements CobolInterpreter {
     private StackFrames runtimeStackFrames;
     private final ExecuteCondition condition;
-    private final ConsoleInputResolver conditionResolver;
+    private final ConditionResolver conditionResolver;
 
-    public SmolCobolInterpreter(StackFrames runtimeStackFrames, ExecuteCondition condition, ConsoleInputResolver conditionResolver) {
+    public SmolCobolInterpreter(StackFrames runtimeStackFrames, ExecuteCondition condition, ConditionResolver conditionResolver) {
         this.runtimeStackFrames = runtimeStackFrames;
         this.condition = condition;
         this.conditionResolver = conditionResolver;
@@ -29,7 +30,7 @@ public class SmolCobolInterpreter implements CobolInterpreter {
     @Override
     public CobolVmSignal execute(ChartNode node) {
         return condition.run((Void) -> {
-            System.out.println("Executing " + node.getClass().getSimpleName() + node.label());
+            System.out.println(coloured("Executing " + node.getClass().getSimpleName() + node.label(), 25));
             return CobolVmSignal.CONTINUE;
         });
     }
@@ -37,12 +38,12 @@ public class SmolCobolInterpreter implements CobolInterpreter {
     @Override
     public void enter(ChartNode node) {
         condition.evaluate(node);
-        System.out.println("Entering " + node.getClass().getSimpleName() + node.label());
+        System.out.println(coloured("Entering " + node.getClass().getSimpleName() + node.label(), 240));
     }
 
     @Override
     public void exit(ChartNode node) {
-        System.out.println("Exiting " + node.getClass().getSimpleName() + node.label());
+        System.out.println(coloured("Exiting " + node.getClass().getSimpleName() + node.label(), 240));
     }
 
     @Override
@@ -55,7 +56,7 @@ public class SmolCobolInterpreter implements CobolInterpreter {
                 System.out.println("ROUTING TO IF-THEN");
                 ChartNode ifThenBlock = ifNode.getIfThenBlock();
                 return ifThenBlock.acceptInterpreter(this, nodeService, FlowControl::CONTINUE);
-            } else if (ifNode.getIfElseBlock() != null){
+            } else if (ifNode.getIfElseBlock() != null) {
                 System.out.println("ROUTING TO IF-ELSE");
                 ChartNode ifElseBlock = ifNode.getIfElseBlock();
                 return ifElseBlock.acceptInterpreter(this, nodeService, FlowControl::CONTINUE);
@@ -68,9 +69,9 @@ public class SmolCobolInterpreter implements CobolInterpreter {
     @Override
     public CobolVmSignal executePerformProcedure(List<ChartNode> procedures, ChartNodeService nodeService) {
         return condition.run((Void) -> {
-            System.out.println("Executing a PERFORM statement: " + procedures.getFirst());
+            System.out.println(cyan("Executing a PERFORM statement: " + procedures.getFirst()));
             CobolVmSignal signal = procedures.getFirst().acceptInterpreter(this, nodeService, FlowControl::STOP);
-            System.out.println("Returned from PERFORM statement: " + procedures.getFirst());
+            System.out.println(cyan("Returned from PERFORM statement: " + procedures.getFirst()));
             // If a PERFORM has returned (early or normal termination), do not propagate termination any higher
             return CobolVmSignal.CONTINUE;
         });
@@ -79,11 +80,11 @@ public class SmolCobolInterpreter implements CobolInterpreter {
     @Override
     public CobolVmSignal executeGoto(List<ChartNode> destinationNodes, ChartNodeService nodeService) {
         return condition.run((Void) -> {
-            System.out.println("Executing a GOTO statement: " + destinationNodes.getFirst());
+            System.out.println(red("Executing a GOTO statement: " + destinationNodes.getFirst()));
             ChartNode destination = destinationNodes.getFirst();
-            ChartNode continuationNode = actualDestination(destination, nodeService);
+            ChartNode continuationNode = actualDestination(destination);
             CobolVmSignal signal = continuationNode.acceptInterpreter(locator(destination), nodeService, FlowControl::CONTINUE);
-            System.out.println("Exiting program");
+            System.out.println(red("Exiting program"));
             System.exit(0);
             return signal;
         });
@@ -92,10 +93,10 @@ public class SmolCobolInterpreter implements CobolInterpreter {
     @Override
     public CobolVmSignal executeExit(ChartNodeService nodeService) {
         return condition.run((Void) -> {
-            System.out.println("Processing EXIT");
+            System.out.println(coloured("Processing EXIT", 52));
 //        System.out.println(runtimeStackFrames.stackTrace());
             CobolVmSignal signal = runtimeStackFrames.callSite();
-            System.out.println("EXIT instruction is " + signal);
+            System.out.println("EXIT instruction is " + coloured(signal.name(), 207));
             return signal;
         });
     }
@@ -103,7 +104,7 @@ public class SmolCobolInterpreter implements CobolInterpreter {
     @Override
     public CobolVmSignal executeNextSentence(ChartNodeService nodeService) {
         return condition.run((Void) -> {
-            System.out.println("Processing NEXT SENTENCE");
+            System.out.println(purple("Processing NEXT SENTENCE"));
             return CobolVmSignal.NEXT_SENTENCE;
         });
     }
@@ -111,7 +112,7 @@ public class SmolCobolInterpreter implements CobolInterpreter {
     @Override
     public CobolVmSignal executeDisplay(List<CobolParser.DisplayOperandContext> messages, ChartNodeService nodeService) {
         return condition.run((Void) -> {
-            messages.forEach(m -> System.out.println("CONSOLE >> " + m.getText()));
+            messages.forEach(m -> System.out.println(coloured("CONSOLE >> " + m.getText(), 154)));
             return CobolVmSignal.CONTINUE;
         });
     }
@@ -120,7 +121,7 @@ public class SmolCobolInterpreter implements CobolInterpreter {
     public CobolVmSignal executeMove(ChartNode moveChartNode, ChartNodeService nodeService) {
         return condition.run((Void) -> {
             MoveChartNode move = (MoveChartNode) moveChartNode;
-            move.getTos().forEach(to -> System.out.println(String.format("%s was affected by %s", dataDescription(to, nodeService.getDataStructures()), move.getFrom().getText())));
+            move.getTos().forEach(to -> System.out.println(coloured(String.format("%s was affected by %s", dataDescription(to, nodeService.getDataStructures()), move.getFrom().getText()), 227)));
 
             return CobolVmSignal.CONTINUE;
         });
@@ -137,7 +138,7 @@ public class SmolCobolInterpreter implements CobolInterpreter {
         return CobolInterpreterFactory.interpreter(new ExecuteAtTargetFlipCondition(specificLocation), runtimeStackFrames);
     }
 
-    private ChartNode actualDestination(ChartNode destination, ChartNodeService nodeService) {
+    private ChartNode actualDestination(ChartNode destination) {
         if (destination.getClass() == SectionChartNode.class) return destination;
         ParagraphChartNode paragraph = (ParagraphChartNode) destination;
         return paragraph.parentOrSelf();
