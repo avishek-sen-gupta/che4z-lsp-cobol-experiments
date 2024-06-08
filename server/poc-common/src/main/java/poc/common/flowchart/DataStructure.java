@@ -57,6 +57,9 @@ public class DataStructure extends SimpleTreeNode {
 
     public DataStructure parent(int level) {
         DataStructure current = this;
+
+        // If we find a node at the required entry level, it's not enough
+        // We need to find a node of an entry level smaller than this to get the parent candidate
         while(current != null && current.level() >= level) {
             current = current.parent();
         }
