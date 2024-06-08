@@ -6,10 +6,14 @@ import poc.common.flowchart.*;
 public class CobolInterpreterFactory {
 
     public static CobolInterpreter interpreter() {
-        return new SmolCobolInterpreter(new CobolStackFrames(), ExecuteCondition.ALWAYS_EXECUTE, new ConsoleInputResolver());
+        return interpreter(new ConsoleInputResolver());
     }
 
-    public static CobolInterpreter interpreter(ExecuteCondition condition, StackFrames runtimeStackFrames) {
-        return new SmolCobolInterpreter(runtimeStackFrames, condition, new ConsoleInputResolver());
+    public static CobolInterpreter interpreter(ConditionResolver conditionResolver) {
+        return interpreter(ExecuteCondition.ALWAYS_EXECUTE, new CobolStackFrames(), conditionResolver);
+    }
+
+    public static CobolInterpreter interpreter(ExecuteCondition condition, StackFrames runtimeStackFrames, ConditionResolver conditionResolver) {
+        return new SmolCobolInterpreter(runtimeStackFrames, condition, conditionResolver);
     }
 }

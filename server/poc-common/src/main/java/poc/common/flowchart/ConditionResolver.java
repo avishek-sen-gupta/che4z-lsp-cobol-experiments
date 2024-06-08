@@ -9,6 +9,7 @@ public interface ConditionResolver {
     ConditionResolver ALWAYS_TRUE = new ConditionResolver() {
         @Override
         public boolean resolve(ChartNode node) {
+            System.out.println(ConsoleColors.green("Resolved " + node.label().trim() + " condition to TRUE automatically..."));
             return true;
         }
     };

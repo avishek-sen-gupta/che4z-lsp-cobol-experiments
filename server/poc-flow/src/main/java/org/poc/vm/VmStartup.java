@@ -68,6 +68,6 @@ public class VmStartup {
 
         dataStructures.report();
         System.out.println("INTERPRETING\n--------------------------------\n");
-        root.acceptInterpreter(CobolInterpreterFactory.interpreter(), nodeService, FlowControl::CONTINUE);
+        root.acceptInterpreter(CobolInterpreterFactory.interpreter(ConditionResolver.ALWAYS_TRUE), nodeService, FlowControl::CONTINUE);
     }
 }

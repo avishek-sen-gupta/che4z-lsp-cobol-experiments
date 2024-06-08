@@ -146,7 +146,7 @@ public class SmolCobolInterpreter implements CobolInterpreter {
 
     private CobolInterpreter locator(ChartNode specificLocation) {
 //        return new SmolCobolInterpreter(new ExecuteAtTargetFlipCondition(specificLocation), runtimeStackFrames);
-        return CobolInterpreterFactory.interpreter(new ExecuteAtTargetFlipCondition(specificLocation), runtimeStackFrames);
+        return CobolInterpreterFactory.interpreter(new ExecuteAtTargetFlipCondition(specificLocation), runtimeStackFrames, conditionResolver);
     }
 
     private ChartNode actualDestination(ChartNode destination) {
